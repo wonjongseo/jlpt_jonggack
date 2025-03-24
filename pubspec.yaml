@@ -1,0 +1,167 @@
+name: jlpt_jonggack
+description: "A new Flutter project."
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  get:
+  flutter_svg:
+  hive:
+  hive_flutter:
+  animate_do:
+  flutter_slidable:
+  flutter_animation_progress_bar:
+  file_picker:
+  flutter_tts:
+  table_calendar:
+  excel:
+  tutorial_coach_mark:
+  google_mobile_ads:
+  url_launcher:
+  change_app_package_name:
+  kanji_drawing_animation:
+  flutter_spinkit:
+  font_awesome_flutter:
+  carousel_slider:
+  flutter_local_notifications: ^17.0.0
+  device_info_plus:
+  in_app_review:
+  flutter_widget_from_html_core:
+  animated_text_kit:
+  confetti:
+  auto_size_text:
+  flutter_email_sender:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+  hive_generator:
+  build_runner:
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/svg/
+    - assets/images/
+    - assets/sounds/speech_to_text_cancel.m4r
+    - assets/sounds/speech_to_text_listening.m4r
+    - assets/sounds/speech_to_text_stop.m4r
+
+  fonts:
+    - family: NanumGothic
+      fonts:
+        - asset: assets/fonts/NanumGothic-Regular.ttf
+          weight: 100
+        - asset: assets/fonts/NanumGothic-Regular.ttf
+          weight: 200
+        - asset: assets/fonts/NanumGothic-Regular.ttf
+          weight: 300
+        - asset: assets/fonts/NanumGothic-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NanumGothic-Bold.ttf
+          weight: 500
+        - asset: assets/fonts/NanumGothic-Bold.ttf
+          weight: 600
+        - asset: assets/fonts/NanumGothic-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NanumGothic-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/NanumGothic-ExtraBold.ttf
+          weight: 900
+
+    - family: NotoSerifJP
+      fonts:
+        - asset: assets/fonts/NotoSerifJP-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/NotoSerifJP-Light.otf
+          weight: 300
+        - asset: assets/fonts/NotoSerifJP-Regular.otf
+          weight: 400
+        - asset: assets/fonts/NotoSerifJP-Medium.otf
+          weight: 500
+        - asset: assets/fonts/NotoSerifJP-SemiBold.otf
+          weight: 700
+        - asset: assets/fonts/NotoSerifJP-Bold.otf
+          weight: 800
+        - asset: assets/fonts/NotoSerifJP-Black.otf
+          weight: 900
+
+    - family: ScoreStd
+      fonts:
+        - asset: assets/fonts/Montserrat-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Montserrat-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Montserrat-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Caveat-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Caveat-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Caveat-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Caveat-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Montserrat-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Montserrat-Black.ttf
+          weight: 900
+    - family: Gilroy
+      fonts:
+        - asset: assets/fonts/Gilroy-Regular.ttf
+        - asset: assets/fonts/Gilroy-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Gilroy-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Gilroy-Bold.ttf
+          weight: 700
+
+    - family: GMarket
+      fonts:
+        - asset: assets/fonts/GmarketSansTTFMedium.ttf
+        - asset: assets/fonts/GmarketSansTTFMedium.ttf
+          weight: 300
+        - asset: assets/fonts/GmarketSansTTFLight.ttf
+          weight: 500
+        - asset: assets/fonts/GmarketSansTTFBold.ttf
+          weight: 700
