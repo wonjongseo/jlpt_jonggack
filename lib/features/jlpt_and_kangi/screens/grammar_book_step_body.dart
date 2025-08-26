@@ -67,6 +67,7 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
 
             bool isFinished =
                 grammarController.grammers[index].isFinished ?? false;
+
             return InkWell(
               onLongPress: () {
                 if (isAllAccessable) {

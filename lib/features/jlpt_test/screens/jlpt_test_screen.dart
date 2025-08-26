@@ -9,6 +9,7 @@ import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart'
 
 const JLPT_TEST_PATH = '/test';
 const JLPT_TEST = 'jlpt';
+const IS_RANDOM = 'is_random';
 const CONTINUTE_JLPT_TEST = 'continue_jlpt_test';
 const MY_VOCA_TEST = 'my_vcoa_test';
 const MY_VOCA_TEST_KNOWN = 'known';
@@ -21,11 +22,15 @@ class JlptTestScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     JlptTestController jlptTestController = Get.put(JlptTestController());
     jlptTestController.init(Get.arguments);
-    print('asdadsdadasdnflsjad');
     return Scaffold(
       appBar: _appBar(context, jlptTestController),
       body: const JlptTestBody(),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 

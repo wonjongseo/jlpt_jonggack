@@ -13,7 +13,12 @@ class VeryGoodScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: const SafeArea(child: Center(child: CelebrationScreen())),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 }

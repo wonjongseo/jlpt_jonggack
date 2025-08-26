@@ -27,8 +27,13 @@ class GrammarTestScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: _appBar(size),
-      bottomNavigationBar: const GlobalBannerAdmob(),
       body: _body(size),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 
@@ -107,14 +112,10 @@ class GrammarTestScreen extends StatelessWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () async {
-          if (grammarTestController.isSubmitted) {
+          if (grammarTestController.isSubmitted ||
+              grammarTestController.isRandom) {
             return Get.back();
           }
-          //   grammarTestController.saveScore();
-          //   Get.back();
-          //   return;
-          // }
-          // bool result = await reallyQuitText();
           bool result = await CommonDialog.beforeExitTestPageDialog();
 
           if (result) {
@@ -166,7 +167,7 @@ class GrammarTestScreen extends StatelessWidget {
                 child: const Padding(
                   padding: EdgeInsets.all(14),
                   child: Text(
-                    '제출!',
+                    '제출',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,

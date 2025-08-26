@@ -231,8 +231,6 @@ class MyVocaController extends GetxController {
   MyWordRepository myWordReposotiry = MyWordRepository();
   UserController userController = Get.find<UserController>();
 
-  AdController? adController;
-
   Map<DateTime, List<MyWord>> kEvents = {};
   List<MyWord> myWords = [];
 
@@ -240,7 +238,6 @@ class MyVocaController extends GetxController {
 
   void loadData() async {
     myWords = await myWordReposotiry.getAllMyWord(isManualSavedWordPage);
-    print('myWords.length : ${myWords.length}');
 
     DateTime now = DateTime.now();
 
@@ -299,7 +296,6 @@ class MyVocaController extends GetxController {
   void onInit() async {
     super.onInit();
     loadData();
-    adController = Get.find<AdController>();
   }
 
   @override
@@ -516,7 +512,7 @@ class MyVocaController extends GetxController {
 
     if (savedWordNumber != 0) {
       if (!userController.user.isPremieum) {
-        adController!.showRewardedInterstitialAd();
+        // adController!.showRewardedInterstitialAd();
       }
     }
     return savedWordNumber;

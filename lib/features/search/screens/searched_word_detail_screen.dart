@@ -40,7 +40,12 @@ class SearchedWordDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 }
@@ -76,7 +81,12 @@ class SearchedKangiDetailScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 }
@@ -102,7 +112,12 @@ class SearchedGrammarDetailScreen extends StatelessWidget {
       body: SafeArea(
         child: Center(child: GrammarCard(grammar: searchedGrammar[index])),
       ),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 }

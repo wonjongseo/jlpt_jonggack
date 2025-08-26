@@ -4,10 +4,8 @@ import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/features/calendar_step/grammar_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/calendar_step/japanese_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
-import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
@@ -31,7 +29,7 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
     jlptWordController = Get.put(JlptStepController(level: widget.level));
 
     progrssingIndex = LocalReposotiry.getCurrentProgressing(
-      '${CategoryEnum.Grammars.name}-${widget.level}',
+      '${CategoryEnum.Japaneses.name}-${widget.level}',
     );
 
     super.initState();
@@ -39,6 +37,24 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
 
   void goTo(int index, String chapter) {
     Get.to(() => JapaneseCalendarStepScreen(chapter: chapter));
+  }
+
+  void _onTap(bool isAllAccessable, int index) {
+    if (!isAllAccessable) {
+      CommonDialog.appealDownLoadThePaidVersion();
+      return;
+    }
+
+    setState(() {
+      progrssingIndex = index;
+      carouselController.animateToPage(progrssingIndex);
+    });
+
+    LocalReposotiry.putCurrentProgressing(
+      '${CategoryEnum.Japaneses.name}-${widget.level}',
+      progrssingIndex,
+    );
+    goTo(index, '챕터${index + 1}');
   }
 
   @override
@@ -57,43 +73,21 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
             },
             scrollDirection: Axis.horizontal,
           ),
-          items: List.generate(jlptWordController.headTitleCount, (index) {
-            bool isAllAccessable =
-                !(widget.level == '1' && index > 2) ||
-                controller.user.isPremieum ||
-                controller.user.isTrik;
+          items: [
+            ...List.generate(jlptWordController.headTitleCount, (index) {
+              bool isAllAccessable =
+                  !(widget.level == '1' && index > 2) ||
+                  controller.user.isPremieum ||
+                  controller.user.isTrik;
 
-            return InkWell(
-              onLongPress: () {
-                if (isAllAccessable) {
-                  return;
-                }
-                userController.changeUserAuth();
-              },
-              onTap: () {
-                if (!isAllAccessable) {
-                  CommonDialog.appealDownLoadThePaidVersion();
-                  return;
-                }
-                if (progrssingIndex == index) {
-                  LocalReposotiry.putCurrentProgressing(
-                    '${CategoryEnum.Grammars.name}-${widget.level}',
-                    progrssingIndex,
-                  );
-                  goTo(index, '챕터${index + 1}');
-                } else if (progrssingIndex < index) {
-                  progrssingIndex++;
-                  carouselController.animateToPage(progrssingIndex);
-                } else {
-                  progrssingIndex--;
-                  carouselController.animateToPage(progrssingIndex);
-                }
-                setState(() {});
-              },
-              child: Card(
-                color: !isAllAccessable ? Colors.grey.shade400 : Colors.white,
-                child: SizedBox(
-                  width: double.infinity,
+              return InkWell(
+                onLongPress: () {
+                  if (isAllAccessable) return;
+                  userController.changeUserAuth();
+                },
+                onTap: () => _onTap(isAllAccessable, index),
+                child: Card(
+                  color: !isAllAccessable ? Colors.grey.shade400 : Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Stack(
@@ -101,7 +95,7 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
                         Center(
                           child: RichText(
                             text: TextSpan(
-                              text: '${CategoryEnum.Grammars.id}\n',
+                              text: '${CategoryEnum.Japaneses.id}\n',
                               children: [
                                 TextSpan(
                                   text: 'Chapter ${(index + 1)}',
@@ -148,9 +142,9 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
                     ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+          ],
         );
       },
     );

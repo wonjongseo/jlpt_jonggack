@@ -143,7 +143,12 @@ class _RelatedWordScrenState extends State<RelatedWordScren> {
         child: AppBar(),
       ),
       body: KangiCard(kangi: widget.kangi),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 }

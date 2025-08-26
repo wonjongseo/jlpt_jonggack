@@ -6,6 +6,8 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_card.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/features/jlpt_test/widgets/toggle_subjective_qustion_button.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 
 class JlptTestBody extends StatelessWidget {
@@ -61,44 +63,7 @@ class JlptTestBody extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Row(
-                            children: [
-                              const Text('주관식 문제'),
-                              Transform.scale(
-                                scale: 1,
-                                child: Checkbox(
-                                  value:
-                                      controller
-                                          .settingController
-                                          .isTestKeyBoard,
-                                  onChanged: (v) {
-                                    if (controller
-                                        .settingController
-                                        .isTestKeyBoard) {
-                                      controller
-                                              .settingController
-                                              .isTestKeyBoard =
-                                          LocalReposotiry.testKeyBoardOnfOFF();
-                                      controller.textEditingController = null;
-                                    } else {
-                                      controller
-                                              .settingController
-                                              .isTestKeyBoard =
-                                          LocalReposotiry.testKeyBoardOnfOFF();
-                                      controller.textEditingController =
-                                          TextEditingController(
-                                            text: controller.inputValue,
-                                          );
-                                    }
-                                  },
-                                  checkColor: Colors.cyan.shade600,
-                                  fillColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          ToggleSubjectiveQustionButton(),
                         ],
                       ),
                     ),

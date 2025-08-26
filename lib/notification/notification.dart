@@ -111,7 +111,7 @@ class _NotificaionScreenState extends State<NotificaionScreen> {
                     onTap: () {
                       Get.offAndToNamed(
                         JLPT_TEST_PATH,
-                        arguments: {JLPT_TEST: words},
+                        arguments: {JLPT_TEST: words, IS_RANDOM: true},
                       );
                     },
                     child: Card(

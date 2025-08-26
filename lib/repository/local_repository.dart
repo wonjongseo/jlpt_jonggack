@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 import 'package:jlpt_jonggack/model/example.dart';
@@ -186,6 +187,9 @@ class LocalReposotiry {
     if (!Hive.isBoxOpen('lastRunDate')) {
       await Hive.openBox('lastRunDate');
     }
+    if (!Hive.isBoxOpen(AppConstant.settingModelBox)) {
+      await Hive.openBox(AppConstant.settingModelBox);
+    }
   }
 
   static bool isSeenHomeTutorial() {
@@ -205,19 +209,19 @@ class LocalReposotiry {
     return true;
   }
 
-  static bool testKeyBoardOnfOFF() {
-    final list = Hive.box('textKeyBoardKey');
-    String key = 'textKeyBoard';
+  // static bool testKeyBoardOnfOFF() {
+  //   final list = Hive.box('textKeyBoardKey');
+  //   String key = 'textKeyBoard';
 
-    if (!list.containsKey(key)) {
-      list.put(key, false);
-      return false;
-    }
-    bool isTextKeyBoard = list.get(key);
+  //   if (!list.containsKey(key)) {
+  //     list.put(key, false);
+  //     return false;
+  //   }
+  //   bool isTextKeyBoard = list.get(key);
 
-    list.put(key, !isTextKeyBoard);
-    return !isTextKeyBoard;
-  }
+  //   list.put(key, !isTextKeyBoard);
+  //   return !isTextKeyBoard;
+  // }
 
   static int getJlptOrKangiOrGrammar(String level) {
     final list = Hive.box('jlptOrKangiOrGrarmmar');
@@ -251,11 +255,11 @@ class LocalReposotiry {
     return index;
   }
 
-  static bool getTestKeyBoard() {
-    final list = Hive.box('textKeyBoardKey');
-    String key = 'textKeyBoard';
-    return list.get(key, defaultValue: true);
-  }
+  // static bool getTestKeyBoard() {
+  //   final list = Hive.box('textKeyBoardKey');
+  //   String key = 'textKeyBoard';
+  //   return list.get(key, defaultValue: true);
+  // }
 
   static int getBasicOrJlptOrMy() {
     final list = Hive.box('basicOrJlptOrMy');
@@ -425,7 +429,6 @@ class LocalReposotiry {
   }
 
   static Future<void> saveLastRunDate() async {
-    print('saveLastRunDate');
     final list = Hive.box('lastRunDate');
     list.put('lastRunDate', DateTime.now().millisecondsSinceEpoch);
   }

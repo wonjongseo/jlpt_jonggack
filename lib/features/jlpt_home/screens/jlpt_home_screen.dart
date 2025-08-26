@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/grammar_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/japanese_book_step_body.dart';
@@ -7,9 +8,10 @@ import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/kangi_book_step_bo
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/book_step_screen.dart';
 import 'package:jlpt_jonggack/features/home/services/home_controller.dart';
+import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
+import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
 import '../../../common/admob/banner_ad/global_banner_admob.dart';
 
@@ -99,8 +101,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
             padding: EdgeInsets.symmetric(horizontal: Responsive.width20),
             child: Column(
               children: [
-                SizedBox(height: Responsive.height10 * 2),
-                const NewSearchWidget(),
+                NewSearchWidget(isHomeScreen: true),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: Responsive.height10),
                   child: Row(
@@ -162,13 +163,32 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
                     },
                   ),
                 ),
-                const Spacer(flex: 1),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: BottomBtn(
+                label:
+                    'N${widget.levelIndex + 1}급 ${CategoryEnum.values[selectedCategoryIndex].id} 랜덤 퀴즈',
+                onTap: () {
+                  RandomTestGenerator.test(
+                    widget.levelIndex + 1,
+                    CategoryEnum.values[selectedCategoryIndex],
+                  );
+                },
+              ),
+            ),
+            const GlobalBannerAdmob(),
+          ],
+        ),
+      ),
     );
   }
 }

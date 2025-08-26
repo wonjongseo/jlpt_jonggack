@@ -29,7 +29,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
     kangiController = Get.put(KangiStepController(level: widget.level));
 
     progrssingIndex = LocalReposotiry.getCurrentProgressing(
-      '${CategoryEnum.Grammars.name}-${widget.level}',
+      '${CategoryEnum.Kangis.name}-${widget.level}',
     );
 
     super.initState();
@@ -75,7 +75,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                 }
                 if (progrssingIndex == index) {
                   LocalReposotiry.putCurrentProgressing(
-                    '${CategoryEnum.Grammars.name}-${widget.level}',
+                    '${CategoryEnum.Kangis.name}-${widget.level}',
                     progrssingIndex,
                   );
                   goTo('챕터${index + 1}');
@@ -99,7 +99,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                         Center(
                           child: RichText(
                             text: TextSpan(
-                              text: '${CategoryEnum.Grammars.id}\n',
+                              text: '${CategoryEnum.Kangis.id}\n',
                               children: [
                                 TextSpan(
                                   text: 'Chapter ${(index + 1)}',

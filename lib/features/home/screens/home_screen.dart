@@ -73,12 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
           await CommonDialog.askSetSubjectQuestionOfJlptTestDialog();
 
       if (isKeyBoardActive) {
-        if (!settingController.isTestKeyBoard) {
-          settingController.flipTestKeyBoard();
+        if (!settingController.isSubjective) {
+          settingController.toggleSubjective();
         }
       } else {
-        if (settingController.isTestKeyBoard) {
-          settingController.flipTestKeyBoard();
+        if (settingController.isSubjective) {
+          settingController.toggleSubjective();
         }
       }
 
@@ -115,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
     Get.put(TtsController());
     super.initState();
     FlutterLocalNotification.init();
-    // initNotification();
     setting();
     selectedCategoryIndex = LocalReposotiry.getBasicOrJlptOrMy();
     pageController = PageController(initialPage: selectedCategoryIndex);
@@ -147,9 +146,16 @@ class _HomeScreenState extends State<HomeScreen> {
           resizeToAvoidBottomInset: false,
           key: homeController.scaffoldKey,
           endDrawer: _endDrawer(),
-          body: _body(context, homeController),
-          bottomNavigationBar: const GlobalBannerAdmob(),
-          // floatingActionButton: FloatingActionButton.small(onPressed: () {}),
+          body: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: _body(context, homeController),
+          ),
+          bottomNavigationBar: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [const GlobalBannerAdmob()],
+            ),
+          ),
         );
       },
     );
@@ -339,8 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const WelcomeWidget(),
-                  const Spacer(flex: 1),
-                  const NewSearchWidget(),
+                  NewSearchWidget(isHomeScreen: true),
                   const Spacer(flex: 1),
                   StudyCategoryNavigator(
                     onTap: (index) {

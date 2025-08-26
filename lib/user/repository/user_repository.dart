@@ -23,7 +23,7 @@ class UserRepository {
     return user;
   }
 
-  Future<bool> updateUser(User user) async {
+  static Future<bool> updateUser(User user) async {
     final box = Hive.box(User.boxKey);
     try {
       await box.put('user', user);

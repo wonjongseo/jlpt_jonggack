@@ -103,7 +103,7 @@ class JlptStepController extends GetxController {
     if (isOffAndToName) {
       Get.offAndToNamed(
         JLPT_TEST_PATH,
-        arguments: {JLPT_TEST: getJlptStep().words},
+        arguments: {JLPT_TEST: getJlptStep().words, IS_RANDOM: false},
       );
     } else {
       if (getJlptStep().isFinished == null) {
@@ -114,7 +114,10 @@ class JlptStepController extends GetxController {
         }
       }
 
-      Get.toNamed(JLPT_TEST_PATH, arguments: {JLPT_TEST: getJlptStep().words});
+      Get.toNamed(
+        JLPT_TEST_PATH,
+        arguments: {JLPT_TEST: getJlptStep().words, IS_RANDOM: false},
+      );
     }
     // 모든 문제로 테스트 보기.
   }
@@ -235,12 +238,13 @@ class JlptStepController extends GetxController {
   }
 
   JlptStep getJlptStep() {
+    print('step : ${step}');
+
     return jlptSteps[step];
   }
 
   void setJlptSteps(String headTitle) {
     this.headTitle = headTitle;
-    print('headTitle : ${headTitle}');
 
     jlptSteps = jlptStepRepositroy.getJlptStepByHeadTitle(
       level,

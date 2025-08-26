@@ -15,7 +15,12 @@ class _HowToUseScreenState extends State<HowToUseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
       appBar: AppBar(
         title: Text(
           'JLPT 종각 사용법',

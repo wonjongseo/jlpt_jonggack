@@ -75,7 +75,12 @@ class KangiScoreScreen extends StatelessWidget {
         ),
       ),
       body: _body(kangiQuestionController, size),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 

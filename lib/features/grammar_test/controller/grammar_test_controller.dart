@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
+import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
@@ -32,11 +34,9 @@ class GrammarTestController extends GetxController {
 
   UserController userController = Get.find<UserController>();
 
-  late AdController? adController;
-
   @override
   void onClose() {
-    if (isSubmitted) {
+    if (isSubmitted && !isRandom) {
       saveScore();
     }
     super.onClose();
@@ -51,7 +51,7 @@ class GrammarTestController extends GetxController {
         return;
       }
     }
-
+    InterstitialManager.instance.maybeShow();
     isSubmitted = true;
     scrollController.jumpTo(0);
     update();
@@ -62,7 +62,11 @@ class GrammarTestController extends GetxController {
     Get.offNamed(
       GRAMMAR_TEST_SCREEN,
       preventDuplicates: false,
-      arguments: {'grammar': Get.arguments['grammar'], 'isTestAgain': true},
+      arguments: {
+        'grammar': Get.arguments['grammar'],
+        'isTestAgain': true,
+        IS_RANDOM: isRandom,
+      },
     );
   }
 
@@ -73,10 +77,11 @@ class GrammarTestController extends GetxController {
     );
   }
 
+  bool isRandom = false;
   void init(dynamic arguments) {
-    adController = Get.find<AdController>();
     scrollController = ScrollController();
     startGrammarTest(arguments['grammar']);
+    isRandom = arguments[IS_RANDOM] ?? false;
     if (arguments['isTestAgain'] != null) {
       isTestAgain = true;
     }

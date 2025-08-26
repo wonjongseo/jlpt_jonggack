@@ -285,7 +285,12 @@ class _RelatedKangiWordScreenState extends State<RelatedKangiWordScreen> {
           return WordCard(word: widget.relatedVoca[index]);
         },
       ),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 

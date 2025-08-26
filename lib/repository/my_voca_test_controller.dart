@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
@@ -16,7 +17,6 @@ import '../user/controller/user_controller.dart';
 
 class MyVocaTestController extends GetxController
     with SingleGetTickerProviderMixin {
-  AdController adController = Get.find<AdController>();
   UserController userController = Get.find<UserController>();
   SettingController settingController = Get.find<SettingController>();
   MyVocaController myVocaController = Get.find<MyVocaController>();
@@ -124,7 +124,7 @@ class MyVocaTestController extends GetxController
     animationController.forward().whenComplete(nextQuestion);
     pageController = PageController();
 
-    if (settingController.isTestKeyBoard) {
+    if (settingController.isSubjective) {
       textEditingController = TextEditingController();
       focusNode = FocusNode();
     }
@@ -189,7 +189,7 @@ class MyVocaTestController extends GetxController
 
     correctQuestion = question.options[correctAns];
 
-    if (settingController.isTestKeyBoard) {
+    if (settingController.isSubjective) {
       if (textEditingController!.text.isEmpty) {
         requestFocus();
         return;
@@ -200,7 +200,7 @@ class MyVocaTestController extends GetxController
     update();
 
     // if 설정에서 읽는법도 테스트에 포함
-    if (settingController.isTestKeyBoard) {
+    if (settingController.isSubjective) {
       if (correctAns == selectedAns &&
           formattingQuestion(correctQuestion.yomikata, inputValue!)) {
         testCorect();
@@ -299,6 +299,7 @@ class MyVocaTestController extends GetxController
     else {
       // AD
       // adController.showIntersistialAd(KIND_OF_AD.JLPT);
+      InterstitialManager.instance.maybeShow();
       if (!isMyWordTest) {
         jlptWordController.updateScore(numOfCorrectAns, wrongQuestions);
       }
@@ -308,6 +309,7 @@ class MyVocaTestController extends GetxController
         getBacks(2);
         return;
       }
+
       Get.offAndToNamed(SCORE_PATH);
     }
   }

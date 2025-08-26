@@ -75,7 +75,12 @@ class _ScoreScreenState extends State<ScoreScreen> {
         ),
       ),
       body: _body(jlptController, size),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 

@@ -52,7 +52,12 @@ class _KangiStudySceenState extends State<KangiStudySceen> {
         return Scaffold(
           appBar: _appBar(controller, wordsLen),
           body: _body(controller, wordsLen),
-          bottomNavigationBar: const GlobalBannerAdmob(),
+          bottomNavigationBar: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [const GlobalBannerAdmob()],
+            ),
+          ),
         );
       },
     );

@@ -26,7 +26,6 @@ class GrammarStudyScreen extends StatefulWidget {
 class _GrammarStudyScreenState extends State<GrammarStudyScreen> {
   late PageController pageController;
   bool isWantToSee = false;
-  AdController adController = Get.find<AdController>();
 
   void toggleWantToSee() {
     isWantToSee = true;

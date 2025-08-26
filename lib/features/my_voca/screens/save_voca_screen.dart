@@ -168,7 +168,12 @@ class _SaveWordScreenState extends State<SaveWordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         centerTitle: true,

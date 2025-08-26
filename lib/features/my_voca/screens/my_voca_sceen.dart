@@ -151,7 +151,7 @@ class MyVocaScreenNew extends StatelessWidget {
               children: [
                 if (controller.filteredMyword.length >= 4)
                   BottomBtn(label: '퀴즈!', onTap: () {}),
-                const GlobalBannerAdmob(),
+                GlobalBannerAdmob(),
               ],
             ),
           ),
@@ -385,14 +385,11 @@ class MyVocaScreenNew extends StatelessWidget {
 
 // ignore: must_be_immutable
 class MyVocaPage extends StatefulWidget {
-  late AdController? adController;
   late bool isManualSavedWord;
 
   MyVocaPage({super.key}) {
     isManualSavedWord =
         Get.arguments[MY_VOCA_TYPE] == MyVocaEnum.MANUAL_SAVED_WORD;
-
-    adController = Get.find<AdController>();
   }
 
   @override
@@ -446,7 +443,12 @@ class _MyVocaPageState extends State<MyVocaPage> {
               }
             }
             return Scaffold(
-              bottomNavigationBar: const GlobalBannerAdmob(),
+              bottomNavigationBar: SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [const GlobalBannerAdmob()],
+                ),
+              ),
               appBar: AppBar(
                 scrolledUnderElevation: 0.0,
                 centerTitle: true,

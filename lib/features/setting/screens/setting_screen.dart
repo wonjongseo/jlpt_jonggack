@@ -20,7 +20,12 @@ class SettingScreen extends StatelessWidget {
       child: Scaffold(
         appBar: _appBar(settingController, isSettingPage),
         body: _body(settingController.userController, isSettingPage),
-        bottomNavigationBar: const GlobalBannerAdmob(),
+        bottomNavigationBar: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [const GlobalBannerAdmob()],
+          ),
+        ),
       ),
       onWillPop: () async {
         if (settingController.isInitial) {
@@ -55,8 +60,8 @@ class SettingScreen extends StatelessWidget {
               children: [
                 if (isSettingPage) ...[
                   SettingSwitch(
-                    isOn: settingController.isTestKeyBoard,
-                    onChanged: (value) => settingController.flipTestKeyBoard(),
+                    isOn: settingController.isSubjective,
+                    onChanged: (value) => settingController.toggleSubjective(),
                     text: 'JLPT단어 테스트 키보드 활성화',
                   ),
                   const Divider(),

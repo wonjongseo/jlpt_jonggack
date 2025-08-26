@@ -243,7 +243,12 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 }

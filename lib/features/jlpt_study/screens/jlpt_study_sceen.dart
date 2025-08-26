@@ -51,7 +51,12 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
         return Scaffold(
           appBar: _appBar(controller),
           body: _body(context, controller),
-          bottomNavigationBar: const GlobalBannerAdmob(),
+          bottomNavigationBar: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [const GlobalBannerAdmob()],
+            ),
+          ),
         );
       },
     );

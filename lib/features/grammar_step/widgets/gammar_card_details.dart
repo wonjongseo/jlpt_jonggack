@@ -45,7 +45,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
   }
 
   UserController userController = Get.find<UserController>();
-  AdController adController = Get.find<AdController>();
+
   TtsController ttsController = Get.find<TtsController>();
   bool isShowMoreExample = false;
 
@@ -116,7 +116,12 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
           ),
         ),
       ),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 }
@@ -137,7 +142,6 @@ class _GrammarCardState extends State<GrammarCard> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('widget.grammar.grammar.length : ${widget.grammar.grammar.length}');
 
     maxLine = (widget.grammar.grammar.length / 18).ceil();
   }

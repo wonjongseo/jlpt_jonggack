@@ -23,23 +23,16 @@ class JapaneseCalendarStepScreen extends StatefulWidget {
 class _JapaneseCalendarStepScreenState
     extends State<JapaneseCalendarStepScreen> {
   late String level;
-  late String chapter;
   String category = '일본어';
-  int currChapNumber = 0;
-  UserController userController = Get.find<UserController>();
-  late PageController pageController;
   List<GlobalKey> gKeys = [];
   JlptStepController jlptStepController = Get.find<JlptStepController>();
 
   @override
   void initState() {
     super.initState();
-    chapter = widget.chapter;
-    category = '일본어';
-    jlptStepController = Get.find<JlptStepController>();
 
     level = jlptStepController.level;
-    jlptStepController.setJlptSteps(chapter);
+    jlptStepController.setJlptSteps(widget.chapter);
 
     gKeys = List.generate(
       jlptStepController.jlptSteps.length,
@@ -83,7 +76,7 @@ class _JapaneseCalendarStepScreenState
       child: AppBar(
         scrolledUnderElevation: 0.0,
         title: Text(
-          'JLPT N$level $category - $chapter',
+          'JLPT N$level $category - ${widget.chapter}',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         actions: [_bottomSheet()],

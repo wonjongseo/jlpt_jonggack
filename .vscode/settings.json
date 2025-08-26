@@ -1,3 +1,4 @@
 {
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "cmake.sourceDirectory": "/Users/jongseowon/Desktop/MY/project/202506/jlpt_jonggack/linux"
 }

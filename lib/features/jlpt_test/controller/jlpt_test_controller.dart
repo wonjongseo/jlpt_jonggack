@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
@@ -22,6 +23,7 @@ import '../../../user/controller/user_controller.dart';
 
 class JlptTestController extends GetxController
     with SingleGetTickerProviderMixin {
+  static JlptTestController get to => Get.find<JlptTestController>();
   @override
   void onInit() {
     animationController = AnimationController(
@@ -36,7 +38,7 @@ class JlptTestController extends GetxController
     animationController.forward().whenComplete((nextQuestion));
     pageController = PageController();
 
-    if (settingController.isTestKeyBoard) {
+    if (settingController.isSubjective) {
       textEditingController = TextEditingController();
       focusNode = FocusNode();
     }
@@ -45,22 +47,20 @@ class JlptTestController extends GetxController
   }
 
   Random random = Random();
-
+  bool isRandom = false;
   void init(dynamic arguments) {
     if (arguments != null && arguments[MY_VOCA_TEST] != null) {
       // 나만의 시험 초기화
       myVocaController = Get.find<MyVocaController>();
       startMyVocaQuiz(arguments[MY_VOCA_TEST]);
     } else if (arguments != null && arguments[JLPT_TEST] != null) {
-      // JLPT 단어 시험 초기화
+      isRandom = arguments[IS_RANDOM] ?? false;
       startJlptQuiz(arguments[JLPT_TEST]);
     } else {
       // 과거에 틀린 문제로만 테스트 준비하기
       isTestAgain = true;
       startJlptQuizHistory(arguments[CONTINUTE_JLPT_TEST]);
     }
-
-    initAd();
   }
 
   bool isTestAgain = false;
@@ -68,7 +68,6 @@ class JlptTestController extends GetxController
 
   bool isDisTouchable = false;
 
-  AdController adController = Get.find<AdController>();
   UserController userController = Get.find<UserController>();
   SettingController settingController = Get.find<SettingController>();
 
@@ -105,7 +104,15 @@ class JlptTestController extends GetxController
   int numOfCorrectAns = 0;
   String nextOrSkipText = 'skip';
   Color color = Colors.black;
-  void initAd() {}
+
+  void toggleSubjective() {
+    SettingController.to.toggleSubjective();
+    if (SettingController.to.isSubjective) {
+      textEditingController = TextEditingController(text: inputValue);
+    } else {
+      textEditingController = null;
+    }
+  }
 
   @override
   void onClose() {
@@ -132,7 +139,10 @@ class JlptTestController extends GetxController
     map = Question.generateQustion(words);
     // 테스트 다시 시작한 것이기 때문에,
     // 기존에 저장 되어 있는 점수 초기화.
-    jlptWordController.getJlptStep().scores = 0;
+    if (!isRandom) {
+      jlptWordController.getJlptStep().scores = 0;
+    }
+
     setQuestions();
   }
 
@@ -149,7 +159,6 @@ class JlptTestController extends GetxController
     );
 
     map = Question.generateQustion(tempWords);
-    print('tempWords : ${tempWords}');
 
     setQuestions();
   }
@@ -222,7 +231,7 @@ class JlptTestController extends GetxController
 
   // 사지선다 눌렀을 경우.
   void checkAns(Question question, int selectedIndex) {
-    if (settingController.isTestKeyBoard) {
+    if (settingController.isSubjective) {
       if (!isSubmittedYomikata) return;
     }
     isDisTouchable = true;
@@ -233,7 +242,7 @@ class JlptTestController extends GetxController
 
     correctQuestion = question.options[correctAns];
 
-    if (settingController.isTestKeyBoard) {
+    if (settingController.isSubjective) {
       if (textEditingController!.text.isEmpty) {
         requestFocus();
         return;
@@ -244,7 +253,7 @@ class JlptTestController extends GetxController
     update();
 
     // if 설정에서 읽는법도 테스트에 포함
-    if (settingController.isTestKeyBoard) {
+    if (settingController.isSubjective) {
       if (correctAns == selectedAns &&
           formattingQuestion(correctQuestion.yomikata, inputValue!)) {
         testCorect();
@@ -343,30 +352,35 @@ class JlptTestController extends GetxController
     }
     // 테스트를 다 풀 었으면
     else {
-      // AD
+      bool isRecordData = !isRandom && !isMyWordTest;
 
-      if (!isMyWordTest) {
-        if (jlptWordController.getJlptStep().isFinished == null) {
+      if (isRecordData) {
+        bool? isFinished = jlptWordController.getJlptStep().isFinished;
+        if (isFinished == null) {
           jlptWordController.updateScore(numOfCorrectAns, wrongQuestions);
         } else {
-          if (!jlptWordController.getJlptStep().isFinished!) {
+          if (!isFinished) {
             jlptWordController.updateScore(numOfCorrectAns, wrongQuestions);
           }
         }
       } else {
-        Get.back();
+        if (isMyWordTest) {
+          Get.back();
+        }
       }
 
       if (numOfCorrectAns == questions.length) {
-        if (!isMyWordTest) {
+        if (isRecordData) {
           jlptWordController.finishQuizAndchangeHeaderPageIndex();
+        }
+        if (!isMyWordTest) {
           Get.off(() => const VeryGoodScreen());
         } else {
           Get.to(() => const VeryGoodScreen());
         }
         return;
       }
-
+      InterstitialManager.instance.maybeShow();
       Get.offAndToNamed(SCORE_PATH);
     }
   }

@@ -355,44 +355,6 @@ class CommonDialog {
     return result;
   }
 
-  // static Future<bool> alertPreviousTestRequired() async {
-  //   Get.dialog(AlertDialog(
-  //     shape: Border.all(),
-  //     content: Column(
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         SizedBox(height: Responsive.height10),
-  //         RichText(
-  //           text: TextSpan(
-  //             text: '다음 단계로 넘어가기 위해서 해당 챕터의\n퀴즈에서',
-  //             children: [
-  //               TextSpan(
-  //                 text: ' 100점',
-  //                 style: TextStyle(
-  //                   color: Colors.redAccent,
-  //                   fontSize: Responsive.width18,
-  //                 ),
-  //               ),
-  //               const TextSpan(
-  //                 text: '을 맞으셔야 합니다!',
-  //               )
-  //             ],
-  //             style: TextStyle(
-  //               color: Colors.black,
-  //               fontSize: Responsive.width16,
-  //               fontWeight: FontWeight.w500,
-  //             ),
-  //           ),
-  //         ),
-  //         SizedBox(height: Responsive.height20),
-  //         const JonggackAvator(),
-  //         SizedBox(height: Responsive.height20),
-  //       ],
-  //     ),
-  //   ));
-  //   return true;
-  // }
-
   static Future<void> appealDownLoadThePaidVersion() async {
     Get.dialog(
       AlertDialog(

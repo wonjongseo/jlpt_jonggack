@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/data/grammar_datas.dart';
 import 'package:jlpt_jonggack/data/kangi_datas.dart';
 import 'package:jlpt_jonggack/data/word_datas.dart';
 import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
+import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/routes.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:jlpt_jonggack/services/app_info_service.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
@@ -28,8 +32,8 @@ import 'features/setting/services/setting_controller.dart';
 
 STEP 1. 프로젝트 명 반드시 바꾸기!!
 JLPT 종각
-  JLPT 종각 => flutter pub run change_app_package_name:main com.wonjongseo.jlpt_jonggack
-  JLPT 종각 Plus => flutter pub run change_app_package_name:main com.wonjongseo.jlpt_jonggack_plus
+  JLPT 종각 => flutter pub run change_app_package_name:main com.wonjongseo.jlpt-jonggack
+  JLPT 종각 Plus => flutter pub run change_app_package_name:main com.wonjongseo.jlpt-jonggack_plus
 
 STEP 2. 앱 이름 바꾸기 
   JLPT 종각 <-> JLPT 종각 Plus
@@ -63,6 +67,15 @@ BundleID  com.wonjongseo.jlpt-jonggack
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+
+  InterstitialManager.instance.configure(
+    maxPerDay: 100,
+    showChance: 0.6,
+    cooldownMinutes: 15,
+  );
+
+  InterstitialManager.instance.preload();
+
   initializeDateFormatting();
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
@@ -110,32 +123,19 @@ class _AppState extends State<App> {
 
       jlptWordScroes.add(await JlptStepRepositroy.init('1'));
       jlptWordScroes.add(await JlptStepRepositroy.init('2'));
-
       jlptWordScroes.add(await JlptStepRepositroy.init('3'));
-
       jlptWordScroes.add(await JlptStepRepositroy.init('4'));
-
       jlptWordScroes.add(await JlptStepRepositroy.init('5'));
-
       grammarScores.add(await GrammarRepositroy.init('1'));
-
       grammarScores.add(await GrammarRepositroy.init('2'));
-
       grammarScores.add(await GrammarRepositroy.init('3'));
-
       grammarScores.add(await GrammarRepositroy.init('4'));
       grammarScores.add(await GrammarRepositroy.init('5'));
-
       kangiScores.add(await KangiStepRepositroy.init("1"));
-
       kangiScores.add(await KangiStepRepositroy.init("2"));
-
       kangiScores.add(await KangiStepRepositroy.init("3"));
-
       kangiScores.add(await KangiStepRepositroy.init("4"));
-
       kangiScores.add(await KangiStepRepositroy.init("5"));
-
       kangiScores.add(await KangiStepRepositroy.init("6"));
 
       late User user;
@@ -170,8 +170,6 @@ class _AppState extends State<App> {
       UserController userController = Get.put(UserController());
       userController.user.isPad = await isIpad();
 
-      Get.put(AdController());
-
       Get.put(SettingController());
     } catch (e) {
       rethrow;
@@ -185,6 +183,7 @@ class _AppState extends State<App> {
     List<int> kangiScores = [];
     try {
       await LocalReposotiry.init();
+      // SettingRepository.init();
 
       if (await JlptStepRepositroy.isExistData(1) == false) {
         jlptWordScroes.add(await JlptStepRepositroy.init('1'));
@@ -366,6 +365,13 @@ class _AppState extends State<App> {
       if (userController.user.grammarScores.length == 3) {
         userController.addN4N5GrammarScore();
       }
+      bool isPlus = await AppInfoService.isPlus();
+
+      if (!isPlus) {
+        userController.user.isPremieum = false;
+        UserRepository.updateUser(userController.user);
+      }
+
       bool ischeckAndExecuteFunction =
           await LocalReposotiry.checkAndExecuteFunction();
       if (ischeckAndExecuteFunction) {
@@ -385,8 +391,8 @@ class _AppState extends State<App> {
           );
         }
       }
-      Get.put(AdController());
 
+      Get.put(JSearchController());
       Get.put(SettingController());
     } catch (e) {
       rethrow;

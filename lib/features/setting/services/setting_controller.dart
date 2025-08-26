@@ -3,32 +3,42 @@ import 'package:flutter/foundation.dart';
 import 'dart:io';
 
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
+import 'package:jlpt_jonggack/repository/my_word_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 import '../../../repository/grammar_step_repository.dart';
 import '../../../repository/jlpt_step_repository.dart';
 import '../../../repository/kangis_step_repository.dart';
-import '../../../repository/local_repository.dart';
-import '../../../repository/my_word_repository.dart';
 
 class SettingController extends GetxController {
-  bool isTestKeyBoard = LocalReposotiry.getTestKeyBoard();
+  static SettingController get to => Get.find<SettingController>();
+
+  @override
+  void onInit() {
+    getIsSubjective();
+    super.onInit();
+  }
+
+  final _isSubjective = true.obs;
+  bool get isSubjective => _isSubjective.value;
+
   // 초기화 버튼을 눌렀는가
   bool isInitial = false;
 
   UserController userController = Get.find<UserController>();
 
-  void flipTestKeyBoard() {
-    isTestKeyBoard = toggleTestKeyBoard();
+  void getIsSubjective() {
+    _isSubjective.value =
+        SettingRepository.getBool(HVKey.settingModelBox) ?? true;
   }
 
-  bool toggleTestKeyBoard() {
-    isTestKeyBoard = !isTestKeyBoard;
-    LocalReposotiry.testKeyBoardOnfOFF();
-    update();
-    return isTestKeyBoard;
+  void toggleSubjective() {
+    _isSubjective.value = !_isSubjective.value;
+    SettingRepository.setBool(HVKey.settingModelBox, _isSubjective.value);
   }
 
   Future<void> successDeleteAndQuitApp() async {

@@ -4,10 +4,10 @@ class AppConstant {
   // 네이티브 광고 주기
   static const int PER_COUNT_NATIVE_ND = 4;
 
-// 챕터 당 단어 수
+  // 챕터 당 단어 수
   static const int MINIMUM_STEP_COUNT = 15; //TODO
 
-// 틀린 문제로 다시 테스트를 본 경우 광고 넘어갈 수 있는 경우의 수
+  // 틀린 문제로 다시 테스트를 본 경우 광고 넘어갈 수 있는 경우의 수
   static const int PROBABILITY_PASS_AD = 15;
 
   // 자주 틀리는 문제로 유도하는 [모르는 버튼] 누른 숫자 MIN = 15 AND MAX = 10
@@ -18,6 +18,11 @@ class AppConstant {
 
   // 무료 버전이 볼 수 있는 1급 서브챕터 제한 인덱스
   static const int RESTRICT_SUB_STEP_INDEX = 3;
+  static const String settingModelBox = 'settingsBox';
+}
+
+class HVKey {
+  static const String settingModelBox = 'settings';
 }
 
 class AppConstantMsg {

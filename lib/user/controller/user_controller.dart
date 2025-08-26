@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/data/grammar_datas.dart';
 import 'package:jlpt_jonggack/data/kangi_datas.dart';
 import 'package:jlpt_jonggack/data/word_datas.dart';
 import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
 import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
+import 'package:jlpt_jonggack/features/search/screens/search_screen.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
@@ -28,76 +30,56 @@ enum TotalProgressType { JLPT, GRAMMAR, KANGI }
 enum SOUND_OPTIONS { VOLUMN, PITCH, RATE }
 
 class UserController extends GetxController {
-  late TextEditingController textEditingController;
-  String selectedDropDownItem = 'japanese';
-  List<Word>? searchedWords;
-  List<Kangi>? searchedKangis;
-  List<Grammar>? searchedGrammar;
-  bool isSearchReq = false;
+  late TextEditingController teCnt;
+  // List<Word> searchedWords = [];
+  // List<Kangi> searchedKangis = [];
+  // List<Grammar> searchedGrammar = [];
+  // bool isSearchReq = false;
+  // bool isLoading = false;
   UserRepository userRepository = UserRepository();
   bool isPad = false;
   late User user;
 
-  bool noSearchedQuery() {
-    if (searchedWords != null &&
-        searchedKangis != null &&
-        searchedGrammar != null) {
-      if (searchedWords!.isEmpty && searchedKangis!.isEmpty) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // Future<void> clearQuery() async {
+  //   searchedWords.clear();
+  //   searchedKangis.clear();
+  //   searchedGrammar.clear();
+  //   update();
+  // }
 
-  Future<void> clearQuery() async {
-    searchedWords = null;
-    searchedKangis = null;
-    searchedGrammar = null;
-    update();
-  }
+  // String query = '';
+  // Future<void> sendQuery() async {
+  //   try {
+  //     isLoading = true;
 
-  String query = '';
-  Future<void> sendQuery() async {
-    query = textEditingController.text;
-    query = query.trim();
-    if (query.isEmpty || query == '') {
-      return;
-    }
+  //     query = teCnt.text.trim();
+  //     if (query.isEmpty || query == '') return;
 
-    searchedWords = null;
-    searchedKangis = null;
-    searchedGrammar = null;
-    isSearchReq = true;
-    update();
-    searchedWords = await JlptRepositry.searchWords(query);
+  //     clearQuery();
 
-    searchedKangis = await KangiRepositroy.searchkangis(query);
-    searchedGrammar = await GrammarRepositroy.searchGrammars(query);
+  //     searchedWords = await JlptRepositry.searchWords(query);
+  //     searchedKangis = await KangiRepositroy.searchkangis(query);
+  //     searchedGrammar = await GrammarRepositroy.searchGrammars(query);
 
-    if (query.length == 1) {
-      String aa = '0123456789';
+  //     if (query.length == 1) {
+  //       String aa = '0123456789';
 
-      if (aa.contains(query)) {
-        searchedWords = [];
-        searchedKangis = [];
-        searchedGrammar = [];
-      }
-    }
+  //       if (aa.contains(query)) {
+  //         clearQuery();
+  //       }
+  //     }
 
-    isSearchReq = false;
-    textEditingController.text = '';
-
-    update();
-  }
+  //     update();
+  //   } catch (e) {
+  //     SnackBarHelper.showErrorSnackBar('$e');
+  //   } finally {
+  //     isLoading = false;
+  //   }
+  // }
 
   void changeuserTric(bool premieum) {
     user.isTrik = premieum;
-    userRepository.updateUser(user);
-    update();
-  }
-
-  void changeDropDownButtonItme(String? v) {
-    selectedDropDownItem = v!;
+    UserRepository.updateUser(user);
     update();
   }
 
@@ -112,7 +94,7 @@ class UserController extends GetxController {
     volumn = LocalReposotiry.getVolumn();
     pitch = LocalReposotiry.getPitch();
     rate = LocalReposotiry.getRate();
-    textEditingController = TextEditingController();
+    teCnt = TextEditingController();
   }
 
   void updateSoundValues(SOUND_OPTIONS command, double newValue) {
@@ -267,7 +249,7 @@ class UserController extends GetxController {
         }
         break;
     }
-    userRepository.updateUser(user);
+    UserRepository.updateUser(user);
   }
 
   void updateCurrentProgress(
@@ -310,14 +292,14 @@ class UserController extends GetxController {
 
         break;
     }
-    userRepository.updateUser(user);
+    UserRepository.updateUser(user);
     update();
   }
 
   void deleteAllMyVocabularyDatas() {
     user.yokumatigaeruMyWords = 0;
     user.manualSavedMyWords = 0;
-    userRepository.updateUser(user);
+    UserRepository.updateUser(user);
   }
 
   void changeUserAuth() {
@@ -350,7 +332,7 @@ class UserController extends GetxController {
     if (user.yokumatigaeruMyWords < 0) {
       user.manualSavedMyWords = 0;
     }
-    userRepository.updateUser(user);
+    UserRepository.updateUser(user);
 
     update();
   }
@@ -380,6 +362,6 @@ class UserController extends GetxController {
 
     user.currentGrammarScores.addAll([0, 0]);
 
-    userRepository.updateUser(user);
+    UserRepository.updateUser(user);
   }
 }

@@ -5,6 +5,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
+import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/veryGoodScreen.dart';
@@ -22,7 +24,7 @@ class KangiTestController extends GetxController
   late Animation animation;
   late PageController pageController;
   List<Map<int, List<Word>>> map = List.empty(growable: true);
-  AdController adController = Get.find<AdController>();
+
   UserController userController = Get.find<UserController>();
 
   late KangiStepController kangiController;
@@ -30,9 +32,12 @@ class KangiTestController extends GetxController
   // 틀릴 경우
   bool isWrong = false;
 
+  bool isRandom = false;
   void init(dynamic arguments) {
     // 모든 문제로 테스트 준비해기
     if (arguments != null && arguments[KANGI_TEST] != null) {
+      isRandom = arguments[IS_RANDOM] ?? false;
+
       startKangiQuiz(arguments[KANGI_TEST]);
     }
     // 과거에 틀린 문제로만 테스트 준비하기
@@ -110,7 +115,9 @@ class KangiTestController extends GetxController
     for (int i = 0; i < kangis.length; i++) {
       words.add(kangis[i].kangiToWord());
     }
-    kangiController.getKangiStep().scores = 0;
+    if (!isRandom) {
+      kangiController.getKangiStep().scores = 0;
+    }
     map = Question.generateQustion(words);
 
     setQuestions();
@@ -280,24 +287,30 @@ class KangiTestController extends GetxController
     // 테스트를 다 풀 었으면
     else {
       // AD
-      // if (adController.randomlyPassAd() || !isTestAgain) {
-      //   adController.showIntersistialAd(KIND_OF_AD.KANGI);
-      // }
-      if (kangiController.getKangiStep().isFinished == null) {
-        kangiController.updateScore(numOfCorrectAns, wrongQuestions);
-      } else {
-        if (!kangiController.getKangiStep().isFinished!) {
+      if (!isTestAgain) {
+        InterstitialManager.instance.maybeShow();
+        // adController.showIntersistialAd(KIND_OF_AD.KANGI);
+      }
+      if (!isRandom) {
+        if (kangiController.getKangiStep().isFinished == null) {
           kangiController.updateScore(numOfCorrectAns, wrongQuestions);
+        } else {
+          if (!kangiController.getKangiStep().isFinished!) {
+            kangiController.updateScore(numOfCorrectAns, wrongQuestions);
+          }
         }
       }
 
       if (numOfCorrectAns == questions.length) {
-        kangiController.finishQuizAndchangeHeaderPageIndex();
-        // userController.plusHeart(plusHeartCount: 3);
+        if (!isRandom) {
+          kangiController.finishQuizAndchangeHeaderPageIndex();
+        }
 
         Get.off(const VeryGoodScreen());
         return;
       }
+      InterstitialManager.instance.maybeShow();
+
       Get.offAndToNamed(KANGI_SCORE_PATH, arguments: {});
     }
   }

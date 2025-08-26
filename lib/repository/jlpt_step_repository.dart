@@ -13,7 +13,7 @@ import '../common/app_constant.dart';
 class JlptRepositry {
   static Future<Word?> searchWord(String query) async {
     final wordBox = Hive.box<Word>(Word.boxKey);
-    Word? word = await wordBox.get(query);
+    Word? word = wordBox.get(query);
 
     return word;
   }
@@ -57,10 +57,6 @@ class JlptStepRepositroy {
       defaultValue: 0,
     );
 
-    // For Development
-    // if (!kReleaseMode) {
-    //   return false;
-    // }
     return jlptHeadTieleCount != 0;
   }
 

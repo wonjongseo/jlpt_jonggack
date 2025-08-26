@@ -44,7 +44,7 @@ class JlptTestCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: Responsive.height40),
-          if (controller.settingController.isTestKeyBoard)
+          if (controller.settingController.isSubjective)
             const JlptTestTextFormField(),
           Expanded(
             child: SingleChildScrollView(

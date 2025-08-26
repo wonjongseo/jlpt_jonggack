@@ -26,7 +26,12 @@ class KangiTestScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: _appBar(kangiTestController),
       body: _body(context),
-      bottomNavigationBar: const GlobalBannerAdmob(),
+      bottomNavigationBar: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [const GlobalBannerAdmob()],
+        ),
+      ),
     );
   }
 

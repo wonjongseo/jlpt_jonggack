@@ -38,7 +38,7 @@ class MyWordInputField extends StatefulWidget {
 
 class _MyWordInputFieldState extends State<MyWordInputField> {
   bool isManual = true;
-  AdController adController = Get.find<AdController>();
+
   MyVocaController controller = Get.find<MyVocaController>();
   UserController userController = Get.find<UserController>();
 
