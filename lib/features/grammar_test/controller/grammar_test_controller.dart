@@ -58,7 +58,9 @@ class GrammarTestController extends GetxController {
   }
 
   void againTest() {
-    saveScore();
+    if (!isRandom) {
+      saveScore();
+    }
     Get.offNamed(
       GRAMMAR_TEST_SCREEN,
       preventDuplicates: false,

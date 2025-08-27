@@ -352,6 +352,11 @@ class JlptTestController extends GetxController
     }
     // 테스트를 다 풀 었으면
     else {
+      if (!isTestAgain) {
+        print("Call InterstitialManager JLPT");
+        InterstitialManager.instance.maybeShow();
+      }
+
       bool isRecordData = !isRandom && !isMyWordTest;
 
       if (isRecordData) {
@@ -380,7 +385,7 @@ class JlptTestController extends GetxController
         }
         return;
       }
-      InterstitialManager.instance.maybeShow();
+
       Get.offAndToNamed(SCORE_PATH);
     }
   }

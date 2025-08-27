@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -51,14 +52,14 @@ class KangiQuestionOption extends StatelessWidget {
             child:
                 multMean.length == 1
                     ? Center(
-                      child: Text(
+                      child: AutoSizeText(
                         text,
                         style: TextStyle(
                           color: color,
-                          fontSize: Responsive.height14,
                           fontFamily: AppFonts.japaneseFont,
                           fontWeight: FontWeight.bold,
                         ),
+                        maxLines: 1,
                         textAlign: TextAlign.center,
                       ),
                     )
@@ -74,7 +75,6 @@ class KangiQuestionOption extends StatelessWidget {
                               '${index + 1}. ${multMean[index].trim()}',
                               style: TextStyle(
                                 color: color,
-                                fontSize: Responsive.height14,
                                 fontFamily: AppFonts.japaneseFont,
                                 fontWeight: FontWeight.bold,
                               ),

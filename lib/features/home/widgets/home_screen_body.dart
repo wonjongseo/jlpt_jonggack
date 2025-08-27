@@ -115,14 +115,14 @@ class _JLPTCardsState extends State<JLPTCards> {
                     totalCnt: userController.user.jlptWordScroes[index],
                   ),
                   StudyCategoryAndProgress(
-                    caregory: '문법',
-                    curCnt: userController.user.currentGrammarScores[index],
-                    totalCnt: userController.user.grammarScores[index],
-                  ),
-                  StudyCategoryAndProgress(
                     caregory: '한자',
                     curCnt: userController.user.currentKangiScores[index],
                     totalCnt: userController.user.kangiScores[index],
+                  ),
+                  StudyCategoryAndProgress(
+                    caregory: '문법',
+                    curCnt: userController.user.currentGrammarScores[index],
+                    totalCnt: userController.user.grammarScores[index],
                   ),
                 ],
               ),

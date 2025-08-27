@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+
+import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
+import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/features/home/services/home_controller.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/grammar_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/japanese_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/kangi_book_step_body.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
-import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/features/home/services/home_controller.dart';
-import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
-
-import '../../../common/admob/banner_ad/global_banner_admob.dart';
 
 // ignore: constant_identifier_names
 enum CategoryEnum { Japaneses, Kangis, Grammars }
@@ -103,7 +102,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
               children: [
                 NewSearchWidget(isHomeScreen: true),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: Responsive.height10),
+                  padding: EdgeInsets.symmetric(vertical: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: List.generate(
@@ -163,6 +162,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
                     },
                   ),
                 ),
+                SizedBox(height: 10),
               ],
             ),
           ),

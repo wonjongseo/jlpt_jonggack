@@ -25,6 +25,8 @@ class InterstitialManager {
   static const _kCountKey = 'interstitial_count';
   static const _kLastTsKey = 'interstitial_last_ts';
 
+  static const _kFirstSkipDayKey = 'interstitial_first_skip_day';
+
   // ---------- 공개 API ----------
 
   /// 초기 설정 (앱 시작 시 1회)
@@ -111,11 +113,19 @@ class InterstitialManager {
   Future<bool> _shouldShowNow() async {
     // 날짜 리셋
     final today = _todayKey();
-    final savedDay = await SettingRepository.getString(_kDateKey);
+    final savedDay = SettingRepository.getString(_kDateKey);
     if (savedDay != today) {
       await SettingRepository.setString(_kDateKey, today);
       await SettingRepository.setInt(_kCountKey, 0);
       await SettingRepository.setInt(_kLastTsKey, 0);
+      // 첫 노출 스킵은 광고가 실제 준비된 경우에만 소모되도록 여기선 설정하지 않음
+    }
+
+    // ★ 추가: 오늘의 첫 "광고 노출 기회"는 무조건 스킵
+    final firstSkipDay = SettingRepository.getString(_kFirstSkipDayKey);
+    if (firstSkipDay != today) {
+      await SettingRepository.setString(_kFirstSkipDayKey, today);
+      return false; // 첫 기회 스킵
     }
 
     // 일일 캡

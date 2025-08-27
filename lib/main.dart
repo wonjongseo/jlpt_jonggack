@@ -69,8 +69,8 @@ void main() async {
   MobileAds.instance.initialize();
 
   InterstitialManager.instance.configure(
-    maxPerDay: 100,
-    showChance: 0.6,
+    maxPerDay: 1000,
+    showChance: 0.5,
     cooldownMinutes: 15,
   );
 

@@ -8,17 +8,19 @@ class BottomBtn extends StatelessWidget {
   final Function() onTap;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(15),
-      onTap: onTap,
-      child: Container(
-        height: 50,
-        width: double.infinity,
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        decoration: BoxDecoration(
-          color: AppColors.mainColor,
-          borderRadius: BorderRadius.circular(15),
-        ),
+    return Container(
+      height: 50,
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ).copyWith(top: 4, bottom: 10),
+      decoration: BoxDecoration(
+        color: AppColors.mainColor,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: onTap,
         child: Center(
           child: Text(
             label,

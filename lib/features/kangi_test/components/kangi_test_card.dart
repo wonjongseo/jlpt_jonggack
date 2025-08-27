@@ -39,51 +39,10 @@ class KangiQuestionCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: Responsive.height10),
-          if (controller.isKangiSubject)
-            Expanded(
-              child: TextFormField(
-                decoration: InputDecoration(
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Responsive.height8,
-                    ),
-                    child: const Tooltip(
-                      triggerMode: TooltipTriggerMode.tap,
-                      message:
-                          '1. 읽는 법을 입력하면 사지선다가 표시됩니다.\n2. 장음 (-, ー) 은 생략해도 됩니다.',
-                      child: Icon(
-                        Icons.help,
-                        size: 16,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                  hintText: '읽는 법을 먼저 입력해주세요.',
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  label: Text(
-                    ' 읽는 법',
-                    style: TextStyle(
-                      color: AppColors.scaffoldBackground.withOpacity(0.5),
-                      fontSize: Responsive.height16,
-                    ),
-                  ),
-                ),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: AppFonts.japaneseFont,
-                ),
-              ),
-            ),
+
           Row(
             children: [
-              if (!controller.isKangiSubject) _selectKangi(),
+              _selectKangi(),
               SizedBox(width: Responsive.width10),
               Expanded(
                 child: Column(
@@ -107,7 +66,8 @@ class KangiQuestionCard extends StatelessWidget {
                                         .yomikata
                                         .split('@')[0] ==
                                     controller1.correctAns2) {
-                                  return const Color(0xFF6AC259);
+                                  // return const Color(0xFF6AC259);
+                                  return Colors.green;
                                 } else if (question
                                             .options[controller1
                                                 .randumIndexs[index]]
@@ -189,7 +149,8 @@ class KangiQuestionCard extends StatelessWidget {
                                         .yomikata
                                         .split('@')[1] ==
                                     controller1.correctAns3) {
-                                  return const Color(0xFF6AC259);
+                                  // return const Color(0xFF6AC259);
+                                  return Colors.green;
                                 } else if (question
                                             .options[controller1
                                                 .randumIndexs2[index]]
@@ -275,7 +236,8 @@ class KangiQuestionCard extends StatelessWidget {
                     if (controller1.isAnswered1) {
                       if (question.options[index].mean ==
                           controller1.correctAns) {
-                        return const Color(0xFF6AC259);
+                        // return const Color(0xFF6AC259);
+                        return Colors.green;
                       } else if (question.options[index].mean ==
                               controller1.selectedAns &&
                           question.options[index].mean !=
