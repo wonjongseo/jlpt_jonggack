@@ -32,8 +32,13 @@ import 'features/setting/services/setting_controller.dart';
 
 STEP 1. 프로젝트 명 반드시 바꾸기!!
 JLPT 종각
-  JLPT 종각 => flutter pub run change_app_package_name:main com.wonjongseo.jlpt-jonggack
-  JLPT 종각 Plus => flutter pub run change_app_package_name:main com.wonjongseo.jlpt-jonggack_plus
+  JLPT 종각 => flutter pub run change_app_package_name:main com.wonjongseo.jlpt_jonggack
+  JLPT 종각 Plus => flutter pub run change_app_package_name:main com.wonjongseo.jlpt_jonggack_plus
+
+IOS번들은 
+com.wonjongseo.jlpt-jonggack
+com.wonjongseo.jlpt-jonggack-plus
+
 
 STEP 2. 앱 이름 바꾸기 
   JLPT 종각 <-> JLPT 종각 Plus
@@ -60,8 +65,6 @@ Android Command - flutter build appbundle
 Hive - flutter pub run build_runner build --delete-conflicting-outputs
 
 
-IOS 
-BundleID  com.wonjongseo.jlpt-jonggack
  */
 
 void main() async {
@@ -70,8 +73,8 @@ void main() async {
 
   InterstitialManager.instance.configure(
     maxPerDay: 1000,
-    showChance: 0.5,
-    cooldownMinutes: 15,
+    showChance: 1,
+    cooldownMinutes: 0,
   );
 
   InterstitialManager.instance.preload();

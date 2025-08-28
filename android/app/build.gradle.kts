@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.wonjongseo.jlpt_jonggack"
+    namespace = "com.wonjongseo.jlpt_jonggack_plus"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.wonjongseo.jlpt_jonggack"
+        applicationId = "com.wonjongseo.jlpt_jonggack_plus"
         // minSdk = flutter.minSdkVersion
         minSdk = 23
         targetSdk = 35
