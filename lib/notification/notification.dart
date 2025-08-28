@@ -200,9 +200,6 @@ class FlutterLocalNotification {
       iOS: DarwinNotificationDetails(badgeNumber: 0),
     );
 
-    print('showNotification');
-    print('payload : ${payload}');
-
     await flutterLocalNotificationsPlugin.periodicallyShow(
       0,
       '일본어를 공부할 시간이에요!',
