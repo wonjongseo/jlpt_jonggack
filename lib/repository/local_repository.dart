@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -187,6 +188,10 @@ class LocalReposotiry {
     if (!Hive.isBoxOpen('lastRunDate')) {
       await Hive.openBox('lastRunDate');
     }
+    if (!Hive.isBoxOpen('appConfig')) {
+      await Hive.openBox('appConfig');
+    }
+
     if (!Hive.isBoxOpen(AppConstant.settingModelBox)) {
       await Hive.openBox(AppConstant.settingModelBox);
     }
@@ -457,5 +462,43 @@ class LocalReposotiry {
       return true;
     }
     return false;
+  }
+
+  static Future changeCategory(String category) async {
+    final box = Hive.box('appConfig');
+    await box.put('selectedCategory', category);
+  }
+
+  static String getCategory() {
+    final box = Hive.box('appConfig');
+    return box.get('selectedCategory', defaultValue: '명사');
+  }
+
+  static Future<bool> runOnceAfter280() async {
+    final box = Hive.box('appConfig');
+
+    // 이미 실행했는지 확인
+    final hasRun = box.get('runOnceAfter280', defaultValue: false);
+    print('hasRun : ${hasRun}');
+
+    if (hasRun) return false; // 이미 실행한 적 있음
+
+    // Dart SDK 버전 문자열 → "3.3.4 (stable)" 같은 형식
+    final version = Platform.version.split(' ').first;
+    final parts = version.split('.').map(int.parse).toList();
+
+    // 2.8.1 이상인지 체크
+    final isOk =
+        (parts[0] > 2) ||
+        (parts[0] == 2 && parts[1] > 8) ||
+        (parts[0] == 2 && parts[1] == 8 && parts[2] >= 0);
+
+    if (isOk) {
+      // 조건 만족 + 첫 실행 → true 반환 + 기록 저장
+      await box.put('runOnceAfter280', true);
+      return true;
+    }
+
+    return false; // 조건 안 맞음
   }
 }

@@ -22,13 +22,14 @@ class WordAdapter extends TypeAdapter<Word> {
       yomikata: fields[3] as String,
       headTitle: fields[1] as String,
       examples: (fields[5] as List?)?.cast<Example>(),
+      category: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Word obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(1)
       ..write(obj.headTitle)
       ..writeByte(2)
@@ -38,7 +39,9 @@ class WordAdapter extends TypeAdapter<Word> {
       ..writeByte(4)
       ..write(obj.mean)
       ..writeByte(5)
-      ..write(obj.examples);
+      ..write(obj.examples)
+      ..writeByte(6)
+      ..write(obj.category);
   }
 
   @override

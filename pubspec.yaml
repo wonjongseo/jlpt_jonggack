@@ -43,6 +43,7 @@ dependencies:
   intl:
   logger: ^2.5.0
   package_info_plus: ^8.3.0
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

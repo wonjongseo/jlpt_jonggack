@@ -48,3 +48,5 @@ app.*.map.json
 /lib/data/
 /lib/data/word_datas.dart
 /lib/data/*
+
+/assets/json

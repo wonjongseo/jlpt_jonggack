@@ -23,6 +23,8 @@ class Word extends HiveObject {
   late String mean;
   @HiveField(5)
   List<Example>? examples;
+  @HiveField(6, defaultValue: null)
+  String? category;
 
   Word({
     // this.id,
@@ -31,6 +33,7 @@ class Word extends HiveObject {
     required this.yomikata,
     required this.headTitle,
     this.examples,
+    this.category,
   });
 
   @override
@@ -43,6 +46,7 @@ class Word extends HiveObject {
     yomikata = map['yomikata'] ?? '';
     mean = map['mean'] ?? '';
     headTitle = map['headTitle'] ?? '';
+    category = map['categories'] ?? '';
     examples =
         map['examples'] == null
             ? []
@@ -78,7 +82,6 @@ class Word extends HiveObject {
     } else if (nLevel == '5') {
       selectedJlptLevelJson = NetWorkManager.getDataToServer('N5-voca');
     }
-
     for (int i = 0; i < selectedJlptLevelJson.length; i++) {
       List<Word> temp = [];
       for (int j = 0; j < selectedJlptLevelJson[i].length; j++) {
@@ -99,6 +102,7 @@ class Word extends HiveObject {
     result.addAll({'word': word});
     result.addAll({'yomikata': yomikata});
     result.addAll({'mean': mean});
+    result.addAll({'category': category});
     if (examples != null) {
       result.addAll({'examples': examples!.map((x) => x?.toMap()).toList()});
     }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/data/grammar_datas.dart';
@@ -73,8 +74,8 @@ void main() async {
 
   InterstitialManager.instance.configure(
     maxPerDay: 1000,
-    showChance: 1,
-    cooldownMinutes: 0,
+    showChance: 0.5,
+    cooldownMinutes: 10,
   );
 
   InterstitialManager.instance.preload();
@@ -129,17 +130,17 @@ class _AppState extends State<App> {
       jlptWordScroes.add(await JlptStepRepositroy.init('3'));
       jlptWordScroes.add(await JlptStepRepositroy.init('4'));
       jlptWordScroes.add(await JlptStepRepositroy.init('5'));
-      grammarScores.add(await GrammarRepositroy.init('1'));
-      grammarScores.add(await GrammarRepositroy.init('2'));
-      grammarScores.add(await GrammarRepositroy.init('3'));
-      grammarScores.add(await GrammarRepositroy.init('4'));
-      grammarScores.add(await GrammarRepositroy.init('5'));
-      kangiScores.add(await KangiStepRepositroy.init("1"));
-      kangiScores.add(await KangiStepRepositroy.init("2"));
-      kangiScores.add(await KangiStepRepositroy.init("3"));
-      kangiScores.add(await KangiStepRepositroy.init("4"));
-      kangiScores.add(await KangiStepRepositroy.init("5"));
-      kangiScores.add(await KangiStepRepositroy.init("6"));
+      // grammarScores.add(await GrammarRepositroy.init('1'));
+      // grammarScores.add(await GrammarRepositroy.init('2'));
+      // grammarScores.add(await GrammarRepositroy.init('3'));
+      // grammarScores.add(await GrammarRepositroy.init('4'));
+      // grammarScores.add(await GrammarRepositroy.init('5'));
+      // kangiScores.add(await KangiStepRepositroy.init("1"));
+      // kangiScores.add(await KangiStepRepositroy.init("2"));
+      // kangiScores.add(await KangiStepRepositroy.init("3"));
+      // kangiScores.add(await KangiStepRepositroy.init("4"));
+      // kangiScores.add(await KangiStepRepositroy.init("5"));
+      // kangiScores.add(await KangiStepRepositroy.init("6"));
 
       late User user;
       List<int> currentJlptWordScroes = List.generate(
@@ -172,7 +173,7 @@ class _AppState extends State<App> {
 
       UserController userController = Get.put(UserController());
       userController.user.isPad = await isIpad();
-
+      Get.put(JSearchController());
       Get.put(SettingController());
     } catch (e) {
       rethrow;
@@ -375,9 +376,8 @@ class _AppState extends State<App> {
         UserRepository.updateUser(userController.user);
       }
 
-      bool ischeckAndExecuteFunction =
-          await LocalReposotiry.checkAndExecuteFunction();
-      if (ischeckAndExecuteFunction) {
+      bool isForceUpdate = await _isForceUpdate();
+      if (isForceUpdate) {
         for (int i = 1; i < 6; i++) {
           jlptWordScroes[i - 1] = await JlptStepRepositroy.updateJlptStepData(
             "$i",
@@ -401,6 +401,11 @@ class _AppState extends State<App> {
       rethrow;
     }
     return true;
+  }
+
+  Future<bool> _isForceUpdate() async {
+    return await LocalReposotiry.checkAndExecuteFunction() ||
+        await LocalReposotiry.runOnceAfter280();
   }
 
   MaterialApp loadingMaterialApp(BuildContext context) {

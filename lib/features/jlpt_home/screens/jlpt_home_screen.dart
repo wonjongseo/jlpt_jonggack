@@ -178,7 +178,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
                 label:
                     'N${widget.levelIndex + 1}급 ${CategoryEnum.values[selectedCategoryIndex].id} 랜덤 퀴즈',
                 onTap: () {
-                  RandomTestGenerator.test(
+                  RandomTestGenerator.randomText(
                     widget.levelIndex + 1,
                     CategoryEnum.values[selectedCategoryIndex],
                   );
