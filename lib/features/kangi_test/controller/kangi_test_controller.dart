@@ -304,7 +304,12 @@ class KangiTestController extends GetxController
         return;
       }
 
-      Get.offAndToNamed(KANGI_SCORE_PATH, arguments: {});
+      if (isRandom) {
+        Get.back();
+        Get.toNamed(KANGI_SCORE_PATH, arguments: {});
+      } else {
+        Get.offAndToNamed(KANGI_SCORE_PATH, arguments: {});
+      }
     }
   }
 

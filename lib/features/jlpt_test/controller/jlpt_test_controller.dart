@@ -353,7 +353,6 @@ class JlptTestController extends GetxController
     // 테스트를 다 풀 었으면
     else {
       if (!isTestAgain) {
-        print("Call InterstitialManager JLPT");
         InterstitialManager.instance.maybeShow();
       }
 
@@ -386,7 +385,12 @@ class JlptTestController extends GetxController
         return;
       }
 
-      Get.offAndToNamed(SCORE_PATH);
+      if (isRandom) {
+        Get.back();
+        Get.toNamed(SCORE_PATH);
+      } else {
+        Get.offAndToNamed(SCORE_PATH);
+      }
     }
   }
 

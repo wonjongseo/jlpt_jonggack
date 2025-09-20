@@ -30,6 +30,7 @@ enum TotalProgressType { JLPT, GRAMMAR, KANGI }
 enum SOUND_OPTIONS { VOLUMN, PITCH, RATE }
 
 class UserController extends GetxController {
+  static UserController get to => Get.find<UserController>();
   late TextEditingController teCnt;
   // List<Word> searchedWords = [];
   // List<Kangi> searchedKangis = [];

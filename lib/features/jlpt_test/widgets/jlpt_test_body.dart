@@ -15,8 +15,6 @@ class JlptTestBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    JlptTestController controller = Get.put(JlptTestController());
-
     return GetBuilder<JlptTestController>(
       builder: (questionController) {
         return IgnorePointer(
