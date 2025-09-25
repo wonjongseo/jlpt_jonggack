@@ -41,30 +41,32 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (controller.isManualSavedWordPage) ...[
-                  Expanded(
-                    child: BottomBtn(
-                      label: "단어 추가",
-                      onTap: () {
-                        controller.goToAddMyWord();
-                      },
+            Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (controller.isManualSavedWordPage) ...[
+                    Expanded(
+                      child: BottomBtn(
+                        label: "단어 추가",
+                        onTap: () {
+                          controller.goToAddMyWord();
+                        },
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 6),
+                    SizedBox(width: 6),
+                  ],
+                  if (controller.allMyWords.isNotEmpty)
+                    Expanded(
+                      child: BottomBtn(
+                        label: "퀴즈!",
+                        onTap: () {
+                          controller.goToQuiz();
+                        },
+                      ),
+                    ),
                 ],
-                if (controller.allMyWords.isNotEmpty)
-                  Expanded(
-                    child: BottomBtn(
-                      label: "퀴즈!",
-                      onTap: () {
-                        controller.goToQuiz();
-                      },
-                    ),
-                  ),
-              ],
+              ),
             ),
             const GlobalBannerAdmob(),
           ],

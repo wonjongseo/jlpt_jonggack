@@ -13,83 +13,47 @@ class ImportExcelFileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NewMyWordController controller = Get.find<NewMyWordController>();
-    UserController userController = Get.find<UserController>();
     return Padding(
       padding: EdgeInsets.all(8),
-      child: Stack(
+      child: Column(
         children: [
-          Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: Responsive.height16 / 2,
-                ),
-                child: Text(
-                  "아래의 형식에 맞는 엑셀 파일을 불러와주세요.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: Responsive.width10 * 1.8,
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: Responsive.height16 / 2),
+            child: Text(
+              "아래의 형식에 맞는 엑셀 파일을 불러와주세요.",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: Responsive.width10 * 1.8,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: Responsive.width16 / 2),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(Responsive.width16 / 2),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.mainColor),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("1. 확장자는 .xlsx로 지정해주세요."),
+                      SizedBox(height: Responsive.height16 / 4),
+                      const Text("2. A(첫번째) 열에는 일본어를 입력해주세요."),
+                      SizedBox(height: Responsive.height16 / 4),
+                      const Text("3. B(두번째) 열에는 읽는 법를 입력해주세요."),
+                      SizedBox(height: Responsive.height16 / 4),
+                      const Text("4. C(세번쨰) 열에는 의미를 입력해주세요."),
+                    ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Responsive.width16 / 2,
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(Responsive.width16 / 2),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.mainColor),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("1. 확장자는 .xlsx로 지정해주세요."),
-                          SizedBox(height: Responsive.height16 / 4),
-                          const Text("2. A(첫번째) 열에는 일본어를 입력해주세요."),
-                          SizedBox(height: Responsive.height16 / 4),
-                          const Text("3. B(두번째) 열에는 읽는 법를 입력해주세요."),
-                          SizedBox(height: Responsive.height16 / 4),
-                          const Text("4. C(세번쨰) 열에는 의미를 입력해주세요."),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: Responsive.height16),
-                    excelLikeDataTable(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: BottomBtn(
-              label: "엑셀 파일 불러오기",
-              onTap: () async {
-                // Get.offAllNamed(HOME_PATH);
-
-                int savedWordNumber = await controller.postExcelData();
-                if (savedWordNumber != 0) {
-                  Get.back();
-                  Get.back();
-                  showSnackBar(
-                    '$savedWordNumber개의 단어가 저장되었습니다.\n($savedWordNumber 단어가 이미 저장되어 있습니다.)',
-                    duration: const Duration(seconds: 4),
-                  );
-                  userController.updateMyWordSavedCount(
-                    true,
-                    isYokumatiageruWord: false,
-                    count: savedWordNumber,
-                  );
-                  return;
-                }
-              },
+                SizedBox(height: Responsive.height16),
+                excelLikeDataTable(),
+              ],
             ),
           ),
         ],

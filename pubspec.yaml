@@ -23,7 +23,7 @@ dependencies:
   flutter_tts:
   table_calendar:
   excel:
-  tutorial_coach_mark:
+  # tutorial_coach_mark:
   google_mobile_ads:
   url_launcher:
   change_app_package_name:
