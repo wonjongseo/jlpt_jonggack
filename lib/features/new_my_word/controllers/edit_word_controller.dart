@@ -7,6 +7,7 @@ import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/services/excel_service.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EditWordController extends GetxController {
   final tapIndex = 0.obs;
@@ -17,9 +18,18 @@ class EditWordController extends GetxController {
     tapIndex.value = index;
   }
 
-  void addWordsByExcel() async {
-    // Get.offAllNamed(HOME_PATH);
+  void onTapSaveBtn() {
+    switch (tapIndex.value) {
+      case 0:
+        addWord();
+        break;
+      case 1:
+        addWordsByExcel();
+        break;
+    }
+  }
 
+  void addWordsByExcel() async {
     int savedWordNumber = await ExcelService.postExcelData();
     if (savedWordNumber != 0) {
       Get.back();
@@ -58,6 +68,29 @@ class EditWordController extends GetxController {
 
   late FocusNode exampleWordFocusNode;
   late FocusNode exampleMeanFocusNode;
+
+  void openNaverDictionary() async {
+    String sUrl = 'https://ja.dict.naver.com/#/';
+
+    String query = meanController.text;
+    if (query.isEmpty) {
+      query = japaneseController.text;
+    }
+
+    if (query.isNotEmpty) {
+      sUrl += 'search?query=$query';
+    }
+
+    final url = Uri.parse(sUrl);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(
+        url,
+        mode: LaunchMode.inAppBrowserView, // ✅ 외부 브라우저
+      );
+    } else {
+      SnackBarHelper.showErrorSnackBar('브라우저를 열 수 없습니다.');
+    }
+  }
 
   @override
   void onInit() {
@@ -125,7 +158,12 @@ class EditWordController extends GetxController {
     super.onClose();
   }
 
+  void deleteExample(int index) {
+    _examples.removeAt(index);
+  }
+
   bool appendExample() {
+    if (exampleWordController.text.isEmpty) return true;
     if (exampleFormKey.currentState!.validate()) {
       String eJapanese = exampleWordController.text;
       String eMean = exampleMeanController.text;

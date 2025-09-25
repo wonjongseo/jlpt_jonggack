@@ -135,7 +135,7 @@ class SelectMyQuizDialog extends StatelessWidget {
                             style: TextStyle(
                               color: AppColors.scaffoldBackground,
                               fontSize: Responsive.height16,
-                              fontFamily: AppFonts.nanumGothic,
+                              fontFamily: AppFonts.gMarket,
                             ),
                           ),
                         ),

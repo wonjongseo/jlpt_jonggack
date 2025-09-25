@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       '앱 설명 보기',
                       style: TextStyle(
-                        fontFamily: AppFonts.nanumGothic,
+                        fontFamily: AppFonts.gMarket,
                         fontWeight: FontWeight.bold,
                         fontSize: Responsive.width14,
                         color: AppColors.scaffoldBackground,
@@ -201,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       '설정 페이지',
                       style: TextStyle(
-                        fontFamily: AppFonts.nanumGothic,
+                        fontFamily: AppFonts.gMarket,
                         fontWeight: FontWeight.bold,
                         fontSize: Responsive.width14,
                         color: AppColors.scaffoldBackground,
@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       '데이터 초기화',
                       style: TextStyle(
-                        fontFamily: AppFonts.nanumGothic,
+                        fontFamily: AppFonts.gMarket,
                         fontWeight: FontWeight.bold,
                         fontSize: Responsive.width14,
                         color: AppColors.scaffoldBackground,
@@ -258,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
               subtitle: AutoSizeText(
                 '제보는 개발자에게 아주 큰 힘이 됩니다 !',
                 style: TextStyle(
-                  fontFamily: AppFonts.nanumGothic,
+                  fontFamily: AppFonts.gMarket,
                   fontSize: Responsive.width14,
                   color: AppColors.scaffoldBackground,
                 ),
@@ -307,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   '희망 기능 또는 에러 제보',
                   style: TextStyle(
-                    fontFamily: AppFonts.nanumGothic,
+                    fontFamily: AppFonts.gMarket,
                     fontWeight: FontWeight.bold,
                     fontSize: Responsive.width14,
                     color: AppColors.scaffoldBackground,

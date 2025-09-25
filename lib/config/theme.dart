@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 
 class AppFonts {
-  // static const nanumGothic = 'NanumGothic';
-  static const nanumGothic = 'GMarket';
+  static const gMarket = 'GMarket';
   static const japaneseFont = 'NotoSerifJP';
   static const descriptionFont = japaneseFont;
   // static const gMaretFont = 'GMarket';
@@ -13,7 +12,7 @@ class AppFonts {
 class AppThemings {
   static TextStyle darkTextStyle = const TextStyle(
     color: AppColors.whiteGrey,
-    fontFamily: AppFonts.nanumGothic,
+    fontFamily: AppFonts.gMarket,
   );
 
   static final dartTheme = ThemeData.light(useMaterial3: true).copyWith(
@@ -42,7 +41,7 @@ class AppThemings {
           labelSmall: darkTextStyle,
         ),
     primaryTextTheme: ThemeData.dark().textTheme.apply(
-      fontFamily: AppFonts.nanumGothic,
+      fontFamily: AppFonts.gMarket,
     ),
     scaffoldBackgroundColor: AppColors.scaffoldBackground,
     appBarTheme: const AppBarTheme(
@@ -94,7 +93,7 @@ class AppThemings {
           labelSmall: lightTextStyle,
         ),
     primaryTextTheme: ThemeData.light().textTheme.apply(
-      fontFamily: AppFonts.nanumGothic,
+      fontFamily: AppFonts.gMarket,
     ),
     scaffoldBackgroundColor: Colors.grey.shade200,
     appBarTheme: const AppBarTheme(

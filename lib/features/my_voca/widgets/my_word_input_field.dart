@@ -22,7 +22,7 @@ extension TextFormEnumExtension on TextFormEnum {
       case TextFormEnum.YOMIKATA:
         return '읽는 법';
       case TextFormEnum.MEAN:
-        return '의미';
+        return '한국어';
       case TextFormEnum.EXAMPLES:
         return '예시';
     }

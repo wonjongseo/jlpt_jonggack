@@ -1,22 +1,31 @@
-enum TextInputEnum { JAPANESE, YOMIKATA, MEAN, EXAMPLE_JAPANESE, EXAMPLE_MEAN }
+enum TextInputEnum {
+  JAPANESE('일본어'),
+  YOMIKATA('읽는 법'),
+  MEAN('한국어'),
+  EXAMPLE_JAPANESE('예제 (예문)'),
+  EXAMPLE_MEAN('예제 (의미)');
 
-extension TextInputEnumExtensions on TextInputEnum {
-  String get name {
-    switch (this) {
-      case TextInputEnum.JAPANESE:
-        return '일본어';
-      case TextInputEnum.YOMIKATA:
-        return '읽는 법';
-      case TextInputEnum.MEAN:
-        return '의미';
-
-      case TextInputEnum.EXAMPLE_JAPANESE:
-        return '예제 (예문)';
-      case TextInputEnum.EXAMPLE_MEAN:
-        return '예제 (의미)';
-    }
-  }
+  final String name;
+  const TextInputEnum(this.name);
 }
+
+// extension TextInputEnumExtensions on TextInputEnum {
+//   String get name {
+//     switch (this) {
+//       case TextInputEnum.JAPANESE:
+//         return ;
+//       case TextInputEnum.YOMIKATA:
+//         return ;
+//       case TextInputEnum.MEAN:
+//         return ;
+
+//       case TextInputEnum.EXAMPLE_JAPANESE:
+//         return ;
+//       case TextInputEnum.EXAMPLE_MEAN:
+//         return ;
+//     }
+//   }
+// }
 
 enum MyVocaPageFilter1 { ALL_VOCA, KNOWN_VOCA, UNKNOWN_VOCA }
 
