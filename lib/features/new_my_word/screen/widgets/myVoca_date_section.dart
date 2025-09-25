@@ -98,15 +98,6 @@ class MyVocaDateSection extends StatelessWidget {
                                   style: TextStyle(color: textColor),
                                 ),
                               ),
-                              SizedBox(width: 12),
-                              if (w.createdAt != null)
-                                Text(
-                                  DateFormat("yyyy년M월d일").format(w.createdAt!),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: textColor.withValues(alpha: 0.7),
-                                  ),
-                                ),
                             ],
                           ),
                         ],

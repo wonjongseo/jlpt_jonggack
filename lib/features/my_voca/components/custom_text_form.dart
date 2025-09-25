@@ -41,11 +41,11 @@ class CustomTextForm extends StatelessWidget {
         decoration: InputDecoration(
           hintText: textInputEnum.name,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: AppColors.mainColor, width: 2),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(10),
           ),
           focusedErrorBorder: outlineErrorBorder(),
           errorBorder: outlineErrorBorder(),
@@ -58,7 +58,7 @@ class CustomTextForm extends StatelessWidget {
 
   OutlineInputBorder outlineErrorBorder() {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: Colors.redAccent, width: 2),
     );
   }

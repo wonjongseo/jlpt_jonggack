@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
+import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/kangi_card.dart';
@@ -140,7 +142,7 @@ class _RelatedWordScrenState extends State<RelatedWordScren> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(appBarHeight),
-        child: AppBar(),
+        child: AppBar(actions: [howToRightBtn(context, widget.kangi.japan)]),
       ),
       body: KangiCard(kangi: widget.kangi),
       bottomNavigationBar: SafeArea(

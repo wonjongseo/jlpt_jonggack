@@ -32,7 +32,6 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
   @override
   Widget build(BuildContext context) {
     int itemCount = controller.allMyWords.length;
-    print('itemCount : ${itemCount}');
 
     return Scaffold(
       appBar: PreferredSize(

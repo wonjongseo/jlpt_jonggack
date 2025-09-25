@@ -10,6 +10,13 @@ import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EditWordController extends GetxController {
+  final externalDictType = ExternalDictType.naver.obs;
+
+  void toggleExternalDictType(ExternalDictType? type) {
+    if (type == null) return;
+    externalDictType.value = type;
+  }
+
   final tapIndex = 0.obs;
   void toggleTab(int index) {
     if (index == 1) {
@@ -68,6 +75,52 @@ class EditWordController extends GetxController {
 
   late FocusNode exampleWordFocusNode;
   late FocusNode exampleMeanFocusNode;
+
+  bool isDropdownButtonOpen = false;
+  void onTapExternalType(ExternalDictType? type) async {
+    toggleExternalDictType(type);
+    String sUrl;
+    String query;
+    switch (externalDictType.value) {
+      case ExternalDictType.naver:
+        sUrl = 'https://ja.dict.naver.com/#/';
+        query = meanController.text;
+        if (query.isEmpty) {
+          query = japaneseController.text;
+        }
+        if (query.isNotEmpty) {
+          sUrl += 'search?query=$query';
+        }
+        break;
+      case ExternalDictType.papago:
+        sUrl = 'http://papago.naver.com/';
+
+        if (meanController.text.isNotEmpty) {
+          query = meanController.text;
+          sUrl += '?sk=ko&tk=ja&hn=1&st=$query';
+        } else if (japaneseController.text.isNotEmpty) {
+          query = japaneseController.text;
+          sUrl += '?sk=ja&tk=ko&hn=1&st=$query';
+        }
+
+        break;
+    }
+    if (isDropdownButtonOpen) {
+      Get.back();
+    }
+
+    // FocusManager.instance.primaryFocus!.unfocus();
+
+    final url = Uri.parse(sUrl);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(
+        url,
+        mode: LaunchMode.inAppBrowserView, // ✅ 외부 브라우저
+      );
+    } else {
+      SnackBarHelper.showErrorSnackBar('브라우저를 열 수 없습니다.');
+    }
+  }
 
   void openNaverDictionary() async {
     String sUrl = 'https://ja.dict.naver.com/#/';

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 Future showCustomBottomSheet({
   required BuildContext context,
   required Widget child,
+  Color? backgroundColor,
 }) async {
   showModalBottomSheet(
     isScrollControlled: true,
     context: context,
+    backgroundColor: backgroundColor,
     builder: (context) {
       return Padding(
         padding: EdgeInsets.only(

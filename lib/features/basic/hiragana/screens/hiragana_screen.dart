@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -49,22 +50,35 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(Responsive.height16 / 2),
+          padding: EdgeInsets.all(8 / 2),
           child: Center(
             child: Column(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(border: Border.all(width: 1)),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Responsive.width16 / 2,
-                      ),
-                      child: DropdownButton(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      DropdownButton2(
+                        isExpanded: true,
                         value: selectedHiragana,
-                        underline: Container(),
+                        buttonStyleData: ButtonStyleData(
+                          padding: EdgeInsets.zero,
+
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: AppColors.mainColor),
+                          ),
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: AppColors.mainColor),
+                          ),
+                        ),
+                        underline: SizedBox(),
                         items: List.generate(
                           hiraAndkatakana.length,
                           (index) => DropdownMenuItem(
@@ -80,7 +94,6 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                                         color: Colors.cyan.shade500,
                                       )
                                       : const TextStyle(
-                                        fontWeight: FontWeight.normal,
                                         fontFamily: AppFonts.japaneseFont,
                                         fontSize: 14,
                                       ),
@@ -93,36 +106,36 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                           setState(() {});
                         },
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: List.generate(
-                          selectedHiragana.subHiragana.length,
-                          (index) => InkWell(
-                            onTap: () {
-                              selectedIndex = index;
-                              setState(() {});
-                            },
-                            child: SizedBox(
-                              width: 70,
-                              height: 50,
-                              child: Card(
-                                elevation: 0,
-                                color:
-                                    index == selectedIndex
-                                        ? AppColors.mainColor
-                                        : Colors.grey.shade200,
-                                child: Center(
-                                  child: Text(
-                                    selectedHiragana
-                                        .subHiragana[index]
-                                        .hiragana,
-                                    style: const TextStyle(
-                                      fontFamily: AppFonts.japaneseFont,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 20,
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: List.generate(
+                            selectedHiragana.subHiragana.length,
+                            (index) => InkWell(
+                              onTap: () {
+                                selectedIndex = index;
+                                setState(() {});
+                              },
+                              child: SizedBox(
+                                width: 70,
+                                height: 50,
+                                child: Card(
+                                  elevation: 0,
+                                  color:
+                                      index == selectedIndex
+                                          ? AppColors.mainColor
+                                          : Colors.grey.shade200,
+                                  child: Center(
+                                    child: Text(
+                                      selectedHiragana
+                                          .subHiragana[index]
+                                          .hiragana,
+                                      style: const TextStyle(
+                                        fontFamily: AppFonts.japaneseFont,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -131,15 +144,15 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: Card(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: Responsive.height16,
-                        horizontal: Responsive.width16,
+                        vertical: 8,
+                        horizontal: 16,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

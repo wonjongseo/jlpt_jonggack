@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
+import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
 import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
+import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 
 final String JLPT_STUDY_PATH = '/jlpt_study';
 
@@ -45,10 +49,11 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return GetBuilder<JlptStepController>(
       builder: (controller) {
         return Scaffold(
-          appBar: _appBar(controller),
+          appBar: _appBar(controller, size),
           body: _body(context, controller),
           bottomNavigationBar: SafeArea(
             child: Column(
@@ -61,8 +66,19 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
     );
   }
 
-  PreferredSize _appBar(JlptStepController controller) {
+  PreferredSize _appBar(JlptStepController controller, Size size) {
     int wordsLen = controller.getJlptStep().words.length;
+
+    bool hasKangi = false;
+    String japanese = '';
+    if (wordsLen != controller.currentIndex) {
+      japanese =
+          controller.getJlptStep().words[controller.currentIndex].word.split(
+            '·',
+          )[0];
+      hasKangi = japanese.characters.any((char) => isKangi(char));
+    }
+
     return PreferredSize(
       preferredSize: const Size.fromHeight(appBarHeight),
       child: AppBar(
@@ -73,14 +89,9 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
                   totalIndex: wordsLen,
                 )
                 : null,
+        actions: [if (hasKangi) howToRightBtn(context, japanese)],
       ),
     );
-  }
-
-  void onPageChanged(int page) {
-    currentIndex = page;
-    wordController.currentIndex = page;
-    setState(() {});
   }
 
   Widget _body(BuildContext context, JlptStepController controller) {

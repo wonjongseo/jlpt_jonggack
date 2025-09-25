@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
+import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/related_word.dart';
@@ -275,6 +277,9 @@ class _RelatedKangiWordScreenState extends State<RelatedKangiWordScreen> {
             curIndex: currentPageIndex + 1,
             totalIndex: widget.relatedVoca.length,
           ),
+          actions: [
+            howToRightBtn(context, widget.relatedVoca[currentPageIndex].word),
+          ],
         ),
       ),
       body: PageView.builder(

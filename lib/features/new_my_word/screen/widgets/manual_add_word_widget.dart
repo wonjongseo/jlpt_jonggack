@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -35,20 +36,45 @@ class ManualAddWordWidget extends GetView<EditWordController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  TextButton(
-                    onPressed: () => controller.openNaverDictionary(),
-                    child: Text(
-                      '네이버 사전',
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Obx(
+                      () => DropdownButton2(
+                        underline: SizedBox(),
+                        value: controller.externalDictType.value,
+                        onMenuStateChange: (isOpen) {
+                          controller.isDropdownButtonOpen = isOpen;
+                        },
+                        onChanged:
+                            (value) => controller.toggleExternalDictType(value),
+                        items: List.generate(ExternalDictType.values.length, (
+                          index,
+                        ) {
+                          final type = ExternalDictType.values[index];
+                          return DropdownMenuItem(
+                            value: type,
+                            child: InkWell(
+                              onTap: () {
+                                controller.onTapExternalType(type);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  type.label,
+                                  style: TextStyle(
+                                    color: type.color,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
                       ),
                     ),
                   ),
 
-                  //   onPressed: controller.openNaverDictionary,
-                  //   child: Text('네이버 사전'),
-                  // ),
                   _wordTextForms(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,

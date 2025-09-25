@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/common.dart';
+import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
+import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
@@ -74,6 +78,13 @@ class _KangiStudySceenState extends State<KangiStudySceen> {
                   totalIndex: controller.getKangiStep().kangis.length,
                 )
                 : null,
+        actions: [
+          if (wordsLen != controller.currentIndex)
+            howToRightBtn(
+              context,
+              controller.getKangiStep().kangis[controller.currentIndex].japan,
+            ),
+        ],
       ),
     );
   }

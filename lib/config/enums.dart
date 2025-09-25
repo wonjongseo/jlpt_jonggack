@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+
 enum TextInputEnum {
   JAPANESE('일본어'),
   YOMIKATA('읽는 법'),
@@ -9,23 +12,14 @@ enum TextInputEnum {
   const TextInputEnum(this.name);
 }
 
-// extension TextInputEnumExtensions on TextInputEnum {
-//   String get name {
-//     switch (this) {
-//       case TextInputEnum.JAPANESE:
-//         return ;
-//       case TextInputEnum.YOMIKATA:
-//         return ;
-//       case TextInputEnum.MEAN:
-//         return ;
+enum ExternalDictType {
+  naver("네이버 사전", Colors.green),
+  papago("파파고", Colors.blueAccent);
 
-//       case TextInputEnum.EXAMPLE_JAPANESE:
-//         return ;
-//       case TextInputEnum.EXAMPLE_MEAN:
-//         return ;
-//     }
-//   }
-// }
+  final String label;
+  final Color color;
+  const ExternalDictType(this.label, this.color);
+}
 
 enum MyVocaPageFilter1 { ALL_VOCA, KNOWN_VOCA, UNKNOWN_VOCA }
 

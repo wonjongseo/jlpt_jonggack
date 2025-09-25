@@ -10,12 +10,10 @@ class KangiText extends StatelessWidget {
     required this.japanese,
     required this.clickTwice,
     this.color = Colors.black,
-    this.fontSize = 45,
   });
 
   final String japanese;
   final bool clickTwice;
-  final double fontSize;
 
   final Color color;
   @override
@@ -31,7 +29,7 @@ class KangiText extends StatelessWidget {
         japanese,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: fontSize == 45 ? Responsive.height50 : Responsive.height30,
+          fontSize: 40,
           color: AppColors.scaffoldBackground,
           fontFamily: AppFonts.japaneseFont,
         ),
@@ -45,7 +43,7 @@ class KangiText extends StatelessWidget {
             homonymWords[0],
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: fontSize == 45 ? 50 : 30,
+              fontSize: 40,
               color: AppColors.scaffoldBackground,
               fontFamily: AppFonts.japaneseFont,
             ),
@@ -58,7 +56,7 @@ class KangiText extends StatelessWidget {
                 '= ',
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: fontSize == 45 ? 16 : 10,
+                  fontSize: 16,
                   fontFamily: AppFonts.japaneseFont,
                 ),
               ),
@@ -75,7 +73,7 @@ class KangiText extends StatelessWidget {
                   japanese,
                   style: TextStyle(
                     color: color,
-                    fontSize: fontSize == 45 ? 20 : 12,
+                    fontSize: 20,
                     fontFamily: AppFonts.japaneseFont,
                   ),
                 );

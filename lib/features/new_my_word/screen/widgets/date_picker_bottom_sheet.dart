@@ -39,7 +39,6 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
                   controller.onDaySelected(selectedDay, focusedDay);
                 },
                 onRangeSelected: (start, end, focusedDay) {
-                  // 미리 컨트롤러에 임시 저장 (실제 필터는 '적용'에서)
                   controller.rangeStart.value = start;
                   controller.rangeEnd.value = end;
                   controller.focusedDay.value = focusedDay;
@@ -54,7 +53,7 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
               children: [
                 Expanded(
                   child: BottomBtn(
-                    label: '초기화',
+                    label: '선택 해제',
                     backgroundColor: Colors.grey,
                     onTap: () {
                       controller.clearRange(); // 전체 보기
@@ -75,18 +74,6 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
                     },
                   ),
                 ),
-                // Expanded(
-                //   child: ElevatedButton(
-                //     onPressed: () {
-                //       controller.applyRange(
-                //         controller.rangeStart.value,
-                //         controller.rangeEnd.value,
-                //       );
-                //       Get.back();
-                //     },
-                //     child: const Text('적용'),
-                //   ),
-                // ),
               ],
             ),
           ),

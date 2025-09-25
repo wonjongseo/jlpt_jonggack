@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -13,11 +14,11 @@ import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class JapaneseListTile extends StatefulWidget {
   const JapaneseListTile({
-    Key? key,
+    super.key,
     required this.isSaved,
     required this.index,
     required this.word,
-  }) : super(key: key);
+  });
   final bool isSaved;
   final int index;
   final Word word;
@@ -50,7 +51,6 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
         decoration: BoxDecoration(border: Border.all(width: 0.3)),
         child: ListTile(
           isThreeLine: true,
-          minLeadingWidth: 80,
           subtitle: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: SizedBox(
@@ -101,13 +101,16 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
                       ),
                     ),
           ),
-          leading: Text(
-            changedWord,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              fontFamily: AppFonts.japaneseFont,
-              overflow: TextOverflow.ellipsis,
+          leading: SizedBox(
+            width: 100,
+            child: AutoSizeText(
+              changedWord,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                fontFamily: AppFonts.japaneseFont,
+              ),
+              maxLines: 1,
             ),
           ),
           trailing: IconButton(

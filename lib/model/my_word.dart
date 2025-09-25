@@ -62,6 +62,7 @@ class MyWord {
     isKnown = false;
     examples = map['examples'] ?? [];
   }
+
   static MyWord kangiToMyWord(Kangi kangi) {
     MyWord newMyWord = MyWord(
       word: kangi.japan,
@@ -83,8 +84,8 @@ class MyWord {
     );
 
     newMyWord.createdAt = DateTime.now();
-    // final now = DateTime.now();
-    // newMyWord.createdAt = DateTime(now.year, now.month, now.day - 7);
+    final now = DateTime.now();
+    newMyWord.createdAt = DateTime(now.year, now.month, now.day - 7);
 
     return newMyWord;
   }

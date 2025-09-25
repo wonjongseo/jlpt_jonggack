@@ -33,7 +33,6 @@ class WordCard extends StatelessWidget {
     }
 
     KangiStepRepositroy kangiStepRepositroy = KangiStepRepositroy();
-    print('word.examples : ${word.examples}');
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Responsive.width10),

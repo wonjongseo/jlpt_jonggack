@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
-import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/features/my_voca/components/custom_button.dart';
-import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class ImportExcelFileWidget extends StatelessWidget {
   const ImportExcelFileWidget({super.key});
@@ -18,40 +12,39 @@ class ImportExcelFileWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: Responsive.height16 / 2),
+            padding: EdgeInsets.symmetric(vertical: 8),
             child: Text(
               "아래의 형식에 맞는 엑셀 파일을 불러와주세요.",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: Responsive.width10 * 1.8,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: Responsive.width16 / 2),
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: Column(
               children: [
-                Container(
-                  padding: EdgeInsets.all(Responsive.width16 / 2),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.mainColor),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("1. 확장자는 .xlsx로 지정해주세요."),
-                      SizedBox(height: Responsive.height16 / 4),
-                      const Text("2. A(첫번째) 열에는 일본어를 입력해주세요."),
-                      SizedBox(height: Responsive.height16 / 4),
-                      const Text("3. B(두번째) 열에는 읽는 법를 입력해주세요."),
-                      SizedBox(height: Responsive.height16 / 4),
-                      const Text("4. C(세번쨰) 열에는 의미를 입력해주세요."),
-                    ],
+                Card(
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.mainColor),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("1. 확장자는 .xlsx로 지정해주세요."),
+                        SizedBox(height: 4),
+                        const Text("2. A(첫번째) 열에는 일본어를 입력해주세요."),
+                        SizedBox(height: 4),
+                        const Text("3. B(두번째) 열에는 읽는 법를 입력해주세요."),
+                        SizedBox(height: 4),
+                        const Text("4. C(세번쨰) 열에는 의미를 입력해주세요."),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(height: Responsive.height16),
+                SizedBox(height: 16),
                 excelLikeDataTable(),
               ],
             ),

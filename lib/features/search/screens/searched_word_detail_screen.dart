@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/common.dart';
+import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
+import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
+import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
@@ -23,10 +27,14 @@ class SearchedWordDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(JlptStepController(level: 'My'));
+    String japanese = searchedWords[index].word.split('·')[0];
+    bool hasKangi = japanese.characters.any((char) => isKangi(char));
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(appBarHeight),
-        child: AppBar(),
+        child: AppBar(
+          actions: [if (hasKangi) howToRightBtn(context, japanese)],
+        ),
       ),
       body: SafeArea(
         child: Center(
