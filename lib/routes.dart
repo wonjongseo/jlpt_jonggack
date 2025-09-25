@@ -6,6 +6,9 @@ import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
+import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 import 'package:jlpt_jonggack/features/setting/screens/setting_screen.dart';
@@ -21,7 +24,18 @@ class AppRoutes {
       // page: () => NewHomeScreen(),
     ),
     GetPage(name: KANGI_SCORE_PATH, page: () => const KangiScoreScreen()),
-    GetPage(name: MY_VOCA_PATH, page: () => MyVocaPage()),
+    GetPage(
+      name: NewMyWordScreen.name,
+      page: () => NewMyWordScreen(),
+      binding: BindingsBuilder.put(() {
+        bool isManualSavedWordPage =
+            Get.arguments[MY_VOCA_TYPE] as MyVocaEnum ==
+            MyVocaEnum.MANUAL_SAVED_WORD;
+
+        return NewMyWordController(isManualSavedWordPage);
+      }),
+    ),
+    GetPage(name: NewAddMyWordScreen.name, page: () => NewAddMyWordScreen()),
     GetPage(
       name: JLPT_CALENDAR_STEP_PATH,
       page: () => GrammarCalendarStepScreen(),

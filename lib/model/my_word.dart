@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
 import 'package:jlpt_jonggack/model/example.dart';
@@ -30,13 +28,9 @@ class MyWord {
   bool? isManuelSave = false;
 
   @HiveField(6)
-  late List<Example>? examples;
+  late List<Example> examples;
 
   String getWord() {
-    // if (word.contains('_M_A_N_U_A_L')) {
-    //   return word.replaceAll('_M_A_N_U_A_L', '');
-    // }
-
     return word;
   }
 
@@ -44,25 +38,29 @@ class MyWord {
     required this.word,
     required this.mean,
     required this.yomikata,
+    List<Example>? examples,
     this.isManuelSave = false,
-    this.examples,
-  }) {
-    createdAt = DateTime.now();
-  }
+  }) : examples =
+           examples == null
+               ? <Example>[]
+               // ✅ 얕은 복사 방지: 새로운 리스트로 복제
+               : List<Example>.from(
+                 examples.map((e) => e.copyWith()), // deep copy 권장
+               ),
+       createdAt = DateTime.now();
 
   @override
   String toString() {
-    return "MyWord{word: $word, mean: $mean, yomikata: $yomikata, isKnown: $isKnown, createdAt: $createdAt, isManuelSave: $isManuelSave}";
+    return "MyWord{word: $word, mean: $mean, yomikata: $yomikata, isKnown: $isKnown, createdAt: $createdAt, isManuelSave: $isManuelSave, examples: $examples}";
   }
 
   MyWord.fromMap(Map<String, dynamic> map) {
     word = map['word'] ?? '';
     mean = map['mean'] ?? '';
     createdAt = map['createdAt'] ?? '';
-
     yomikata = map['yomikata'] ?? '';
     isKnown = false;
-    examples = [];
+    examples = map['examples'] ?? [];
   }
   static MyWord kangiToMyWord(Kangi kangi) {
     MyWord newMyWord = MyWord(
@@ -84,7 +82,9 @@ class MyWord {
       examples: word.examples,
     );
 
-    newMyWord.createdAt = DateTime.now(); //.subtract(Duration(days: 3));
+    newMyWord.createdAt = DateTime.now();
+    // final now = DateTime.now();
+    // newMyWord.createdAt = DateTime(now.year, now.month, now.day - 7);
 
     return newMyWord;
   }

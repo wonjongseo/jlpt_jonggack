@@ -94,29 +94,32 @@ class _GrammarExampleCardState extends State<GrammarExampleCard> {
               ],
             ),
           ),
-          GetBuilder<TtsController>(
-            builder: (ttsController) {
-              return IconButton(
-                style: IconButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(20, 20),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                onPressed: () {
-                  String grammar = widget.examples[widget.index].word;
-                  grammar = grammar.replaceAll('<span class=\"bold\">', '');
-                  grammar = grammar.replaceAll('</span>', '');
-                  ttsController.speak(grammar);
-                },
-                icon: FaIcon(
-                  ttsController.isPlaying
-                      ? FontAwesomeIcons.volumeLow
-                      : FontAwesomeIcons.volumeOff,
-                  color: AppColors.mainBordColor,
-                  size: Responsive.height10 * 2.6,
-                ),
-              );
+          // GetBuilder<TtsController>(
+          //   builder: (ttsController) {
+          //     return ;
+          //   },
+          // ),
+          IconButton(
+            style: IconButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: const Size(20, 20),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: () {
+              String grammar = widget.examples[widget.index].word;
+              grammar = grammar.replaceAll('<span class=\"bold\">', '');
+              grammar = grammar.replaceAll('</span>', '');
+              TtsController.to.speak(grammar);
             },
+            icon: Obx(
+              () => FaIcon(
+                TtsController.to.isPlaying
+                    ? FontAwesomeIcons.volumeLow
+                    : FontAwesomeIcons.volumeOff,
+                color: AppColors.mainBordColor,
+                size: Responsive.height10 * 2.6,
+              ),
+            ),
           ),
         ],
       ),

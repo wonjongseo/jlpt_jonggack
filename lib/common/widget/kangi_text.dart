@@ -10,7 +10,7 @@ class KangiText extends StatelessWidget {
     required this.japanese,
     required this.clickTwice,
     this.color = Colors.black,
-    this.fontSize = 60,
+    this.fontSize = 45,
   });
 
   final String japanese;
@@ -31,7 +31,7 @@ class KangiText extends StatelessWidget {
         japanese,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: fontSize == 60 ? Responsive.height50 : Responsive.height30,
+          fontSize: fontSize == 45 ? Responsive.height50 : Responsive.height30,
           color: AppColors.scaffoldBackground,
           fontFamily: AppFonts.japaneseFont,
         ),
@@ -45,8 +45,7 @@ class KangiText extends StatelessWidget {
             homonymWords[0],
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize:
-                  fontSize == 60 ? Responsive.height50 : Responsive.height30,
+              fontSize: fontSize == 45 ? 50 : 30,
               color: AppColors.scaffoldBackground,
               fontFamily: AppFonts.japaneseFont,
             ),
@@ -59,10 +58,7 @@ class KangiText extends StatelessWidget {
                 '= ',
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize:
-                      fontSize == 60
-                          ? Responsive.height50 / 3
-                          : Responsive.height30 / 3,
+                  fontSize: fontSize == 45 ? 16 : 10,
                   fontFamily: AppFonts.japaneseFont,
                 ),
               ),
@@ -79,10 +75,7 @@ class KangiText extends StatelessWidget {
                   japanese,
                   style: TextStyle(
                     color: color,
-                    fontSize:
-                        fontSize == 60
-                            ? Responsive.height50 / 2.5
-                            : Responsive.height30 / 2.5,
+                    fontSize: fontSize == 45 ? 20 : 12,
                     fontFamily: AppFonts.japaneseFont,
                   ),
                 );

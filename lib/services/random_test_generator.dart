@@ -93,7 +93,7 @@ class RandomTestGenerator {
     return words;
   }
 
-  static Future<List<Word>> _getAllJapaneseByLevel(
+  static Future<List<Word>> getAllJapaneseByLevel(
     int level,
     bool isPremium,
   ) async {
@@ -204,7 +204,7 @@ class RandomTestGenerator {
 
     switch (category) {
       case CategoryEnum.Japaneses:
-        tempWords = await _getAllJapaneseByLevel(level, isPremium);
+        tempWords = await getAllJapaneseByLevel(level, isPremium);
 
         // final tempword = tempWords.firstOrNull;
 
@@ -277,7 +277,7 @@ class RandomTestGenerator {
 
     switch (category) {
       case CategoryEnum.Japaneses:
-        tempWords = await _getAllJapaneseByLevel(level, isPremium);
+        tempWords = await getAllJapaneseByLevel(level, isPremium);
         maxCount = tempWords.length;
       case CategoryEnum.Kangis:
         tempKangis = await _getAllKangisByLevel(level, isPremium);

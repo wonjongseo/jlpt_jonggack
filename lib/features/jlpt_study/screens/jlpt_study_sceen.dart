@@ -25,7 +25,6 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
   final JlptStepController wordController = Get.find<JlptStepController>();
   late int currentIndex;
   SettingController settingController = Get.find<SettingController>();
-  TtsController ttsController = Get.find<TtsController>();
   KangiStepRepositroy kangiStepRepositroy = KangiStepRepositroy();
 
   late PageController pageController;
@@ -40,7 +39,7 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
   @override
   void dispose() {
     pageController.dispose();
-    ttsController.stop();
+    TtsController.to.stop();
     super.dispose();
   }
 
@@ -89,7 +88,7 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
     return PageView.builder(
       controller: pageController,
       onPageChanged: (value) async {
-        await ttsController.stop();
+        await TtsController.to.stop();
         controller.onPageChanged(value);
       },
       itemCount: wordsLen >= 4 ? wordsLen + 1 : wordsLen,

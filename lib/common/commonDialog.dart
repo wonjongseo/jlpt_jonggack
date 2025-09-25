@@ -100,35 +100,6 @@ class CommonDialog {
     );
   }
 
-  static Future<bool> alertPreviousTestRequired() async {
-    return selectionDialog(
-      title: RichText(
-        text: TextSpan(
-          text: '다음 단계로 넘어가기 위해서 해당 챕터의\n퀴즈에서',
-          children: [
-            TextSpan(
-              text: ' 100점',
-              style: TextStyle(
-                color: Colors.redAccent,
-                fontSize: Responsive.width18,
-              ),
-            ),
-            const TextSpan(text: '을 맞으셔야 합니다!'),
-          ],
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: Responsive.width16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-      connent: const Text(
-        '해당 챕터의 퀴즈를 보시겠습니까?',
-        style: TextStyle(color: AppColors.scaffoldBackground),
-      ),
-    );
-  }
-
   static Future<bool> askSetSubjectQuestionOfJlptTestDialog() async {
     return selectionDialog(
       title: Text(
@@ -142,12 +113,6 @@ class CommonDialog {
         '일본어 단어 퀴즈에 읽는 법을 직접 입력하는 기능이 있습니다.\n해당 기능을 활성화하면 일본어 학습하는데 도움이 됩니다.',
         style: TextStyle(color: AppColors.scaffoldBackground),
       ),
-    );
-  }
-
-  static Future<bool> askSaveExcelDatasDialog() async {
-    return selectionDialog(
-      title: const Text('광고를 시청하고 엑셀에 있는 데이터를\n나만의 단어장에 저장하시겠습니까?'),
     );
   }
 
@@ -197,7 +162,7 @@ class CommonDialog {
               child: Padding(
                 padding: EdgeInsets.all(Responsive.width15),
                 child: Text(
-                  '네!',
+                  '네',
                   style: TextStyle(
                     // fontSize: Responsive.height14,
                     fontWeight: FontWeight.w600,
@@ -217,7 +182,7 @@ class CommonDialog {
               child: Padding(
                 padding: EdgeInsets.all(Responsive.width15),
                 child: Text(
-                  '아뇨!',
+                  '아뇨',
                   style: TextStyle(
                     // fontSize: Responsive.height14,
                     fontWeight: FontWeight.w600,
@@ -314,7 +279,7 @@ class CommonDialog {
                     child: Padding(
                       padding: EdgeInsets.all(Responsive.width15),
                       child: Text(
-                        '네!',
+                        '네',
                         style: TextStyle(
                           // fontSize: Responsive.height14,
                           fontWeight: FontWeight.w600,
@@ -334,7 +299,7 @@ class CommonDialog {
                     child: Padding(
                       padding: EdgeInsets.all(Responsive.width15),
                       child: Text(
-                        '아뇨!',
+                        '아뇨',
                         style: TextStyle(
                           // fontSize: Responsive.height14,
                           fontWeight: FontWeight.w600,

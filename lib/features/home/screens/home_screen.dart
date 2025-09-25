@@ -142,18 +142,18 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         }
 
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          key: homeController.scaffoldKey,
-          endDrawer: _endDrawer(),
-          body: GestureDetector(
-            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            child: _body(context, homeController),
-          ),
-          bottomNavigationBar: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [const GlobalBannerAdmob()],
+        return GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            key: homeController.scaffoldKey,
+            endDrawer: _endDrawer(),
+            body: _body(context, homeController),
+            bottomNavigationBar: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [const GlobalBannerAdmob()],
+              ),
             ),
           ),
         );

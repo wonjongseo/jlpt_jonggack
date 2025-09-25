@@ -13,6 +13,7 @@ import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
 const KANGI_SCORE_PATH = '/kangi_score';
@@ -49,7 +50,7 @@ class KangiScoreScreen extends StatelessWidget {
           kangiQuestionController.userController.clickUnKnownButtonCount = 0;
           getBacks(3);
           Get.toNamed(
-            MY_VOCA_PATH,
+            NewMyWordScreen.name,
             arguments: {MY_VOCA_TYPE: MyVocaEnum.YOKUMATIGAERU_WORD},
           );
         } else {

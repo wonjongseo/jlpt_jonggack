@@ -21,7 +21,7 @@ class ProgressBar extends StatelessWidget {
     );
   }
 
-  GetBuilder<JlptTestController> jlptChild() {
+  Widget jlptChild() {
     return GetBuilder<JlptTestController>(
       builder: (controller) {
         return Stack(

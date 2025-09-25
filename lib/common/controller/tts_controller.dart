@@ -1,155 +1,48 @@
-import 'dart:developer';
+//
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/logger/logger_service.dart';
+import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
-import '../../model/word.dart';
-
-enum TtsState { playing, stopped, paused, continued }
-
+/// 앱 전역에서 하나만 생성되어 사용하는 TTS 컨트롤러.
+/// - _isPlaying: TTS가 현재 재생 중인지 여부
+/// - currentWord: 현재 재생 중인 단어
 class TtsController extends GetxController {
-  late FlutterTts flutterTts;
+  static TtsController get to => Get.find<TtsController>();
 
-  String? engine;
-  int? inputLength;
-  UserController userController = Get.find<UserController>();
-  TtsState ttsState = TtsState.stopped;
+  late final FlutterTts _tts;
 
-  get isPlaying => ttsState == TtsState.playing;
-  get isStopped => ttsState == TtsState.stopped;
-  get isPaused => ttsState == TtsState.paused;
-  get isContinued => ttsState == TtsState.continued;
+  /// TTS 재생 중이면 true, 아니면 false
+  final RxBool _isPlaying = false.obs;
+  bool get isPlaying => _isPlaying.value;
 
-  bool get isIOS => !kIsWeb && GetPlatform.isIOS;
-  bool get isAndroid => !kIsWeb && GetPlatform.isAndroid;
-  bool get isWindows => !kIsWeb && GetPlatform.isWindows;
-  bool get isWeb => kIsWeb;
+  /// 현재 재생 중인 단어 (''이면 재생 중 아님)
+  final RxString currentWord = ''.obs;
 
-  bool isCurrentLanguageInstalled = false;
+  Future _setAwaitOptions() async {
+    await _tts.awaitSpeakCompletion(true);
 
-  void changeVolumn(double newValue) {
-    userController.updateSoundValues(SOUND_OPTIONS.VOLUMN, newValue);
-
-    update();
-  }
-
-  void changePitch(double newPitch) {
-    userController.updateSoundValues(SOUND_OPTIONS.PITCH, newPitch);
-    update();
-  }
-
-  void changeRate(double newRate) {
-    userController.updateSoundValues(SOUND_OPTIONS.RATE, newRate);
-
-    update();
-  }
-
-  Future setAwaitOptions() async {
-    await flutterTts.awaitSynthCompletion(true);
+    await _tts.awaitSynthCompletion(true);
   }
 
   @override
-  void dispose() {
-    super.dispose();
-
-    pause();
-    stop();
-  }
-
-  stop() async {
-    var result = await flutterTts.stop();
-    if (result == 1) {
-      ttsState = TtsState.stopped;
-      if (!isClosed) {
-        update();
-      }
-    }
-  }
-
-  Future pause() async {
-    var result = await flutterTts.pause();
-    if (result == 1) {
-      ttsState = TtsState.paused;
-      update();
-    }
-  }
-
-  @override
-  void onClose() {
-    pause();
-    stop();
-    super.dispose();
-  }
-
-  @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    initTts();
-  }
+    _tts = FlutterTts();
 
-  Future getDefaultEngine() async {
-    var engine = await flutterTts.getDefaultEngine;
-    if (engine != null) {
-      log(engine);
-    }
-  }
+    // flutter_tts 4.2.3에서는 awaitSpeakCompletion 옵션을 설정해야
+    // speak() 호출 후 onComplete 콜백이 정상 동작합니다.
+    _tts.awaitSpeakCompletion(true);
 
-  Future getDefaultVoice() async {
-    var voice = await flutterTts.getDefaultVoice;
-    if (voice != null) {
-      log(voice);
-    }
-  }
+    // 언어, 속도, 볼륨, 음조 등 기본 설정
+    // _tts.setSpeechRate(0.5);
+    // _tts.setVolume(1.0);
+    // _tts.setPitch(1.0);
 
-  Future<void> speak(String word, {String language = 'ja-JP'}) async {
-    if (isPlaying) return;
-    await flutterTts.setVolume(userController.volumn);
-    await flutterTts.setSpeechRate(userController.rate);
-    await flutterTts.setPitch(userController.pitch);
-
-    flutterTts.setLanguage(language);
-    await flutterTts.speak(word);
-  }
-
-  Future<void> japaneseSpeak(Word newWord) async {
-    await flutterTts.setVolume(userController.volumn);
-    await flutterTts.setSpeechRate(userController.rate);
-    await flutterTts.setPitch(userController.pitch);
-
-    flutterTts.setLanguage('ja-JP');
-
-    await flutterTts.speak(newWord.yomikata);
-    await Future.delayed(const Duration(milliseconds: 150));
-
-    flutterTts.setLanguage('ko-KR');
-
-    String full = '';
-
-    String mean = newWord.mean.replaceAll('~', '무엇무엇');
-
-    if (mean.contains('\n')) {
-      List<String> eachMeans = mean.split('\n');
-
-      for (int i = 0; i < eachMeans.length; i++) {
-        full += '${eachMeans[i]},';
-      }
-      await flutterTts.speak(full);
-    } else {
-      await flutterTts.speak(mean);
-    }
-  }
-
-  bool disalbe = false;
-  initTts() async {
-    flutterTts = FlutterTts();
-    await flutterTts.awaitSpeakCompletion(true);
-
-    setAwaitOptions();
-
-    if (isIOS) {
-      await flutterTts.setIosAudioCategory(
+    if (GetPlatform.isIOS) {
+      await _tts.setIosAudioCategory(
         // IosTextToSpeechAudioCategory.playback,
         IosTextToSpeechAudioCategory.playback,
         [
@@ -160,49 +53,76 @@ class TtsController extends GetxController {
         IosTextToSpeechAudioMode.voicePrompt,
       );
     }
-    if (isAndroid) {
+    if (GetPlatform.isAndroid) {
       getDefaultEngine();
       getDefaultVoice();
     }
 
-    flutterTts.setCompletionHandler(() {
-      disalbe = false;
-      log("Complete");
-
-      ttsState = TtsState.stopped;
-
-      update();
+    // 재생 완료 시 호출되는 콜백
+    _tts.setCompletionHandler(() {
+      _isPlaying.value = false;
+      currentWord.value = '';
     });
 
-    flutterTts.setErrorHandler((msg) {
-      log("error: $msg");
-      ttsState = TtsState.stopped;
-      update();
+    // 에러 발생 시 호출되는 콜백
+    _tts.setErrorHandler((msg) {
+      _isPlaying.value = false;
+      currentWord.value = '';
     });
+  }
 
-    flutterTts.setStartHandler(() {
-      disalbe = true;
-      log("Playing");
-      ttsState = TtsState.playing;
+  @override
+  void onClose() {
+    _tts.stop();
+    super.onClose();
+  }
 
-      update();
-    });
+  Future getDefaultEngine() async {
+    var engine = await _tts.getDefaultEngine;
+    if (engine != null) {
+      LogManager.info(engine);
+    }
+  }
 
-    flutterTts.setCancelHandler(() {
-      log("Cancel");
-      ttsState = TtsState.stopped;
-    });
+  Future getDefaultVoice() async {
+    var voice = await _tts.getDefaultVoice;
+    if (voice != null) {
+      LogManager.info(voice);
+    }
+  }
 
-    flutterTts.setPauseHandler(() {
-      update();
-      log("Paused");
-      ttsState = TtsState.paused;
-    });
+  /// [word]를 TTS로 재생함.
+  /// 이미 재생 중이면 먼저 중단 후 새로 재생.
+  Future<void> speak(String word) async {
+    try {
+      _tts.setLanguage('ja-JP');
+      _tts.setSpeechRate(UserController.to.rate);
+      _tts.setVolume(UserController.to.volumn);
+      _tts.setPitch(UserController.to.pitch);
+      // 동일한 단어가 이미 재생 중이면 아무 동작 안 함
+      if (_isPlaying.value && currentWord.value == word) return;
+      // 다른 단어가 재생 중이라면 먼저 중단
+      if (_isPlaying.value) {
+        await _tts.stop();
+        // onComplete 콜백에서 _isPlaying, currentWord가 자동으로 false/''로 변함
+      }
 
-    flutterTts.setContinueHandler(() {
-      log("Continued");
-      ttsState = TtsState.continued;
-      update();
-    });
+      currentWord.value = word;
+      _isPlaying.value = true;
+      await _tts.speak(word);
+      // flutter_tts 설정상 awaitSpeakCompletion(true)를 설정했기 때문에,
+      // speak()가 끝나면 setCompletionHandler가 반드시 호출됩니다.
+    } catch (e) {
+      SnackBarHelper.showErrorSnackBar(e.toString());
+    }
+  }
+
+  /// 재생 중인 TTS 멈춤
+  Future<void> stop() async {
+    if (_isPlaying.value) {
+      await _tts.stop();
+      _isPlaying.value = false;
+      currentWord.value = '';
+    }
   }
 }

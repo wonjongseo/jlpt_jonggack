@@ -51,4 +51,18 @@ class Example {
 
   factory Example.fromJson(String source) =>
       Example.fromMap(json.decode(source));
+
+  Example copyWith({
+    String? word,
+    String? mean,
+    String? answer,
+    String? yomikata,
+  }) {
+    return Example(
+      word: word ?? this.word,
+      mean: mean ?? this.mean,
+      answer: answer ?? this.answer,
+      yomikata: yomikata ?? this.yomikata,
+    );
+  }
 }

@@ -2,12 +2,13 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/common.dart';
+import 'package:jlpt_jonggack/core/bindings/initial_bindings.dart';
 import 'package:jlpt_jonggack/data/grammar_datas.dart';
 import 'package:jlpt_jonggack/data/kangi_datas.dart';
 import 'package:jlpt_jonggack/data/word_datas.dart';
 import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
+import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/routes.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jlpt_jonggack/services/app_info_service.dart';
@@ -15,7 +16,6 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/model/user.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
@@ -107,6 +107,7 @@ class _AppState extends State<App> {
             getPages: AppRoutes.getPages,
             fallbackLocale: const Locale('ko', 'KR'),
             locale: Get.deviceLocale,
+            initialBinding: InitialBindings(),
             theme: AppThemings.lightTheme,
           );
         } else if (snapshat.hasError) {

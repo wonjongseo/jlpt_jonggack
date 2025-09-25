@@ -10,6 +10,7 @@ import 'package:jlpt_jonggack/data/word_datas.dart';
 import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
 import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/search/screens/search_screen.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -346,7 +347,7 @@ class UserController extends GetxController {
 
       if (result) {
         Get.offNamedUntil(
-          MY_VOCA_PATH,
+          NewMyWordScreen.name,
           arguments: {MY_VOCA_TYPE: MyVocaEnum.YOKUMATIGAERU_WORD},
           ModalRoute.withName(HOME_PATH),
         );

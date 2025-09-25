@@ -6,6 +6,7 @@ import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
@@ -203,8 +204,9 @@ class _MyCardsState extends State<MyCards> {
             LevelCategoryCard(
               onTap: () {
                 LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.MY, 0);
+                print("asd");
                 Get.toNamed(
-                  MY_VOCA_PATH,
+                  NewMyWordScreen.name,
                   arguments: {MY_VOCA_TYPE: MyVocaEnum.YOKUMATIGAERU_WORD},
                 );
               },
@@ -243,7 +245,7 @@ class _MyCardsState extends State<MyCards> {
               onTap: () {
                 LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.MY, 1);
                 Get.toNamed(
-                  MY_VOCA_PATH,
+                  NewMyWordScreen.name,
                   arguments: {MY_VOCA_TYPE: MyVocaEnum.MANUAL_SAVED_WORD},
                 );
               },

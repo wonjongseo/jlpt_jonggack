@@ -13,55 +13,53 @@ class CustomTextForm extends StatelessWidget {
     required this.textInputEnum,
     required this.isFocus,
     this.validator,
+    this.onFieldSubmitted,
   });
 
   final TextInputEnum textInputEnum;
   final TextEditingController textController;
   final FocusNode focusNode;
   final String? Function(String?)? validator;
+  final void Function(String?)? onFieldSubmitted;
   final bool isFocus;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: Responsive.height16 / 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(textInputEnum.name, style: isFocus ? accentTextStyle : null),
-          TextFormField(
-            textInputAction:
-                textInputEnum == TextInputEnum.MEAN ||
-                        textInputEnum == TextInputEnum.EXAMPLE_MEAN
-                    ? TextInputAction.done
-                    : TextInputAction.next,
-            style: const TextStyle(
-              fontFamily: AppFonts.japaneseFont,
-              fontWeight: FontWeight.w500,
-            ),
-            onChanged: validator,
-            validator: validator,
-            autofocus: textInputEnum == TextInputEnum.JAPANESE,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: Responsive.width10, top: 0),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.mainColor, width: 2.5),
-              ),
-              enabledBorder: const OutlineInputBorder(),
-              focusedErrorBorder: outlineErrorBorder(),
-              errorBorder: outlineErrorBorder(),
-            ),
-            controller: textController,
-            focusNode: focusNode,
+      padding: EdgeInsets.only(bottom: 16),
+      child: TextFormField(
+        textInputAction:
+            textInputEnum == TextInputEnum.MEAN ||
+                    textInputEnum == TextInputEnum.EXAMPLE_MEAN
+                ? TextInputAction.done
+                : TextInputAction.next,
+        style: TextStyle(fontFamily: AppFonts.japaneseFont, fontSize: 14),
+        onChanged: validator,
+        validator: validator,
+        onFieldSubmitted: onFieldSubmitted,
+        autofocus: textInputEnum == TextInputEnum.JAPANESE,
+        decoration: InputDecoration(
+          hintText: textInputEnum.name,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide(color: AppColors.mainColor, width: 2),
           ),
-        ],
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+          ),
+          focusedErrorBorder: outlineErrorBorder(),
+          errorBorder: outlineErrorBorder(),
+        ),
+        controller: textController,
+        focusNode: focusNode,
       ),
     );
   }
 
   OutlineInputBorder outlineErrorBorder() {
-    return const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.redAccent, width: 3),
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(18),
+      borderSide: BorderSide(color: Colors.redAccent, width: 2),
     );
   }
 }

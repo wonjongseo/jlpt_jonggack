@@ -25,12 +25,12 @@ class MyWordRepository {
     return list.containsKey(word.word);
   }
 
-  static bool saveMyWord(MyWord word) {
+  static Future<bool> saveMyWord(MyWord word) async {
     final list = Hive.box<MyWord>(MyWord.boxKey);
     if (savedInMyWordInLocal(word)) {
       return false;
     }
-    list.put(word.word, word);
+    await list.put(word.word, word);
     return true;
   }
 
@@ -41,10 +41,10 @@ class MyWordRepository {
     log('deleteAllMyWord success');
   }
 
-  static void deleteMyWord(MyWord word) {
+  static Future<void> deleteMyWord(MyWord word) async {
     final list = Hive.box<MyWord>(MyWord.boxKey);
 
-    list.delete(word.word);
+    await list.delete(word.word);
   }
 
   void updateKnownMyVoca(String word, bool isTrue) {
@@ -52,5 +52,10 @@ class MyWordRepository {
     MyWord myWord = list.get(word) as MyWord;
     myWord.isKnown = isTrue;
     list.put(word, myWord);
+  }
+
+  void updateKnownMyVoca2(MyWord myWord) {
+    final list = Hive.box<MyWord>(MyWord.boxKey);
+    list.put(myWord.word, myWord);
   }
 }

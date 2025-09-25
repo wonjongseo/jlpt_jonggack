@@ -33,6 +33,7 @@ class WordCard extends StatelessWidget {
     }
 
     KangiStepRepositroy kangiStepRepositroy = KangiStepRepositroy();
+    print('word.examples : ${word.examples}');
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Responsive.width10),
@@ -67,7 +68,7 @@ class WordCard extends StatelessWidget {
                                   ? FontAwesomeIcons.bookmark
                                   : FontAwesomeIcons.solidBookmark,
                               color: AppColors.mainBordColor,
-                              size: Responsive.height10 * 2.2,
+                              size: 22,
                             ),
                           ),
                       ],
@@ -75,41 +76,39 @@ class WordCard extends StatelessWidget {
                   ),
                   if (myWordIcon != null)
                     Padding(
-                      padding: EdgeInsets.only(left: Responsive.height16),
+                      padding: EdgeInsets.only(left: 16),
                       child: myWordIcon!,
                     ),
                 ],
               ),
-              SizedBox(height: Responsive.height10),
+              SizedBox(height: 10),
               Row(
                 children: [
                   Flexible(
                     child: Text(
                       yomikata,
                       style: TextStyle(
-                        fontSize: Responsive.height20,
+                        fontSize: 20,
                         fontWeight: FontWeight.w800,
                         fontFamily: AppFonts.japaneseFont,
                       ),
                     ),
                   ),
                   SizedBox(width: Responsive.width10 / 2),
-                  GetBuilder<TtsController>(
-                    builder: (ttsController) {
-                      return IconButton(
-                        onPressed:
-                            () => ttsController.speak(
-                              word.yomikata == '-' ? word.word : word.yomikata,
-                            ),
-                        icon: FaIcon(
-                          ttsController.isPlaying
-                              ? FontAwesomeIcons.volumeLow
-                              : FontAwesomeIcons.volumeOff,
-                          color: AppColors.mainBordColor,
-                          size: Responsive.height10 * 2.6,
+                  IconButton(
+                    onPressed:
+                        () => TtsController.to.speak(
+                          word.yomikata == '-' ? word.word : word.yomikata,
                         ),
-                      );
-                    },
+                    icon: Obx(
+                      () => FaIcon(
+                        TtsController.to.isPlaying
+                            ? FontAwesomeIcons.volumeLow
+                            : FontAwesomeIcons.volumeOff,
+                        color: AppColors.mainBordColor,
+                        size: Responsive.height10 * 2.6,
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -2,12 +2,14 @@
 
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
+import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/veryGoodScreen.dart';
@@ -15,6 +17,7 @@ import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart'
 import 'package:jlpt_jonggack/model/Question.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
+import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
 import '../../../common/app_constant.dart';
 import '../../../model/my_word.dart';
@@ -48,10 +51,14 @@ class JlptTestController extends GetxController
 
   Random random = Random();
   bool isRandom = false;
+
+  int backCnt = 0;
+
   void init(dynamic arguments) {
+    backCnt = arguments['backCnt'] ?? 0;
     if (arguments != null && arguments[MY_VOCA_TEST] != null) {
       // 나만의 시험 초기화
-      myVocaController = Get.find<MyVocaController>();
+      myVocaController = Get.find<NewMyWordController>();
       startMyVocaQuiz(arguments[MY_VOCA_TEST]);
     } else if (arguments != null && arguments[JLPT_TEST] != null) {
       isRandom = arguments[IS_RANDOM] ?? false;
@@ -64,7 +71,7 @@ class JlptTestController extends GetxController
   }
 
   bool isTestAgain = false;
-  late MyVocaController? myVocaController;
+  late NewMyWordController? myVocaController;
 
   bool isDisTouchable = false;
 
@@ -148,6 +155,7 @@ class JlptTestController extends GetxController
 
   void startMyVocaQuiz(List<MyWord> myWords) {
     isMyWordTest = true;
+
     List<Word> tempWords = List.generate(
       myWords.length,
       (i) => Word(
@@ -158,9 +166,9 @@ class JlptTestController extends GetxController
       ),
     );
 
-    map = Question.generateQustion(tempWords);
-
-    setQuestions();
+    // map = Question.generateQustion(tempWords);
+    // print("object");
+    setQuestions2(tempWords);
   }
 
   void startJlptQuizHistory(List<Question> wrongQuestions) {
@@ -203,6 +211,56 @@ class JlptTestController extends GetxController
 
         questions.add(question);
       }
+    }
+  }
+
+  void setQuestions2(List<Word> words) async {
+    List<Word> baseWords = List.from(words);
+
+    int needed = baseWords.length - 4;
+    List<Word> extraWords = [];
+    if (needed < 0) {
+      // final wordRepo = Get.find<HiveRepository<Word>>(tag: Word.boxKey);
+      List<Word> allWords = await RandomTestGenerator.getAllJapaneseByLevel(
+        1,
+        false,
+      );
+
+      for (int i = 0; i < -needed; i++) {
+        int randomIndex = random.nextInt(allWords.length);
+        baseWords.add(allWords[randomIndex]);
+        extraWords.add(allWords[randomIndex]);
+      }
+    }
+
+    map = Question.generateQustion(baseWords);
+
+    for (var vocas in map) {
+      for (var e in vocas.entries) {
+        List<Word> optionsVoca = e.value;
+        Word questionVoca = optionsVoca[e.key];
+
+        Question question = Question(
+          question: questionVoca,
+          answer: e.key,
+          options: optionsVoca,
+        );
+
+        questions.add(question);
+      }
+    }
+
+    if (extraWords.isNotEmpty) {
+      questions.removeWhere((question) {
+        Word? word = extraWords.firstWhereOrNull(
+          (tWord) => tWord.word == question.question.word,
+        );
+        return word != null;
+      });
+    }
+    for (var i = 0; i < questions.length; i++) {
+      final q = questions[i];
+      print('${i + 1}번 : ${q.answer + 1}');
     }
   }
 
@@ -352,6 +410,9 @@ class JlptTestController extends GetxController
     }
     // 테스트를 다 풀 었으면
     else {
+      for (var i = 0; i < backCnt; i++) {
+        Get.back();
+      }
       if (!isTestAgain) {
         InterstitialManager.instance.maybeShow();
       }
@@ -368,9 +429,9 @@ class JlptTestController extends GetxController
           }
         }
       } else {
-        if (isMyWordTest) {
-          Get.back();
-        }
+        // if (isMyWordTest) {
+        //   Get.back();
+        // }
       }
 
       if (numOfCorrectAns == questions.length) {
@@ -380,6 +441,7 @@ class JlptTestController extends GetxController
         if (!isMyWordTest) {
           Get.off(() => const VeryGoodScreen());
         } else {
+          Get.back();
           Get.to(() => const VeryGoodScreen());
         }
         return;

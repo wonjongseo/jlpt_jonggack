@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 
 class BottomBtn extends StatelessWidget {
-  const BottomBtn({super.key, required this.label, required this.onTap});
+  const BottomBtn({
+    super.key,
+    required this.label,
+    required this.onTap,
+    this.backgroundColor,
+    this.textColor,
+  });
 
   final String label;
   final Function() onTap;
+  final Color? backgroundColor;
+  final Color? textColor;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,7 +23,7 @@ class BottomBtn extends StatelessWidget {
         horizontal: 16,
       ).copyWith(top: 4, bottom: 10),
       decoration: BoxDecoration(
-        color: AppColors.mainColor,
+        color: backgroundColor ?? AppColors.mainColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: InkWell(
@@ -24,10 +32,10 @@ class BottomBtn extends StatelessWidget {
         child: Center(
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.white,
+              color: textColor ?? Colors.white,
             ),
           ),
         ),
