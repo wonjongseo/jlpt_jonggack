@@ -6,6 +6,7 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/screens/kangi_study_sceen.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class KangiListTile extends StatefulWidget {
@@ -164,7 +165,10 @@ class _KangiListTileState extends State<KangiListTile> {
               color: widget.isSaved ? AppColors.mainBordColor : null,
               size: 22,
             ),
-            onPressed: () => controller.toggleSaveWord(widget.kangi),
+            onPressed:
+                () => controller.toggleSaveWord(
+                  MyWord.kangiToMyWord(widget.kangi),
+                ),
           ),
         ),
       ),

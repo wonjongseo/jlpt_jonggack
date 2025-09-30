@@ -11,9 +11,7 @@ class UserRepository {
 
   static Future<User> init(User user) async {
     final box = Hive.box(User.boxKey);
-
     await box.put('user', user);
-
     return user;
   }
 

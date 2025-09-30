@@ -17,7 +17,7 @@ class ExcelService {
     return value.toString().replaceAll(RegExp(r'\s+'), '');
   }
 
-  static Future<int> postExcelData() async {
+  static Future<List<MyWord>> postExcelData() async {
     FilePickerResult? picked = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx'],
@@ -25,19 +25,21 @@ class ExcelService {
       allowMultiple: false,
     );
 
+    List<MyWord> mywords = [];
+
     int saved = 0;
-    if (picked == null) return saved;
+    if (picked == null) return mywords;
 
     // 1) bytes 우선, 없으면 경로로 읽기 (플랫폼별 안전 처리)
     Uint8List? bytes = picked.files.single.bytes;
     if (bytes == null) {
       final path = picked.files.single.path;
-      if (path == null) return saved;
+      if (path == null) return mywords;
       bytes = await File(path).readAsBytes();
     }
 
     final excel = Excel.decodeBytes(bytes);
-
+    print("Start");
     try {
       for (final tableKey in excel.tables.keys) {
         final sheet = excel.tables[tableKey];
@@ -74,23 +76,20 @@ class ExcelService {
             continue;
           }
 
+          await Future.delayed(Duration(microseconds: 300));
           final newWord = MyWord(
             word: word,
             mean: mean,
             yomikata: yomikata,
             isManuelSave: true,
           )..createdAt = DateTime.now();
-
-          // 5) 저장 (중복이면 repo가 false 반환 가정)
-          if (await MyWordRepository.saveMyWord(newWord)) {
-            saved++;
-          }
+          mywords.add(newWord);
         }
       }
     } catch (e) {
-      SnackBarHelper.showErrorSnackBar('엑셀 처리 중 오류: $e');
+      rethrow;
     }
-
-    return saved;
+    print("End");
+    return mywords;
   }
 }

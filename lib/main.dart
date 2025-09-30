@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/core/bindings/initial_bindings.dart';
@@ -7,8 +6,9 @@ import 'package:jlpt_jonggack/data/grammar_datas.dart';
 import 'package:jlpt_jonggack/data/kangi_datas.dart';
 import 'package:jlpt_jonggack/data/word_datas.dart';
 import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
-import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
+import 'package:jlpt_jonggack/model/book.dart';
+import 'package:jlpt_jonggack/repository/hive_repository.dart';
 import 'package:jlpt_jonggack/routes.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jlpt_jonggack/services/app_info_service.dart';
@@ -74,7 +74,7 @@ void main() async {
 
   InterstitialManager.instance.configure(
     maxPerDay: 1000,
-    showChance: 0.5,
+    showChance: 1,
     cooldownMinutes: 10,
   );
 
@@ -117,69 +117,6 @@ class _AppState extends State<App> {
         }
       },
     );
-  }
-
-  Future<bool> forTest() async {
-    List<int> jlptWordScroes = [];
-    List<int> grammarScores = [];
-    List<int> kangiScores = [];
-    try {
-      await LocalReposotiry.init();
-
-      jlptWordScroes.add(await JlptStepRepositroy.init('1'));
-      jlptWordScroes.add(await JlptStepRepositroy.init('2'));
-      jlptWordScroes.add(await JlptStepRepositroy.init('3'));
-      jlptWordScroes.add(await JlptStepRepositroy.init('4'));
-      jlptWordScroes.add(await JlptStepRepositroy.init('5'));
-      // grammarScores.add(await GrammarRepositroy.init('1'));
-      // grammarScores.add(await GrammarRepositroy.init('2'));
-      // grammarScores.add(await GrammarRepositroy.init('3'));
-      // grammarScores.add(await GrammarRepositroy.init('4'));
-      // grammarScores.add(await GrammarRepositroy.init('5'));
-      // kangiScores.add(await KangiStepRepositroy.init("1"));
-      // kangiScores.add(await KangiStepRepositroy.init("2"));
-      // kangiScores.add(await KangiStepRepositroy.init("3"));
-      // kangiScores.add(await KangiStepRepositroy.init("4"));
-      // kangiScores.add(await KangiStepRepositroy.init("5"));
-      // kangiScores.add(await KangiStepRepositroy.init("6"));
-
-      late User user;
-      List<int> currentJlptWordScroes = List.generate(
-        jlptWordScroes.length,
-        (index) => 0,
-      );
-      List<int> currentGrammarScores = List.generate(
-        grammarScores.length,
-        (index) => 0,
-      );
-      List<int> currentKangiScores = List.generate(
-        kangiScores.length,
-        (index) => 0,
-      );
-
-      user = User(
-        jlptWordScroes: jlptWordScroes,
-        grammarScores: grammarScores,
-        kangiScores: kangiScores,
-        currentJlptWordScroes: currentJlptWordScroes,
-        currentGrammarScores: currentGrammarScores,
-        currentKangiScores: currentKangiScores,
-      );
-
-      user = await UserRepository.init(user);
-      if (!LocalReposotiry.isAskUpdateAllDataFor2_3_3()) {
-        LocalReposotiry.putIsNeedUpdateAllData(false);
-        LocalReposotiry.askedUpdateAllDataFor2_3_3(true);
-      }
-
-      UserController userController = Get.put(UserController());
-      userController.user.isPad = await isIpad();
-      Get.put(JSearchController());
-      Get.put(SettingController());
-    } catch (e) {
-      rethrow;
-    }
-    return true;
   }
 
   Future<bool> loadData() async {
@@ -394,6 +331,12 @@ class _AppState extends State<App> {
             "$i",
           );
         }
+      }
+
+      final bookRepo = Get.find<HiveRepository<Book>>();
+
+      if (bookRepo.getAll().isEmpty) {
+        await LocalReposotiry.migrationToBook(userController.user);
       }
 
       Get.put(JSearchController());

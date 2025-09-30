@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/related_word.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
@@ -83,7 +84,9 @@ class _KangiCardState extends State<KangiCard> {
                     !widget.controller!.isSavedInLocal(widget.kangi)
                         ? IconButton(
                           onPressed: () {
-                            widget.controller!.toggleSaveWord(widget.kangi);
+                            widget.controller!.toggleSaveWord(
+                              MyWord.kangiToMyWord(widget.kangi),
+                            );
                           },
                           icon: FaIcon(
                             FontAwesomeIcons.bookmark,
@@ -93,7 +96,9 @@ class _KangiCardState extends State<KangiCard> {
                         )
                         : IconButton(
                           onPressed: () {
-                            widget.controller!.toggleSaveWord(widget.kangi);
+                            widget.controller!.toggleSaveWord(
+                              MyWord.kangiToMyWord(widget.kangi),
+                            );
                           },
                           icon: FaIcon(
                             FontAwesomeIcons.solidBookmark,
@@ -160,10 +165,7 @@ class _KangiCardState extends State<KangiCard> {
                       '\n2. ',
                     )) {
                       mean =
-                          relatedVocaFromJLPTWord[index2].mean.split(
-                            '\n2. ',
-                          )[0] +
-                          "...";
+                          "${relatedVocaFromJLPTWord[index2].mean.split('\n2. ')[0]}...";
                     }
                     return Container(
                       decoration: BoxDecoration(border: Border.all(width: 0.5)),
@@ -211,28 +213,6 @@ class _KangiCardState extends State<KangiCard> {
                       ),
                     );
                   },
-                ),
-              ),
-              SizedBox(height: Responsive.height10 * 3),
-              InkWell(
-                onTap: () {
-                  Get.bottomSheet(
-                    SizedBox(
-                      width: double.infinity,
-                      child: KanjiDrawingAnimation(
-                        widget.kangi.japan,
-                        speed: 60,
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  '획순 보기',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: Responsive.height10 * 1.8,
-                    color: AppColors.mainBordColor,
-                  ),
                 ),
               ),
               SizedBox(height: Responsive.height10 * 3),

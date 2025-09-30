@@ -1,17 +1,18 @@
 import 'dart:collection';
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:excel/excel.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
+import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
+import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_study_screen.dart';
+import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
+import 'package:jlpt_jonggack/model/word.dart';
+import 'package:jlpt_jonggack/repository/hive_repository.dart';
 import 'package:jlpt_jonggack/repository/my_word_repository.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 enum MyWordType {
@@ -26,14 +27,27 @@ enum MyWordType {
 class NewMyWordController extends GetxController {
   static NewMyWordController get to => Get.find<NewMyWordController>();
   final MyWordRepository myWordRepository = MyWordRepository();
-  final bool isManualSavedWordPage;
+
+  final MyBookController myBookController;
   int selectedIndex = 0;
 
-  NewMyWordController(this.isManualSavedWordPage);
+  NewMyWordController(this.myBookController);
+
+  Book get book {
+    return myBookController.selectedBook!;
+  }
+
+  ScrollController scrollController = ScrollController();
 
   // 선택된 타입
   final _selectedType = MyWordType.all.obs;
   MyWordType get selectedType => _selectedType.value;
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
 
   // ✅ 타입 변경 시 표시 데이터 재적용
   void changeType(MyWordType? type) {
@@ -78,14 +92,7 @@ class NewMyWordController extends GetxController {
     );
   }
 
-  void manualSaveMyWord(MyWord newWord) async {
-    await MyWordRepository.saveMyWord(newWord);
-
-    UserController.to.updateMyWordSavedCount(true, isYokumatiageruWord: false);
-
-    loadMyWords();
-    SnackBarHelper.showSuccessSnackBar('${newWord.getWord()}가 저장되었습니다.');
-  }
+  void excelSaveMyWords() {}
 
   void onScrollLeft(int dateIndex, int wordIndex) {
     final item = _getVisibleItem(dateIndex, wordIndex);
@@ -95,8 +102,7 @@ class NewMyWordController extends GetxController {
     if (idx < 0) return;
 
     // 토글
-    _allList[idx].isKnown = !_allList[idx].isKnown;
-    myWordRepository.updateKnownMyVoca2(_allList[idx]);
+    updateWord(_allList[idx]);
 
     // 필터 상태(known/unKnown)에 따라 화면에서 사라지거나 나타나야 하므로 재적용
     _applyCurrentFilters();
@@ -110,15 +116,14 @@ class NewMyWordController extends GetxController {
     final idx = _indexInAllList(item);
     if (idx < 0) return;
 
-    deleteWord(_allList[idx], isYokumatiageruWord: !isManualSavedWordPage);
-    loadMyWords();
+    deleteWord(_allList[idx]);
   }
 
   void deleteWordInDetailPage(
     MyWord myWord, {
     bool isYokumatiageruWord = true,
   }) async {
-    await deleteWord(myWord, isYokumatiageruWord: isYokumatiageruWord);
+    await deleteWord(myWord);
 
     if (_allList.isNotEmpty) {
       Get.off(() => NewMyWordStudyScreen(), preventDuplicates: false);
@@ -127,17 +132,9 @@ class NewMyWordController extends GetxController {
     }
   }
 
-  Future<void> deleteWord(
-    MyWord myWord, {
-    bool isYokumatiageruWord = true,
-  }) async {
-    UserController.to.updateMyWordSavedCount(
-      false,
-      isYokumatiageruWord: isYokumatiageruWord,
-    );
-    await MyWordRepository.deleteMyWord(myWord);
+  Future<void> deleteWord(MyWord myWord) async {
+    myBookController.deleteMyWord(myWord);
     await loadMyWords();
-    // update();
   }
 
   void goToStudyScreen(int dateIndex, int wordIndex) {
@@ -151,26 +148,6 @@ class NewMyWordController extends GetxController {
 
   // 전체 리스트(원본)
   final _allList = <MyWord>[].obs;
-
-  // ✅ 외부에서 참조하는 getter: 타입 필터 적용
-  // List<MyWord> get allMyWords {
-  //   final result = <MyWord>[];
-  //   for (final w in _allList) {
-  //     // switch-filter
-  //     switch (selectedType) {
-  //       case MyWordType.known:
-  //         if (!w.isKnown) continue;
-  //         break;
-  //       case MyWordType.unKnown:
-  //         if (w.isKnown) continue;
-  //         break;
-  //       case MyWordType.all:
-  //         break;
-  //     }
-  //     result.add(w);
-  //   }
-  //   return result;
-  // }
 
   // 🔽 유틸: 현재 보이는 날짜 키(최신순 정렬)
   List<DateTime> get _sortedVisibleDays {
@@ -286,20 +263,23 @@ class NewMyWordController extends GetxController {
     }
   }
 
+  final bookRepo = Get.find<HiveRepository<Book>>();
   Future<void> loadMyWords() async {
+    print("loadMyWords");
     try {
       _isLoading(true);
-      final items = await myWordRepository.getAllMyWord(isManualSavedWordPage);
+
+      List<MyWord> myWord = myBookController.selectedBook!.mywords;
 
       // 최신순 정렬
-      items.sort((a, b) {
+      myWord.sort((a, b) {
         final ad = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
         final bd = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
         return bd.compareTo(ad);
       });
 
-      _allList.assignAll(items);
-      _rebuildAllMap(items);
+      _allList.assignAll(myWord);
+      _rebuildAllMap(myWord);
 
       // 초기: 전체 보기 + 타입 필터만 적용
       selectedDay.value = null;
@@ -309,7 +289,7 @@ class NewMyWordController extends GetxController {
 
       _applyCurrentFilters(); // ✅ 초기 화면 반영
     } catch (e) {
-      SnackBarHelper.showErrorSnackBar(e.toString());
+      SnackBarHelper.showErrorSnackBar(e.toString(), isLog: true);
     } finally {
       _isLoading(false);
     }
@@ -348,6 +328,7 @@ class NewMyWordController extends GetxController {
 
     // 단일일 해제하고 범위 적용
     selectedDay.value = null;
+    scrollController.jumpTo(0);
     _applyCurrentFilters(); // ✅ 타입 + 범위 반영
   }
 
@@ -356,6 +337,8 @@ class NewMyWordController extends GetxController {
     rangeStart.value = null;
     rangeEnd.value = null;
     selectedDay.value = null;
+
+    scrollController.jumpTo(0);
     _applyCurrentFilters(); // ✅ 타입만 반영해 전체 보기
   }
 
@@ -365,19 +348,140 @@ class NewMyWordController extends GetxController {
     loadMyWords();
   }
 
-  void updateWord(String word, bool isTrue) {
-    myWordRepository.updateKnownMyVoca(word, isTrue);
+  void autoUpdateWordInQuiz(Word word, bool value) {
+    int index = -1;
+    // MyWord updateMyWord = MyWord.wordToMyWord(word);
+    for (var i = 0; i < allMyWords.length; i++) {
+      if (allMyWords[i].word == word.word &&
+          allMyWords[i].yomikata == word.yomikata) {
+        index = i;
+        break;
+      }
+    }
+    if (index == -1) {
+      return;
+    }
+
+    allMyWords[index].isKnown = value;
+    MyBookController.to.updateMyWord(allMyWords[index]);
+    update();
+  }
+
+  void updateWord(MyWord word) {
+    word.isKnown = !word.isKnown;
+
+    MyBookController.to.updateMyWord(word);
     update();
   }
 
   void goToQuiz({int backCnt = 0}) async {
+    final result = await Get.dialog(
+      name: 'InputQuizCntDialog',
+      InputQuizCntDialog(maxCnt: allMyWords.length),
+    );
+    if (result == null) return;
+
+    String quizCnt = result['quizCnt'];
+    bool isRandom = result['isRandom'];
+
+    int iQuizCnt = int.tryParse(quizCnt) ?? 0;
+    if (iQuizCnt < 1) {
+      SnackBarHelper.showErrorSnackBar('1보다 큰 수를 입력해주세요');
+      return;
+    } else if (iQuizCnt > allMyWords.length) {
+      SnackBarHelper.showErrorSnackBar('${allMyWords.length}보다 작은 수를 입력해주세요');
+      return;
+    }
+
+    List<MyWord> tempWords = List.from(allMyWords);
+
+    if (isRandom) {
+      tempWords.shuffle();
+    }
+    tempWords = tempWords.sublist(0, iQuizCnt);
+
     await Get.toNamed(
       JLPT_TEST_PATH,
-      arguments: {MY_VOCA_TEST: allMyWords, 'backCnt': backCnt},
+      arguments: {MY_VOCA_TEST: tempWords, 'backCnt': backCnt},
     );
   }
 
   void goToAddMyWord() {
     Get.toNamed(NewAddMyWordScreen.name);
+  }
+}
+
+class InputQuizCntDialog extends StatefulWidget {
+  const InputQuizCntDialog({super.key, required this.maxCnt});
+  final int maxCnt;
+
+  @override
+  State<InputQuizCntDialog> createState() => _InputQuizCntDialogState();
+}
+
+class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
+  late TextEditingController teCrl;
+  bool isRandom = true;
+
+  @override
+  void initState() {
+    teCrl = TextEditingController(
+      text: widget.maxCnt > 15 ? '15' : widget.maxCnt.toString(),
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    teCrl.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '퀴즈를 진행 할 단어수를 입력해주세요.',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 12),
+
+          Card(
+            child: CustomTextFormField(
+              autofocus: true,
+              hintText: '15',
+              controller: teCrl,
+              sufficIcon: Text(
+                '최대 ${widget.maxCnt}개',
+                style: TextStyle(fontSize: 12, color: Colors.black54),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text('랜덤 퀴즈'),
+              SizedBox(width: 4),
+              Checkbox.adaptive(
+                value: isRandom,
+                onChanged: (v) => setState(() => isRandom = !isRandom),
+              ),
+            ],
+          ),
+          SizedBox(height: 12),
+          BottomBtn(
+            label: '확인',
+            onTap: () {
+              Get.back(result: {'quizCnt': teCrl.text, 'isRandom': isRandom});
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

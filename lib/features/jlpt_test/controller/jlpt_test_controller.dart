@@ -2,13 +2,10 @@
 
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
@@ -16,10 +13,8 @@ import 'package:jlpt_jonggack/features/score/screens/veryGoodScreen.dart';
 import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 import 'package:jlpt_jonggack/model/word.dart';
-import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
-import '../../../common/app_constant.dart';
 import '../../../model/my_word.dart';
 import '../screens/jlpt_test_screen.dart';
 import '../../../user/controller/user_controller.dart';
@@ -135,10 +130,8 @@ class JlptTestController extends GetxController
     if (isMyWordTest) {
       return;
     }
-    if (MyWord.saveToMyVoca(wrongQuestions[index].question)) {
-      userController.updateMyWordSavedCount(true);
-    }
-    jlptWordController.update();
+
+    jlptWordController.toggleSaveWord(wrongQuestions[index].question);
   }
 
   void startJlptQuiz(List<Word> words) {
@@ -156,15 +149,21 @@ class JlptTestController extends GetxController
   void startMyVocaQuiz(List<MyWord> myWords) {
     isMyWordTest = true;
 
-    List<Word> tempWords = List.generate(
-      myWords.length,
-      (i) => Word(
+    List<Word> tempWords = List.generate(myWords.length, (i) {
+      String yomikata = myWords[i].yomikata ?? '';
+      print('yomikata : ${yomikata}');
+
+      if (yomikata.contains('@')) {
+        List<String> splitedYomikata = yomikata.split('@');
+        yomikata = '음독: ${splitedYomikata[0]}, 훈독: ${splitedYomikata[1]}';
+      }
+      return Word(
         word: myWords[i].word,
         mean: myWords[i].mean,
-        yomikata: myWords[i].yomikata ?? '',
+        yomikata: yomikata,
         headTitle: '',
-      ),
-    );
+      );
+    });
 
     // map = Question.generateQustion(tempWords);
     // print("object");
@@ -329,7 +328,7 @@ class JlptTestController extends GetxController
 
   textWrong() {
     if (isMyWordTest) {
-      myVocaController!.updateWord(correctQuestion.word, false);
+      myVocaController!.autoUpdateWordInQuiz(correctQuestion, false);
     }
     saveWrongQuestion();
     isWrong = true;
@@ -347,7 +346,7 @@ class JlptTestController extends GetxController
     nextOrSkipText = 'next';
     if (isMyWordTest) {
       // 나만의 단어 알고 있음으로 변경.
-      myVocaController!.updateWord(correctQuestion.word, true);
+      myVocaController!.autoUpdateWordInQuiz(correctQuestion, true);
     }
     Future.delayed(const Duration(milliseconds: 1200), () {
       nextQuestion();

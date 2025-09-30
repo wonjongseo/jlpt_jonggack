@@ -113,7 +113,7 @@ class TtsController extends GetxController {
       // flutter_tts 설정상 awaitSpeakCompletion(true)를 설정했기 때문에,
       // speak()가 끝나면 setCompletionHandler가 반드시 호출됩니다.
     } catch (e) {
-      SnackBarHelper.showErrorSnackBar(e.toString());
+      SnackBarHelper.showErrorSnackBar(e.toString(), isLog: true);
     }
   }
 

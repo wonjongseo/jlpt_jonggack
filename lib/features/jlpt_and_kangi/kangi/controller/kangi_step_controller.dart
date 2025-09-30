@@ -1,12 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
+import 'package:jlpt_jonggack/model/word.dart';
 
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
@@ -18,33 +21,54 @@ import '../../../../user/controller/user_controller.dart';
 
 class KangiStepController extends GetxController {
   void toggleAllSave() {
-    if (isAllSave()) {
-      for (int i = 0; i < getKangiStep().kangis.length; i++) {
-        Kangi kangi = getKangiStep().kangis[i];
-        MyWord newMyWord = MyWord.kangiToMyWord(kangi);
-
-        if (isSavedInLocal(kangi)) {
-          MyWordRepository.deleteMyWord(newMyWord);
-          userController.updateMyWordSavedCount(false);
-        }
-      }
-      // isAllSave = false;
+    List<MyWord> myWords =
+        getKangiStep().kangis
+            .map((item) => MyWord.kangiToMyWord(item))
+            .toList();
+    if (!isAllSave()) {
+      // for (var word in getJlptStep().words) {
+      //   MyBookController.to.addMyWord(MyWord.wordToMyWord(word));
+      // }
+      MyBookController.to.bulkHandleMyWords(myWords);
     } else {
-      for (int i = 0; i < getKangiStep().kangis.length; i++) {
-        Kangi kangi = getKangiStep().kangis[i];
-
-        MyWord newMyWord = MyWord.kangiToMyWord(kangi);
-
-        if (!isSavedInLocal(kangi)) {
-          MyWordRepository.saveMyWord(newMyWord);
-          userController.updateMyWordSavedCount(true);
-          isWordSaved = true;
-        }
-      }
-
-      // isAllSave = true;
+      // for (var word in getJlptStep().words) {
+      //   MyBookController.to.deleteMyWord(MyWord.wordToMyWord(word));
+      // }
+      MyBookController.to.bulkHandleMyWords(myWords, isAdd: false);
     }
+
+    // for (int i = 0; i < getJlptStep().words.length; i++) {
+    //   Word word = getJlptStep().words[i];
+    //   toggleSaveWord(word, showSnackBar: false);
+    // }
     update();
+    // if (isAllSave()) {
+    //   for (int i = 0; i < getKangiStep().kangis.length; i++) {
+    //     Kangi kangi = getKangiStep().kangis[i];
+    //     MyWord newMyWord = MyWord.kangiToMyWord(kangi);
+
+    //     if (isSavedInLocal(kangi)) {
+    //       MyWordRepository.deleteMyWord(newMyWord);
+    //       userController.updateMyWordSavedCount(false);
+    //     }
+    //   }
+    //   // isAllSave = false;
+    // } else {
+    //   for (int i = 0; i < getKangiStep().kangis.length; i++) {
+    //     Kangi kangi = getKangiStep().kangis[i];
+
+    //     MyWord newMyWord = MyWord.kangiToMyWord(kangi);
+
+    //     if (!isSavedInLocal(kangi)) {
+    //       MyWordRepository.saveMyWord(newMyWord);
+    //       userController.updateMyWordSavedCount(true);
+    //       isWordSaved = true;
+    //     }
+    //   }
+
+    //   // isAllSave = true;
+    // }
+    // update();
   }
 
   bool isAllSave() {
@@ -89,24 +113,32 @@ class KangiStepController extends GetxController {
   bool isSavedInLocal(Kangi kangi) {
     MyWord newMyWord = MyWord.kangiToMyWord(kangi);
 
-    newMyWord.createdAt = DateTime.now();
-    isWordSaved = MyWordRepository.savedInMyWordInLocal(newMyWord);
+    List<MyWord> book1Words = getBook1Words();
 
+    isWordSaved = book1Words.contains(newMyWord);
     return isWordSaved;
   }
 
-  void toggleSaveWord(Kangi kangi) {
-    MyWord newMyWord = MyWord.kangiToMyWord(kangi);
-    if (isSavedInLocal(kangi)) {
-      MyWordRepository.deleteMyWord(newMyWord);
-      userController.updateMyWordSavedCount(false);
-      isWordSaved = false;
+  List<MyWord> getBook1Words() {
+    return MyBookController.to.books[0].mywords;
+  }
+
+  void toggleSaveWord(MyWord newMyWord, {bool showSnackBar = true}) {
+    // MyWord newMyWord = MyWord.wordToMyWord(word);
+    List<MyWord> book1Words = MyBookController.to.books[0].mywords;
+
+    if (book1Words.contains(newMyWord)) {
+      MyBookController.to.deleteMyWord(newMyWord);
     } else {
-      MyWordRepository.saveMyWord(newMyWord);
-      userController.updateMyWordSavedCount(true);
-      showSnackBar('${kangi.japan}가 저장되었습니다.\n나만의 단어장 1에서 확인해주세요.');
-      isWordSaved = true;
+      MyBookController.to.addMyWord(newMyWord);
+
+      if (showSnackBar) {
+        SnackBarHelper.showSuccessSnackBar(
+          '${newMyWord.word}가 저장되었습니다.\n종각 단어장에서 확인해주세요.',
+        );
+      }
     }
+
     update();
   }
 

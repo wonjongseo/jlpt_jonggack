@@ -39,8 +39,11 @@ class KangiScoreScreen extends StatelessWidget {
 
       if (kangiQuestionController.userController.clickUnKnownButtonCount >
           randomNumber) {
-        int savedDataCount =
-            kangiQuestionController.userController.user.yokumatigaeruMyWords;
+        //TODO
+        int savedDataCount = 0;
+        // int savedDataCount =
+        //     kangiQuestionController.userController.user.yokumatigaeruMyWords;
+        //TODO
 
         bool result = await CommonDialog.askGoToMyVocaPageDialog(
           savedDataCount,
@@ -49,10 +52,7 @@ class KangiScoreScreen extends StatelessWidget {
         if (result) {
           kangiQuestionController.userController.clickUnKnownButtonCount = 0;
           getBacks(3);
-          Get.toNamed(
-            NewMyWordScreen.name,
-            arguments: {MY_VOCA_TYPE: MyVocaEnum.YOKUMATIGAERU_WORD},
-          );
+          Get.toNamed(NewMyWordScreen.name);
         } else {
           randomNumber = randDom.nextInt(2) + 1;
           kangiQuestionController.userController.clickUnKnownButtonCount =

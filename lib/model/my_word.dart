@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
@@ -82,27 +83,35 @@ class MyWord {
       yomikata: word.yomikata,
       examples: word.examples,
     );
-
     newMyWord.createdAt = DateTime.now();
-    final now = DateTime.now();
-    newMyWord.createdAt = DateTime(now.year, now.month, now.day - 7);
+    // final now = DateTime.now();
+    // newMyWord.createdAt = DateTime(now.year, now.month, now.day - 7);
 
     return newMyWord;
   }
 
-  static bool saveToMyVoca(Word word) {
-    MyWord newMyWord = wordToMyWord(word);
-    if (MyWordRepository.savedInMyWordInLocal(newMyWord)) {
-      showSnackBar('${word.word}가 이미 저장되어 있습니다.\n나만의 단어장1에서 확인 해주세요');
-      return false;
-    } else {
-      MyWordRepository.saveMyWord(newMyWord);
-      showSnackBar('${word.word}가 저장되었습니다.\n나만의 단어장1에서 확인 해주세요');
-    }
-    return true;
-  }
-
   String createdAtString() {
     return createdAt.toString().substring(0, 16);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MyWord &&
+        other.word == word &&
+        other.mean == mean &&
+        other.yomikata == yomikata;
+  }
+
+  @override
+  int get hashCode {
+    return word.hashCode ^
+        mean.hashCode ^
+        yomikata.hashCode ^
+        isKnown.hashCode ^
+        createdAt.hashCode ^
+        isManuelSave.hashCode ^
+        examples.hashCode;
   }
 }

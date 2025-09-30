@@ -3,8 +3,14 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/logger/logger_service.dart';
 
 class SnackBarHelper {
-  static void showErrorSnackBar(String message, {String title = "Error"}) {
-    LogManager.error(message);
+  static void showErrorSnackBar(
+    String message, {
+    String title = "Error",
+    bool isLog = false,
+  }) {
+    if (isLog) {
+      LogManager.info(message);
+    }
     Get.rawSnackbar(
       message: message,
       backgroundColor: Colors.red,
@@ -16,8 +22,15 @@ class SnackBarHelper {
     );
   }
 
-  static void showSuccessSnackBar(String message, {String title = "Success"}) {
-    LogManager.info(message);
+  static void showSuccessSnackBar(
+    String message, {
+    String title = "Success",
+    bool isLog = false,
+  }) {
+    if (Get.isSnackbarOpen) return;
+    if (isLog) {
+      LogManager.info(message);
+    }
     Get.rawSnackbar(
       message: message,
       backgroundColor: Colors.green,

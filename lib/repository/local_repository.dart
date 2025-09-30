@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:get/get.dart';
 import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
+import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
@@ -14,6 +16,10 @@ import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';
+import 'package:jlpt_jonggack/repository/hive_repository.dart';
+import 'package:jlpt_jonggack/repository/my_word_repository.dart';
+import 'package:jlpt_jonggack/user/controller/user_controller.dart';
+import 'package:jlpt_jonggack/user/repository/user_repository.dart';
 
 import '../model/user.dart';
 
@@ -23,10 +29,6 @@ class LocalReposotiry {
       await Hive.initFlutter();
     } else if (GetPlatform.isWindows) {
       Hive.init("C:/jlpt_app/assets/hive");
-    }
-
-    if (!Hive.isAdapterRegistered(UserTypeId)) {
-      Hive.registerAdapter(UserAdapter());
     }
 
     if (!Hive.isAdapterRegistered(KangiTypeId)) {
@@ -39,11 +41,15 @@ class LocalReposotiry {
     if (!Hive.isAdapterRegistered(WordTypeId)) {
       Hive.registerAdapter(WordAdapter());
     }
-
+    if (!Hive.isAdapterRegistered(bookTypeId)) {
+      Hive.registerAdapter(BookAdapter());
+    }
     if (!Hive.isAdapterRegistered(MyWordTypeId)) {
       Hive.registerAdapter(MyWordAdapter());
     }
-
+    if (!Hive.isAdapterRegistered(UserTypeId)) {
+      Hive.registerAdapter(UserAdapter());
+    }
     if (!Hive.isAdapterRegistered(JlptStepTypeId)) {
       Hive.registerAdapter(JlptStepAdapter());
     }
@@ -138,6 +144,12 @@ class LocalReposotiry {
       await Hive.openBox('isAskUpdatedAllData2.3.3');
     }
 
+    if (!Hive.isBoxOpen(Book.boxKey)) {
+      await Hive.openBox<Book>(Book.boxKey);
+    }
+    if (!Hive.isBoxOpen(MyWord.boxKey)) {
+      await Hive.openBox<MyWord>(MyWord.boxKey);
+    }
     if (!Hive.isBoxOpen(User.boxKey)) {
       await Hive.openBox(User.boxKey);
     }
@@ -173,10 +185,6 @@ class LocalReposotiry {
       await Hive.openBox<Word>(Word.boxKey);
     }
 
-    if (!Hive.isBoxOpen(MyWord.boxKey)) {
-      await Hive.openBox<MyWord>(MyWord.boxKey);
-    }
-
     if (!Hive.isBoxOpen('usageCount')) {
       await Hive.openBox('usageCount');
     }
@@ -189,6 +197,35 @@ class LocalReposotiry {
     }
     if (!Hive.isBoxOpen(AppConstant.settingModelBox)) {
       await Hive.openBox(AppConstant.settingModelBox);
+    }
+
+    final bookRepo = HiveRepository<Book>(Book.boxKey);
+    await bookRepo.initBox();
+    Get.put<HiveRepository<Book>>(bookRepo);
+  }
+
+  static Future<void> migrationToBook(User user) async {
+    MyWordRepository myWordRepository = MyWordRepository();
+    List<MyWord> myWordBook1Words = await myWordRepository.getAllMyWord(false);
+
+    List<Book> books = Book.createDefaultBooks();
+
+    List<MyWord> myWordBook2Words = await myWordRepository.getAllMyWord(true);
+    books[0].mywords = myWordBook1Words;
+    books[1].mywords = myWordBook2Words;
+
+    final bookRepo = Get.find<HiveRepository<Book>>();
+    String book1Id = books[0].id;
+    await bookRepo.put(book1Id, books[0]);
+
+    String book2Id = books[1].id;
+    await bookRepo.put(book2Id, books[1]);
+
+    for (var word in myWordBook1Words) {
+      await myWordRepository.deleteMyWord(word);
+    }
+    for (var word in myWordBook2Words) {
+      await myWordRepository.deleteMyWord(word);
     }
   }
 
@@ -284,7 +321,6 @@ class LocalReposotiry {
         if (index > 4) return 0;
         break;
       case KindOfStudy.MY:
-        if (index > 1) return 0;
         break;
     }
     final list = Hive.box('basicOrJlptOrMy');

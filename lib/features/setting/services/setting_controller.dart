@@ -87,21 +87,6 @@ class SettingController extends GetxController {
     return result;
   }
 
-  Future<bool> initMyWords() async {
-    bool result = await CommonDialog.askBeforeDeleteDatasDialog(
-      '나만의 단어를',
-      message: '나만의 단어장1과 나만의 단어장2에 저장된 데이터가 제거 됩니다.\n그래도 진행하시겠습니까?',
-    );
-
-    if (result) {
-      isInitial = true;
-
-      userController.deleteAllMyVocabularyDatas();
-      MyWordRepository.deleteAllMyWord();
-    }
-    return result;
-  }
-
   void allDataDelete() {
     userController.initializeProgress(TotalProgressType.JLPT);
     JlptStepRepositroy.deleteAllWord();

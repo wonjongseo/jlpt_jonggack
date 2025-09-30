@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
+import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
@@ -22,6 +24,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
   late PageController pageController;
   int pageIndex = 0;
   final controller = Get.find<NewMyWordController>();
+
   @override
   void initState() {
     pageIndex = controller.selectedIndex;
@@ -30,8 +33,21 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
   }
 
   @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     int itemCount = controller.allMyWords.length;
+
+    bool hasKangi = false;
+    String japanese = '';
+    if (itemCount != pageIndex) {
+      japanese = controller.allMyWords[pageIndex].word.split('·')[0];
+      hasKangi = japanese.characters.any((char) => isKangi(char));
+    }
 
     return Scaffold(
       appBar: PreferredSize(
@@ -44,6 +60,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                     curIndex: pageIndex + 1,
                     totalIndex: controller.allMyWords.length,
                   ),
+          actions: [if (hasKangi) howToRightBtn(context, japanese)],
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -115,7 +132,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                   Checkbox.adaptive(
                     value: word.isKnown,
                     onChanged: (v) {
-                      controller.updateWord(word.word, !word.isKnown);
+                      controller.updateWord(word);
                     },
                   ),
                   if (word.isKnown)
@@ -135,10 +152,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                 children: [
                   IconButton(
                     onPressed: () {
-                      controller.deleteWordInDetailPage(
-                        word,
-                        isYokumatiageruWord: !controller.isManualSavedWordPage,
-                      );
+                      controller.deleteWordInDetailPage(word);
                     },
                     icon: Icon(Icons.delete),
                   ),

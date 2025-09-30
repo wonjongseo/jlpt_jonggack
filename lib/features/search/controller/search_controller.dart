@@ -70,7 +70,7 @@ class JSearchController extends GetxController {
 
       update();
     } catch (e) {
-      SnackBarHelper.showErrorSnackBar('$e');
+      SnackBarHelper.showErrorSnackBar('$e', isLog: true);
     } finally {
       isLoading.value = false;
     }

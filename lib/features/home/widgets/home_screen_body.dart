@@ -6,6 +6,7 @@ import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 
@@ -101,7 +102,6 @@ class _JLPTCardsState extends State<JLPTCards> {
           ),
           items: List.generate(5, (index) {
             return LevelCategoryCard(
-              titleSize: Responsive.width10 * 3,
               title: 'N${index + 1}',
               onTap: () {
                 Get.to(() => JlptHomeScreen(levelIndex: index));
@@ -161,7 +161,7 @@ class MyCards extends StatefulWidget {
 class _MyCardsState extends State<MyCards> {
   CarouselSliderController carouselController = CarouselSliderController();
   int _currentIndex = 0;
-
+  final controller = Get.find<MyBookController>();
   @override
   void initState() {
     super.initState();
@@ -182,108 +182,70 @@ class _MyCardsState extends State<MyCards> {
   List<Widget> bodys = [];
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<UserController>(
-      builder: (userController) {
-        return CarouselSlider(
-          carouselController: carouselController,
-          options: CarouselOptions(
-            disableCenter: true,
-            viewportFraction: userController.user.isPad ? 0.55 : 0.75,
-            enableInfiniteScroll: false,
-            initialPage: _currentIndex,
-            enlargeCenterPage: true,
-            onPageChanged: (index, reason) {
-              _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-                KindOfStudy.MY,
-                index,
-              );
+    return Obx(() {
+      return CarouselSlider(
+        carouselController: carouselController,
+        options: CarouselOptions(
+          disableCenter: true,
+          viewportFraction: UserController.to.user.isPad ? 0.55 : 0.75,
+          enableInfiniteScroll: false,
+          initialPage: _currentIndex,
+          enlargeCenterPage: true,
+          onPageChanged: (index, reason) {
+            _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
+              KindOfStudy.MY,
+              index,
+            );
+          },
+          scrollDirection: Axis.horizontal,
+        ),
+        items: List.generate(controller.books.length + 1, (index) {
+          if (controller.books.length == index) {
+            return LevelCategoryCard(
+              onTap: () => controller.goToEditBook(),
+              title: '단어장 생성',
+              body: Center(
+                child: Icon(Icons.add, color: AppColors.mainColor, size: 30),
+              ),
+            );
+          }
+
+          final book = controller.books[index];
+          return LevelCategoryCard(
+            onTap: () {
+              controller.tapBook(book);
             },
-            scrollDirection: Axis.horizontal,
-          ),
-          items: [
-            LevelCategoryCard(
-              onTap: () {
-                LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.MY, 0);
-                print("asd");
-                Get.toNamed(
-                  NewMyWordScreen.name,
-                  arguments: {MY_VOCA_TYPE: MyVocaEnum.YOKUMATIGAERU_WORD},
-                );
-              },
-              title: '나만의 단어장 1',
-              extraInfo: RichText(
-                text: TextSpan(
-                  text: '저장된 단어: ',
-                  children: [
-                    TextSpan(
-                      text: "${userController.user.yokumatigaeruMyWords}",
-                      style: TextStyle(color: AppColors.mainBordColor),
-                    ),
-                    const TextSpan(text: "개"),
-                  ],
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: Responsive.width10 * 1.4,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: AppFonts.gMaretFont,
+            title: book.title,
+
+            extraInfo: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: '저장된 단어: '),
+                  TextSpan(
+                    text: book.mywords.length.toString(),
+                    style: TextStyle(color: AppColors.mainBordColor),
                   ),
-                ),
-              ),
-              titleSize: Responsive.width10 * 2.3,
-              foot: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '종각 앱에서 저장한 단어들을\n학습하는 단어장',
-                  style: TextStyle(
-                    fontFamily: AppFonts.gMaretFont,
-                    fontSize: Responsive.height15,
-                  ),
+                  TextSpan(text: '개'),
+                ],
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: AppFonts.gMaretFont,
                 ),
               ),
             ),
-            LevelCategoryCard(
-              onTap: () {
-                LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.MY, 1);
-                Get.toNamed(
-                  NewMyWordScreen.name,
-                  arguments: {MY_VOCA_TYPE: MyVocaEnum.MANUAL_SAVED_WORD},
-                );
-              },
-              title: '나만의 단어장 2',
-              titleSize: Responsive.width10 * 2.3,
-              extraInfo: RichText(
-                text: TextSpan(
-                  text: '저장된 단어: ',
-                  children: [
-                    TextSpan(
-                      text: "${userController.user.manualSavedMyWords}",
-                      style: TextStyle(color: AppColors.mainBordColor),
-                    ),
-                    const TextSpan(text: "개"),
-                  ],
-                  style: TextStyle(
-                    fontSize: Responsive.width10 * 1.4,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: AppFonts.gMaretFont,
-                  ),
-                ),
-              ),
-              foot: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '사용자가 직접 저장한 단어들을\n학습하는 단어장',
-                  style: TextStyle(
-                    fontFamily: AppFonts.gMaretFont,
-                    fontSize: Responsive.height15,
-                  ),
-                ),
+            foot: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                book.description,
+                style: TextStyle(fontFamily: AppFonts.gMaretFont, fontSize: 15),
               ),
             ),
-          ],
-        );
-      },
-    );
+          );
+        }),
+      );
+    });
   }
 
   void onPageChanged(v) {
@@ -330,7 +292,7 @@ class _BasicCardState extends State<BasicCard> {
         Get.to(() => const HiraganaScreen(category: 'hiragana'));
       },
       title: '히라가나 단어장',
-      titleSize: Responsive.width10 * 2.3,
+
       foot: Text(
         '왕초보를 위한 히라가나 단어장',
         style: TextStyle(fontSize: Responsive.height15),
@@ -342,7 +304,7 @@ class _BasicCardState extends State<BasicCard> {
         Get.to(() => const HiraganaScreen(category: 'katakana'));
       },
       title: '카타카나 단어장',
-      titleSize: Responsive.width10 * 2.3,
+
       foot: Text(
         '왕초보를 위한 카타카나 단어장',
         style: TextStyle(fontSize: Responsive.height15),

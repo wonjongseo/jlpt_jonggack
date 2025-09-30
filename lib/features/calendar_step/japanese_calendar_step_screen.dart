@@ -132,59 +132,54 @@ class _JapaneseCalendarStepScreenState
     );
   }
 
-  SafeArea _body() {
+  Widget _body() {
     return SafeArea(
       child: GetBuilder<JlptStepController>(
         builder: (controller) {
-          return Center(
-            child: Column(
-              children: [
-                TopNavigationBtn(
-                  stepList: controller.jlptSteps,
-                  navigationKey: (index) => gKeys[index],
-                  onTap: (index) {
-                    jlptStepController.changeHeaderPageIndex(index);
-                    setState(() {});
-                  },
-                  isCurrent: (index) => jlptStepController.step == index,
-                  isFinished: (index) => controller.jlptSteps[index].isFinished,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Container(
-                      color: Colors.white,
-                      child: PageView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        controller: jlptStepController.pageController,
-                        itemCount: controller.jlptSteps.length,
-                        itemBuilder: (context, subStep) {
-                          JlptStep jlptStep =
-                              controller.jlptSteps[controller.step];
+          return Column(
+            children: [
+              TopNavigationBtn(
+                stepList: controller.jlptSteps,
+                navigationKey: (index) => gKeys[index],
+                onTap: (index) {
+                  jlptStepController.changeHeaderPageIndex(index);
+                  setState(() {});
+                },
+                isCurrent: (index) => jlptStepController.step == index,
+                isFinished: (index) => controller.jlptSteps[index].isFinished,
+              ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  color: Colors.white,
+                  child: PageView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: jlptStepController.pageController,
+                    itemCount: controller.jlptSteps.length,
+                    itemBuilder: (context, subStep) {
+                      JlptStep jlptStep = controller.jlptSteps[controller.step];
 
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: List.generate(jlptStep.words.length, (
-                                index,
-                              ) {
-                                bool isSaved = controller.isSavedInLocal(
-                                  jlptStep.words[index],
-                                );
-                                return JapaneseListTile(
-                                  word: jlptStep.words[index],
-                                  index: index,
-                                  isSaved: isSaved,
-                                );
-                              }),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: List.generate(jlptStep.words.length, (
+                            index,
+                          ) {
+                            bool isSaved = controller.isSavedInLocal(
+                              jlptStep.words[index],
+                            );
+                            return JapaneseListTile(
+                              word: jlptStep.words[index],
+                              index: index,
+                              isSaved: isSaved,
+                            );
+                          }),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
       ),

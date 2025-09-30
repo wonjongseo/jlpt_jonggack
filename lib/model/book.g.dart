@@ -1,50 +1,47 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'my_word.dart';
+part of 'book.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class MyWordAdapter extends TypeAdapter<MyWord> {
+class BookAdapter extends TypeAdapter<Book> {
   @override
-  final int typeId = 1;
+  final int typeId = 3;
 
   @override
-  MyWord read(BinaryReader reader) {
+  Book read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MyWord(
-      word: fields[0] as String,
-      mean: fields[1] as String,
-      yomikata: fields[3] as String?,
-      examples: (fields[6] as List?)?.cast<Example>(),
-      isManuelSave: fields[5] as bool?,
-    )
-      ..isKnown = fields[2] as bool
-      ..createdAt = fields[4] as DateTime?;
+    return Book(
+      id: fields[0] as String?,
+      createdAt: fields[4] as String?,
+      title: fields[1] as String,
+      description: fields[2] as String,
+      bookNum: fields[3] as int,
+      mywords: (fields[5] as List?)?.cast<MyWord>(),
+    );
   }
 
   @override
-  void write(BinaryWriter writer, MyWord obj) {
+  void write(BinaryWriter writer, Book obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(6)
       ..writeByte(0)
-      ..write(obj.word)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.mean)
-      ..writeByte(3)
-      ..write(obj.yomikata)
+      ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.isKnown)
+      ..write(obj.description)
+      ..writeByte(3)
+      ..write(obj.bookNum)
       ..writeByte(4)
       ..write(obj.createdAt)
       ..writeByte(5)
-      ..write(obj.isManuelSave)
-      ..writeByte(6)
-      ..write(obj.examples);
+      ..write(obj.mywords);
   }
 
   @override
@@ -53,7 +50,7 @@ class MyWordAdapter extends TypeAdapter<MyWord> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is MyWordAdapter &&
+      other is BookAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

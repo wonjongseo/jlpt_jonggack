@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
@@ -36,23 +37,80 @@ class EditWordController extends GetxController {
     }
   }
 
-  void addWordsByExcel() async {
-    int savedWordNumber = await ExcelService.postExcelData();
-    if (savedWordNumber != 0) {
-      Get.back();
-      Get.back();
+  final _isLoading = false.obs;
+  bool get isLoading => _isLoading.value;
 
-      SnackBarHelper.showSuccessSnackBar(
-        '$savedWordNumber개의 단어가 저장되었습니다.\n($savedWordNumber 단어가 이미 저장되어 있습니다.)',
+  void addWord() {
+    if (wordFormKey.currentState!.validate()) {
+      String japanese = japaneseController.text;
+      String yomikata = yomikataController.text;
+      String mean = meanController.text;
+
+      if (!appendExample()) {
+        return;
+      }
+
+      final myword = MyWord(
+        word: japanese,
+        mean: mean,
+        yomikata: yomikata,
+        examples: _examples,
+        isManuelSave: true,
       );
 
-      UserController.to.updateMyWordSavedCount(
-        true,
-        isYokumatiageruWord: false,
-        count: savedWordNumber,
-      );
-      return;
+      MyBookController.to.addMyWord(myword);
+      NewMyWordController.to.loadMyWords();
+      SnackBarHelper.showSuccessSnackBar('${myword.getWord()}가 저장되었습니다.');
+
+      japaneseController.clear();
+      yomikataController.clear();
+      meanController.clear();
+
+      japaneseFocusNode.requestFocus();
+
+      _examples.clear();
+      exampleWordController.clear();
+      exampleMeanController.clear();
     }
+  }
+
+  void addWordsByExcel() async {
+    try {
+      _isLoading.value = true;
+      List<MyWord> convertMyWord = await ExcelService.postExcelData();
+
+      int savedWordCnt = await MyBookController.to.bulkHandleMyWords(
+        convertMyWord,
+      );
+      if (convertMyWord.isNotEmpty && savedWordCnt == 0) {
+        SnackBarHelper.showErrorSnackBar('이미 저장된 단어(들) 이여서 단어 등록을 스킵했습니다');
+        return;
+      }
+      NewMyWordController.to.loadMyWords();
+      SnackBarHelper.showSuccessSnackBar(
+        '중복 단어를 제외하고 $savedWordCnt개의 단어가 등록되었습니다',
+      );
+    } catch (e) {
+      SnackBarHelper.showErrorSnackBar('엑셀 처리 중 오류: $e', isLog: true);
+    } finally {
+      _isLoading.value = false;
+    }
+
+    // if (savedWordNumber != 0) {
+    //   Get.back();
+    //   Get.back();
+
+    //   SnackBarHelper.showSuccessSnackBar(
+    //     '$savedWordNumber개의 단어가 저장되었습니다.\n($savedWordNumber 단어가 이미 저장되어 있습니다.)',
+    //   );
+
+    //   UserController.to.updateMyWordSavedCount(
+    //     true,
+    //     isYokumatiageruWord: false,
+    //     count: savedWordNumber,
+    //   );
+    //   return;
+    // }
   }
 
   final wordFormKey = GlobalKey<FormState>();
@@ -216,11 +274,10 @@ class EditWordController extends GetxController {
   }
 
   bool appendExample() {
-    if (exampleWordController.text.isEmpty) return true;
+    String eJapanese = exampleWordController.text.trim();
+    String eMean = exampleMeanController.text.trim();
+    if (eJapanese.isEmpty && eMean.isEmpty) return true;
     if (exampleFormKey.currentState!.validate()) {
-      String eJapanese = exampleWordController.text;
-      String eMean = exampleMeanController.text;
-
       Example example = Example(word: eJapanese, mean: eMean);
 
       _examples.add(example);
@@ -233,36 +290,6 @@ class EditWordController extends GetxController {
       return true;
     }
     return false;
-  }
-
-  void addWord() {
-    if (wordFormKey.currentState!.validate()) {
-      String japanese = japaneseController.text;
-      String yomikata = yomikataController.text;
-      String mean = meanController.text;
-
-      if (!appendExample()) {
-        return;
-      }
-
-      final myword = MyWord(
-        word: japanese,
-        mean: mean,
-        yomikata: yomikata,
-        examples: _examples,
-        isManuelSave: true,
-      );
-
-      NewMyWordController.to.manualSaveMyWord(myword);
-
-      japaneseController.clear();
-      yomikataController.clear();
-      meanController.clear();
-
-      japaneseFocusNode.requestFocus();
-
-      _examples.clear();
-    }
   }
 
   String? customValidator({

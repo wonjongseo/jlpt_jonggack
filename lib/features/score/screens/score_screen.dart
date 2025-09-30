@@ -36,8 +36,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
 
       if (jlptController.userController.clickUnKnownButtonCount >
           randomNumber) {
-        int savedDataCount =
-            jlptController.userController.user.yokumatigaeruMyWords;
+        //TODO
+        int savedDataCount = 0;
+        // jlptController.userController.user.yokumatigaeruMyWords;
+        //TODO
 
         bool result = await CommonDialog.askGoToMyVocaPageDialog(
           savedDataCount,
@@ -46,10 +48,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
         if (result) {
           jlptController.userController.clickUnKnownButtonCount = 0;
           jlptController.isMyWordTest ? getBacks(2) : getBacks(3);
-          Get.toNamed(
-            NewMyWordScreen.name,
-            arguments: {MY_VOCA_TYPE: MyVocaEnum.YOKUMATIGAERU_WORD},
-          );
+          Get.toNamed(NewMyWordScreen.name);
         } else {
           randomNumber = randDom.nextInt(2) + 2;
           jlptController.userController.clickUnKnownButtonCount =

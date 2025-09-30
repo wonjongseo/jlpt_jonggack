@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class MyWordRepository {
   Future<List<MyWord>> getAllMyWord(bool isManuelSave) async {
@@ -20,42 +19,9 @@ class MyWordRepository {
     return words;
   }
 
-  static bool savedInMyWordInLocal(MyWord word) {
-    final list = Hive.box<MyWord>(MyWord.boxKey);
-    return list.containsKey(word.word);
-  }
-
-  static Future<bool> saveMyWord(MyWord word) async {
-    final list = Hive.box<MyWord>(MyWord.boxKey);
-    if (savedInMyWordInLocal(word)) {
-      return false;
-    }
-    await list.put(word.word, word);
-    return true;
-  }
-
-  static void deleteAllMyWord() {
-    final list = Hive.box<MyWord>(MyWord.boxKey);
-
-    list.deleteFromDisk();
-    log('deleteAllMyWord success');
-  }
-
-  static Future<void> deleteMyWord(MyWord word) async {
+  Future<void> deleteMyWord(MyWord word) async {
     final list = Hive.box<MyWord>(MyWord.boxKey);
 
     await list.delete(word.word);
-  }
-
-  void updateKnownMyVoca(String word, bool isTrue) {
-    final list = Hive.box<MyWord>(MyWord.boxKey);
-    MyWord myWord = list.get(word) as MyWord;
-    myWord.isKnown = isTrue;
-    list.put(word, myWord);
-  }
-
-  void updateKnownMyVoca2(MyWord myWord) {
-    final list = Hive.box<MyWord>(MyWord.boxKey);
-    list.put(myWord.word, myWord);
   }
 }

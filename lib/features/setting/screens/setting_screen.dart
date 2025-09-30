@@ -154,14 +154,6 @@ class SettingScreen extends StatelessWidget {
                     text: '문법 초기화',
                   ),
                 ],
-                SettingButton(
-                  text: '나만의 단어 초기화',
-                  onPressed: () async {
-                    if (await settingController.initMyWords()) {
-                      settingController.successDeleteAndQuitApp();
-                    }
-                  },
-                ),
               ],
               // ],
             );

@@ -2,35 +2,43 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:jlpt_jonggack/model/hive_type.dart';
 
-// part 'book.g.dart';
+import 'package:jlpt_jonggack/model/hive_type.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
+
+part 'book.g.dart';
 
 @HiveType(typeId: bookTypeId)
 class Book extends HiveObject {
   static String boxKey = 'book_key';
   @HiveField(0)
   final String id;
+
   @HiveField(1)
   final String title;
+
   @HiveField(2)
   final String description;
+
   @HiveField(3)
   final int bookNum;
+
   @HiveField(4)
   final String createdAt;
+
   @HiveField(5)
-  List<String> wordIds;
+  List<MyWord> mywords;
+
   Book({
     String? id,
     String? createdAt,
     required this.title,
     required this.description,
     required this.bookNum,
-    List<String>? wordIds,
+    List<MyWord>? mywords,
   }) : id = id ?? '${DateTime.now().microsecondsSinceEpoch}',
        createdAt = createdAt ?? DateTime.now().toIso8601String(),
-       wordIds = wordIds ?? [];
+       mywords = mywords ?? [];
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -39,7 +47,7 @@ class Book extends HiveObject {
     result.addAll({'title': title});
     result.addAll({'bookNum': bookNum});
     result.addAll({'createdAt': createdAt});
-    result.addAll({'wordIds': wordIds});
+    result.addAll({'mywords': mywords});
 
     return result;
   }
@@ -51,7 +59,7 @@ class Book extends HiveObject {
       description: map['description'] ?? '',
       bookNum: map['bookNum']?.toInt() ?? 0,
       createdAt: map['createdAt'] ?? '',
-      wordIds: List<String>.from(map['wordIds']),
+      mywords: List<MyWord>.from(map['mywords']),
     );
   }
 
@@ -69,7 +77,7 @@ class Book extends HiveObject {
         other.description == description &&
         other.bookNum == bookNum &&
         other.createdAt == createdAt &&
-        listEquals(other.wordIds, wordIds);
+        listEquals(other.mywords, mywords);
   }
 
   @override
@@ -79,6 +87,45 @@ class Book extends HiveObject {
         description.hashCode ^
         bookNum.hashCode ^
         createdAt.hashCode ^
-        wordIds.hashCode;
+        mywords.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'Book(id: $id, title: $title, description: $description, bookNum: $bookNum, createdAt: $createdAt, mywords: $mywords)';
+  }
+
+  static List<Book> createDefaultBooks() {
+    Book myWordBook1 = Book(
+      title: '종각 단어장',
+      description: '종각 앱에서 저장한 단어들을\n학습하는 단어장',
+      bookNum: 1,
+    );
+    Book myWordBook2 = Book(
+      title: '나만의 단어장',
+      description: '사용자가 직접 저장한 단어들을\n학습하는 단어장',
+      bookNum: 2,
+    );
+
+    List<Book> books = [myWordBook1, myWordBook2];
+    return books;
+  }
+
+  Book copyWith({
+    String? id,
+    String? title,
+    String? description,
+    int? bookNum,
+    String? createdAt,
+    List<MyWord>? mywords,
+  }) {
+    return Book(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      bookNum: bookNum ?? this.bookNum,
+      createdAt: createdAt ?? this.createdAt,
+      mywords: mywords ?? this.mywords,
+    );
   }
 }

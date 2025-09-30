@@ -1,15 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
-import 'package:jlpt_jonggack/repository/my_word_repository.dart';
 
 import '../../../../model/Question.dart';
 
@@ -19,28 +20,14 @@ class JlptStepController extends GetxController {
   int currChapNumber = 0;
 
   void toggleAllSave() {
-    if (isAllSave()) {
-      for (int i = 0; i < getJlptStep().words.length; i++) {
-        Word word = getJlptStep().words[i];
-        MyWord newMyWord = MyWord.wordToMyWord(word);
-
-        if (isSavedInLocal(word)) {
-          MyWordRepository.deleteMyWord(newMyWord);
-          userController.updateMyWordSavedCount(false);
-        }
-      }
+    List<MyWord> myWords =
+        getJlptStep().words.map((item) => MyWord.wordToMyWord(item)).toList();
+    if (!isAllSave()) {
+      MyBookController.to.bulkHandleMyWords(myWords);
     } else {
-      for (int i = 0; i < getJlptStep().words.length; i++) {
-        Word word = getJlptStep().words[i];
-        MyWord newMyWord = MyWord.wordToMyWord(word);
-
-        if (!isSavedInLocal(word)) {
-          MyWordRepository.saveMyWord(newMyWord);
-          userController.updateMyWordSavedCount(true);
-          isWordSaved = true;
-        }
-      }
+      MyBookController.to.bulkHandleMyWords(myWords, isAdd: false);
     }
+
     update();
   }
 
@@ -138,27 +125,28 @@ class JlptStepController extends GetxController {
 
   bool isSavedInLocal(Word word) {
     MyWord newMyWord = MyWord.wordToMyWord(word);
+    List<MyWord> book1Words = MyBookController.to.books[0].mywords;
 
-    newMyWord.createdAt = DateTime.now();
-    isWordSaved = MyWordRepository.savedInMyWordInLocal(newMyWord);
-
+    isWordSaved = book1Words.contains(newMyWord);
     return isWordSaved;
   }
 
-  void toggleSaveWord(Word word) {
+  void toggleSaveWord(Word word, {bool showSnackBar = true}) {
     MyWord newMyWord = MyWord.wordToMyWord(word);
+    List<MyWord> book1Words = MyBookController.to.books[0].mywords;
 
-    if (isSavedInLocal(word)) {
-      MyWordRepository.deleteMyWord(newMyWord);
-      userController.updateMyWordSavedCount(false);
-
-      isWordSaved = false;
+    if (book1Words.contains(newMyWord)) {
+      MyBookController.to.deleteMyWord(newMyWord);
     } else {
-      MyWordRepository.saveMyWord(newMyWord);
-      userController.updateMyWordSavedCount(true);
-      showSnackBar('${word.word}가 저장되었습니다.\n나만의 단어장 1에서 확인해주세요.');
-      isWordSaved = true;
+      MyBookController.to.addMyWord(newMyWord);
+
+      if (showSnackBar) {
+        SnackBarHelper.showSuccessSnackBar(
+          '${word.word}가 저장되었습니다.\n종각 단어장에서 확인해주세요.',
+        );
+      }
     }
+
     update();
   }
 

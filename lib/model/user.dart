@@ -47,6 +47,9 @@ class User extends HiveObject {
   @HiveField(101, defaultValue: false)
   bool isTrik = false;
 
+  // @HiveField(7, defaultValue: [])
+  // List<String> bookIds = [];
+
   bool isPad = false;
   @override
   String toString() {

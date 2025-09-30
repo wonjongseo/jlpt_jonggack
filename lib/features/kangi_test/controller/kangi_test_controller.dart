@@ -101,10 +101,9 @@ class KangiTestController extends GetxController
   bool isDisTouchable = false;
 
   void manualSaveToMyVoca(int index) {
-    if (MyWord.saveToMyVoca(wrongQuestions[index].question)) {
-      userController.updateMyWordSavedCount(true);
-    }
-    kangiController.update();
+    kangiController.toggleSaveWord(
+      MyWord.wordToMyWord(wrongQuestions[index].question),
+    );
   }
 
   void startKangiQuiz(List<Kangi> kangis) {

@@ -5,6 +5,7 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/date_picker_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/myVoca_date_section.dart';
@@ -18,23 +19,17 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('나만의 단어장 ${controller.isManualSavedWordPage ? '2' : '1'}'),
+        title: Obx(() {
+          return Text(controller.book.title);
+        }),
         actions: [
-          _typeSelecgor(),
-          IconButton(
-            onPressed: () {
-              showCustomBottomSheet(
-                context: context,
-                child: const DatePickerBottomSheet(),
-              );
-            },
-            icon: Obx(
-              () => Icon(
-                Icons.calendar_today_outlined,
-                color: controller.isRanged ? AppColors.mainColor : null,
-              ),
+          if (controller.book.bookNum != 1)
+            IconButton(
+              onPressed: () {
+                MyBookController.to.goToEditBook(book: controller.book);
+              },
+              icon: Icon(Icons.mode_edit_outline_outlined),
             ),
-          ),
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -45,7 +40,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
               () => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (controller.isManualSavedWordPage) ...[
+                  if (controller.book.bookNum != 1) ...[
                     Expanded(
                       child: BottomBtn(
                         label: "단어 추가",
@@ -73,41 +68,75 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
         ),
       ),
       body: SafeArea(
-        child: Obx(() {
-          if (controller.isLoading) {
-            return const Center(child: CircularProgressIndicator.adaptive());
-          }
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ).copyWith(bottom: 12, top: 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      showCustomBottomSheet(
+                        context: context,
+                        child: const DatePickerBottomSheet(),
+                      );
+                    },
+                    child: Obx(
+                      () => Icon(
+                        Icons.calendar_month,
+                        size: 30,
+                        color: controller.isRanged ? AppColors.mainColor : null,
+                      ),
+                    ),
+                  ),
+                  _typeSelecgor(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                }
+                final map = controller.myWordsMap.value;
+                if (map.isEmpty) {
+                  return const Center(child: Text('저장된 단어가 없습니다'));
+                }
 
-          final map = controller.myWordsMap.value;
-          if (map.isEmpty) {
-            return const Center(child: Text('데이터가 없습니다'));
-          }
+                final keys = map.keys.toList()..sort((a, b) => b.compareTo(a));
 
-          final keys = map.keys.toList()..sort((a, b) => b.compareTo(a));
-
-          return ListView.separated(
-            padding: const EdgeInsets.only(bottom: 12),
-            itemCount: keys.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
-            itemBuilder: (context, i) {
-              final day = keys[i];
-              final words = map[day] ?? const <MyWord>[];
-              return MyVocaDateSection(
-                date: day,
-                words: words,
-                onTap: (index) {
-                  controller.goToStudyScreen(i, index);
-                },
-                onScrollLeft: (index) {
-                  controller.onScrollLeft(i, index);
-                },
-                onScrollRight: (index) {
-                  controller.onScrollRight(i, index);
-                },
-              );
-            },
-          );
-        }),
+                return ListView.separated(
+                  controller: controller.scrollController,
+                  padding: const EdgeInsets.only(bottom: 12),
+                  itemCount: keys.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  itemBuilder: (context, i) {
+                    final day = keys[i];
+                    final words = map[day] ?? const <MyWord>[];
+                    return MyVocaDateSection(
+                      date: day,
+                      words: words,
+                      onTap: (index) {
+                        controller.goToStudyScreen(i, index);
+                      },
+                      onScrollLeft: (index) {
+                        controller.onScrollLeft(i, index);
+                      },
+                      onScrollRight: (index) {
+                        controller.onScrollRight(i, index);
+                      },
+                    );
+                  },
+                );
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }

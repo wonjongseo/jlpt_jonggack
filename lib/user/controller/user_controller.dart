@@ -2,27 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/commonDialog.dart';
-import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/data/grammar_datas.dart';
 import 'package:jlpt_jonggack/data/kangi_datas.dart';
 import 'package:jlpt_jonggack/data/word_datas.dart';
-import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
-import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
-import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
-import 'package:jlpt_jonggack/features/search/screens/search_screen.dart';
-import 'package:jlpt_jonggack/model/grammar.dart';
-import 'package:jlpt_jonggack/model/word.dart';
-import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
-import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
-import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/model/user.dart';
 import 'package:jlpt_jonggack/user/repository/user_repository.dart';
 import 'package:jlpt_jonggack/user/screen/hiden_screen.dart';
-
-import 'package:jlpt_jonggack/model/kangi.dart';
 
 // ignore: constant_identifier_names
 
@@ -33,51 +19,11 @@ enum SOUND_OPTIONS { VOLUMN, PITCH, RATE }
 class UserController extends GetxController {
   static UserController get to => Get.find<UserController>();
   late TextEditingController teCnt;
-  // List<Word> searchedWords = [];
-  // List<Kangi> searchedKangis = [];
-  // List<Grammar> searchedGrammar = [];
-  // bool isSearchReq = false;
-  // bool isLoading = false;
+
   UserRepository userRepository = UserRepository();
+
   bool isPad = false;
   late User user;
-
-  // Future<void> clearQuery() async {
-  //   searchedWords.clear();
-  //   searchedKangis.clear();
-  //   searchedGrammar.clear();
-  //   update();
-  // }
-
-  // String query = '';
-  // Future<void> sendQuery() async {
-  //   try {
-  //     isLoading = true;
-
-  //     query = teCnt.text.trim();
-  //     if (query.isEmpty || query == '') return;
-
-  //     clearQuery();
-
-  //     searchedWords = await JlptRepositry.searchWords(query);
-  //     searchedKangis = await KangiRepositroy.searchkangis(query);
-  //     searchedGrammar = await GrammarRepositroy.searchGrammars(query);
-
-  //     if (query.length == 1) {
-  //       String aa = '0123456789';
-
-  //       if (aa.contains(query)) {
-  //         clearQuery();
-  //       }
-  //     }
-
-  //     update();
-  //   } catch (e) {
-  //     SnackBarHelper.showErrorSnackBar('$e');
-  //   } finally {
-  //     isLoading = false;
-  //   }
-  // }
 
   void changeuserTric(bool premieum) {
     user.isTrik = premieum;
@@ -298,12 +244,6 @@ class UserController extends GetxController {
     update();
   }
 
-  void deleteAllMyVocabularyDatas() {
-    user.yokumatigaeruMyWords = 0;
-    user.manualSavedMyWords = 0;
-    UserRepository.updateUser(user);
-  }
-
   void changeUserAuth() {
     Get.to(() => const HidenScreen());
   }
@@ -313,47 +253,31 @@ class UserController extends GetxController {
     bool isYokumatiageruWord = true,
     int count = 1,
   }) {
-    if (isYokumatiageruWord) {
-      if (isSaved) {
-        user.yokumatigaeruMyWords += count;
-        showGoToTheMyScreen();
-      } else {
-        user.yokumatigaeruMyWords -= count;
-      }
-    } else {
-      if (isSaved) {
-        user.manualSavedMyWords += count;
-      } else {
-        user.manualSavedMyWords -= count;
-      }
-    }
+    print("updateMyWordSavedCount FIX!!!");
+    // if (isYokumatiageruWord) {
+    //   if (isSaved) {
+    //     user.yokumatigaeruMyWords += count;
+    //     showGoToTheMyScreen();
+    //   } else {
+    //     user.yokumatigaeruMyWords -= count;
+    //   }
+    // } else {
+    //   if (isSaved) {
+    //     user.manualSavedMyWords += count;
+    //   } else {
+    //     user.manualSavedMyWords -= count;
+    //   }
+    // }
 
-    if (user.yokumatigaeruMyWords < 0) {
-      user.yokumatigaeruMyWords = 0;
-    }
-    if (user.yokumatigaeruMyWords < 0) {
-      user.manualSavedMyWords = 0;
-    }
+    // if (user.yokumatigaeruMyWords < 0) {
+    //   user.yokumatigaeruMyWords = 0;
+    // }
+    // if (user.yokumatigaeruMyWords < 0) {
+    //   user.manualSavedMyWords = 0;
+    // }
     UserRepository.updateUser(user);
 
     update();
-  }
-
-  void showGoToTheMyScreen() async {
-    int savedCount = user.yokumatigaeruMyWords;
-
-    if (savedCount % 15 == 0) {
-      bool result = await CommonDialog.askGoToMyVocaPageDialog(savedCount);
-
-      if (result) {
-        Get.offNamedUntil(
-          NewMyWordScreen.name,
-          arguments: {MY_VOCA_TYPE: MyVocaEnum.YOKUMATIGAERU_WORD},
-          ModalRoute.withName(HOME_PATH),
-        );
-        return;
-      }
-    }
   }
 
   void addN4N5GrammarScore() {
