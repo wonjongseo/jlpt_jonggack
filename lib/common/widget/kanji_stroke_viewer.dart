@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
 
 TextButton howToRightBtn(BuildContext context, String word) {
@@ -15,7 +17,10 @@ TextButton howToRightBtn(BuildContext context, String word) {
         child: KanjiStrokeViewer(japanese: word),
       );
     },
-    child: Text('획순 보기', style: TextStyle(color: AppColors.mainBordColor)),
+    child: Text(
+      AppString.strokeOrder.tr,
+      style: TextStyle(color: AppColors.mainBordColor),
+    ),
   );
 }
 

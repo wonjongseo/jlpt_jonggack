@@ -29,15 +29,15 @@ class CustomTextForm extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 16),
       child: TextFormField(
         textInputAction:
-            textInputEnum == TextInputEnum.MEAN ||
-                    textInputEnum == TextInputEnum.EXAMPLE_MEAN
+            textInputEnum == TextInputEnum.mean ||
+                    textInputEnum == TextInputEnum.exampleMean
                 ? TextInputAction.done
                 : TextInputAction.next,
         style: TextStyle(fontFamily: AppFonts.japaneseFont, fontSize: 14),
         onChanged: validator,
         validator: validator,
         onFieldSubmitted: onFieldSubmitted,
-        autofocus: textInputEnum == TextInputEnum.JAPANESE,
+        autofocus: textInputEnum == TextInputEnum.japanese,
         decoration: InputDecoration(
           hintText: textInputEnum.name,
           focusedBorder: OutlineInputBorder(

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
 import 'package:jlpt_jonggack/features/search/screens/search_screen.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
@@ -135,8 +138,8 @@ class NewSearchWidget extends GetView<JSearchController> {
                       ),
                       decoration: InputDecoration(
                         fillColor: Colors.white,
-                        hintText: ' 일본어/한자/문법 검색...',
-                        hintStyle: TextStyle(fontSize: Responsive.height14),
+                        hintText: AppString.searchHintText.tr,
+                        hintStyle: TextStyle(fontSize: isKo ? 14 : 12),
                         filled: true,
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,

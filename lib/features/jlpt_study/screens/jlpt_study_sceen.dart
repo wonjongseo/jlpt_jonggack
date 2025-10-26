@@ -3,22 +3,20 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
-import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
+
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 
-final String JLPT_STUDY_PATH = '/jlpt_study';
-
 // ignore: must_be_immutable
 class JlptStudyScreen extends StatefulWidget {
+  static String name = '/jlpt_study';
   const JlptStudyScreen({super.key, required this.currentIndex});
   final int currentIndex;
   @override
@@ -28,7 +26,7 @@ class JlptStudyScreen extends StatefulWidget {
 class _JlptStudyScreenState extends State<JlptStudyScreen> {
   final JlptStepController wordController = Get.find<JlptStepController>();
   late int currentIndex;
-  SettingController settingController = Get.find<SettingController>();
+
   KangiStepRepositroy kangiStepRepositroy = KangiStepRepositroy();
 
   late PageController pageController;
@@ -112,7 +110,7 @@ class _JlptStudyScreenState extends State<JlptStudyScreen> {
               child: Card(
                 child: Center(
                   child: Text(
-                    '퀴즈 풀러 가기!',
+                    AppString.goToQuiz.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.cyan.shade600,

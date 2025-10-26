@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
@@ -14,15 +15,6 @@ import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
 import 'package:jlpt_jonggack/repository/my_word_repository.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-enum MyWordType {
-  all("모두 보기"),
-  known("암기 단어"),
-  unKnown("미암기 단어");
-
-  final String label;
-  const MyWordType(this.label);
-}
 
 class NewMyWordController extends GetxController {
   static NewMyWordController get to => Get.find<NewMyWordController>();
@@ -401,7 +393,7 @@ class NewMyWordController extends GetxController {
     tempWords = tempWords.sublist(0, iQuizCnt);
 
     await Get.toNamed(
-      JLPT_TEST_PATH,
+      JlptTestScreen.name,
       arguments: {MY_VOCA_TEST: tempWords, 'backCnt': backCnt},
     );
   }

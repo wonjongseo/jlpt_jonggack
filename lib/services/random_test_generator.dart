@@ -7,9 +7,8 @@ import 'package:jlpt_jonggack/common/app_constant.dart';
 
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
@@ -18,7 +17,6 @@ import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';
 import 'package:jlpt_jonggack/model/word.dart';
-import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class RandomTestGenerator {
@@ -112,6 +110,7 @@ class RandomTestGenerator {
 
           int chapter = int.tryParse(sChapter) ?? 100;
           if (chapter > 3) {
+            print("continue");
             continue;
           }
         }
@@ -147,7 +146,17 @@ class RandomTestGenerator {
     for (var key in keys) {
       Object jlptStep = box.get(key);
       if (jlptStep.runtimeType == KangiStep) {
-        tempKangis.addAll((jlptStep as KangiStep).kangis);
+        jlptStep = jlptStep as KangiStep;
+        if (!isPremium && level == 1) {
+          String sChapter = jlptStep.headTitle.split('챕터')[1];
+
+          int chapter = int.tryParse(sChapter) ?? 100;
+          if (chapter > 3) {
+            print("continue");
+            continue;
+          }
+        }
+        tempKangis.addAll((jlptStep).kangis);
       }
     }
     return tempKangis;
@@ -166,8 +175,11 @@ class RandomTestGenerator {
       Object jlptStep = box.get(key);
       if (jlptStep.runtimeType == GrammarStep) {
         final x = key.split("-").last;
-        if (int.parse(x) > 2) {
-          continue;
+        if (!isPremium && level == 1) {
+          if (int.parse(x) > 2) {
+            print("continue");
+            continue;
+          }
         }
         tempGrammars.addAll((jlptStep as GrammarStep).grammars);
       }
@@ -195,7 +207,7 @@ class RandomTestGenerator {
 
     if (Get.isRegistered<UserController>()) {
       isPremium =
-          UserController.to.user.isPremieum || UserController.to.user.isTrik;
+          UserController.to.user!.isPremieum || UserController.to.user!.isTrik;
     }
     List<Word> tempWords = [];
     bool isHasCategory = false;
@@ -203,7 +215,7 @@ class RandomTestGenerator {
     List<Kangi> tempKangis = [];
 
     switch (category) {
-      case CategoryEnum.Japaneses:
+      case CategoryEnum.japaneses:
         tempWords = await getAllJapaneseByLevel(level, isPremium);
 
         // final tempword = tempWords.firstOrNull;
@@ -232,11 +244,11 @@ class RandomTestGenerator {
         );
 
         Get.toNamed(
-          JLPT_TEST_PATH,
+          JlptTestScreen.name,
           arguments: {JLPT_TEST: words, IS_RANDOM: true},
         );
         break;
-      case CategoryEnum.Kangis:
+      case CategoryEnum.kangis:
         tempKangis = await _getAllKangisByLevel(level, isPremium);
 
         List<Kangi> kangis = await _createKangiQuiz(
@@ -245,11 +257,11 @@ class RandomTestGenerator {
           tempKangis,
         );
         Get.toNamed(
-          KANGI_TEST_PATH,
+          KangiTestScreen.name,
           arguments: {KANGI_TEST: kangis, IS_RANDOM: true},
         );
         break;
-      case CategoryEnum.Grammars:
+      case CategoryEnum.grammars:
         tempGrammars = await _getAllGrammarByLevel(level, isPremium);
 
         List<Grammar> grammars = await _createGrammarQuiz(
@@ -268,7 +280,7 @@ class RandomTestGenerator {
     bool isPremium = false;
     if (Get.isRegistered<UserController>()) {
       isPremium =
-          UserController.to.user.isPremieum || UserController.to.user.isTrik;
+          UserController.to.user!.isPremieum || UserController.to.user!.isTrik;
     }
     List<Word> tempWords = [];
     List<Grammar> tempGrammars = [];
@@ -276,13 +288,13 @@ class RandomTestGenerator {
     int? maxCount;
 
     switch (category) {
-      case CategoryEnum.Japaneses:
+      case CategoryEnum.japaneses:
         tempWords = await getAllJapaneseByLevel(level, isPremium);
         maxCount = tempWords.length;
-      case CategoryEnum.Kangis:
+      case CategoryEnum.kangis:
         tempKangis = await _getAllKangisByLevel(level, isPremium);
         maxCount = tempKangis.length;
-      case CategoryEnum.Grammars:
+      case CategoryEnum.grammars:
         tempGrammars = await _getAllGrammarByLevel(level, isPremium);
         maxCount = tempGrammars.length;
     }
@@ -291,7 +303,7 @@ class RandomTestGenerator {
       name: 'QuizCntForm',
       QuizCntForm(
         maxCount: maxCount,
-        isJapanese: category == CategoryEnum.Japaneses,
+        isJapanese: category == CategoryEnum.japaneses,
       ),
     );
     if (count == null || count.runtimeType != String) return;
@@ -299,21 +311,21 @@ class RandomTestGenerator {
     count = int.tryParse(count) ?? 15;
 
     switch (category) {
-      case CategoryEnum.Japaneses:
+      case CategoryEnum.japaneses:
         List<Word> words = await _createJlptQuiz(level, count, tempWords, '랜덤');
         Get.toNamed(
-          JLPT_TEST_PATH,
+          JlptTestScreen.name,
           arguments: {JLPT_TEST: words, IS_RANDOM: true},
         );
         break;
-      case CategoryEnum.Kangis:
+      case CategoryEnum.kangis:
         List<Kangi> kangis = await _createKangiQuiz(level, count, tempKangis);
         Get.offAndToNamed(
-          KANGI_TEST_PATH,
+          KangiTestScreen.name,
           arguments: {KANGI_TEST: kangis, IS_RANDOM: true},
         );
         break;
-      case CategoryEnum.Grammars:
+      case CategoryEnum.grammars:
         List<Grammar> grammars = await _createGrammarQuiz(
           level,
           count,

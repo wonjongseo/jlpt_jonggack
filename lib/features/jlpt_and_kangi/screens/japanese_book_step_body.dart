@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/calendar_step/japanese_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -29,14 +29,10 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
     jlptWordController = Get.put(JlptStepController(level: widget.level));
 
     progrssingIndex = LocalReposotiry.getCurrentProgressing(
-      '${CategoryEnum.Japaneses.name}-${widget.level}',
+      '${CategoryEnum.japaneses.name}-${widget.level}',
     );
 
     super.initState();
-  }
-
-  void goTo(int index, String chapter) {
-    Get.to(() => JapaneseCalendarStepScreen(chapter: chapter));
   }
 
   void _onTap(bool isAllAccessable, int index) {
@@ -51,10 +47,11 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
     });
 
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Japaneses.name}-${widget.level}',
+      '${CategoryEnum.japaneses.name}-${widget.level}',
       progrssingIndex,
     );
-    goTo(index, '챕터${index + 1}');
+
+    Get.to(() => JapaneseStepScreen(index: index, chapter: '챕터${index + 1}'));
   }
 
   @override
@@ -77,8 +74,8 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
             ...List.generate(jlptWordController.headTitleCount, (index) {
               bool isAllAccessable =
                   !(widget.level == '1' && index > 2) ||
-                  controller.user.isPremieum ||
-                  controller.user.isTrik;
+                  controller.user!.isPremieum ||
+                  controller.user!.isTrik;
 
               return InkWell(
                 onLongPress: () {
@@ -95,7 +92,7 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
                         Center(
                           child: RichText(
                             text: TextSpan(
-                              text: '${CategoryEnum.Japaneses.id}\n',
+                              text: '${CategoryEnum.japaneses.id}\n',
                               children: [
                                 TextSpan(
                                   text: 'Chapter ${(index + 1)}',

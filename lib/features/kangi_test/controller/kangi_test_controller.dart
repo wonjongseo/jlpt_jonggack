@@ -4,9 +4,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/veryGoodScreen.dart';
@@ -31,7 +32,6 @@ class KangiTestController extends GetxController
 
   // 틀릴 경우
   bool isWrong = false;
-
   bool isRandom = false;
   void init(dynamic arguments) {
     // 모든 문제로 테스트 준비해기
@@ -186,6 +186,40 @@ class KangiTestController extends GetxController
     }
   }
 
+  bool isSubjective = false;
+  TextEditingController kangiTec = TextEditingController();
+  TextEditingController undocTec = TextEditingController();
+  TextEditingController hundocTec = TextEditingController();
+
+  bool isPressedNext = false;
+
+  var formKey = GlobalKey<FormState>();
+  void onNextButton(Question question) {
+    if (formKey.currentState?.validate() ?? false) {
+      isPressedNext = true;
+      String kangi = kangiTec.text.trim();
+      String undoc = undocTec.text.trim();
+      String hundoc = hundocTec.text.trim();
+
+      final corractUndocAndHundoc = question.question.yomikata.split('@');
+
+      String corractKangi = question.question.mean;
+      String corractUndoc = corractUndocAndHundoc[0];
+      String corractHundoc = corractUndocAndHundoc[1];
+
+      if (kangi == corractKangi) {
+        isAnswered1 = true;
+      }
+      if (undoc == corractUndoc) {
+        isAnswered2 = true;
+      }
+      if (hundoc == corractHundoc) {
+        isAnswered3 = true;
+      }
+      update();
+    }
+  }
+
   void checkAns(Question question, String selectedIndex, String type) {
     // 운독, 훈독, 읽는 법을 다 채크 했니 ?
 
@@ -213,7 +247,6 @@ class KangiTestController extends GetxController
       update();
 
       // 정답 이면
-
       if (correctAns == selectedAns &&
           correctAns2 == selectedAns2 &&
           correctAns3 == selectedAns3) {
@@ -221,17 +254,23 @@ class KangiTestController extends GetxController
         numOfCorrectAns++;
         color = Colors.blue;
         text = 'next';
-        Future.delayed(const Duration(milliseconds: 800), () {
-          nextQuestion();
-        });
+        Future.delayed(
+          Duration(milliseconds: SettingController.to.correctDuration.value),
+          () {
+            nextQuestion();
+          },
+        );
       } else {
         saveWrongQuestion();
         isWrong = true;
         color = Colors.pink;
         text = 'next';
-        Future.delayed(const Duration(milliseconds: 1500), () {
-          nextQuestion();
-        });
+        Future.delayed(
+          Duration(milliseconds: SettingController.to.incorrectDuration.value),
+          () {
+            nextQuestion();
+          },
+        );
       }
     }
   }
@@ -243,6 +282,7 @@ class KangiTestController extends GetxController
   }
 
   void skipQuestion() {
+    formKey = GlobalKey<FormState>();
     isDisTouchable = false;
     isAnswered1 = true;
     isAnswered2 = true;

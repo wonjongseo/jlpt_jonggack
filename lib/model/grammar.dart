@@ -59,32 +59,19 @@ class Grammar extends HiveObject {
     examples = myWords;
   }
 
-  static Future<List<Grammar>> jsonToObject(String nLevel) async {
-    log('jsonToObjectGrammar');
-
-    var json_grammars = [];
-
-    if (nLevel == '1') {
-      // json_grammars = json_grammars_n1;
-      json_grammars = NetWorkManager.getDataToServer('N1-grammar');
-    } else if (nLevel == '2') {
-      // json_grammars = json_grammars_n2;
-      json_grammars = NetWorkManager.getDataToServer('N2-grammar');
-    } else if (nLevel == '3') {
-      // json_grammars = json_grammars_n3;
-      json_grammars = NetWorkManager.getDataToServer('N3-grammar');
-    } else if (nLevel == '4') {
-      // json_grammars = json_grammars_n3;
-      json_grammars = NetWorkManager.getDataToServer('N4-grammar');
-    } else if (nLevel == '5') {
-      // json_grammars = json_grammars_n3;
-      json_grammars = NetWorkManager.getDataToServer('N5-grammar');
-    }
+  static Future<List<Grammar>> jsonToObject(
+    String language,
+    String nLevel,
+  ) async {
+    print('jsonToObjectGrammar');
+    var jsonGrammars = await NetWorkManager.getDataToServer(
+      '${language}_grammars/n$nLevel',
+    );
 
     List<Grammar> grammars = [];
 
-    for (int i = 0; i < json_grammars.length; i++) {
-      Grammar grammar = Grammar.fromMap(json_grammars[i]);
+    for (int i = 0; i < jsonGrammars.length; i++) {
+      Grammar grammar = Grammar.fromMap(jsonGrammars[i]);
       grammars.add(grammar);
     }
 

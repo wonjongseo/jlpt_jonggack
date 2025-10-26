@@ -1,17 +1,18 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
-import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
-import 'package:jlpt_jonggack/features/jlpt_study/widgets/related_word.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
-import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
 
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
@@ -22,7 +23,7 @@ import 'package:jlpt_jonggack/config/colors.dart';
 
 // ignore: must_be_immutable
 class KangiCard extends StatefulWidget {
-  KangiCard({Key? key, required this.kangi, this.controller}) : super(key: key);
+  KangiCard({super.key, required this.kangi, this.controller});
   final Kangi kangi;
   KangiStepController? controller;
 
@@ -45,7 +46,9 @@ class _KangiCardState extends State<KangiCard> {
       );
 
       if (word == null) {
-        relatedVocaFromJLPTWord.add(widget.kangi.relatedVoca[i]);
+        if (isKo) {
+          relatedVocaFromJLPTWord.add(widget.kangi.relatedVoca[i]);
+        }
       } else {
         relatedVocaFromJLPTWord.add((word));
       }
@@ -59,10 +62,7 @@ class _KangiCardState extends State<KangiCard> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Card(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: Responsive.height11,
-            horizontal: Responsive.width14,
-          ),
+          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class _KangiCardState extends State<KangiCard> {
                           icon: FaIcon(
                             FontAwesomeIcons.bookmark,
                             color: AppColors.mainBordColor,
-                            size: Responsive.height10 * 2.2,
+                            size: 22,
                           ),
                         )
                         : IconButton(
@@ -103,19 +103,20 @@ class _KangiCardState extends State<KangiCard> {
                           icon: FaIcon(
                             FontAwesomeIcons.solidBookmark,
                             color: AppColors.mainBordColor,
-                            size: Responsive.height10 * 2.2,
+                            size: 22,
                           ),
                         ),
                 ],
               ),
-              Text(
-                widget.kangi.korea,
+              AutoSizeText(
+                widget.kangi.mean,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: Responsive.height25,
+                  fontSize: isKo ? 25 : 20,
                 ),
+                maxLines: 3,
               ),
-              SizedBox(height: Responsive.height15),
+              SizedBox(height: 15),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -125,7 +126,7 @@ class _KangiCardState extends State<KangiCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '음독 :  ${widget.kangi.undoc}',
+                          '${AppString.undoc.tr}： ${widget.kangi.undoc}',
                           style: TextStyle(
                             fontSize: Responsive.height18,
                             fontWeight: FontWeight.w800,
@@ -133,7 +134,7 @@ class _KangiCardState extends State<KangiCard> {
                           ),
                         ),
                         Text(
-                          '훈독 :  ${widget.kangi.hundoc}',
+                          '${AppString.hundoc.tr}：${widget.kangi.hundoc}',
                           style: TextStyle(
                             fontSize: Responsive.height18,
                             fontWeight: FontWeight.w800,
@@ -148,7 +149,7 @@ class _KangiCardState extends State<KangiCard> {
               const Divider(),
               SizedBox(height: Responsive.height10),
               Text(
-                '연관 단어',
+                AppString.relatedWord.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: Responsive.height10 * 1.8,

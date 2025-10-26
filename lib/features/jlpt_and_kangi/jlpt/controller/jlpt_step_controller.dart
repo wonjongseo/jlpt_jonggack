@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
@@ -75,12 +76,12 @@ class JlptStepController extends GetxController {
         // Get.offAndToNamed(page)
         if (isOffAndToName) {
           Get.offAndToNamed(
-            JLPT_TEST_PATH,
+            JlptTestScreen.name,
             arguments: {CONTINUTE_JLPT_TEST: getJlptStep().wrongQestion},
           );
         } else {
           Get.toNamed(
-            JLPT_TEST_PATH,
+            JlptTestScreen.name,
             arguments: {CONTINUTE_JLPT_TEST: getJlptStep().wrongQestion},
           );
         }
@@ -89,7 +90,7 @@ class JlptStepController extends GetxController {
     }
     if (isOffAndToName) {
       Get.offAndToNamed(
-        JLPT_TEST_PATH,
+        JlptTestScreen.name,
         arguments: {JLPT_TEST: getJlptStep().words, IS_RANDOM: false},
       );
     } else {
@@ -102,7 +103,7 @@ class JlptStepController extends GetxController {
       }
 
       Get.toNamed(
-        JLPT_TEST_PATH,
+        JlptTestScreen.name,
         arguments: {JLPT_TEST: getJlptStep().words, IS_RANDOM: false},
       );
     }
@@ -142,7 +143,7 @@ class JlptStepController extends GetxController {
 
       if (showSnackBar) {
         SnackBarHelper.showSuccessSnackBar(
-          '${word.word}가 저장되었습니다.\n종각 단어장에서 확인해주세요.',
+          '${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
         );
       }
     }
@@ -165,7 +166,7 @@ class JlptStepController extends GetxController {
 
   void goToStudyPage(int subStep) {
     setStep(subStep);
-    Get.toNamed(JLPT_STUDY_PATH);
+    Get.toNamed(JlptStudyScreen.name);
   }
 
   void setStep(int step) {

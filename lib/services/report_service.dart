@@ -1,10 +1,10 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,9 +14,9 @@ class ReportService {
   static String _deviceInfo = '';
 
   /// 앱·디바이스 정보 초기화 및 보고서 전송을 한번에 수행
-  static Future<void> report(BuildContext context) async {
+  static Future<void> report() async {
     await init();
-    await sendReport(context);
+    await sendReport();
   }
 
   /// 앱 버전 및 디바이스 정보 로드
@@ -45,11 +45,10 @@ class ReportService {
     }
   }
 
-  /// 이메일 앱을 통해 보고서 전송
-  static Future<void> sendReport(BuildContext context) async {
+  static Future<void> sendReport() async {
     final email = Email(
       body: _composeBody(),
-      subject: _subject,
+      subject: AppString.enableOpenEndQustion.tr,
       recipients: [_supportEmail],
       isHTML: false,
     );
@@ -73,7 +72,10 @@ class ReportService {
     final uri = Uri(
       scheme: 'mailto',
       path: _supportEmail,
-      queryParameters: {'subject': _subject, 'body': _composeBody()},
+      queryParameters: {
+        'subject': AppString.enableOpenEndQustion.tr,
+        'body': _composeBody(),
+      },
     );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
@@ -82,40 +84,10 @@ class ReportService {
     return false;
   }
 
-  static String get _subject => '[JLPT 종각] 버그・오류 제보';
-  static String _composeBody() => '''$reportMsgContectKr
+  static String _composeBody() => '''${AppString.reportMsgContect.tr}
 
 ---
 $_appInfo
 $_deviceInfo
 ''';
 }
-
-String reportMsgContectKr = """
-💡 **희망 기능 제안 / 버그·오류 제보**
-
-───────────────────────
-
-✨ **[희망 기능 제안]**
-- 원하는 기능이나 개선 아이디어를 상세히 알려주세요!
-
-───────────────────────
-
-🐞 **[버그・오류 제보]**
-1️⃣ **발생 화면**  
-   예) 캘린더 화면, 비용 입력 화면 등  
-2️⃣ **발생 내용**  
-   예) 일정 추가 시 앱이 강제 종료됩니다.  
-3️⃣ **재현 방법**  
-   1. 캘린더 화면 진입  
-   2. “일정 추가” 버튼 클릭  
-   3. 오류 확인  
-
-📎 **첨부 가능 항목**  
-- 스크린샷 또는 동영상 (버그 파악에 큰 도움이 됩니다!)
-
-───────────────────────
-
-🙏 **소중한 제보 감사합니다!**  
-빠른 시일 내에 검토하고 개선하도록 하겠습니다.
-""";

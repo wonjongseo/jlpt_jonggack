@@ -5,6 +5,8 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/date_picker_bottom_sheet.dart';
@@ -43,7 +45,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                   if (controller.book.bookNum != 1) ...[
                     Expanded(
                       child: BottomBtn(
-                        label: "단어 추가",
+                        label: AppString.addWord.tr,
                         onTap: () {
                           controller.goToAddMyWord();
                         },
@@ -54,7 +56,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                   if (controller.allMyWords.isNotEmpty)
                     Expanded(
                       child: BottomBtn(
-                        label: "퀴즈!",
+                        label: AppString.quiz.tr,
                         onTap: () {
                           controller.goToQuiz();
                         },
@@ -105,7 +107,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                 }
                 final map = controller.myWordsMap.value;
                 if (map.isEmpty) {
-                  return const Center(child: Text('저장된 단어가 없습니다'));
+                  return Center(child: Text(AppString.noSavedWord.tr));
                 }
 
                 final keys = map.keys.toList()..sort((a, b) => b.compareTo(a));

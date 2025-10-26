@@ -62,6 +62,11 @@ flutter:
   assets:
     - assets/svg/
     - assets/images/
+    - assets/json/ko_words/
+    - assets/json/kangis/
+    - assets/json/ko_grammars/
+    - assets/json/en_words/
+    - assets/json/en_grammars/
     - assets/sounds/speech_to_text_cancel.m4r
     - assets/sounds/speech_to_text_listening.m4r
     - assets/sounds/speech_to_text_stop.m4r

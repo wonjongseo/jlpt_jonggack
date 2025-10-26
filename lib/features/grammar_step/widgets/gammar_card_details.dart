@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_description_card.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
@@ -103,7 +104,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.cyan.shade600,
-                            fontSize: Responsive.height10 * 2.4,
+                            fontSize: 20.4,
                           ),
                         ),
                       ),
@@ -165,42 +166,43 @@ class _GrammarCardState extends State<GrammarCard> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontFamily: AppFonts.japaneseFont,
-                    fontSize: Responsive.height10 * 3.0,
+                    fontSize: 30,
                   ),
                   maxLines: maxLine,
                 ),
-                SizedBox(height: Responsive.height10 * 2),
+                SizedBox(height: 20),
                 if (widget.grammar.means.isNotEmpty) ...[
                   GrammarDescriptionCard(
-                    fontSize: Responsive.height10 * 1.8,
-                    title: '뜻',
+                    fontSize: 18,
+                    title: AppString.mean.tr,
                     content: widget.grammar.means,
                   ),
                 ],
                 if (widget.grammar.description.isNotEmpty) ...[
                   GrammarDescriptionCard(
-                    fontSize: Responsive.height10 * 1.8,
-                    title: '설명',
+                    fontSize: 18,
+                    title: AppString.description.tr,
                     content: widget.grammar.description,
                   ),
                 ],
                 if (widget.grammar.connectionWays.isNotEmpty) ...[
                   GrammarDescriptionCard(
-                    fontSize: Responsive.height10 * 1.8,
-                    title: '접속 형태',
+                    fontSize: 18,
+                    title: AppString.connectionWays.tr,
                     content: widget.grammar.connectionWays,
                   ),
                 ],
                 const Divider(),
-                SizedBox(height: Responsive.height10 * 2),
+                SizedBox(height: 20),
                 Text(
-                  '문법 예제',
+                  AppString.examples.tr,
                   style: TextStyle(
                     color: AppColors.mainBordColor,
-                    fontSize: Responsive.height10 * 1.8,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                SizedBox(height: 4),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -225,11 +227,11 @@ class _GrammarCardState extends State<GrammarCard> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         child: Text(
-                          '예제 더보기...',
+                          AppString.seeMoreExamples.tr,
                           style: TextStyle(
                             color: AppColors.mainBordColor,
                             fontWeight: FontWeight.w700,
-                            fontSize: Responsive.height10 * 1.8,
+                            fontSize: 18,
                           ),
                         ),
                       ),

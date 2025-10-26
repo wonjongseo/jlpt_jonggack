@@ -4,6 +4,7 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/check_row_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/kangi_list_tile.dart';
@@ -75,24 +76,24 @@ class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
                       ),
                     ),
                     CToggleBtn(
-                      label: '의미 가리기',
+                      label: AppString.hideMean.tr,
                       toggle: controller.toggleSeeMean,
                       value: !controller.isHidenMean,
                     ),
                     const SizedBox(height: 10),
                     CToggleBtn(
-                      label: '음독 가리기',
+                      label: AppString.hideUndoc.tr,
                       toggle: controller.toggleSeeUndoc,
                       value: !controller.isHidenUndoc,
                     ),
                     const SizedBox(height: 10),
                     CToggleBtn(
-                      label: '훈독 가리기',
+                      label: AppString.hideUndoc.tr,
                       toggle: controller.toggleSeeHundoc,
                       value: !controller.isHidenHundoc,
                     ),
                     CheckRowBtn(
-                      label: '단어 전체 저장',
+                      label: AppString.saveAllWords.tr,
                       value: controller.isAllSave(),
                       onChanged: (v) => controller.toggleAllSave(),
                     ),
@@ -118,7 +119,10 @@ class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (kangiController.getKangiStep().kangis.length >= 4)
-              BottomBtn(label: '퀴즈!', onTap: kangiController.goToTest),
+              BottomBtn(
+                label: AppString.quiz.tr,
+                onTap: kangiController.goToTest,
+              ),
             const GlobalBannerAdmob(),
           ],
         ),

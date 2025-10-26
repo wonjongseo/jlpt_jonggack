@@ -2,36 +2,35 @@ import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get/get.dart';
 
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
-import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/home/services/home_controller.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/features/home/widgets/study_category_navigator.dart';
 import 'package:jlpt_jonggack/features/home/widgets/welcome_widget.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
 import 'package:jlpt_jonggack/notification/notification.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/appReviewRequest.dart';
+import 'package:jlpt_jonggack/services/report_service.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 import '../../../config/colors.dart';
 import '../../../config/theme.dart';
 import '../../how_to_user/screen/how_to_use_screen.dart';
-import '../../setting/screens/setting_screen.dart';
-
-const String HOME_PATH = '/home';
 
 StreamController<String> streamController = StreamController.broadcast();
 
 class HomeScreen extends StatefulWidget {
+  static String name = '/home';
   const HomeScreen({super.key});
 
   @override
@@ -39,7 +38,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  KindOfStudy kindOfStudy = KindOfStudy.JLPT;
+  KindOfStudy kindOfStudy = KindOfStudy.jlpt;
   late PageController pageController;
   int selectedCategoryIndex = 0;
   UserController userController = Get.find<UserController>();
@@ -47,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future setting() async {
     await initNotification();
     await settingFunctions();
-
     await setAppReviewRequest();
   }
 
@@ -63,46 +61,19 @@ class _HomeScreenState extends State<HomeScreen> {
     await FlutterLocalNotification.showNotification();
   }
 
-  SettingController settingController = Get.find<SettingController>();
-
   Future settingFunctions() async {
-    bool isSeen = LocalReposotiry.isSeenHomeTutorial();
-
-    if (!isSeen) {
-      bool isKeyBoardActive =
-          await CommonDialog.askSetSubjectQuestionOfJlptTestDialog();
-
-      if (isKeyBoardActive) {
-        if (!settingController.isSubjective) {
-          settingController.toggleSubjective();
-        }
-      } else {
-        if (settingController.isSubjective) {
-          settingController.toggleSubjective();
-        }
-      }
-
-      showSnackBar(
-        '초기 설정이 완료 되었습니다.\n해당 설정들은 설정 페이지에서 재설정 할 수 있습니다.',
-        duration: const Duration(seconds: 4),
-      );
-    }
-    // TODO 살리기
     bool isNeedUpdateAllData = LocalReposotiry.getIsNeedUpdateAllData();
 
     // await CommonDialog.askToDeleteAllDataForUpdateDatas();
     if (isNeedUpdateAllData) {
       bool a = await CommonDialog.askToDeleteAllDataForUpdateDatas();
       if (a) {
-        // LocalReposotiry.putAllDataUpdate(true);
-        settingController.allDataDelete();
+        SettingController.to.allDataDelete();
       } else {
         bool secondQuestion = await CommonDialog.askToDeleteAllDataOneMore();
 
         if (secondQuestion) {
-          settingController.allDataDelete();
-        } else {
-          // LocalReposotiry.putAllDataUpdate(false);
+          SettingController.to.allDataDelete();
         }
       }
 
@@ -188,27 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: TextButton(
-                    onPressed: () {
-                      Get.back();
-                      Get.toNamed(
-                        SETTING_PATH,
-                        arguments: {'isSettingPage': true},
-                      );
-                    },
-                    child: Text(
-                      '설정 페이지',
-                      style: TextStyle(
-                        fontFamily: AppFonts.gMarket,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Responsive.width14,
-                        color: AppColors.scaffoldBackground,
-                      ),
-                    ),
-                  ),
-                ),
+
                 // ListTile(
                 //   leading: const Icon(Icons.alarm),
                 //   title: TextButton(
@@ -229,27 +180,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 //     ),
                 //   ),
                 // ),
-                ListTile(
-                  leading: const Icon(Icons.remove),
-                  title: TextButton(
-                    onPressed: () {
-                      Get.back();
-                      Get.toNamed(
-                        SETTING_PATH,
-                        arguments: {'isSettingPage': false},
-                      );
-                    },
-                    child: Text(
-                      '데이터 초기화',
-                      style: TextStyle(
-                        fontFamily: AppFonts.gMarket,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Responsive.width14,
-                        color: AppColors.scaffoldBackground,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
             const Spacer(flex: 2),
@@ -266,43 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               title: TextButton(
                 onPressed: () async {
-                  // Get.back();
-
-                  String body = """
-
-⭐️ [희망 기능 제보]
-
-
-==========================
-
-⭐️ [버그・오류 제보]
-
-🔸 버그・오류 페이지 :　  
-   예) 일본어 학습장 페이지 또는 나만의 단어장 페이지 
-
-🔸 버그・오류 내용 :　
-   예) 나만의 단어장에서 단어 추가를 하면 에러 발생
-
-
-==========================
-
-▪️이미지를 함께 첨부해주시면 버그・오류를 수정하는데 큰 도움이 됩니다!!▪️
-                  """;
-
-                  final Email email = Email(
-                    body: body,
-                    subject: '[JLPT 종각] 버그・오류 제보',
-                    recipients: ['visionwill3322@gmail.com'],
-                    isHTML: false,
-                  );
-                  try {
-                    await FlutterEmailSender.send(email);
-                  } catch (e) {
-                    bool result = await CommonDialog.errorNoEnrolledEmail();
-                    if (result) {
-                      copyWord('visionwill3322@gmail.com');
-                    }
-                  }
+                  await ReportService.report();
                 },
                 child: Text(
                   '희망 기능 또는 에러 제보',
@@ -334,7 +228,10 @@ class _HomeScreenState extends State<HomeScreen> {
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
-              onPressed: () => homeController.openDrawer(),
+              // onPressed: () => homeController.openDrawer(),
+              onPressed: () {
+                Get.toNamed(SettingScreen.name);
+              },
               icon: Icon(Icons.settings, size: Responsive.height10 * 2.2),
             ),
           ),

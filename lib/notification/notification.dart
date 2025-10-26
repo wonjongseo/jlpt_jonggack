@@ -110,7 +110,7 @@ class _NotificaionScreenState extends State<NotificaionScreen> {
                   child: InkWell(
                     onTap: () {
                       Get.offAndToNamed(
-                        JLPT_TEST_PATH,
+                        JlptTestScreen.name,
                         arguments: {JLPT_TEST: words, IS_RANDOM: true},
                       );
                     },

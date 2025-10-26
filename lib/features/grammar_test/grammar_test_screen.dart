@@ -4,9 +4,12 @@ import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/app_bar_progress_bar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_test/controller/grammar_test_controller.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_test_card.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/score_and_message.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 import '../../common/admob/banner_ad/global_banner_admob.dart';
 
@@ -44,11 +47,7 @@ class GrammarTestScreen extends StatelessWidget {
         return Stack(
           children: [
             Padding(
-              padding: EdgeInsets.only(
-                top: Responsive.height10,
-                left: Responsive.width15,
-                right: Responsive.width15,
-              ),
+              padding: EdgeInsets.only(top: 10, left: 15, right: 15),
               child: Container(
                 color: AppColors.whiteGrey,
                 child: SingleChildScrollView(
@@ -61,17 +60,10 @@ class GrammarTestScreen extends StatelessWidget {
                           ScoreAndMessage(score: score, size: size)
                         else
                           Padding(
-                            padding: EdgeInsets.only(
-                              bottom: Responsive.height16,
-                            ),
-                            child: const Align(
+                            padding: EdgeInsets.only(bottom: 16),
+                            child: Align(
                               alignment: Alignment.topLeft,
-                              child: Text(
-                                '빈칸에 맞는 답을 선택해 주세요.',
-                                style: TextStyle(
-                                  color: AppColors.scaffoldBackground,
-                                ),
-                              ),
+                              child: Text(AppString.plzSelectTheAnswer.tr),
                             ),
                           ),
                         ...List.generate(controller.questions.length, (
@@ -138,41 +130,60 @@ class GrammarTestScreen extends StatelessWidget {
         GetBuilder<GrammarTestController>(
           builder: (grammarTestController) {
             if (grammarTestController.isSubmitted) {
-              return Card(
-                shape: const CircleBorder(),
+              return Container(
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.mainColor,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 4),
+                      blurRadius: 10,
+                      color: Colors.black.withValues(alpha: .2),
+                    ),
+                  ],
+                ),
                 child: InkWell(
                   onTap: () => grammarTestController.againTest(),
-                  child: Padding(
-                    padding: EdgeInsets.all(Responsive.width14),
-                    child: Text(
-                      '다시!',
-                      style: TextStyle(
-                        fontSize: Responsive.width14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.pinkAccent,
-                      ),
+                  child: Text(
+                    AppString.again.tr,
+                    style: TextStyle(
+                      fontSize: isKo ? 14 : 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.pinkAccent,
                     ),
                   ),
                 ),
               );
             }
 
-            return Card(
-              shape: const CircleBorder(),
+            return Container(
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(right: 8),
+              decoration: BoxDecoration(
+                color: AppColors.mainColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 4),
+                    blurRadius: 10,
+                    color: Colors.black.withValues(alpha: .2),
+                  ),
+                ],
+              ),
               child: InkWell(
-                onTap:
-                    () => grammarTestController.submit(
-                      grammarTestController.getScore(),
-                    ),
-                child: const Padding(
-                  padding: EdgeInsets.all(14),
-                  child: Text(
-                    '제출',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.pinkAccent,
-                    ),
+                onTap: () {
+                  grammarTestController.submit(
+                    grammarTestController.getScore(),
+                  );
+                },
+                child: Text(
+                  AppString.submit.tr,
+                  style: TextStyle(
+                    fontSize: isKo ? 14 : 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
                 ),
               ),

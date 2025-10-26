@@ -134,38 +134,38 @@ class ManualAddWordWidget extends GetView<EditWordController> {
     return Column(
       children: [
         CustomTextForm(
-          textInputEnum: TextInputEnum.JAPANESE,
+          textInputEnum: TextInputEnum.japanese,
           textController: controller.japaneseController,
           focusNode: controller.japaneseFocusNode,
-          isFocus: TextInputEnum.JAPANESE == controller.currentFocus,
+          isFocus: TextInputEnum.japanese == controller.currentFocus,
           validator: (value) {
             return controller.customValidator(
               value: value,
-              textInputEnum: TextInputEnum.JAPANESE,
+              textInputEnum: TextInputEnum.japanese,
             );
           },
         ),
         CustomTextForm(
-          textInputEnum: TextInputEnum.YOMIKATA,
+          textInputEnum: TextInputEnum.yomikata,
           textController: controller.yomikataController,
           focusNode: controller.yomikataFocusNode,
-          isFocus: TextInputEnum.YOMIKATA == controller.currentFocus,
+          isFocus: TextInputEnum.yomikata == controller.currentFocus,
           validator: (value) {
             return controller.customValidator(
               value: value,
-              textInputEnum: TextInputEnum.YOMIKATA,
+              textInputEnum: TextInputEnum.yomikata,
             );
           },
         ),
         CustomTextForm(
-          textInputEnum: TextInputEnum.MEAN,
+          textInputEnum: TextInputEnum.mean,
           textController: controller.meanController,
           focusNode: controller.meanFocusNode,
-          isFocus: TextInputEnum.MEAN == controller.currentFocus,
+          isFocus: TextInputEnum.mean == controller.currentFocus,
           validator: (value) {
             return controller.customValidator(
               value: value,
-              textInputEnum: TextInputEnum.MEAN,
+              textInputEnum: TextInputEnum.mean,
             );
           },
         ),
@@ -181,26 +181,26 @@ class ManualAddWordWidget extends GetView<EditWordController> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CustomTextForm(
-            textInputEnum: TextInputEnum.EXAMPLE_JAPANESE,
+            textInputEnum: TextInputEnum.exampleSentence,
             textController: controller.exampleWordController,
             focusNode: controller.exampleWordFocusNode,
-            isFocus: TextInputEnum.EXAMPLE_JAPANESE == controller.currentFocus,
+            isFocus: TextInputEnum.exampleSentence == controller.currentFocus,
             validator: (value) {
               return controller.customValidator(
                 value: value,
-                textInputEnum: TextInputEnum.EXAMPLE_JAPANESE,
+                textInputEnum: TextInputEnum.exampleSentence,
               );
             },
           ),
           CustomTextForm(
-            textInputEnum: TextInputEnum.EXAMPLE_MEAN,
+            textInputEnum: TextInputEnum.exampleMean,
             textController: controller.exampleMeanController,
             focusNode: controller.exampleMeanFocusNode,
-            isFocus: TextInputEnum.EXAMPLE_MEAN == controller.currentFocus,
+            isFocus: TextInputEnum.exampleMean == controller.currentFocus,
             validator: (value) {
               return controller.customValidator(
                 value: value,
-                textInputEnum: TextInputEnum.EXAMPLE_MEAN,
+                textInputEnum: TextInputEnum.exampleMean,
               );
             },
             onFieldSubmitted: (v) => controller.appendExample(),

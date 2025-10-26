@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/components/hiragana_example_card.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/models/hiragana.dart';
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
@@ -43,14 +44,16 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
         preferredSize: const Size.fromHeight(appBarHeight),
         child: AppBar(
           title: Text(
-            widget.category == 'hiragana' ? '히라가나 단어장' : '카타카나 단어장',
+            widget.category == 'hiragana'
+                ? AppString.hiraganaVocabulary.tr
+                : AppString.katakanaVocabulary.tr,
             style: TextStyle(fontSize: appBarTextSize),
           ),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(8 / 2),
+          padding: EdgeInsets.all(4),
           child: Center(
             child: Column(
               children: [
@@ -64,7 +67,6 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                         value: selectedHiragana,
                         buttonStyleData: ButtonStyleData(
                           padding: EdgeInsets.zero,
-
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
@@ -211,23 +213,23 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                                 icon: FaIcon(
                                   FontAwesomeIcons.volumeOff,
                                   color: AppColors.mainBordColor,
-                                  size: Responsive.height10 * 2.4,
+                                  size: 24,
                                 ),
                               ),
                             ],
                           ),
                           const Divider(),
-                          SizedBox(height: Responsive.height10 * 3),
+                          SizedBox(height: 30),
                           Text(
-                            '예시',
+                            AppString.examples.tr,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: Responsive.height18,
+                              fontSize: 18,
                               color: AppColors.mainBordColor,
                               fontFamily: AppFonts.japaneseFont,
                             ),
                           ),
-                          SizedBox(height: Responsive.height10 / 2),
+                          SizedBox(height: 5),
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(

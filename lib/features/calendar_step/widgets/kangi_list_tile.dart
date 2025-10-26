@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/screens/kangi_study_sceen.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
@@ -27,8 +28,10 @@ class _KangiListTileState extends State<KangiListTile> {
   bool isWantToSeeMean = false;
   bool isWantToSeeUndoc = false;
   bool isWantToSeeHundoc = false;
+
   UserController userController = Get.find<UserController>();
   KangiStepController controller = Get.find<KangiStepController>();
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -45,13 +48,14 @@ class _KangiListTileState extends State<KangiListTile> {
                 height: 20,
                 child: Row(
                   children: [
-                    const Text(
-                      '옴독: ',
+                    Text(
+                      '${AppString.undoc.tr}：',
                       style: TextStyle(
                         fontSize: 14,
                         fontFamily: AppFonts.japaneseFont,
                       ),
                     ),
+                    SizedBox(width: 4),
                     if (isWantToSeeUndoc || !controller.isHidenUndoc)
                       Flexible(
                         child: Text(
@@ -82,13 +86,14 @@ class _KangiListTileState extends State<KangiListTile> {
                   height: 20,
                   child: Row(
                     children: [
-                      const Text(
-                        '훈독: ',
+                      Text(
+                        '${AppString.hundoc.tr}：',
                         style: TextStyle(
                           fontSize: 14,
                           fontFamily: AppFonts.japaneseFont,
                         ),
                       ),
+                      SizedBox(width: 4),
                       if (isWantToSeeHundoc || !controller.isHidenHundoc)
                         Flexible(
                           child: Text(
@@ -116,34 +121,7 @@ class _KangiListTileState extends State<KangiListTile> {
               ),
             ],
           ),
-          title: Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: SizedBox(
-              height: 20,
-              child:
-                  isWantToSeeMean || !controller.isHidenMean
-                      ? Text(
-                        widget.kangi.korea,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: AppFonts.japaneseFont,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )
-                      : InkWell(
-                        onTap: () {
-                          isWantToSeeMean = true;
-                          setState(() {});
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: 15,
-                          color: Colors.grey,
-                        ),
-                      ),
-            ),
-          ),
+          title: _title(),
           leading: Text(
             widget.kangi.japan,
             style: const TextStyle(
@@ -171,6 +149,37 @@ class _KangiListTileState extends State<KangiListTile> {
                 ),
           ),
         ),
+      ),
+    );
+  }
+
+  Padding _title() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: SizedBox(
+        height: 25,
+        child:
+            isWantToSeeMean || !controller.isHidenMean
+                ? Text(
+                  widget.kangi.mean,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: AppFonts.japaneseFont,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
+                : InkWell(
+                  onTap: () {
+                    isWantToSeeMean = true;
+                    setState(() {});
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 15,
+                    color: Colors.grey,
+                  ),
+                ),
       ),
     );
   }

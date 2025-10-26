@@ -4,6 +4,7 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_voca/components/import_excel_file_widget.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/manual_add_word_widget.dart';
@@ -44,7 +45,10 @@ class NewAddMyWordScreen extends GetView<EditWordController> {
                 ),
                 dividerColor: Colors.transparent,
                 indicatorColor: AppColors.mainColor, // 기본 밑줄 색
-                tabs: [Tab(text: '직접 입력'), Tab(text: '엑셀 불러오기')],
+                tabs: [
+                  Tab(text: AppString.direclyEnter.tr),
+                  Tab(text: AppString.importExcel.tr),
+                ],
               ),
             ),
           ),
@@ -54,7 +58,10 @@ class NewAddMyWordScreen extends GetView<EditWordController> {
               children: [
                 Obx(
                   () => BottomBtn(
-                    label: controller.tapIndex.value == 0 ? '저장' : '엑셀 파일 불러오기',
+                    label:
+                        controller.tapIndex.value == 0
+                            ? AppString.save.tr
+                            : AppString.importExcel.tr,
                     onTap: controller.onTapSaveBtn,
                   ),
                 ),

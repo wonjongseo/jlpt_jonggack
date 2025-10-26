@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
@@ -134,7 +136,7 @@ class KangiStepController extends GetxController {
 
       if (showSnackBar) {
         SnackBarHelper.showSuccessSnackBar(
-          '${newMyWord.word}가 저장되었습니다.\n종각 단어장에서 확인해주세요.',
+          '${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
         );
       }
     }
@@ -153,12 +155,12 @@ class KangiStepController extends GetxController {
 
         if (isOffAndToName) {
           Get.offAndToNamed(
-            KANGI_TEST_PATH,
+            KangiTestScreen.name,
             arguments: {CONTINUTE_KANGI_TEST: getKangiStep().wrongQuestion},
           );
         } else {
           Get.toNamed(
-            KANGI_TEST_PATH,
+            KangiTestScreen.name,
             arguments: {CONTINUTE_KANGI_TEST: getKangiStep().wrongQuestion},
           );
         }
@@ -167,7 +169,7 @@ class KangiStepController extends GetxController {
     }
     if (isOffAndToName) {
       Get.offAndToNamed(
-        KANGI_TEST_PATH,
+        KangiTestScreen.name,
         arguments: {KANGI_TEST: getKangiStep().kangis},
       );
     } else {
@@ -179,7 +181,7 @@ class KangiStepController extends GetxController {
         }
       }
       Get.toNamed(
-        KANGI_TEST_PATH,
+        KangiTestScreen.name,
         arguments: {KANGI_TEST: getKangiStep().kangis},
       );
     }
@@ -225,7 +227,7 @@ class KangiStepController extends GetxController {
 
   void goToStudyPage(int subStep) {
     setStep(subStep);
-    Get.toNamed(KANGI_STUDY_PATH);
+    Get.toNamed(KangiStudySceen.name);
   }
 
   void updateScore(int score, List<Question> wrongQestion) {
@@ -274,7 +276,7 @@ class KangiStepController extends GetxController {
     );
 
     step = LocalReposotiry.getCurrentProgressing(
-      '${CategoryEnum.Kangis.name}-$level-$headTitle',
+      '${CategoryEnum.kangis.name}-$level-$headTitle',
     );
     setStep(step);
 
@@ -283,7 +285,7 @@ class KangiStepController extends GetxController {
 
   void finishQuizAndchangeHeaderPageIndex() {
     int currentHeaderPageIndex = LocalReposotiry.getCurrentProgressing(
-      '${CategoryEnum.Kangis.name}-$level-$headTitle',
+      '${CategoryEnum.kangis.name}-$level-$headTitle',
     );
     if (currentHeaderPageIndex + 1 == kangiSteps.length) {
       // TODO
@@ -292,7 +294,7 @@ class KangiStepController extends GetxController {
     }
     step = currentHeaderPageIndex + 1;
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Kangis.name}-$level-$headTitle',
+      '${CategoryEnum.kangis.name}-$level-$headTitle',
       step,
     );
     pageController.jumpToPage(step);
@@ -306,7 +308,7 @@ class KangiStepController extends GetxController {
   void changeHeaderPageIndex(int index) {
     step = index;
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Kangis.name}-$level-$headTitle',
+      '${CategoryEnum.kangis.name}-$level-$headTitle',
       step,
     );
     pageController.animateToPage(

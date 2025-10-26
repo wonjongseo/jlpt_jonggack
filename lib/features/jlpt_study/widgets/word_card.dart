@@ -5,9 +5,12 @@ import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/kangi_text.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/related_word.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
@@ -23,7 +26,9 @@ class WordCard extends StatelessWidget {
     List<String> temp = [];
     String japanese = word.word;
     String yomikata = word.yomikata;
-
+    if (japanese.isEmpty) {
+      japanese = yomikata;
+    }
     if (yomikata.contains('@')) {
       String undoc = yomikata.split('@')[0];
       String hundoc = yomikata.split('@')[1];
@@ -32,16 +37,15 @@ class WordCard extends StatelessWidget {
       yomikata = '[$yomikata]';
     }
 
+    print('yomikata : ${yomikata}');
+
     KangiStepRepositroy kangiStepRepositroy = KangiStepRepositroy();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: Responsive.width10),
       child: Card(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: Responsive.height11,
-            horizontal: Responsive.width14,
-          ),
+          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -80,7 +84,7 @@ class WordCard extends StatelessWidget {
                     ),
                 ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 4),
               Row(
                 children: [
                   Flexible(
@@ -93,7 +97,7 @@ class WordCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: Responsive.width10 / 2),
+                  SizedBox(width: 4),
                   IconButton(
                     onPressed:
                         () => TtsController.to.speak(
@@ -105,59 +109,44 @@ class WordCard extends StatelessWidget {
                             ? FontAwesomeIcons.volumeLow
                             : FontAwesomeIcons.volumeOff,
                         color: AppColors.mainBordColor,
-                        size: Responsive.height10 * 2.6,
+                        size: 26,
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: Responsive.height10),
+              SizedBox(height: 10),
               Text(
                 word.mean,
                 style: TextStyle(
-                  fontSize: Responsive.height18,
+                  fontSize: isKo ? 18 : 15,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const Divider(),
-              SizedBox(height: Responsive.height10 * 1.5),
-              RelatedWords(
-                japanese: japanese,
-                kangiStepRepositroy: kangiStepRepositroy,
-                temp: temp,
-              ),
-              SizedBox(height: Responsive.height10 * 2),
+              SizedBox(height: 8),
+              if (temp.isNotEmpty)
+                RelatedWords(
+                  japanese: japanese,
+                  kangiStepRepositroy: kangiStepRepositroy,
+                  temp: temp,
+                ),
+              SizedBox(height: 20),
               if (word.examples != null && word.examples!.isNotEmpty) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '예제',
+                      AppString.examples.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: Responsive.height10 * 1.8,
+                        fontSize: 16,
                         color: AppColors.mainBordColor,
                       ),
                     ),
-                    // InkWell(
-                    //   onTap: () {
-                    //     Get.to(
-                    //       () => GrammarDetailScreen(
-                    //         examples: word.examples!,
-                    //       ),
-                    //     );
-                    //   },
-                    //   child: Text(
-                    //     '셈플 발음 테스트하기→',
-                    //     style: TextStyle(
-                    //       fontWeight: FontWeight.bold,
-                    //       fontSize: Responsive.height10 * 1.8,
-                    //       color: AppColors.mainBordColor,
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
+
                 if (controller == null)
                   Expanded(
                     child: Padding(
@@ -200,9 +189,9 @@ class WordCard extends StatelessWidget {
                                 InkWell(
                                   onTap: controller!.onTapMoreExample,
                                   child: Text(
-                                    '예제 더보기...',
+                                    AppString.seeMoreExamples.tr,
                                     style: TextStyle(
-                                      fontSize: Responsive.height15,
+                                      fontSize: 15,
                                       color: AppColors.mainBordColor,
                                     ),
                                   ),

@@ -4,19 +4,20 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
-import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_study_screen.dart';
+import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_list_tile.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
-const String JLPT_CALENDAR_STEP_PATH = '/jlpt-calendar-step';
-
 // ignore: must_be_immutable
 class GrammarCalendarStepScreen extends StatefulWidget {
+  static String name = '/grammar-step';
   late CategoryEnum categoryEnum;
 
   GrammarCalendarStepScreen({super.key}) {
@@ -29,21 +30,15 @@ class GrammarCalendarStepScreen extends StatefulWidget {
 }
 
 class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
-  int currChapNumber = 0;
-  UserController userController = Get.find<UserController>();
-  late PageController pageController;
-  List<GlobalKey> gKeys = [];
   late GrammarController grammarController;
 
   late String level;
   late String chapter;
-  late String category;
   @override
   void initState() {
     super.initState();
     chapter = Get.arguments['chapter'];
 
-    category = '문법';
     grammarController = Get.find<GrammarController>();
     level = grammarController.level;
   }
@@ -59,7 +54,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
           children: [
             if (grammarController.getGrammarStep().grammars.length >= 4)
               BottomBtn(
-                label: '퀴즈!',
+                label: AppString.quiz.tr,
                 onTap: () {
                   Get.toNamed(
                     GRAMMAR_TEST_SCREEN,
@@ -74,7 +69,6 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
         ),
       ),
     );
-    // floatingActionButton: _floatingActionButton());
   }
 
   SafeArea _body() {
@@ -94,7 +88,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
                         children: List.generate(
                           controller.getGrammarStep().grammars.length,
                           (index) {
-                            return GrammarStudyScreen(
+                            return GrammarListTile(
                               index: index,
                               grammars: controller.getGrammarStep().grammars,
                             );
@@ -118,11 +112,8 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
       child: AppBar(
         scrolledUnderElevation: 0.0,
         title: Text(
-          'JLPT N$level $category - $chapter',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: Responsive.height16,
-          ),
+          'JLPT N$level ${CategoryEnum.grammars.id} - $chapter',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [_bottomSheet()],
       ),
@@ -150,7 +141,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
                       ),
                     ),
                     CToggleBtn(
-                      label: '의미 가리기',
+                      label: AppString.hideMean.tr,
                       toggle: controller.toggleSeeMean,
                       value: controller.isSeeMean,
                     ),

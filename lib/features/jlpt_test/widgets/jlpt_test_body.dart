@@ -7,7 +7,9 @@ import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller
 import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_card.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/widgets/toggle_subjective_qustion_button.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 
 class JlptTestBody extends StatelessWidget {
@@ -61,7 +63,12 @@ class JlptTestBody extends StatelessWidget {
                               ],
                             ),
                           ),
-                          ToggleSubjectiveQustionButton(),
+                          ToggleSubjectiveQustionButton(
+                            value: SettingController.to.isSubjective,
+                            onChanged: (v) {
+                              JlptTestController.to.toggleSubjective();
+                            },
+                          ),
                         ],
                       ),
                     ),

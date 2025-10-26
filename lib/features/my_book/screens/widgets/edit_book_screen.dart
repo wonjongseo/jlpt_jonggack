@@ -4,6 +4,7 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 
 class EditBookScreen extends StatefulWidget {
@@ -42,17 +43,17 @@ class _EditBookScreenState extends State<EditBookScreen> {
     String title = titleTController.text.trim();
 
     if (title.isEmpty) {
-      SnackBarHelper.showErrorSnackBar('단어장 이름을 입력해주세요');
+      SnackBarHelper.showErrorSnackBar(AppString.plzEnterBookName.tr);
       return;
     } else if (title.length >= 20) {
-      SnackBarHelper.showErrorSnackBar('단어장 이름은 20자 이하로 입력해주세요');
+      SnackBarHelper.showErrorSnackBar(AppString.plzEnterMore20Char.tr);
       return;
     }
 
     String description = descriptionTController.text.trim();
 
     if (description.length >= 50) {
-      SnackBarHelper.showErrorSnackBar('단어장 설명은 50자 이하로 입력해주세요');
+      SnackBarHelper.showErrorSnackBar(AppString.plzEnterMess20Char.tr);
       return;
     }
     Get.back(
@@ -81,7 +82,11 @@ class _EditBookScreenState extends State<EditBookScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(title: Text(isEditMode ? '단어장 변경' : '단어장 생성')),
+        appBar: AppBar(
+          title: Text(
+            isEditMode ? AppString.changeBook.tr : AppString.createBook.tr,
+          ),
+        ),
         bottomNavigationBar: SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -91,14 +96,17 @@ class _EditBookScreenState extends State<EditBookScreen> {
                   if (isEditMode)
                     Expanded(
                       child: BottomBtn(
-                        label: '삭제',
+                        label: AppString.delete.tr,
                         backgroundColor: Colors.redAccent,
                         onTap: deleteBtn,
                       ),
                     ),
                   Expanded(
                     child: BottomBtn(
-                      label: isEditMode ? '변경' : '생성',
+                      label:
+                          isEditMode
+                              ? AppString.change.tr
+                              : AppString.create.tr,
                       onTap: tapBottomBtn,
                     ),
                   ),
@@ -119,12 +127,12 @@ class _EditBookScreenState extends State<EditBookScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomTextFormField(
-                      hintText: '단어장 이름',
+                      hintText: AppString.bookName.tr,
                       controller: titleTController,
                     ),
                     SizedBox(height: 12),
                     CustomTextFormField(
-                      hintText: '단어장 설명',
+                      hintText: AppString.bookDesc.tr,
                       controller: descriptionTController,
                       maxLines: 10,
                     ),

@@ -69,7 +69,7 @@ class InterstitialManager {
   Future<bool> maybeShow() async {
     // 준비 여부
     UserController userController = Get.find<UserController>();
-    if (userController.user.isPremieum) return false;
+    if (userController.user!.isPremieum) return false;
     if (_ad == null) return false;
 
     // 조건 확인

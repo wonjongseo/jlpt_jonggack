@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/common.dart';
-import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/kangi_card.dart';
 
 import '../../../../common/admob/banner_ad/global_banner_admob.dart';
-import '../../../setting/services/setting_controller.dart';
 
-final String KANGI_STUDY_PATH = '/kangi_study';
 final String IS_TEST_AGAIN = 'isTestAgain';
 
 // ignore: must_be_immutable
 class KangiStudySceen extends StatefulWidget {
+  static String name = '/kangi_study';
   final int currentIndex;
   const KangiStudySceen({super.key, required this.currentIndex});
 
@@ -27,7 +24,6 @@ class KangiStudySceen extends StatefulWidget {
 }
 
 class _KangiStudySceenState extends State<KangiStudySceen> {
-  SettingController settingController = Get.find<SettingController>();
   final KangiStepController kangiStepController =
       Get.find<KangiStepController>();
 
@@ -103,7 +99,7 @@ class _KangiStudySceenState extends State<KangiStudySceen> {
               child: Card(
                 child: Center(
                   child: Text(
-                    '퀴즈 풀러 가기!',
+                    AppString.goToQuiz.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.cyan.shade600,

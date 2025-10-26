@@ -207,7 +207,7 @@ class SelectMyQuizDialog extends StatelessWidget {
 
                               Get.back();
                               Get.toNamed(
-                                JLPT_TEST_PATH,
+                                JlptTestScreen.name,
                                 arguments: {MY_VOCA_TEST: quizWords},
                               );
                             } catch (e) {

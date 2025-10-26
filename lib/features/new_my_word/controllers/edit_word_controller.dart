@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/model/example.dart';
@@ -60,7 +61,9 @@ class EditWordController extends GetxController {
 
       MyBookController.to.addMyWord(myword);
       NewMyWordController.to.loadMyWords();
-      SnackBarHelper.showSuccessSnackBar('${myword.getWord()}가 저장되었습니다.');
+      SnackBarHelper.showSuccessSnackBar(
+        '${myword.getWord()}${AppString.savedWord.tr}',
+      );
 
       japaneseController.clear();
       yomikataController.clear();
@@ -95,22 +98,6 @@ class EditWordController extends GetxController {
     } finally {
       _isLoading.value = false;
     }
-
-    // if (savedWordNumber != 0) {
-    //   Get.back();
-    //   Get.back();
-
-    //   SnackBarHelper.showSuccessSnackBar(
-    //     '$savedWordNumber개의 단어가 저장되었습니다.\n($savedWordNumber 단어가 이미 저장되어 있습니다.)',
-    //   );
-
-    //   UserController.to.updateMyWordSavedCount(
-    //     true,
-    //     isYokumatiageruWord: false,
-    //     count: savedWordNumber,
-    //   );
-    //   return;
-    // }
   }
 
   final wordFormKey = GlobalKey<FormState>();
@@ -215,9 +202,9 @@ class EditWordController extends GetxController {
     meanFocusNode = FocusNode();
     // exampleFocusNode = FocusNode();
 
-    japaneseFocusNode.addListener(() => _onFocusChange(TextInputEnum.JAPANESE));
-    yomikataFocusNode.addListener(() => _onFocusChange(TextInputEnum.YOMIKATA));
-    meanFocusNode.addListener(() => _onFocusChange(TextInputEnum.MEAN));
+    japaneseFocusNode.addListener(() => _onFocusChange(TextInputEnum.japanese));
+    yomikataFocusNode.addListener(() => _onFocusChange(TextInputEnum.yomikata));
+    meanFocusNode.addListener(() => _onFocusChange(TextInputEnum.mean));
 
     exampleWordController = TextEditingController();
     exampleMeanController = TextEditingController();
@@ -226,15 +213,15 @@ class EditWordController extends GetxController {
     exampleMeanFocusNode = FocusNode();
 
     exampleWordFocusNode.addListener(
-      () => _onFocusChange(TextInputEnum.EXAMPLE_JAPANESE),
+      () => _onFocusChange(TextInputEnum.exampleSentence),
     );
     exampleMeanFocusNode.addListener(
-      () => _onFocusChange(TextInputEnum.EXAMPLE_MEAN),
+      () => _onFocusChange(TextInputEnum.exampleMean),
     );
     super.onInit();
   }
 
-  TextInputEnum currentFocus = TextInputEnum.JAPANESE;
+  TextInputEnum currentFocus = TextInputEnum.japanese;
   void _onFocusChange(TextInputEnum currentFocus) {
     this.currentFocus = currentFocus;
   }
@@ -297,34 +284,34 @@ class EditWordController extends GetxController {
     required TextInputEnum textInputEnum,
   }) {
     switch (textInputEnum) {
-      case TextInputEnum.JAPANESE:
+      case TextInputEnum.japanese:
         if (value == null || value.isEmpty) {
           japaneseFocusNode.requestFocus();
           return '${textInputEnum.name}을 입력해주세요.';
         }
         return null;
       // return '일본어';
-      case TextInputEnum.YOMIKATA:
+      case TextInputEnum.yomikata:
         if (value == null || value.isEmpty) {
           yomikataFocusNode.requestFocus();
           return '${textInputEnum.name}을 입력해주세요.';
         }
         return null;
 
-      case TextInputEnum.MEAN:
+      case TextInputEnum.mean:
         if (value == null || value.isEmpty) {
           meanFocusNode.requestFocus();
           return '${textInputEnum.name}을 입력해주세요.';
         }
         return null;
 
-      case TextInputEnum.EXAMPLE_MEAN:
+      case TextInputEnum.exampleMean:
         if (value == null || value.isEmpty) {
           exampleMeanFocusNode.requestFocus();
           return '${textInputEnum.name}을 입력해주세요.';
         }
         return null;
-      case TextInputEnum.EXAMPLE_JAPANESE:
+      case TextInputEnum.exampleSentence:
         if (value == null || value.isEmpty) {
           exampleWordFocusNode.requestFocus();
           return '${textInputEnum.name}을 입력해주세요.';

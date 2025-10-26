@@ -25,7 +25,7 @@ class _GlobalBannerAdmobState extends State<GlobalBannerAdmob> {
   void initState() {
     super.initState();
 
-    if (!userController.user.isPremieum) {
+    if (!userController.user!.isPremieum) {
       initAdMob();
     }
   }

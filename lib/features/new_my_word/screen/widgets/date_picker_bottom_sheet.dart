@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
@@ -53,7 +54,7 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
               children: [
                 Expanded(
                   child: BottomBtn(
-                    label: '선택 해제',
+                    label: AppString.deselect.tr,
                     backgroundColor: Colors.grey,
                     onTap: () {
                       controller.clearRange(); // 전체 보기
@@ -64,7 +65,7 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: BottomBtn(
-                    label: '적용',
+                    label: AppString.apply.tr,
                     onTap: () {
                       controller.applyRange(
                         controller.rangeStart.value,

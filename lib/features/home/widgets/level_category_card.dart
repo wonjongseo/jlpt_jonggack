@@ -46,7 +46,7 @@ class LevelCategoryCard extends StatelessWidget {
                         ),
                       ),
                       const Divider(),
-                      SizedBox(height: Responsive.height10),
+                      SizedBox(height: 6),
                       if (body != null) body!,
                       if (extraInfo != null) extraInfo!,
                     ],

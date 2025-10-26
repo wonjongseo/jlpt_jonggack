@@ -2,28 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/check_row_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/japanese_list_tile.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/top_navigation_btn.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
-class JapaneseCalendarStepScreen extends StatefulWidget {
-  const JapaneseCalendarStepScreen({super.key, required this.chapter});
+class JapaneseStepScreen extends StatefulWidget {
+  static String name = '/japanese-step-screen';
 
+  const JapaneseStepScreen({
+    super.key,
+    required this.chapter,
+    required this.index,
+  });
+  final int index;
   final String chapter;
   @override
-  State<JapaneseCalendarStepScreen> createState() =>
-      _JapaneseCalendarStepScreenState();
+  State<JapaneseStepScreen> createState() => _JapaneseStepScreenState();
 }
 
-class _JapaneseCalendarStepScreenState
-    extends State<JapaneseCalendarStepScreen> {
+class _JapaneseStepScreenState extends State<JapaneseStepScreen> {
   late String level;
-  String category = '일본어';
   List<GlobalKey> gKeys = [];
   JlptStepController jlptStepController = Get.find<JlptStepController>();
 
@@ -32,7 +36,7 @@ class _JapaneseCalendarStepScreenState
     super.initState();
 
     level = jlptStepController.level;
-    jlptStepController.setJlptSteps(widget.chapter);
+    jlptStepController.setJlptSteps('챕터${widget.index + 1}');
 
     gKeys = List.generate(
       jlptStepController.jlptSteps.length,
@@ -62,7 +66,10 @@ class _JapaneseCalendarStepScreenState
           mainAxisSize: MainAxisSize.min,
           children: [
             if (jlptStepController.getJlptStep().words.length >= 4)
-              BottomBtn(label: '퀴즈!', onTap: jlptStepController.goToTest),
+              BottomBtn(
+                label: AppString.quiz.tr,
+                onTap: jlptStepController.goToTest,
+              ),
             const GlobalBannerAdmob(),
           ],
         ),
@@ -76,8 +83,8 @@ class _JapaneseCalendarStepScreenState
       child: AppBar(
         scrolledUnderElevation: 0.0,
         title: Text(
-          'JLPT N$level $category - ${widget.chapter}',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          'JLPT N$level ${CategoryEnum.japaneses.id} - ${AppString.chapter.tr}${widget.index + 1}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [_bottomSheet()],
       ),
@@ -105,18 +112,18 @@ class _JapaneseCalendarStepScreenState
                       ),
                     ),
                     CToggleBtn(
-                      label: '의미 가리기',
+                      label: AppString.hideMean.tr,
                       toggle: controller.toggleSeeMean,
                       value: controller.isSeeMean,
                     ),
                     const SizedBox(height: 10),
                     CToggleBtn(
-                      label: '읽는 법 가리기',
+                      label: AppString.hideYomikata.tr,
                       toggle: controller.toggleSeeYomikata,
                       value: controller.isSeeYomikata,
                     ),
                     CheckRowBtn(
-                      label: '단어 전체 저장',
+                      label: AppString.saveAllWords.tr,
                       value: controller.isAllSave(),
                       onChanged: (v) => controller.toggleAllSave(),
                     ),

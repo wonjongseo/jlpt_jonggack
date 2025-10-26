@@ -16,8 +16,6 @@ class AppReviewRequest {
     // bool hasReviewed = isReviewedBox.get('hasReviewed', defaultValue: false)!;
     bool hasReviewed = LocalReposotiry.bbb();
 
-    print('hasReviewed : ${hasReviewed}');
-
     if (!hasReviewed) {
       // 등비수열 (10, 30, 60, 100, ...)
       if (_shouldRequestReview(usageCount)) {

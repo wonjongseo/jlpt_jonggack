@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/get_utils.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 
 class StudyCategoryNavigator extends StatelessWidget {
@@ -34,7 +37,7 @@ class StudyCategoryNavigator extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '${KindOfStudy.values[index].value} 단어장',
+                '${KindOfStudy.values[index].value} ${AppString.vocabulary.tr}',
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontWeight:
                       index == currentPageIndex ? FontWeight.bold : null,

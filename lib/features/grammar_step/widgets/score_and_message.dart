@@ -1,7 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class ScoreAndMessage extends StatelessWidget {
   const ScoreAndMessage({Key? key, required this.score, required this.size})
@@ -12,16 +16,21 @@ class ScoreAndMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String message = '';
+
     if (score >= 100) {
-      message = '대단해요! 100점이에요!!';
-    } else if (score <= 80 && score > 60) {
-      message = '아쉽네요 ㅠ, 다음번에는 100점을 목표로 해봐요!';
-    } else if (score <= 60 && score >= 40) {
-      message = '분발 하셔야 하겠어요..ㅠㅠ';
-    } else if (score <= 80 && score >= 60) {
-      message = '문법 카드에서 예시를 확인해주세요!';
+      message = AppString.score100.tr;
+    } else if (score >= 80) {
+      // 80 ~ 99.9
+      message = AppString.score80.tr;
+    } else if (score >= 60) {
+      // 60 ~ 79.9
+      message = AppString.score60.tr;
+    } else if (score >= 40) {
+      // 40 ~ 59.9
+      message = AppString.score40.tr;
     } else {
-      message = '분발 하셔야 하겠어요..ㅠㅠ';
+      // 0 ~ 39.9
+      message = AppString.score20.tr;
     }
 
     return Column(
@@ -31,32 +40,62 @@ class ScoreAndMessage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ZoomIn(
-              child: Text(
-                score.toInt().toString(),
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w600,
-                  fontSize: Responsive.height10 * 6,
-                  letterSpacing: 1.5,
-                  fontFamily: 'ScoreStd',
-                  fontStyle: FontStyle.italic,
+            if (isKo) ...[
+              ZoomIn(
+                child: Text(
+                  score.toInt().toString(),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 60,
+                    letterSpacing: 1.5,
+                    fontFamily: 'ScoreStd',
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
-            ),
-            ZoomIn(
-              child: Text(
-                ' 점',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w600,
-                  fontSize: Responsive.height10 * 3,
-                  letterSpacing: 1.5,
-                  fontFamily: 'ScoreStd',
-                  fontStyle: FontStyle.italic,
+              ZoomIn(
+                child: Text(
+                  ' 점',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 30,
+                    letterSpacing: 1.5,
+                    fontFamily: 'ScoreStd',
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ),
-            ),
+            ] else ...[
+              ZoomIn(
+                child: Text(
+                  'a score of ',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 30,
+                    letterSpacing: 1.5,
+                    fontFamily: 'ScoreStd',
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+              ZoomIn(
+                child: Text(
+                  score.toInt().toString(),
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 60,
+                    letterSpacing: 1.5,
+                    fontFamily: 'ScoreStd',
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ],
+            SizedBox(width: 10),
           ],
         ),
         ZoomIn(
@@ -65,12 +104,12 @@ class ScoreAndMessage extends StatelessWidget {
             message,
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: Responsive.height16,
+              fontSize: 16,
               color: AppColors.scaffoldBackground,
             ),
           ),
         ),
-        SizedBox(height: Responsive.height30),
+        SizedBox(height: 30),
       ],
     );
   }

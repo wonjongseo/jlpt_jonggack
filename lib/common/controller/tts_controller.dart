@@ -1,10 +1,9 @@
-//
-
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/logger/logger_service.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 /// 앱 전역에서 하나만 생성되어 사용하는 TTS 컨트롤러.
 /// - _isPlaying: TTS가 현재 재생 중인지 여부
@@ -14,7 +13,6 @@ class TtsController extends GetxController {
 
   late final FlutterTts _tts;
 
-  /// TTS 재생 중이면 true, 아니면 false
   final RxBool _isPlaying = false.obs;
   bool get isPlaying => _isPlaying.value;
 
@@ -96,9 +94,9 @@ class TtsController extends GetxController {
   Future<void> speak(String word) async {
     try {
       _tts.setLanguage('ja-JP');
-      _tts.setSpeechRate(UserController.to.rate);
-      _tts.setVolume(UserController.to.volumn);
-      _tts.setPitch(UserController.to.pitch);
+      _tts.setSpeechRate(SettingController.to.speechRate.value);
+      _tts.setVolume(SettingController.to.volumn.value);
+      _tts.setPitch(SettingController.to.pitch.value);
       // 동일한 단어가 이미 재생 중이면 아무 동작 안 함
       if (_isPlaying.value && currentWord.value == word) return;
       // 다른 단어가 재생 중이라면 먼저 중단

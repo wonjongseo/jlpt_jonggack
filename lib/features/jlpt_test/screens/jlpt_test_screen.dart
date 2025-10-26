@@ -7,7 +7,6 @@ import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller
 import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart';
 
-const JLPT_TEST_PATH = '/test';
 const JLPT_TEST = 'jlpt';
 const IS_RANDOM = 'is_random';
 const CONTINUTE_JLPT_TEST = 'continue_jlpt_test';
@@ -16,6 +15,7 @@ const MY_VOCA_TEST_KNOWN = 'known';
 const MY_VOCA_TEST_UNKNWON = 'un_known';
 
 class JlptTestScreen extends StatelessWidget {
+  static String name = '/jlpt-test';
   const JlptTestScreen({super.key});
 
   @override

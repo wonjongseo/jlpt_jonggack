@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/calendar_step/kangi_calendar_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -29,7 +29,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
     kangiController = Get.put(KangiStepController(level: widget.level));
 
     progrssingIndex = LocalReposotiry.getCurrentProgressing(
-      '${CategoryEnum.Kangis.name}-${widget.level}',
+      '${CategoryEnum.kangis.name}-${widget.level}',
     );
 
     super.initState();
@@ -58,8 +58,8 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
           items: List.generate(kangiController.headTitleCount, (index) {
             bool isAllAccessable =
                 !(widget.level == '1' && index > 2) ||
-                controller.user.isPremieum ||
-                controller.user.isTrik;
+                controller.user!.isPremieum ||
+                controller.user!.isTrik;
 
             return InkWell(
               onLongPress: () {
@@ -75,7 +75,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                 }
                 if (progrssingIndex == index) {
                   LocalReposotiry.putCurrentProgressing(
-                    '${CategoryEnum.Kangis.name}-${widget.level}',
+                    '${CategoryEnum.kangis.name}-${widget.level}',
                     progrssingIndex,
                   );
                   goTo('챕터${index + 1}');
@@ -99,7 +99,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                         Center(
                           child: RichText(
                             text: TextSpan(
-                              text: '${CategoryEnum.Kangis.id}\n',
+                              text: '${CategoryEnum.kangis.id}\n',
                               children: [
                                 TextSpan(
                                   text: 'Chapter ${(index + 1)}',

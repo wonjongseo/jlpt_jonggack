@@ -5,10 +5,7 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
-import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
-import 'package:jlpt_jonggack/features/kangi_study/widgets/screens/kangi_study_sceen.dart';
-import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -41,8 +38,13 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
     if (widget.word.mean.contains('1. ')) {
       mean = '${(widget.word.mean.split('\n')[0]).split('1. ')[1]}...';
     }
+
     if (widget.word.word.contains('·')) {
       changedWord = widget.word.word.split('·')[0];
+    }
+
+    if (changedWord.isEmpty) {
+      changedWord = widget.word.yomikata;
     }
 
     return InkWell(

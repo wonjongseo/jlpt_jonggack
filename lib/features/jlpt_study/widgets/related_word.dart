@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/kangi_card.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
@@ -33,16 +34,16 @@ class RelatedWords extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '연관 한자',
+          AppString.relatedKangis.tr,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: Responsive.height10 * 1.8,
+            fontSize: 16,
             color: AppColors.mainBordColor,
           ),
         ),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: Responsive.height16 / 4),
+          padding: EdgeInsets.symmetric(vertical: 4),
           decoration: const BoxDecoration(color: Colors.grey),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -85,13 +86,11 @@ class RelatedWords extends StatelessWidget {
                                     fontWeight: FontWeight.w600,
                                     fontFamily: AppFonts.japaneseFont,
                                     color: Colors.black,
-                                    fontSize: Responsive.height10 * 2.2,
+                                    fontSize: 22,
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: Responsive.width16 / 4,
-                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 4),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -101,7 +100,7 @@ class RelatedWords extends StatelessWidget {
                                     ),
                                   ),
                                   child: Text(
-                                    kangi.korea,
+                                    kangi.shortMean,
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: Responsive.height14,

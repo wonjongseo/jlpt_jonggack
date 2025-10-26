@@ -36,6 +36,7 @@ class _GrammarExampleCardState extends State<GrammarExampleCard> {
     } else {
       grammarWrod = widget.examples[widget.index].yomikata!;
     }
+
     return Padding(
       padding: EdgeInsets.only(bottom: Responsive.height16),
       child: Row(

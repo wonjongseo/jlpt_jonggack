@@ -1,0 +1,693 @@
+import 'package:get/get.dart';
+
+class AppString extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+    'ko_KR': {
+      AppString.koreanText: AppString.koreanTextKr,
+      AppString.englishText: AppString.englishTextKr,
+      AppString.language: AppString.languageKr,
+      AppString.vocabulary: AppString.vocabularyKr,
+      AppString.hiraganaVocabulary: AppString.hiraganaVocabularyKr,
+      AppString.hiraganaVocaDesc: AppString.hiraganaVocaDescKr,
+      AppString.katakanaVocabulary: AppString.katakanaVocabularyKr,
+      AppString.katakanaVocaDesc: AppString.katakanaVocaDescKr,
+      AppString.appName: AppString.appNameKr,
+      AppString.word: AppString.wordKr,
+      AppString.kangi: AppString.kangiKr,
+      AppString.grammar: AppString.grammarKr,
+      AppString.jlptBookDescription: AppString.jlptBookDescriptionKr,
+      AppString.searchHintText: AppString.searchHintTextKr,
+      AppString.randomQuiz: AppString.randomQuizKr,
+      AppString.examples: AppString.examplesKr,
+      AppString.goToQuiz: AppString.goToQuizKr,
+      AppString.seeMoreExamples: AppString.seeMoreExamplesKr,
+      AppString.chapter: AppString.chapterKr,
+      AppString.quiz: AppString.quizKr,
+      AppString.savedWord: AppString.savedWordKr,
+      AppString.checkItAtJGBook: AppString.checkItAtJGBookKr,
+      AppString.hideMean: AppString.hideMeanKr,
+      AppString.hideYomikata: AppString.hideYomikataKr,
+      AppString.hideUndoc: AppString.hideUndocKr,
+      AppString.hideHundoc: AppString.hideHundocKr,
+      AppString.saveAllWords: AppString.saveAllWordsKr,
+      AppString.undoc: AppString.undocKr,
+      AppString.hundoc: AppString.hundocKr,
+      AppString.relatedWord: AppString.relatedWordKr,
+      AppString.relatedKangis: AppString.relatedKangisKr,
+      AppString.jgVoca: AppString.jgVocaKr,
+      AppString.jgVocaDesc: AppString.jgVocaDescKr,
+      AppString.myVoca: AppString.myVocaKr,
+      AppString.myVocaDesc: AppString.myVocaDescKr,
+      AppString.savedWordsCnt: AppString.savedWordsCntKr,
+      AppString.noSavedWord: AppString.noSavedWordKr,
+      AppString.addWord: AppString.addWordKr,
+      AppString.save: AppString.saveKr,
+      AppString.importExcel: AppString.importExcelKr,
+      AppString.direclyEnter: AppString.direclyEnterKr,
+      AppString.apply: AppString.applyKr,
+      AppString.deselect: AppString.deselectKr,
+      AppString.editVoca: AppString.editVocaKr,
+      AppString.delete: AppString.deleteKr,
+      AppString.change: AppString.changeKr,
+      AppString.changeBook: AppString.changeBookKr,
+      AppString.create: AppString.createKr,
+      AppString.createBook: AppString.createBookKr,
+      AppString.known: AppString.knownKr,
+      AppString.unKnown: AppString.unKnownKr,
+      AppString.doChangeLanaguge: AppString.doChangeLanagugeKr,
+      AppString.doChangeLanaguge2: AppString.doChangeLanaguge2Kr,
+      AppString.yes: AppString.yesKr,
+      AppString.no: AppString.noKr,
+      AppString.mean: AppString.meanKr,
+      AppString.description: AppString.descriptionKr,
+      AppString.connectionWays: AppString.connectionWaysKr,
+      AppString.submit: AppString.submitKr,
+      AppString.doExitText: AppString.doExitTextKr,
+      AppString.doExitText2: AppString.doExitText2Kr,
+      AppString.again: AppString.againKr,
+      AppString.score100: AppString.score100Kr,
+      AppString.score80: AppString.score80Kr,
+      AppString.score60: AppString.score60Kr,
+      AppString.score40: AppString.score40Kr,
+      AppString.score20: AppString.score20Kr,
+      AppString.none: AppString.noneKr,
+      AppString.raw: AppString.rawKr,
+      AppString.seacrhResult: AppString.seacrhResultKr,
+      AppString.strokeOrder: AppString.strokeOrderKr,
+      AppString.openEnded: AppString.openEndedKr,
+      AppString.wrongAnswer: AppString.wrongAnswerKr,
+      AppString.score: AppString.scoreKr,
+      AppString.bookName: AppString.bookNameKr,
+      AppString.bookDesc: AppString.bookDescKr,
+      AppString.plzEnterBookName: AppString.plzEnterBookNameKr,
+      AppString.plzEnterMore20Char: AppString.plzEnterMore20CharKr,
+      AppString.plzEnterMess20Char: AppString.plzEnterMess20CharKr,
+      AppString.plzSelectTheAnswer: AppString.plzSelectTheAnswerKr,
+      AppString.proun: AppString.prounKr,
+      AppString.speedRate: AppString.speedRateKr,
+      AppString.volumn: AppString.volumnKr,
+      AppString.pitch: AppString.pitchKr,
+      AppString.appSetting: AppString.appSettingKr,
+      AppString.quizDuration: AppString.quizDurationKr,
+      AppString.whenIncorrect: AppString.whenIncorrectKr,
+      AppString.whenCorrect: AppString.whenCorrectKr,
+      AppString.second: AppString.secondKr,
+      AppString.systemSetting: AppString.systemSettingKr,
+      AppString.setLanguage: AppString.setLanguageKr,
+      AppString.reportMsgContect: AppString.reportMsgContectKr,
+      AppString.enableOpenEndQustion: AppString.enableOpenEndQustionKr,
+      AppString.emailSubject: AppString.emailSubjectKr,
+      AppString.another: AppString.anotherKr,
+      AppString.tipOffMessage: AppString.tipOffMessageKr,
+      AppString.fnOrErorreport: AppString.fnOrErorreportKr,
+      AppString.failLoadMailApp: AppString.failLoadMailAppKr,
+      AppString.failLoadMailApp2: AppString.failLoadMailApp2Kr,
+      AppString.settingScreen: AppString.settingScreenKr,
+    },
+    'en_US': {
+      AppString.koreanText: AppString.koreanTextEn,
+      AppString.englishText: AppString.englishTextEn,
+      AppString.language: AppString.languageEn,
+      AppString.vocabulary: AppString.vocabularyEn,
+      AppString.hiraganaVocabulary: AppString.hiraganaVocabularyEn,
+      AppString.hiraganaVocaDesc: AppString.hiraganaVocaDescEn,
+      AppString.katakanaVocabulary: AppString.katakanaVocabularyEn,
+      AppString.katakanaVocaDesc: AppString.katakanaVocaDescEn,
+      AppString.appName: AppString.appNameEn,
+      AppString.word: AppString.wordEn,
+      AppString.kangi: AppString.kangiEn,
+      AppString.grammar: AppString.grammarEn,
+      AppString.jlptBookDescription: AppString.jlptBookDescriptionEn,
+      AppString.searchHintText: AppString.searchHintTextEn,
+      AppString.randomQuiz: AppString.randomQuizEn,
+      AppString.examples: AppString.examplesEn,
+      AppString.goToQuiz: AppString.goToQuizEn,
+      AppString.seeMoreExamples: AppString.seeMoreExamplesEn,
+      AppString.chapter: AppString.chapterEn,
+      AppString.quiz: AppString.quizEn,
+      AppString.savedWord: AppString.savedWordEn,
+      AppString.checkItAtJGBook: AppString.checkItAtJGBookEn,
+      AppString.hideMean: AppString.hideMeanEn,
+      AppString.hideYomikata: AppString.hideYomikataEn,
+      AppString.hideUndoc: AppString.hideUndocEn,
+      AppString.hideHundoc: AppString.hideHundocEn,
+      AppString.saveAllWords: AppString.saveAllWordsEn,
+      AppString.undoc: AppString.undocEn,
+      AppString.hundoc: AppString.hundocEn,
+      AppString.relatedWord: AppString.relatedWordEn,
+      AppString.relatedKangis: AppString.relatedKangisEn,
+      AppString.jgVoca: AppString.jgVocaEn,
+      AppString.jgVocaDesc: AppString.jgVocaDescEn,
+      AppString.myVoca: AppString.myVocaEn,
+      AppString.myVocaDesc: AppString.myVocaDescEn,
+      AppString.savedWordsCnt: AppString.savedWordsCntEn,
+      AppString.noSavedWord: AppString.noSavedWordEn,
+      AppString.addWord: AppString.addWordEn,
+      AppString.save: AppString.saveEn,
+      AppString.importExcel: AppString.importExcelEn,
+      AppString.direclyEnter: AppString.direclyEnterEn,
+      AppString.apply: AppString.applyEn,
+      AppString.deselect: AppString.deselectEn,
+      AppString.editVoca: AppString.editVocaEn,
+      AppString.delete: AppString.deleteEn,
+      AppString.change: AppString.changeEn,
+      AppString.changeBook: AppString.changeBookEn,
+      AppString.create: AppString.createEn,
+      AppString.createBook: AppString.createBookEn,
+      AppString.known: AppString.knownEn,
+      AppString.unKnown: AppString.unKnownEn,
+      AppString.doChangeLanaguge: AppString.doChangeLanagugeEn,
+      AppString.doChangeLanaguge2: AppString.doChangeLanaguge2En,
+      AppString.yes: AppString.yesEn,
+      AppString.no: AppString.noEn,
+
+      AppString.mean: AppString.meanEn,
+      AppString.description: AppString.descriptionEn,
+      AppString.connectionWays: AppString.connectionWaysEn,
+      AppString.submit: AppString.submitEn,
+      AppString.doExitText: AppString.doExitTextEn,
+      AppString.doExitText2: AppString.doExitText2En,
+      AppString.again: AppString.againEn,
+      AppString.score100: AppString.score100En,
+      AppString.score80: AppString.score80En,
+      AppString.score60: AppString.score60En,
+      AppString.score40: AppString.score40En,
+      AppString.score20: AppString.score20En,
+      AppString.none: AppString.noneEn,
+      AppString.raw: AppString.rawEn,
+      AppString.seacrhResult: AppString.seacrhResultEn,
+      AppString.strokeOrder: AppString.strokeOrderEn,
+      AppString.openEnded: AppString.openEndedEn,
+      AppString.wrongAnswer: AppString.wrongAnswerEn,
+      AppString.score: AppString.scoreEn,
+      AppString.bookName: AppString.bookNameEn,
+      AppString.bookDesc: AppString.bookDescEn,
+      AppString.plzEnterBookName: AppString.plzEnterBookNameEn,
+      AppString.plzEnterMore20Char: AppString.plzEnterMore20CharEn,
+      AppString.plzEnterMess20Char: AppString.plzEnterMess20CharEn,
+      AppString.plzSelectTheAnswer: AppString.plzSelectTheAnswerEn,
+      AppString.proun: AppString.prounEn,
+      AppString.speedRate: AppString.speedRateEn,
+      AppString.volumn: AppString.volumnEn,
+      AppString.pitch: AppString.pitchEn,
+
+      AppString.appSetting: AppString.appSettingEn,
+      AppString.quizDuration: AppString.quizDurationEn,
+      AppString.whenIncorrect: AppString.whenIncorrectEn,
+      AppString.whenCorrect: AppString.whenCorrectEn,
+      AppString.second: AppString.secondEn,
+      AppString.systemSetting: AppString.systemSettingEn,
+      AppString.setLanguage: AppString.setLanguageEn,
+      AppString.reportMsgContect: AppString.reportMsgContectEn,
+
+      AppString.enableOpenEndQustion: AppString.enableOpenEndQustionEn,
+      AppString.emailSubject: AppString.emailSubjectEn,
+      AppString.another: AppString.anotherEn,
+      AppString.tipOffMessage: AppString.tipOffMessageEn,
+      AppString.fnOrErorreport: AppString.fnOrErorreportEn,
+      AppString.failLoadMailApp: AppString.failLoadMailAppEn,
+      AppString.failLoadMailApp2: AppString.failLoadMailApp2En,
+      AppString.settingScreen: AppString.settingScreenEn,
+    },
+  };
+
+  static String language = "languageTr";
+  static String languageKr = '언어';
+  static String languageEn = "Language";
+
+  static String koreanText = "koreanTextTr";
+  static String koreanTextKr = '한국어';
+  static String koreanTextEn = "Korean";
+
+  static String englishText = "englishTextTr";
+  static String englishTextKr = '영어';
+  static String englishTextEn = "English";
+
+  static String vocabulary = "vocabularyTr";
+  static String vocabularyKr = '단어장';
+  static String vocabularyEn = "Book";
+
+  static String hiraganaVocabulary = "hiraganaVocabularyTr";
+  static String hiraganaVocabularyKr = '히라가나 단어장';
+  static String hiraganaVocabularyEn = "Hiragana Book";
+
+  static String hiraganaVocaDesc = "hiraganaVocaDescTr";
+  static String hiraganaVocaDescKr = '왕초보를 위한 히라가나 단어장';
+  static String hiraganaVocaDescEn = "A hiragana book for newbies";
+
+  static String katakanaVocabulary = "katakanaVocabularyTr";
+  static String katakanaVocabularyKr = '카타카나 단어장';
+  static String katakanaVocabularyEn = "Katakana Book";
+
+  static String katakanaVocaDesc = "katakanaVocaDescTr";
+  static String katakanaVocaDescKr = '왕초보를 위한 카타카나 단어장';
+  static String katakanaVocaDescEn = "A katakana book for newbies";
+
+  static String appName = "appNameTr";
+  static String appNameKr = 'JLPT종각';
+  static String appNameEn = "JLPT JG ";
+
+  static String word = "wordTr";
+  static String wordKr = '단어';
+  static String wordEn = "Japanese";
+
+  static String kangi = "kangiTr";
+  static String kangiKr = '한자';
+  static String kangiEn = "Kangi";
+
+  static String grammar = "grammarTr";
+  static String grammarKr = '문법';
+  static String grammarEn = "Grammar";
+
+  static String jlptBookDescription = "jlptBookDescriptionTr";
+  static String jlptBookDescriptionKr = '종합 단어장';
+  static String jlptBookDescriptionEn = "Integrated Book";
+
+  static String searchHintText = "searchHintTextTr";
+  static String searchHintTextKr = ' 일본어/한자/문법 검색...';
+  static String searchHintTextEn = " Search Japanese/Kangi/Grammar...";
+
+  static String randomQuiz = "randomQuizTr";
+  static String randomQuizKr = '랜덤 퀴즈';
+  static String randomQuizEn = "Random Quiz";
+
+  static String examples = "examplesTr";
+  static String examplesKr = '예제';
+  static String examplesEn = "Examples";
+
+  static String goToQuiz = "goToQuizTr";
+  static String goToQuizKr = '퀴즈 풀기';
+  static String goToQuizEn = "Go to Quiz";
+
+  static String seeMoreExamples = "seeMoreExamplesTr";
+  static String seeMoreExamplesKr = '예제 더보기...';
+  static String seeMoreExamplesEn = "See More...";
+
+  static String chapter = "chapterTr";
+  static String chapterKr = '챕터';
+  static String chapterEn = "Chapter";
+
+  static String quiz = "quizTr";
+  static String quizKr = '퀴즈';
+  static String quizEn = "Quiz";
+
+  static String savedWord = "savedWordTr";
+  static String savedWordKr = '가 저장되었습니다.';
+  static String savedWordEn = " has been saved.";
+
+  static String checkItAtJGBook = "checkItAtJGBookTr";
+  static String checkItAtJGBookKr = '종각 단어장에서 확인해주세요.';
+  static String checkItAtJGBookEn = "Please check it at JG Book.";
+
+  static String hideMean = "hideMeanTr";
+  static String hideMeanKr = '의미 가리기';
+  static String hideMeanEn = "Hide Mean";
+
+  static String hideYomikata = "hideYomikataTr";
+  static String hideYomikataKr = '읽는 법 가르기';
+  static String hideYomikataEn = "Hide Pronunciation";
+
+  static String hideUndoc = "hideUndocTr";
+  static String hideUndocKr = '음독 가르기';
+  static String hideUndocEn = "Hide Pronunciation";
+
+  static String hideHundoc = "hideHundocTr";
+  static String hideHundocKr = '음독 가르기';
+  static String hideHundocEn = "Hide Pronunciation";
+
+  static String saveAllWords = "saveAllWordsTr";
+  static String saveAllWordsKr = '단어 전체 저장';
+  static String saveAllWordsEn = "Save All Words";
+
+  static String undoc = "undocTr";
+  static String undocKr = '음독';
+  static String undocEn = "on";
+
+  static String hundoc = "hundocTr";
+  static String hundocKr = '훈독';
+  static String hundocEn = "kun";
+
+  static String relatedWord = "relatedWordTr";
+  static String relatedWordKr = '연관 단어';
+  static String relatedWordEn = "Related Words";
+
+  static String relatedKangis = "relatedKangisTr";
+  static String relatedKangisKr = '연관 한자';
+  static String relatedKangisEn = "Related Kangis";
+
+  static String jgVoca = "jgVocaTr";
+  static String jgVocaKr = '종각 단어장';
+  static String jgVocaEn = "JG Book";
+
+  static String jgVocaDesc = "jgVocaDescTr";
+  static String jgVocaDescKr = '종각 앱에서 저장한 단어들을\n학습하는 단어장';
+  static String jgVocaDescEn =
+      "This is a vocabulary book where words in the app are stored";
+
+  static String myVoca = "myVocaTr";
+  static String myVocaKr = '나만의 단어장';
+  static String myVocaEn = "My Book";
+
+  static String myVocaDesc = "myVocaDescTr";
+  static String myVocaDescKr = '종각 앱에서 저장한 단어들을\n학습하는 단어장';
+  static String myVocaDescEn =
+      "This is a vocabulary book where the user stores the words directly";
+
+  static String savedWordsCnt = "savedWordsCntTr";
+  static String savedWordsCntKr = '저장된 단어';
+  static String savedWordsCntEn = "Saved Words";
+
+  static String noSavedWord = "noSavedWordTr";
+  static String noSavedWordKr = '저장된 단어가 없습니다';
+  static String noSavedWordEn = "No Saved Word";
+
+  static String addWord = "addWordTr";
+  static String addWordKr = '단어 추가';
+  static String addWordEn = "Add Word";
+
+  static String save = "saveTr";
+  static String saveKr = '저장';
+  static String saveEn = "Save";
+
+  static String importExcel = "importExcelTr";
+  static String importExcelKr = '엑셀 파일 불러오기';
+  static String importExcelEn = "Import Excel";
+
+  static String direclyEnter = "direclyEnterTr";
+  static String direclyEnterKr = '직접 입력';
+  static String direclyEnterEn = "Enter directly";
+
+  static String apply = "applyTr";
+  static String applyKr = '적용';
+  static String applyEn = "Apply";
+
+  static String deselect = "deselectTr";
+  static String deselectKr = '선택 해제';
+  static String deselectEn = "Deselect";
+
+  static String editVoca = "editVocaTr";
+  static String editVocaKr = '단어장 변경';
+  static String editVocaEn = "Edit Book";
+
+  static String delete = "deleteTr";
+  static String deleteKr = '삭제';
+  static String deleteEn = "Delete";
+
+  static String change = "changeTr";
+  static String changeKr = '변경';
+  static String changeEn = "Change";
+
+  static String changeBook = "changeBookTr";
+  static String changeBookKr = '단어장 변경';
+  static String changeBookEn = "Change Book";
+
+  static String create = "createTr";
+  static String createKr = '생성';
+  static String createEn = "Create";
+
+  static String createBook = "createBookTr";
+  static String createBookKr = '단어장 생성';
+  static String createBookEn = "Create Book";
+
+  static String known = "knownTr";
+  static String knownKr = '암기';
+  static String knownEn = "known";
+
+  static String unKnown = "unKnownTr";
+  static String unKnownKr = '미암기';
+  static String unKnownEn = "unKnown";
+
+  static String doChangeLanaguge = "doChangeLanagugeTr";
+  static String doChangeLanagugeKr = '시스템 언어를 변경하시겠습니까?';
+  static String doChangeLanagugeEn =
+      "Do you want to change the system language?";
+
+  static String doChangeLanaguge2 = "doChangeLanaguge2Tr";
+  static String doChangeLanaguge2Kr = '변경하면 학습 기록이 초기화됩니다.\n변경하시겠습니까?';
+  static String doChangeLanaguge2En =
+      "If you make changes, your learning history will be initialized.\nDo you want to change it?";
+
+  static String yes = "yesTr";
+  static String yesKr = '네';
+  static String yesEn = "yes";
+
+  static String no = "noTr";
+  static String noKr = '아니요';
+  static String noEn = "No";
+
+  static String mean = "meanTr";
+  static String meanKr = '의미';
+  static String meanEn = "Mean";
+
+  static String description = "descriptionTr";
+  static String descriptionKr = '설명';
+  static String descriptionEn = "Description";
+
+  static String connectionWays = "connectionWaysTr";
+  static String connectionWaysKr = '접속 형태';
+  static String connectionWaysEn = "Connection ways";
+
+  static String submit = "submitTr";
+  static String submitKr = '제출';
+  static String submitEn = "Submit";
+
+  static String doExitText = "doExitTextTr";
+  static String doExitTextKr = '테스트를 그만두시겠습니까?';
+  static String doExitTextEn = "Exit Test?";
+
+  static String doExitText2 = "doExitText2Tr";
+  static String doExitText2Kr = '테스트 중간에 나가면 점수가 기록되지 않습니다. 그래도 나가시겠습니까?';
+  static String doExitText2En =
+      "Your progress will not be saved if you leave now. Are you sure you want to exit?";
+
+  static String again = "againTr";
+  static String againKr = '다시';
+  static String againEn = "Again";
+
+  static String score100 = "score100Tr";
+  static String score100Kr = '대단해요! 만점이에요!';
+  static String score100En = "Amazing! You got a perfect score!";
+
+  static String score80 = "score80Tr";
+  static String score80Kr = '잘했어요! 다음엔 만점을 노려봐요';
+  static String score80En = "Great job! Try to get a perfect score next time!";
+
+  static String score60 = "score60Tr";
+  static String score60Kr = '좋아요! 문법 카드의 예시를 한 번 더 확인해볼까요?';
+  static String score60En =
+      "Nice effort! Take another look at the examples in the grammar cards.";
+
+  static String score40 = "score40Tr";
+  static String score40Kr = '조금만 더 분발해봐요. 곧 더 좋아질 거예요.';
+  static String score40En =
+      "Keep it up! You’re getting there—just a bit more practice!";
+
+  static String score20 = "score20Tr";
+  static String score20Kr = '기초부터 차근차근 복습해봐요. 함께 해봐요!';
+  static String score20En =
+      "Let’s review the basics step by step. You can do it!";
+
+  static String none = "noneTr";
+  static String noneKr = '없음';
+  static String noneEn = "None";
+
+  static String raw = "rawTr";
+  static String rawKr = '행';
+  static String rawEn = " Raw";
+
+  static String seacrhResult = "seacrhResultTr";
+  static String seacrhResultKr = '의 검색 결과';
+  static String seacrhResultEn = "Search Results for";
+
+  static String strokeOrder = "strokeOrderTr";
+  static String strokeOrderKr = '획순 보기';
+  static String strokeOrderEn = "Stroke order";
+  //)
+
+  static String openEnded = "openEndedTr";
+  static String openEndedKr = '주관식 문제';
+  static String openEndedEn = "Open-ended";
+
+  static String wrongAnswer = "wrongAnswerTr";
+  static String wrongAnswerKr = '오답';
+  static String wrongAnswerEn = "Wrong answer";
+
+  static String score = "scoreTr";
+  static String scoreKr = '점수';
+  static String scoreEn = "Score";
+
+  static String bookName = "bookNameTr";
+  static String bookNameKr = '단어장 이름';
+  static String bookNameEn = "Book Name";
+
+  static String bookDesc = "bookDescTr";
+  static String bookDescKr = '단어장 설명';
+  static String bookDescEn = "Book Description";
+
+  static String plzEnterBookName = "plzEnterBookNameTr";
+  static String plzEnterBookNameKr = '단어장 이름을 입력해주세요';
+  static String plzEnterBookNameEn = "Please Enter a book name";
+
+  static String plzEnterMore20Char = "plzEnterMore20CharTr";
+  static String plzEnterMore20CharKr = '단어장 이름은 20자 이상으로 입력해주세요';
+  static String plzEnterMore20CharEn =
+      "Please enter a book name with at least 20 characters.";
+
+  static String plzEnterMess20Char = "plzEnterMess20CharTr";
+  static String plzEnterMess20CharKr = '단어장 설명은 50자 이하로 입력해주세요';
+  static String plzEnterMess20CharEn =
+      "Please enter a book name within 50 characters.";
+
+  static String plzSelectTheAnswer = "plzSelectTheAnswerTr";
+  static String plzSelectTheAnswerKr = '빈칸에 맞는 답을 선택해 주세요.';
+  static String plzSelectTheAnswerEn =
+      "Choose the best answer to fill in the blank.";
+
+  static String proun = "prounTr";
+  static String prounKr = '발음';
+  static String prounEn = "Proun";
+
+  static String speedRate = "speedRateTr";
+  static String speedRateKr = '속도';
+  static String speedRateEn = "Speed";
+
+  static String volumn = "volumnTr";
+  static String volumnKr = '음량';
+  static String volumnEn = "Volumn";
+
+  static String pitch = "pitchTr";
+  static String pitchKr = '음조';
+  static String pitchEn = "Pitch";
+
+  static String appSetting = "appSettingTr";
+  static String appSettingKr = '앱 설정';
+  static String appSettingJp = 'アプリ設定';
+  static String appSettingEn = "App Setting";
+
+  static String quizDuration = "quizDurationTr";
+  static String quizDurationKr = '퀴즈 진행 속도';
+  static String quizDurationEn = "Quiz Duration";
+
+  static String whenIncorrect = "whenIncorrectTr";
+  static String whenIncorrectKr = '틀릴 시';
+  static String whenIncorrectEn = "When InCorrect";
+
+  static String whenCorrect = "whenCorrectTr";
+  static String whenCorrectKr = '맞출 시';
+  static String whenCorrectEn = "When Correct";
+
+  static String second = "secondTr";
+  static String secondKr = '초';
+  static String secondEn = "Second";
+
+  static String systemSetting = "systemSettingtr";
+  static String systemSettingKr = '시스템 설정';
+  static String systemSettingEn = "System Setting";
+
+  static String setLanguage = "setLanguageTr";
+  static String setLanguageKr = '언어 선택';
+  static String setLanguageEn = "Language";
+
+  static String reportMsgContect = "reportMsgContectTr";
+  static String reportMsgContectKr = """
+💡 희망 기능 제안 / 버그·오류 제보
+
+───────────────────────
+
+✨ [희망 기능 제안]
+- 원하는 기능이나 개선 아이디어를 상세히 알려주세요!
+
+
+───────────────────────
+
+🐞 [버그・오류 제보]
+1️⃣ 발생 화면
+   예) 캘린더 화면, 비용 입력 화면 등  
+
+2️⃣ 발생 내용
+   예) 일정 추가 시 앱이 강제 종료됩니다.  
+
+3️⃣ 재현 방법
+   1. 캘린더 화면 진입  
+   2. “일정 추가” 버튼 클릭  
+   3. 오류 확인  
+
+📎 첨부 가능 항목
+- 스크린샷 또는 동영상 (버그 파악에 큰 도움이 됩니다!)
+
+───────────────────────
+
+🙏 소중한 제보 감사합니다!  
+빠른 시일 내에 검토하고 개선하도록 하겠습니다.
+""";
+
+  static String reportMsgContectEn = """
+💡 Feature Requests / Bug Reports
+
+───────────────────────
+
+✨ [Feature Request]
+- Please describe in detail any features or improvements you’d like to see!
+
+
+───────────────────────
+
+🐞 [Bug / Error Report]
+1️⃣ Where it happened  
+   e.g. Calendar screen, Expense input screen, etc.  
+
+2️⃣ What happened  
+   e.g. The app crashes when adding a new event.  
+
+3️⃣ How to reproduce  
+   1. Open the Calendar screen  
+   2. Tap “Add Event”  
+   3. Observe the error  
+
+📎 You can attach:
+- Screenshots or videos (they help us identify the issue much faster!)
+
+───────────────────────
+
+🙏 Thank you for your valuable feedback!  
+We’ll review it as soon as possible and work on improvements.
+""";
+
+  static String enableOpenEndQustion = "enableOpenEndQustionTr";
+  static String enableOpenEndQustionKr = '주관식 문제 활성화';
+  static String enableOpenEndQustionEn = "Enable Open-ended";
+
+  static String emailSubject = "emailSubjectTr";
+  static String emailSubjectKr = '[JLPT 종각] 버그・오류 제보';
+  static String emailSubjectEn = "[JLPT JG] Bug Report";
+
+  static String another = "anotherTr";
+  static String anotherKr = "그 외";
+  static String anotherEn = "Others";
+
+  static String tipOffMessage = "tipOffMessageTr";
+  static String tipOffMessageKr = '여러분의 의견은 큰 힘이 됩니다!';
+  static String tipOffMessageEn = "Your opinions are a great help for me!";
+
+  static String fnOrErorreport = "fnOrErorreportTr";
+  static String fnOrErorreportKr = '희망 기능 또는 에러 제보';
+  static String fnOrErorreportEn = "Feature Request / Bug Report";
+
+  static String failLoadMailApp = "failLoadMailAppTr";
+  static String failLoadMailAppKr = '종각 앱에서 이메일을 작성하는데 실패하였습니다.';
+  static String failLoadMailAppEn = "Failed to compose an email in the JG app";
+
+  static String failLoadMailApp2 = "failLoadMailApp2Tr";
+  static String failLoadMailApp2Kr =
+      '핸드폰에 이메일 등록이 되어 있지 않으면 종각 앱에서 이메일을 작성하는데 어려움이 있습니다.\n별도의 이메일 앱에서 문의 해주시면 감사하겠습니다.\n\n이메일 visionwill3322@gmail.com을 복사하시겠습니까?';
+  static String failLoadMailApp2En =
+      'It seems that no email account is registered on your device.\n'
+      'Because of this, the Jonggack app cannot compose an email directly.\n'
+      'Please contact us using your preferred email app instead.\n\n'
+      'Would you like to copy the email address "visionwill3322@gmail.com"?';
+
+  static String settingScreen = "settingScreenTr";
+  static String settingScreenKr = '설정 페이지';
+  static String settingScreenEn = "Setting Page";
+}

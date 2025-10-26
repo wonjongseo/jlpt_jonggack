@@ -8,12 +8,14 @@ class BottomBtn extends StatelessWidget {
     required this.onTap,
     this.backgroundColor,
     this.textColor,
+    this.fontSize,
   });
 
   final String label;
   final Function() onTap;
   final Color? backgroundColor;
   final Color? textColor;
+  final double? fontSize;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +35,7 @@ class BottomBtn extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: fontSize ?? 18,
               fontWeight: FontWeight.w600,
               color: textColor ?? Colors.white,
             ),

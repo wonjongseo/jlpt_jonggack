@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:hive/hive.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 
 import 'package:jlpt_jonggack/model/kangi.dart';
@@ -52,19 +53,28 @@ class KangiStepRepositroy {
     return countByHangul != 0;
   }
 
-  static void deleteAllKangiStep() {
-    log('deleteAllKangiStep start');
+  static Future<int> getCountInJsonFile(String language, String nLevel) async {
+    List<List<Kangi>> kangis = await Kangi.jsonToObject(language, nLevel);
+    int totalCount = 0;
 
-    final list = Hive.box(KangiStep.boxKey);
-    list.deleteAll(list.keys);
-    list.deleteFromDisk();
-    log('deleteAllKangiStep success');
+    for (int i = 0; i < kangis.length; i++) {
+      totalCount += kangis[i].length;
+    }
+    return totalCount;
   }
 
-  static void deleteAllKangi() {
-    final list = Hive.box<Kangi>(Kangi.boxKey);
-    list.deleteFromDisk();
-    log('deleteAllKangi success');
+  static Future<void> deleteAllKangiStep() async {
+    log('deleteAllKangiStep start');
+
+    final kangiBox = Hive.box<Kangi>(Kangi.boxKey);
+    await kangiBox.deleteAll(kangiBox.keys);
+    // await kangiBox.deleteFromDisk();
+
+    final kangiStepBox = Hive.box(KangiStep.boxKey);
+    await kangiStepBox.deleteAll(kangiStepBox.keys);
+    // await kangiStepBox.deleteFromDisk();
+
+    log('deleteAllKangiStep success');
   }
 
   Kangi? getKangi(String key) {
@@ -82,11 +92,11 @@ class KangiStepRepositroy {
     box.put(kangi.japan, kangi);
   }
 
-  static Future<int> init(String nLevel) async {
+  static Future<int> init(String language, String nLevel) async {
     log('KangiStepRepositroy $nLevel init');
     final box = Hive.box(KangiStep.boxKey);
 
-    List<List<Kangi>> kangis = await Kangi.jsonToObject(nLevel);
+    List<List<Kangi>> kangis = await Kangi.jsonToObject(language, nLevel);
     int totalCount = 0;
     for (int i = 0; i < kangis.length; i++) {
       totalCount += kangis[i].length;
@@ -133,7 +143,7 @@ class KangiStepRepositroy {
 
         String key = '$nLevel-$headTitle-$stepCount'; // "2-챕터1-0"
         LocalReposotiry.putCurrentProgressing(
-          '${CategoryEnum.Kangis.name}-$nLevel-$headTitle', // "Kangis-2-챕터1"
+          '${CategoryEnum.kangis.name}-$nLevel-$headTitle', // "Kangis-2-챕터1"
           0,
         );
         await box.put(key, tempKangiStep);
@@ -142,7 +152,7 @@ class KangiStepRepositroy {
       await box.put('$nLevel-$headTitle', stepCount);
     }
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Kangis.name}-$nLevel',
+      '${CategoryEnum.kangis.name}-$nLevel',
       0,
     );
     return totalCount;
@@ -179,11 +189,11 @@ class KangiStepRepositroy {
     box.put(key, newJlptStep);
   }
 
-  static Future<int> updateKangiStepData(String nLevel) async {
+  static Future<int> updateKangiStepData(String language, String nLevel) async {
     log('KangiStepRepositroy $nLevel Update');
 
     final box = Hive.box(KangiStep.boxKey);
-    List<List<Kangi>> kangis = await Kangi.jsonToObject(nLevel);
+    List<List<Kangi>> kangis = await Kangi.jsonToObject(language, nLevel);
 
     int totalCount = 0;
     for (int i = 0; i < kangis.length; i++) {
@@ -230,7 +240,7 @@ class KangiStepRepositroy {
         beforeKangiStep.kangis = currentKangis;
 
         LocalReposotiry.putCurrentProgressing(
-          '${CategoryEnum.Kangis.name}-$nLevel-$headTitle', // "Kangis-2-챕터1"
+          '${CategoryEnum.kangis.name}-$nLevel-$headTitle', // "Kangis-2-챕터1"
           0,
         );
         await box.put(key, beforeKangiStep);
@@ -239,7 +249,7 @@ class KangiStepRepositroy {
       await box.put('$nLevel-$headTitle', stepCount);
     }
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Kangis.name}-$nLevel',
+      '${CategoryEnum.kangis.name}-$nLevel',
       0,
     );
     return totalCount;

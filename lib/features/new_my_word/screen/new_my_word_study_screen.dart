@@ -7,6 +7,7 @@ import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
@@ -69,7 +70,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
           children: [
             if (itemCount != pageIndex && itemCount != 0)
               BottomBtn(
-                label: "퀴즈!",
+                label: AppString.quiz.tr,
                 onTap: () => controller.goToQuiz(backCnt: 1),
               ),
             const GlobalBannerAdmob(),
@@ -96,7 +97,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                     child: Card(
                       child: Center(
                         child: Text(
-                          '퀴즈 풀러 가기!',
+                          AppString.goToQuiz.tr,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.cyan.shade600,
@@ -137,14 +138,14 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                   ),
                   if (word.isKnown)
                     Text(
-                      '암기',
+                      AppString.known.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppColors.mainBordColor,
                       ),
                     )
                   else
-                    Text('미암기'),
+                    Text(AppString.unKnown.tr),
                 ],
               ),
               SizedBox(width: 12),
@@ -157,7 +158,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                     icon: Icon(Icons.delete),
                   ),
                   Text(
-                    '삭제',
+                    AppString.delete.tr,
                     style: TextStyle(
                       color: Colors.redAccent,
                       fontWeight: FontWeight.bold,

@@ -8,16 +8,16 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
-import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
-
-const SCORE_PATH = '/score';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class ScoreScreen extends StatefulWidget {
-  const ScoreScreen({Key? key}) : super(key: key);
+  static String name = '/score';
+  const ScoreScreen({super.key});
 
   @override
   State<ScoreScreen> createState() => _ScoreScreenState();
@@ -69,7 +69,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
         preferredSize: const Size.fromHeight(appBarHeight),
         child: AppBar(
           title: Text(
-            "점수 ${jlptController.scoreResult}",
+            "${AppString.score.tr} ${jlptController.scoreResult}",
             style: TextStyle(fontSize: appBarTextSize),
           ),
         ),
@@ -89,16 +89,13 @@ class _ScoreScreenState extends State<ScoreScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: Responsive.width16,
-            vertical: Responsive.height8,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Text(
-            '오답',
+            AppString.wrongAnswer.tr,
             style: TextStyle(
               color: AppColors.mainBordColor,
               fontWeight: FontWeight.bold,
-              fontSize: Responsive.height10 * 2,
+              fontSize: 20,
             ),
           ),
         ),
@@ -112,7 +109,6 @@ class _ScoreScreenState extends State<ScoreScreen> {
                 ) {
                   String word = qnController.wrongWord(index);
                   String meanAndYomikata = qnController.wrongMean(index);
-
                   String yomikata = meanAndYomikata.split('\n')[1];
                   String mean = meanAndYomikata.split('\n')[0];
 

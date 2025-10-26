@@ -7,7 +7,7 @@
 // import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 // import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 // import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
-// import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
+// 
 // import 'package:jlpt_jonggack/model/Question.dart';
 // import 'package:jlpt_jonggack/model/word.dart';
 

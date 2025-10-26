@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
-import 'package:jlpt_jonggack/common/common.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/core/bindings/initial_bindings.dart';
-import 'package:jlpt_jonggack/data/grammar_datas.dart';
-import 'package:jlpt_jonggack/data/kangi_datas.dart';
-import 'package:jlpt_jonggack/data/word_datas.dart';
+
 import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
 import 'package:jlpt_jonggack/routes.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jlpt_jonggack/services/app_info_service.dart';
+import 'package:jlpt_jonggack/services/word_load_service.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter/material.dart';
@@ -25,8 +28,6 @@ import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 import 'package:jlpt_jonggack/user/repository/user_repository.dart';
-
-import 'features/setting/services/setting_controller.dart';
 
 /*
  유료버전과 무료버전 업로드 시 .
@@ -84,6 +85,8 @@ void main() async {
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
 
+  await LocalReposotiry.init();
+
   runApp(const App());
 }
 
@@ -95,20 +98,30 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  ThemeMode themeMode = ThemeMode.system;
+  late bool isDarkMode;
+  late String systemLanguage;
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SettingController(), permanent: true);
+    final Locale locale =
+        controller.systemLocale ?? Get.deviceLocale ?? const Locale('ko', 'KR');
+
     return FutureBuilder(
-      future: loadData(),
+      future: loadData(locale.languageCode),
       builder: (context, snapshat) {
         if (snapshat.hasData == true) {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: HOME_PATH,
+            initialRoute: HomeScreen.name,
             getPages: AppRoutes.getPages,
             fallbackLocale: const Locale('ko', 'KR'),
-            locale: Get.deviceLocale,
             initialBinding: InitialBindings(),
             theme: AppThemings.lightTheme,
+            locale: locale,
+            translations: AppString(),
+
+            // themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
           );
         } else if (snapshat.hasError) {
           return errorMaterialApp(snapshat);
@@ -119,151 +132,26 @@ class _AppState extends State<App> {
     );
   }
 
-  Future<bool> loadData() async {
+  void getUsresSetting() {
+    systemLanguage =
+        SettingRepository.getString(AppConstant.settingLanguageKey) ?? "ko-KR";
+    print('systemLanguage : ${systemLanguage}');
+
+    isDarkMode =
+        SettingRepository.getBool(AppConstant.isDarkModeKey) ??
+        ThemeMode.system == ThemeMode.dark;
+  }
+
+  Future<bool> loadData(String systemLanguage) async {
     List<int> jlptWordScroes = [];
     List<int> grammarScores = [];
     List<int> kangiScores = [];
     try {
-      await LocalReposotiry.init();
-      // SettingRepository.init();
+      // getUsresSetting();
 
-      if (await JlptStepRepositroy.isExistData(1) == false) {
-        jlptWordScroes.add(await JlptStepRepositroy.init('1'));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN1Words.length; ii++) {
-          totalCount += (jsonN1Words[ii] as List).length;
-        }
-        jlptWordScroes.add(totalCount);
-      }
-
-      if (await JlptStepRepositroy.isExistData(2) == false) {
-        jlptWordScroes.add(await JlptStepRepositroy.init('2'));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN2Words.length; ii++) {
-          totalCount += (jsonN2Words[ii] as List).length;
-        }
-        jlptWordScroes.add(totalCount);
-      }
-
-      if (await JlptStepRepositroy.isExistData(3) == false) {
-        jlptWordScroes.add(await JlptStepRepositroy.init('3'));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN3Words.length; ii++) {
-          totalCount += (jsonN3Words[ii] as List).length;
-        }
-        jlptWordScroes.add(totalCount);
-      }
-
-      if (await JlptStepRepositroy.isExistData(4) == false) {
-        jlptWordScroes.add(await JlptStepRepositroy.init('4'));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN4Words.length; ii++) {
-          totalCount += (jsonN4Words[ii] as List).length;
-        }
-        jlptWordScroes.add(totalCount);
-      }
-
-      if (await JlptStepRepositroy.isExistData(5) == false) {
-        jlptWordScroes.add(await JlptStepRepositroy.init('5'));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN5Words.length; ii++) {
-          totalCount += (jsonN5Words[ii] as List).length;
-        }
-        jlptWordScroes.add(totalCount);
-      }
-
-      if (await GrammarRepositroy.isExistData(1) == false) {
-        grammarScores.add(await GrammarRepositroy.init('1'));
-      } else {
-        grammarScores.add(jsonN1Grammars.length);
-      }
-
-      if (await GrammarRepositroy.isExistData(2) == false) {
-        grammarScores.add(await GrammarRepositroy.init('2'));
-      } else {
-        grammarScores.add(jsonN2Grammars.length);
-      }
-
-      if (await GrammarRepositroy.isExistData(3) == false) {
-        grammarScores.add(await GrammarRepositroy.init('3'));
-      } else {
-        grammarScores.add(jsonN3Grammars.length);
-      }
-      if (await GrammarRepositroy.isExistData(4) == false) {
-        grammarScores.add(await GrammarRepositroy.init('4'));
-      } else {
-        grammarScores.add(jsonN4Grammars.length);
-      }
-      if (await GrammarRepositroy.isExistData(5) == false) {
-        grammarScores.add(await GrammarRepositroy.init('5'));
-      } else {
-        grammarScores.add(jsonN5Grammars.length);
-      }
-
-      if (await KangiStepRepositroy.isExistData(1) == false) {
-        kangiScores.add(await KangiStepRepositroy.init("1"));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN1Kangis.length; ii++) {
-          totalCount += (jsonN1Kangis[ii] as List).length;
-        }
-        kangiScores.add(totalCount);
-      }
-
-      if (await KangiStepRepositroy.isExistData(2) == false) {
-        kangiScores.add(await KangiStepRepositroy.init("2"));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN2Kangis.length; ii++) {
-          totalCount += (jsonN2Kangis[ii] as List).length;
-        }
-        kangiScores.add(totalCount);
-      }
-
-      if (await KangiStepRepositroy.isExistData(3) == false) {
-        kangiScores.add(await KangiStepRepositroy.init("3"));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN3Kangis.length; ii++) {
-          totalCount += (jsonN3Kangis[ii] as List).length;
-        }
-        kangiScores.add(totalCount);
-      }
-
-      if (await KangiStepRepositroy.isExistData(4) == false) {
-        kangiScores.add(await KangiStepRepositroy.init("4"));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN4Kangis.length; ii++) {
-          totalCount += (jsonN4Kangis[ii] as List).length;
-        }
-        kangiScores.add(totalCount);
-      }
-
-      if (await KangiStepRepositroy.isExistData(5) == false) {
-        kangiScores.add(await KangiStepRepositroy.init("5"));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN5Kangis.length; ii++) {
-          totalCount += (jsonN5Kangis[ii] as List).length;
-        }
-        kangiScores.add(totalCount);
-      }
-
-      if (await KangiStepRepositroy.isExistData(6) == false) {
-        kangiScores.add(await KangiStepRepositroy.init("6"));
-      } else {
-        int totalCount = 0;
-        for (int ii = 0; ii < jsonN6Kangis.length; ii++) {
-          totalCount += (jsonN6Kangis[ii] as List).length;
-        }
-        kangiScores.add(totalCount);
-      }
+      jlptWordScroes = await WordLoadService.wordDataLoad(systemLanguage);
+      kangiScores = await WordLoadService.kangiDataLoad(systemLanguage);
+      grammarScores = await WordLoadService.grammarDataLoad(systemLanguage);
 
       late User user;
       if (await UserRepository.isExistData() == false) {
@@ -302,32 +190,34 @@ class _AppState extends State<App> {
       }
 
       UserController userController = Get.put(UserController());
-      userController.user.isPad = await isIpad();
 
-      if (userController.user.grammarScores.length == 3) {
+      if (userController.user!.grammarScores.length == 3) {
         userController.addN4N5GrammarScore();
       }
       bool isPlus = await AppInfoService.isPlus();
 
       if (!isPlus) {
-        userController.user.isPremieum = false;
-        UserRepository.updateUser(userController.user);
+        userController.user!.isPremieum = false;
+        UserRepository.updateUser(userController.user!);
       }
 
       bool isForceUpdate = await _isForceUpdate();
       if (isForceUpdate) {
         for (int i = 1; i < 6; i++) {
           jlptWordScroes[i - 1] = await JlptStepRepositroy.updateJlptStepData(
+            systemLanguage,
             "$i",
           );
         }
         for (int i = 1; i < 7; i++) {
           kangiScores[i - 1] = await KangiStepRepositroy.updateKangiStepData(
+            systemLanguage,
             "$i",
           );
         }
         for (int i = 1; i < 6; i++) {
           grammarScores[i - 1] = await GrammarRepositroy.updateGrammarStepData(
+            systemLanguage,
             "$i",
           );
         }
@@ -336,11 +226,10 @@ class _AppState extends State<App> {
       final bookRepo = Get.find<HiveRepository<Book>>();
 
       if (bookRepo.getAll().isEmpty) {
-        await LocalReposotiry.migrationToBook(userController.user);
+        await LocalReposotiry.migrationToBook(userController.user!);
       }
 
       Get.put(JSearchController());
-      Get.put(SettingController());
     } catch (e) {
       rethrow;
     }
@@ -352,6 +241,9 @@ class _AppState extends State<App> {
   }
 
   MaterialApp loadingMaterialApp(BuildContext context) {
+    print('isKo : ${isKo}');
+    print('isEn : ${isEn}');
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -360,7 +252,7 @@ class _AppState extends State<App> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '데이터를 불러오는 중입니다.',
+                isKo ? '데이터를 불러오는 중입니다.' : "Loading Datas...",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 12),

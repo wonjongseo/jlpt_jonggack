@@ -9,11 +9,11 @@ import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart'
 
 import '../../config/colors.dart';
 
-const KANGI_TEST_PATH = '/kangi_test';
 const KANGI_TEST = 'kangi';
 const CONTINUTE_KANGI_TEST = 'continue_kangi_test';
 
 class KangiTestScreen extends StatelessWidget {
+  static String name = '/kangi_test';
   const KangiTestScreen({super.key});
 
   @override
@@ -44,9 +44,8 @@ class KangiTestScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: Responsive.height10),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Responsive.width20),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -68,7 +67,7 @@ class KangiTestScreen extends StatelessWidget {
                   ),
                 ),
                 const Divider(thickness: 1.5),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Expanded(
                   child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),

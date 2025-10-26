@@ -4,6 +4,7 @@ import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommonDialog {
@@ -128,12 +129,12 @@ class CommonDialog {
 
   static Future<bool> errorNoEnrolledEmail() async {
     return selectionDialog(
-      title: const Text(
-        '종각 앱에서 이메일을 작성하는데 실패하였습니다.',
+      title: Text(
+        AppString.failLoadMailApp.tr,
         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),
       ),
-      connent: const Text(
-        '핸드폰에 이메일 등록이 되어 있지 않으면 종각 앱에서 이메일을 작성하는데 어려움이 있습니다.\n별도의 이메일 앱에서 문의 해주시면 감사하겠습니다.\n\n이메일 visionwill3322@gmail.com을 복사하시겠습니까?',
+      connent: Text(
+        AppString.failLoadMailApp2.tr,
         style: TextStyle(color: AppColors.scaffoldBackground),
       ),
     );
@@ -199,9 +200,9 @@ class CommonDialog {
 
   static Future<bool> beforeExitTestPageDialog() async {
     return selectionDialog(
-      title: const Text('테스트를 그만두시겠습니까?'),
-      connent: const Text(
-        '테스트 중간에 나가면 점수가 기록되지 않습니다. 그래도 나가시겠습니까?',
+      title: Text(AppString.doExitText.tr),
+      connent: Text(
+        AppString.doExitText2.tr,
         style: TextStyle(color: AppColors.scaffoldBackground),
       ),
     );
@@ -390,31 +391,47 @@ class CommonDialog {
     Widget? action,
   }) async {
     bool result = await Get.dialog(
-      barrierDismissible: false,
-      AlertDialog(
-        shape: Border.all(),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (title != null) ...[
-              title,
-              SizedBox(height: Responsive.height20),
-            ],
-            if (connent != null) ...[
-              connent,
-              SizedBox(height: Responsive.height20),
-            ],
-            const Align(alignment: Alignment.center, child: JonggackAvator()),
-            if (action != null) ...[
-              SizedBox(height: Responsive.height20),
-              action,
-              SizedBox(height: Responsive.height10),
-            ],
-          ],
-        ),
+      AlertDialog.adaptive(
+        title: title,
+        content: connent,
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text(AppString.no.tr),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: Text(AppString.yes.tr),
+          ),
+        ],
       ),
     );
+    // bool result = await Get.dialog(
+    //   barrierDismissible: false,
+    //   AlertDialog(
+    //     shape: Border.all(),
+    //     content: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         if (title != null) ...[
+    //           title,
+    //           SizedBox(height: Responsive.height20),
+    //         ],
+    //         if (connent != null) ...[
+    //           connent,
+    //           SizedBox(height: Responsive.height20),
+    //         ],
+    //         const Align(alignment: Alignment.center, child: JonggackAvator()),
+    //         if (action != null) ...[
+    //           SizedBox(height: Responsive.height20),
+    //           action,
+    //           SizedBox(height: Responsive.height10),
+    //         ],
+    //       ],
+    //     ),
+    //   ),
+    // );
 
     return result;
   }

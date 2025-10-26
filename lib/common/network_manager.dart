@@ -1,6 +1,6 @@
-import 'package:jlpt_jonggack/data/grammar_datas.dart';
-import 'package:jlpt_jonggack/data/kangi_datas.dart';
-import 'package:jlpt_jonggack/data/word_datas.dart';
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 
 class NetWorkManager {
   // static Future<List<Word>> searchWrod(String word, String category) async {
@@ -36,48 +36,20 @@ class NetWorkManager {
   //   return result;
   // }
 
-  static List getDataToServer(String params) {
-    switch (params) {
-      case "N1-voca":
-        return jsonN1Words;
-
-      case "N2-voca":
-        return jsonN2Words;
-
-      case "N3-voca":
-        return jsonN3Words;
-
-      case "N4-voca":
-        return jsonN4Words;
-
-      case "N5-voca":
-        return jsonN5Words;
-
-      case "N1-kangi":
-        return jsonN1Kangis;
-
-      case "N2-kangi":
-        return jsonN2Kangis;
-      case "N3-kangi":
-        return jsonN3Kangis;
-      case "N4-kangi":
-        return jsonN4Kangis;
-      case "N5-kangi":
-        return jsonN5Kangis;
-      case "N6-kangi":
-        return jsonN6Kangis;
-      case "N1-grammar":
-        return jsonN1Grammars;
-      case "N2-grammar":
-        return jsonN2Grammars;
-      case "N3-grammar":
-        return jsonN3Grammars;
-      case "N4-grammar":
-        return jsonN4Grammars;
-      case "N5-grammar":
-        return jsonN5Grammars;
+  static Future<List> readJsonFromAssets(String path) async {
+    try {
+      final raw = await rootBundle.loadString(
+        path,
+      ); // ex) 'assets/data/config.json'
+      return jsonDecode(raw) as List<dynamic>;
+    } catch (e) {
+      print('e.toString() : ${e.toString()}');
+      return [];
     }
-    return [];
+  }
+
+  static Future<List> getDataToServer(String params) async {
+    return await readJsonFromAssets("assets/json/$params.json");
 
     // final dio = Dio();
 

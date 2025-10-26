@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:hive/hive.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 
@@ -57,28 +59,42 @@ class Question {
       bool isMeanOverThree = tempMean.contains('\n3.');
       bool isMeanOverTwo = tempMean.contains('\n2.');
 
-      if (isMeanOverThree) {
-        tempMean = tempMean.replaceAll('3.', '');
-        tempMean = tempMean.replaceAll('2.', '');
-        tempMean = tempMean.replaceAll('1.', '');
-        List<String> speartea = tempMean.split('\n');
-        int randomIndex = random.nextInt(speartea.length);
+      if (isKo) {
+        if (isMeanOverThree) {
+          tempMean = tempMean.replaceAll('3.', '');
+          tempMean = tempMean.replaceAll('2.', '');
+          tempMean = tempMean.replaceAll('1.', '');
+          List<String> speartea = tempMean.split('\n');
+          int randomIndex = random.nextInt(speartea.length);
 
-        tempMean = speartea[randomIndex];
+          tempMean = speartea[randomIndex];
+        }
+        if (isMeanOverTwo) {
+          tempMean = tempMean.replaceAll('2.', '');
+          tempMean = tempMean.replaceAll('1.', '');
+          List<String> speartea = tempMean.split('\n');
+          int randomIndex = random.nextInt(speartea.length);
+
+          tempMean = speartea[randomIndex];
+        }
+      } else {
+        var splited = tempMean.split(';');
+
+        if (splited.length > 1) {
+          if (splited.length > 2) {
+            final splitedMeanIdx = random.nextInt(splited.length);
+            tempMean = splited[splitedMeanIdx];
+          }
+        }
       }
-      if (isMeanOverTwo) {
-        tempMean = tempMean.replaceAll('2.', '');
-        tempMean = tempMean.replaceAll('1.', '');
-        List<String> speartea = tempMean.split('\n');
-        int randomIndex = random.nextInt(speartea.length);
 
-        tempMean = speartea[randomIndex];
+      String word = vocas[answerIndex[j]].word;
+      if (word.isEmpty) {
+        word = vocas[answerIndex[j]].yomikata;
       }
-
       Word newWord = Word(
-        word: vocas[answerIndex[j]].word,
+        word: word,
         mean: tempMean,
-        // mean: vocas[answerIndex[j]].mean,
         yomikata: vocas[answerIndex[j]].yomikata,
         headTitle: vocas[answerIndex[j]].headTitle,
       );
@@ -91,10 +107,11 @@ class Question {
 
   static List<Map<int, List<Word>>> generateQustion(List<Word> vocas) {
     List<Map<int, List<Word>>> map = List.empty(growable: true);
-    for (int correntIndex = 0; correntIndex < vocas.length; correntIndex++) {
-      Map<int, List<Word>> voca = generateAnswer(vocas, correntIndex);
+    for (int i = 0; i < vocas.length; i++) {
+      Map<int, List<Word>> voca = generateAnswer(vocas, i);
       map.add(voca);
     }
+
     map.shuffle();
 
     return map;

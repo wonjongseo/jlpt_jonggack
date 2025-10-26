@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
 import 'package:jlpt_jonggack/features/search/screens/searched_word_detail_screen.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
@@ -65,7 +66,7 @@ class SearchScreen extends GetView<JSearchController> {
                         ),
                       ),
                       Text(
-                        '의 검색 결과: ${controller.totalResultCnt}',
+                        '${AppString.seacrhResult.tr}: ${controller.totalResultCnt}',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
@@ -93,7 +94,9 @@ class SearchScreen extends GetView<JSearchController> {
                           ExpansionTile(
                             initiallyExpanded: true,
                             shape: Border.all(color: Colors.transparent),
-                            title: SearchHeader(label: '일본어'),
+                            title: SearchHeader(
+                              label: CategoryEnum.japaneses.id,
+                            ),
                             children: List.generate(controller.words!.length, (
                               index,
                             ) {
@@ -123,7 +126,7 @@ class SearchScreen extends GetView<JSearchController> {
                           ExpansionTile(
                             initiallyExpanded: true,
                             shape: Border.all(color: Colors.transparent),
-                            title: SearchHeader(label: '한자'),
+                            title: SearchHeader(label: CategoryEnum.kangis.id),
                             children: List.generate(controller.kangis.length, (
                               index,
                             ) {
@@ -153,7 +156,9 @@ class SearchScreen extends GetView<JSearchController> {
                           ExpansionTile(
                             initiallyExpanded: true,
                             shape: Border.all(color: Colors.transparent),
-                            title: SearchHeader(label: '문법'),
+                            title: SearchHeader(
+                              label: CategoryEnum.grammars.id,
+                            ),
                             children: List.generate(controller.grammar.length, (
                               index,
                             ) {

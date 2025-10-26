@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/grammar_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
@@ -29,7 +31,7 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
     grammarController = Get.put(GrammarController(level: widget.level));
 
     progrssingIndex = LocalReposotiry.getCurrentProgressing(
-      '${CategoryEnum.Grammars.name}-${widget.level}',
+      '${CategoryEnum.grammars.name}-${widget.level}',
     );
 
     super.initState();
@@ -38,8 +40,8 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
   void goTo(int index, String chapter) {
     grammarController.setStep(index);
     Get.toNamed(
-      JLPT_CALENDAR_STEP_PATH,
-      arguments: {'chapter': chapter, 'categoryEnum': CategoryEnum.Grammars},
+      GrammarCalendarStepScreen.name,
+      arguments: {'chapter': chapter, 'categoryEnum': CategoryEnum.grammars},
     );
   }
 
@@ -62,8 +64,8 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
           items: List.generate(grammarController.grammers.length, (index) {
             bool isAllAccessable =
                 !(widget.level == '1' && index > 2) ||
-                controller.user.isPremieum ||
-                controller.user.isTrik;
+                controller.user!.isPremieum ||
+                controller.user!.isTrik;
 
             bool isFinished =
                 grammarController.grammers[index].isFinished ?? false;
@@ -82,10 +84,10 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
                 }
                 if (progrssingIndex == index) {
                   LocalReposotiry.putCurrentProgressing(
-                    '${CategoryEnum.Grammars.name}-${widget.level}',
+                    '${CategoryEnum.grammars.name}-${widget.level}',
                     progrssingIndex,
                   );
-                  goTo(index, '챕터${index + 1}');
+                  goTo(index, '${AppString.chapter.tr}${index + 1}');
                 } else if (progrssingIndex < index) {
                   progrssingIndex++;
                   carouselController.animateToPage(progrssingIndex);
@@ -106,7 +108,7 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
                         Center(
                           child: RichText(
                             text: TextSpan(
-                              text: '${CategoryEnum.Grammars.id}\n',
+                              text: '${CategoryEnum.grammars.id}\n',
                               children: [
                                 TextSpan(
                                   text: 'Chapter ${(index + 1)}',

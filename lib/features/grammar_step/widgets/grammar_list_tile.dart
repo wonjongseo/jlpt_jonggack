@@ -10,21 +10,20 @@ import 'package:jlpt_jonggack/model/grammar.dart';
 import '../../../common/admob/controller/ad_controller.dart';
 
 // ignore: must_be_immutable
-class GrammarStudyScreen extends StatefulWidget {
-  const GrammarStudyScreen({
-    Key? key,
+class GrammarListTile extends StatefulWidget {
+  const GrammarListTile({
+    super.key,
     required this.index,
     required this.grammars,
-  }) : super(key: key);
+  });
   final int index;
   final List<Grammar> grammars;
 
   @override
-  State<GrammarStudyScreen> createState() => _GrammarStudyScreenState();
+  State<GrammarListTile> createState() => _GrammarListTileState();
 }
 
-class _GrammarStudyScreenState extends State<GrammarStudyScreen> {
-  late PageController pageController;
+class _GrammarListTileState extends State<GrammarListTile> {
   bool isWantToSee = false;
 
   void toggleWantToSee() {
@@ -36,13 +35,14 @@ class _GrammarStudyScreenState extends State<GrammarStudyScreen> {
   Widget build(BuildContext context) {
     GrammarController controller = Get.find<GrammarController>();
     return InkWell(
-      onTap:
-          () => Get.to(
-            () => GrammarCardDetails(
-              grammars: widget.grammars,
-              index: widget.index,
-            ),
+      onTap: () {
+        Get.to(
+          () => GrammarCardDetails(
+            grammars: widget.grammars,
+            index: widget.index,
           ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(border: Border.all(width: 0.3)),
         child: ListTile(
@@ -58,21 +58,21 @@ class _GrammarStudyScreenState extends State<GrammarStudyScreen> {
             ),
           ),
           subtitle: Padding(
-            padding: EdgeInsets.only(bottom: Responsive.height16),
+            padding: EdgeInsets.only(bottom: 16),
             child: SizedBox(
               child:
                   isWantToSee || controller.isSeeMean
                       ? Text(
                         widget.grammars[widget.index].means,
                         style: TextStyle(
-                          fontSize: Responsive.height14,
+                          fontSize: 14,
                           fontFamily: AppFonts.descriptionFont,
                         ),
                       )
                       : InkWell(
                         onTap: toggleWantToSee,
                         child: Container(
-                          height: Responsive.width10 * 2.5,
+                          height: 25,
                           width: double.infinity,
                           color: Colors.grey,
                         ),

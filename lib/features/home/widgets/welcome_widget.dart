@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class WelcomeWidget extends StatelessWidget {
@@ -37,14 +38,14 @@ class WelcomeWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'JLPT종각',
+                  AppString.appName.tr,
                   style: TextStyle(
                     fontSize: Responsive.height25,
                     fontWeight: FontWeight.w900,
                     color: AppColors.mainBordColor,
                   ),
                 ),
-                if (userController.user.isPremieum)
+                if (userController.user!.isPremieum)
                   Text(
                     '+',
                     style: TextStyle(

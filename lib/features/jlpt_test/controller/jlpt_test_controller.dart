@@ -7,10 +7,12 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/veryGoodScreen.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_controller.dart';
+
 import 'package:jlpt_jonggack/model/Question.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
@@ -36,7 +38,7 @@ class JlptTestController extends GetxController
     animationController.forward().whenComplete((nextQuestion));
     pageController = PageController();
 
-    if (settingController.isSubjective) {
+    if (SettingController.to.isSubjective) {
       textEditingController = TextEditingController();
       focusNode = FocusNode();
     }
@@ -71,7 +73,6 @@ class JlptTestController extends GetxController
   bool isDisTouchable = false;
 
   UserController userController = Get.find<UserController>();
-  SettingController settingController = Get.find<SettingController>();
 
   // 진행률 바
   late AnimationController animationController;
@@ -151,12 +152,12 @@ class JlptTestController extends GetxController
 
     List<Word> tempWords = List.generate(myWords.length, (i) {
       String yomikata = myWords[i].yomikata ?? '';
-      print('yomikata : ${yomikata}');
 
       if (yomikata.contains('@')) {
         List<String> splitedYomikata = yomikata.split('@');
         yomikata = '음독: ${splitedYomikata[0]}, 훈독: ${splitedYomikata[1]}';
       }
+
       return Word(
         word: myWords[i].word,
         mean: myWords[i].mean,
@@ -288,7 +289,7 @@ class JlptTestController extends GetxController
 
   // 사지선다 눌렀을 경우.
   void checkAns(Question question, int selectedIndex) {
-    if (settingController.isSubjective) {
+    if (SettingController.to.isSubjective) {
       if (!isSubmittedYomikata) return;
     }
     isDisTouchable = true;
@@ -299,7 +300,7 @@ class JlptTestController extends GetxController
 
     correctQuestion = question.options[correctAns];
 
-    if (settingController.isSubjective) {
+    if (SettingController.to.isSubjective) {
       if (textEditingController!.text.isEmpty) {
         requestFocus();
         return;
@@ -310,7 +311,7 @@ class JlptTestController extends GetxController
     update();
 
     // if 설정에서 읽는법도 테스트에 포함
-    if (settingController.isSubjective) {
+    if (SettingController.to.isSubjective) {
       if (correctAns == selectedAns &&
           formattingQuestion(correctQuestion.yomikata, inputValue!)) {
         testCorect();
@@ -334,9 +335,12 @@ class JlptTestController extends GetxController
     isWrong = true;
     color = Colors.pink;
     nextOrSkipText = 'next';
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      nextQuestion();
-    });
+    Future.delayed(
+      Duration(milliseconds: SettingController.to.incorrectDuration.value),
+      () {
+        nextQuestion();
+      },
+    );
   }
 
   testCorect() {
@@ -348,9 +352,12 @@ class JlptTestController extends GetxController
       // 나만의 단어 알고 있음으로 변경.
       myVocaController!.autoUpdateWordInQuiz(correctQuestion, true);
     }
-    Future.delayed(const Duration(milliseconds: 1200), () {
-      nextQuestion();
-    });
+    Future.delayed(
+      Duration(milliseconds: SettingController.to.correctDuration.value),
+      () {
+        nextQuestion();
+      },
+    );
   }
 
   bool formattingQuestion(String correct, String answer) {
@@ -448,9 +455,9 @@ class JlptTestController extends GetxController
 
       if (isRandom) {
         Get.back();
-        Get.toNamed(SCORE_PATH);
+        Get.toNamed(ScoreScreen.name);
       } else {
-        Get.offAndToNamed(SCORE_PATH);
+        Get.offAndToNamed(ScoreScreen.name);
       }
     }
   }

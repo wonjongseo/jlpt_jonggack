@@ -9,6 +9,7 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
@@ -95,7 +96,7 @@ class KangiScoreScreen extends StatelessWidget {
             vertical: Responsive.height8,
           ),
           child: Text(
-            '오답',
+            AppString.wrongAnswer.tr,
             style: TextStyle(
               color: AppColors.mainBordColor,
               fontWeight: FontWeight.bold,
@@ -117,8 +118,8 @@ class KangiScoreScreen extends StatelessWidget {
                   String hundocAndUndoc = meanAndYomikata.split('\n')[1]; //
                   String undoc = hundocAndUndoc.split('@')[0];
                   String hundoc = hundocAndUndoc.split('@')[1];
-                  String yomikata = '음독: $undoc\n훈독: $hundoc';
-                  // yomikata = yomikata.replaceAll('@', ' / ');
+                  String yomikata =
+                      '${AppString.undoc.tr}: $undoc\n${AppString.hundoc.tr}: $hundoc';
                   String mean = meanAndYomikata.split('\n')[0]; //한자 읽는 법
 
                   return InkWell(

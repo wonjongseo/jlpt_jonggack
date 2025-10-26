@@ -11,7 +11,6 @@ import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 
-import '../../../common/admob/controller/ad_controller.dart';
 import '../../../user/controller/user_controller.dart';
 import '../grammar_test_screen.dart';
 

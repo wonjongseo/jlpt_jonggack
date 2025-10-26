@@ -4,6 +4,8 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 
 import 'jlpt_test_option.dart';
@@ -29,8 +31,8 @@ class JlptTestCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(Responsive.width24),
-          topRight: Radius.circular(Responsive.width24),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       child: Column(
@@ -44,8 +46,7 @@ class JlptTestCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: Responsive.height40),
-          if (controller.settingController.isSubjective)
-            const JlptTestTextFormField(),
+          if (SettingController.to.isSubjective) const JlptTestTextFormField(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(

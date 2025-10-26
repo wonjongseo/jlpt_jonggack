@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:jlpt_jonggack/common/app_constant.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 import 'package:jlpt_jonggack/model/book.dart';
@@ -27,8 +28,6 @@ class LocalReposotiry {
   static Future<void> init() async {
     if (GetPlatform.isMobile) {
       await Hive.initFlutter();
-    } else if (GetPlatform.isWindows) {
-      Hive.init("C:/jlpt_app/assets/hive");
     }
 
     if (!Hive.isAdapterRegistered(KangiTypeId)) {
@@ -73,24 +72,6 @@ class LocalReposotiry {
     if (!Hive.isBoxOpen('homeTutorialKey')) {
       await Hive.openBox('homeTutorialKey');
     }
-
-    if (!Hive.isBoxOpen('grammarTutorialKey')) {
-      await Hive.openBox('grammarTutorialKey');
-    }
-
-    if (!Hive.isBoxOpen('wordStudyTutorialKey')) {
-      await Hive.openBox('wordStudyTutorialKey');
-    }
-
-    if (!Hive.isBoxOpen('myWordTutorialKey')) {
-      await Hive.openBox('myWordTutorialKey');
-    }
-
-    //TODO DELETE
-    // if (!Hive.isBoxOpen('autoSaveKey')) {
-
-    //   await Hive.openBox('autoSaveKey');
-    // }
 
     if (!Hive.isBoxOpen('currentProgressingKey')) {
       await Hive.openBox('currentProgressingKey');
@@ -246,20 +227,6 @@ class LocalReposotiry {
     return true;
   }
 
-  // static bool testKeyBoardOnfOFF() {
-  //   final list = Hive.box('textKeyBoardKey');
-  //   String key = 'textKeyBoard';
-
-  //   if (!list.containsKey(key)) {
-  //     list.put(key, false);
-  //     return false;
-  //   }
-  //   bool isTextKeyBoard = list.get(key);
-
-  //   list.put(key, !isTextKeyBoard);
-  //   return !isTextKeyBoard;
-  // }
-
   static int getJlptOrKangiOrGrammar(String level) {
     final list = Hive.box('jlptOrKangiOrGrarmmar');
 
@@ -292,12 +259,6 @@ class LocalReposotiry {
     return index;
   }
 
-  // static bool getTestKeyBoard() {
-  //   final list = Hive.box('textKeyBoardKey');
-  //   String key = 'textKeyBoard';
-  //   return list.get(key, defaultValue: true);
-  // }
-
   static int getBasicOrJlptOrMy() {
     final list = Hive.box('basicOrJlptOrMy');
     String key = 'basicOrJlptOrMyKey';
@@ -314,13 +275,13 @@ class LocalReposotiry {
 
   static int putBasicOrJlptOrMyDetail(KindOfStudy kindOfStudy, int index) {
     switch (kindOfStudy) {
-      case KindOfStudy.BASIC:
+      case KindOfStudy.basic:
         if (index > 1) return 0;
         break;
-      case KindOfStudy.JLPT:
+      case KindOfStudy.jlpt:
         if (index > 4) return 0;
         break;
-      case KindOfStudy.MY:
+      case KindOfStudy.my:
         break;
     }
     final list = Hive.box('basicOrJlptOrMy');

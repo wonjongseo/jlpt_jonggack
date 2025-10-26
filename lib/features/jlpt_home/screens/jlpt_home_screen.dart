@@ -5,30 +5,17 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/home/services/home_controller.dart';
-import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/grammar_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/japanese_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/kangi_book_step_body.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
-
-// ignore: constant_identifier_names
-enum CategoryEnum { Japaneses, Kangis, Grammars }
-
-extension CategoryEnumExtension on CategoryEnum {
-  String get id {
-    switch (this) {
-      case CategoryEnum.Japaneses:
-        return '일본어';
-      case CategoryEnum.Kangis:
-        return '한자';
-      case CategoryEnum.Grammars:
-        return '문법';
-    }
-  }
-}
 
 class JlptHomeScreen extends StatefulWidget {
   const JlptHomeScreen({super.key, required this.levelIndex});
@@ -53,7 +40,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
     super.initState();
 
     LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.JLPT,
+      KindOfStudy.jlpt,
       widget.levelIndex,
     );
     selectedCategoryIndex = LocalReposotiry.getJlptOrKangiOrGrammar(
@@ -72,11 +59,11 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
     String level = (widget.levelIndex + 1).toString();
 
     switch (categoryEnum) {
-      case CategoryEnum.Japaneses:
+      case CategoryEnum.japaneses:
         return JapaneseBookStepBody(level: level);
-      case CategoryEnum.Grammars:
+      case CategoryEnum.grammars:
         return GrammarBookStepBody(level: level);
-      case CategoryEnum.Kangis:
+      case CategoryEnum.kangis:
         return KangiBookStepBody(level: level);
     }
   }
@@ -88,83 +75,78 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
         scrolledUnderElevation: 0.0,
         title: Text(
           'JLPT N${widget.levelIndex + 1}',
-          style: TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: Responsive.height10 * 2,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
         ),
       ),
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: Responsive.width20),
-            child: Column(
-              children: [
-                NewSearchWidget(isHomeScreen: true),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(
-                      CategoryEnum.values.length,
-                      (index) => TextButton(
-                        onPressed: () {
-                          LocalReposotiry.putJlptOrKangiOrGrammar(
-                            '${widget.levelIndex + 1}',
-                            index,
-                          );
-                          pageController.animateToPage(
-                            index,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease,
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border:
-                                selectedCategoryIndex == index
-                                    ? Border(
-                                      bottom: BorderSide(
-                                        width: Responsive.width10 * 0.3,
-                                        color: Colors.cyan.shade600,
-                                      ),
-                                    )
-                                    : null,
-                          ),
-                          child: Text(
-                            '${CategoryEnum.values[index].id} 단어장',
-                            style:
-                                index == selectedCategoryIndex
-                                    ? TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.cyan.shade600,
-                                      fontSize: Responsive.height17,
-                                    )
-                                    : TextStyle(
-                                      color: Colors.grey.shade600,
-                                      fontSize: Responsive.height15,
-                                    ),
-                          ),
-                        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: Responsive.width20),
+          child: Column(
+            children: [
+              NewSearchWidget(isHomeScreen: true),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(CategoryEnum.values.length, (index) {
+                  final type = CategoryEnum.values[index];
+                  return TextButton(
+                    onPressed: () {
+                      LocalReposotiry.putJlptOrKangiOrGrammar(
+                        '${widget.levelIndex + 1}',
+                        index,
+                      );
+                      pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.ease,
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border:
+                            selectedCategoryIndex == index
+                                ? Border(
+                                  bottom: BorderSide(
+                                    width: 3,
+                                    color: Colors.cyan.shade600,
+                                  ),
+                                )
+                                : null,
+                      ),
+                      child: Text(
+                        isKo
+                            ? '${type.id} ${AppString.vocabulary.tr}'
+                            : type.id,
+                        style:
+                            index == selectedCategoryIndex
+                                ? TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.cyan.shade600,
+                                  fontSize: Responsive.height17,
+                                )
+                                : TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: Responsive.height15,
+                                ),
                       ),
                     ),
-                  ),
+                  );
+                }),
+              ),
+              Flexible(
+                flex: 6,
+                child: PageView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: CategoryEnum.values.length,
+                  controller: pageController,
+                  onPageChanged: onPageChanged,
+                  itemBuilder: (context, index) {
+                    return getBodys(CategoryEnum.values[index]);
+                  },
                 ),
-                Flexible(
-                  flex: 6,
-                  child: PageView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: CategoryEnum.values.length,
-                    controller: pageController,
-                    onPageChanged: onPageChanged,
-                    itemBuilder: (context, index) {
-                      return getBodys(CategoryEnum.values[index]);
-                    },
-                  ),
-                ),
-                SizedBox(height: 10),
-              ],
-            ),
+              ),
+              SizedBox(height: 10),
+            ],
           ),
         ),
       ),
@@ -175,8 +157,9 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: BottomBtn(
+                fontSize: isKo ? 18 : 16,
                 label:
-                    'N${widget.levelIndex + 1}급 ${CategoryEnum.values[selectedCategoryIndex].id} 랜덤 퀴즈',
+                    'N${widget.levelIndex + 1} ${CategoryEnum.values[selectedCategoryIndex].id} ${AppString.randomQuiz.tr}',
                 onTap: () {
                   RandomTestGenerator.randomText(
                     widget.levelIndex + 1,

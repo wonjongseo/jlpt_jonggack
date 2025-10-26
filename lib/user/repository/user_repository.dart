@@ -15,9 +15,9 @@ class UserRepository {
     return user;
   }
 
-  User getUser() {
+  User? getUser() {
     final box = Hive.box(User.boxKey);
-    User user = box.get('user');
+    User? user = box.get('user');
     return user;
   }
 

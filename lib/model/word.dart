@@ -63,30 +63,21 @@ class Word extends HiveObject {
     );
   }
 
-  static Future<List<List<Word>>> jsonToObject(String nLevel) async {
+  static Future<List<List<Word>>> jsonToObject(
+    String language,
+    String nLevel,
+  ) async {
     List<List<Word>> words = [];
 
-    var selectedJlptLevelJson = [];
-    if (nLevel == '1') {
-      selectedJlptLevelJson = NetWorkManager.getDataToServer('N1-voca');
-    } else if (nLevel == '2') {
-      selectedJlptLevelJson = NetWorkManager.getDataToServer('N2-voca');
-    } else if (nLevel == '3') {
-      selectedJlptLevelJson = NetWorkManager.getDataToServer('N3-voca');
-    } else if (nLevel == '4') {
-      selectedJlptLevelJson = NetWorkManager.getDataToServer('N4-voca');
-    } else if (nLevel == '5') {
-      selectedJlptLevelJson = NetWorkManager.getDataToServer('N5-voca');
-    }
-
+    var selectedJlptLevelJson = await NetWorkManager.getDataToServer(
+      '${language}_words/n$nLevel',
+    );
     for (int i = 0; i < selectedJlptLevelJson.length; i++) {
       List<Word> temp = [];
       for (int j = 0; j < selectedJlptLevelJson[i].length; j++) {
         Word word = Word.fromMap(selectedJlptLevelJson[i][j]);
-
         temp.add(word);
       }
-
       words.add(temp);
     }
     return words;

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/common/common.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -60,27 +61,43 @@ class JlptStepRepositroy {
     return jlptHeadTieleCount != 0;
   }
 
-  static void deleteAllWord() {
-    log('deleteAllWord start');
+  static Future<int> getCountInJsonFile(String language, String nLevel) async {
+    List<List<Word>> words = await Word.jsonToObject(language, nLevel);
+    int totalCount = 0;
 
-    final list = Hive.box(JlptStep.boxKey);
-    list.deleteAll(list.keys);
-    list.deleteFromDisk();
-    log('deleteAllWord success');
+    for (int i = 0; i < words.length; i++) {
+      totalCount += words[i].length;
+    }
+    return totalCount;
   }
 
-  static Future<int> init(String nLevel) async {
+  static Future<void> deleteAllWord() async {
+    log('deleteAllWord start');
+
+    final jlptStepBox = Hive.box(JlptStep.boxKey);
+    await jlptStepBox.deleteAll(jlptStepBox.keys);
+    // await jlptStepBox.deleteFromDisk();
+
+    final wordBox = Hive.box(Word.boxKey);
+    await wordBox.deleteAll(wordBox.keys);
+    // await wordBox.deleteFromDisk();
+  }
+
+  static Future<int> init(String language, String nLevel) async {
     log('JlptStepRepositroy ${nLevel}N init');
 
     final box = Hive.box(JlptStep.boxKey);
     final wordBox = Hive.box<Word>(Word.boxKey);
-    List<List<Word>> words = await Word.jsonToObject(nLevel);
+
+    List<List<Word>> words = await Word.jsonToObject(language, nLevel);
+
     int totalCount = 0;
+
     for (int i = 0; i < words.length; i++) {
       totalCount += words[i].length;
     }
-    log('totalCount: $totalCount');
 
+    log('totalCount: $totalCount');
     box.put('$nLevel-step-count', words.length);
 
     for (int hiraganaIndex = 0; hiraganaIndex < words.length; hiraganaIndex++) {
@@ -119,7 +136,7 @@ class JlptStepRepositroy {
 
         String key = '$nLevel-$hiragana-$stepCount';
         LocalReposotiry.putCurrentProgressing(
-          '${CategoryEnum.Japaneses.name}-$nLevel-$hiragana',
+          '${CategoryEnum.japaneses.name}-$nLevel-$hiragana',
           0,
         );
         await box.put(key, tempJlptStep);
@@ -129,7 +146,7 @@ class JlptStepRepositroy {
       await box.put('$nLevel-$hiragana', stepCount);
     }
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Japaneses.name}-$nLevel',
+      '${CategoryEnum.japaneses.name}-$nLevel',
       0,
     );
 
@@ -166,13 +183,13 @@ class JlptStepRepositroy {
     box.put(key, newJlptStep);
   }
 
-  static Future<int> updateJlptStepData(String nLevel) async {
+  static Future<int> updateJlptStepData(String language, String nLevel) async {
     log('JlptStepRepositroy ${nLevel}N Update');
 
     final box = Hive.box(JlptStep.boxKey);
     final wordBox = Hive.box<Word>(Word.boxKey);
 
-    List<List<Word>> words = await Word.jsonToObject(nLevel);
+    List<List<Word>> words = await Word.jsonToObject(language, nLevel);
     int totalCount = 0;
 
     for (int i = 0; i < words.length; i++) {
@@ -216,7 +233,7 @@ class JlptStepRepositroy {
         beforeJlptStep.words = currentWords;
 
         LocalReposotiry.putCurrentProgressing(
-          '${CategoryEnum.Japaneses.name}-$nLevel-$hiragana',
+          '${CategoryEnum.japaneses.name}-$nLevel-$hiragana',
           0,
         );
         await box.put(key, beforeJlptStep);
@@ -226,7 +243,7 @@ class JlptStepRepositroy {
       await box.put('$nLevel-$hiragana', stepCount);
     }
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Japaneses.name}-$nLevel',
+      '${CategoryEnum.japaneses.name}-$nLevel',
       0,
     );
 

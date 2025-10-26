@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:hive/hive.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
@@ -13,23 +14,34 @@ class GrammarRepositroy {
     final box = Hive.box(GrammarStep.boxKey);
 
     int levelStepCount = await box.get('$level', defaultValue: 0);
+
     return levelStepCount != 0;
   }
 
-  static void deleteAllGrammar() {
+  static Future<int> getCountInJsonFile(String language, String nLevel) async {
+    List<Grammar> grammars = await Grammar.jsonToObject(language, nLevel);
+
+    return grammars.length;
+  }
+
+  static Future<void> deleteAllGrammar() async {
     log('deleteAllGrammarStep start');
 
-    final list = Hive.box(GrammarStep.boxKey);
-    list.deleteAll(list.keys);
-    list.deleteFromDisk();
+    final grammarBox = Hive.box<Grammar>(Grammar.boxKey);
+    await grammarBox.deleteAll(grammarBox.keys);
+    // await grammarBox.deleteFromDisk();
+
+    final grammarStepBox = Hive.box(GrammarStep.boxKey);
+    await grammarStepBox.deleteAll(grammarStepBox.keys);
+    // await grammarStepBox.deleteFromDisk();
     log('deleteAllGrammarStep success');
   }
 
-  static Future<int> init(String nLevel) async {
+  static Future<int> init(String language, String nLevel) async {
     log('GrammerRepositroy $nLevel init');
     final box = Hive.box(GrammarStep.boxKey);
     final grammarBox = Hive.box<Grammar>(Grammar.boxKey);
-    List<Grammar> grammars = await Grammar.jsonToObject(nLevel);
+    List<Grammar> grammars = await Grammar.jsonToObject(language, nLevel);
 
     int stepCount = 0;
 
@@ -64,17 +76,20 @@ class GrammarRepositroy {
     }
     await box.put(nLevel, stepCount);
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Grammars.name}-$nLevel',
+      '${CategoryEnum.grammars.name}-$nLevel',
       0,
     );
     return grammars.length;
   }
 
-  static Future<int> updateGrammarStepData(String nLevel) async {
+  static Future<int> updateGrammarStepData(
+    String language,
+    String nLevel,
+  ) async {
     log('GrammerRepositroy $nLevel Update');
     final box = Hive.box(GrammarStep.boxKey);
     final grammarBox = Hive.box<Grammar>(Grammar.boxKey);
-    List<Grammar> grammars = await Grammar.jsonToObject(nLevel);
+    List<Grammar> grammars = await Grammar.jsonToObject(language, nLevel);
 
     int stepCount = 0;
 
@@ -107,7 +122,7 @@ class GrammarRepositroy {
     }
     await box.put(nLevel, stepCount);
     LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.Grammars.name}-$nLevel',
+      '${CategoryEnum.grammars.name}-$nLevel',
       0,
     );
     log('totalCount : ${grammars.length}');

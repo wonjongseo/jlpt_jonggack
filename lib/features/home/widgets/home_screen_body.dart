@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/animated_circular_progressIndicator.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
+import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
@@ -16,21 +20,6 @@ import 'package:jlpt_jonggack/features/home/widgets/study_category_and_progress.
 import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
-
-enum KindOfStudy { BASIC, JLPT, MY }
-
-extension KindOfStudyExtension on KindOfStudy {
-  String get value {
-    switch (this) {
-      case KindOfStudy.BASIC:
-        return '왕초보';
-      case KindOfStudy.JLPT:
-        return 'JLPT';
-      case KindOfStudy.MY:
-        return '나만의';
-    }
-  }
-}
 
 class HomeScreenBody extends StatefulWidget {
   const HomeScreenBody({super.key, required this.index});
@@ -74,12 +63,12 @@ class _JLPTCardsState extends State<JLPTCards> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.JLPT);
+    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.jlpt);
   }
 
   @override
   void dispose() {
-    LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.JLPT, _currentIndex);
+    LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.jlpt, _currentIndex);
     super.dispose();
   }
 
@@ -91,7 +80,7 @@ class _JLPTCardsState extends State<JLPTCards> {
           carouselController: carouselController,
           options: CarouselOptions(
             disableCenter: true,
-            viewportFraction: userController.user.isPad ? 0.55 : 0.75,
+            viewportFraction: userController.user!.isPad ? 0.55 : 0.75,
             enableInfiniteScroll: false,
             initialPage: _currentIndex,
             enlargeCenterPage: true,
@@ -111,28 +100,28 @@ class _JLPTCardsState extends State<JLPTCards> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   StudyCategoryAndProgress(
-                    caregory: '단어',
-                    curCnt: userController.user.currentJlptWordScroes[index],
-                    totalCnt: userController.user.jlptWordScroes[index],
+                    caregory: AppString.word.tr,
+                    curCnt: userController.user!.currentJlptWordScroes[index],
+                    totalCnt: userController.user!.jlptWordScroes[index],
                   ),
                   StudyCategoryAndProgress(
-                    caregory: '한자',
-                    curCnt: userController.user.currentKangiScores[index],
-                    totalCnt: userController.user.kangiScores[index],
+                    caregory: AppString.kangi.tr,
+                    curCnt: userController.user!.currentKangiScores[index],
+                    totalCnt: userController.user!.kangiScores[index],
                   ),
                   StudyCategoryAndProgress(
-                    caregory: '문법',
-                    curCnt: userController.user.currentGrammarScores[index],
-                    totalCnt: userController.user.grammarScores[index],
+                    caregory: AppString.grammar.tr,
+                    curCnt: userController.user!.currentGrammarScores[index],
+                    totalCnt: userController.user!.grammarScores[index],
                   ),
                 ],
               ),
               foot: Text(
-                'JLPT N${index + 1} 종합 단어장',
+                'JLPT N${index + 1} ${AppString.jlptBookDescription.tr}',
                 style: TextStyle(
                   fontFamily: AppFonts.gMaretFont,
                   fontWeight: FontWeight.w500,
-                  fontSize: Responsive.height16,
+                  // fontSize: 16,
                 ),
               ),
             );
@@ -144,7 +133,7 @@ class _JLPTCardsState extends State<JLPTCards> {
 
   void onPageChanged(v) {
     _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.JLPT,
+      KindOfStudy.jlpt,
       v,
     );
     setState(() {});
@@ -165,7 +154,7 @@ class _MyCardsState extends State<MyCards> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.MY);
+    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.my);
 
     bodys = [];
   }
@@ -174,7 +163,7 @@ class _MyCardsState extends State<MyCards> {
   void dispose() {
     super.dispose();
     _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.MY,
+      KindOfStudy.my,
       _currentIndex,
     );
   }
@@ -187,13 +176,13 @@ class _MyCardsState extends State<MyCards> {
         carouselController: carouselController,
         options: CarouselOptions(
           disableCenter: true,
-          viewportFraction: UserController.to.user.isPad ? 0.55 : 0.75,
+          viewportFraction: UserController.to.user!.isPad ? 0.55 : 0.75,
           enableInfiniteScroll: false,
           initialPage: _currentIndex,
           enlargeCenterPage: true,
           onPageChanged: (index, reason) {
             _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-              KindOfStudy.MY,
+              KindOfStudy.my,
               index,
             );
           },
@@ -203,7 +192,7 @@ class _MyCardsState extends State<MyCards> {
           if (controller.books.length == index) {
             return LevelCategoryCard(
               onTap: () => controller.goToEditBook(),
-              title: '단어장 생성',
+              title: AppString.createBook.tr,
               body: Center(
                 child: Icon(Icons.add, color: AppColors.mainColor, size: 30),
               ),
@@ -220,12 +209,19 @@ class _MyCardsState extends State<MyCards> {
             extraInfo: Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(text: '저장된 단어: '),
+                  TextSpan(text: '${AppString.savedWordsCnt.tr}: '),
                   TextSpan(
                     text: book.mywords.length.toString(),
                     style: TextStyle(color: AppColors.mainBordColor),
                   ),
-                  TextSpan(text: '개'),
+                  TextSpan(
+                    text:
+                        isKo
+                            ? '개'
+                            : book.mywords.length > 1
+                            ? 's'
+                            : '',
+                  ),
                 ],
                 style: TextStyle(
                   color: Colors.black,
@@ -249,7 +245,7 @@ class _MyCardsState extends State<MyCards> {
   }
 
   void onPageChanged(v) {
-    _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.MY, v);
+    _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.my, v);
     setState(() {});
   }
 }
@@ -268,18 +264,18 @@ class _BasicCardState extends State<BasicCard> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.BASIC);
+    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.basic);
   }
 
   @override
   void dispose() {
     super.dispose();
-    LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.BASIC, _currentIndex);
+    LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.basic, _currentIndex);
   }
 
   void onPageChanged(v) {
     _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.BASIC,
+      KindOfStudy.basic,
       v,
     );
     setState(() {});
@@ -288,27 +284,21 @@ class _BasicCardState extends State<BasicCard> {
   List<Widget> bodys = [
     LevelCategoryCard(
       onTap: () {
-        LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.BASIC, 0);
+        LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.basic, 0);
         Get.to(() => const HiraganaScreen(category: 'hiragana'));
       },
-      title: '히라가나 단어장',
+      title: AppString.hiraganaVocabulary.tr,
 
-      foot: Text(
-        '왕초보를 위한 히라가나 단어장',
-        style: TextStyle(fontSize: Responsive.height15),
-      ),
+      foot: Text(AppString.hiraganaVocaDesc.tr, style: TextStyle(fontSize: 15)),
     ),
     LevelCategoryCard(
       onTap: () {
-        LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.BASIC, 1);
+        LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.basic, 1);
         Get.to(() => const HiraganaScreen(category: 'katakana'));
       },
-      title: '카타카나 단어장',
+      title: AppString.katakanaVocabulary.tr,
 
-      foot: Text(
-        '왕초보를 위한 카타카나 단어장',
-        style: TextStyle(fontSize: Responsive.height15),
-      ),
+      foot: Text(AppString.katakanaVocaDesc.tr, style: TextStyle(fontSize: 15)),
     ),
   ];
   @override
@@ -317,13 +307,13 @@ class _BasicCardState extends State<BasicCard> {
       carouselController: carouselController,
       options: CarouselOptions(
         disableCenter: true,
-        viewportFraction: userController.user.isPad ? 0.55 : 0.75,
+        viewportFraction: userController.user!.isPad ? 0.55 : 0.75,
         enableInfiniteScroll: false,
         initialPage: _currentIndex,
         enlargeCenterPage: true,
         onPageChanged: (index, reason) {
           _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-            KindOfStudy.BASIC,
+            KindOfStudy.basic,
             index,
           );
         },
