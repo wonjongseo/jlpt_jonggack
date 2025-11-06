@@ -24,21 +24,25 @@ extension TextInputEnumExtension on TextInputEnum {
   }
 }
 
-enum ExternalDictType {
-  naver(Colors.green),
-  papago(Colors.blueAccent);
-
-  final Color color;
-  const ExternalDictType(this.color);
-}
+enum ExternalDictType { naver(), papago() }
+//#
 
 extension ExternalDictTypeExtension on ExternalDictType {
   String get label {
     switch (this) {
       case ExternalDictType.naver:
-        return isKo ? '네이버 사전' : 'Naver';
+        return isKo ? '네이버 사전' : 'Google';
       case ExternalDictType.papago:
-        return isKo ? '파파고' : 'Papago';
+        return isKo ? '파파고' : 'DeepL';
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case ExternalDictType.naver:
+        return isKo ? Color(0xff03E363) : Color(0xff4485F5);
+      case ExternalDictType.papago:
+        return isKo ? Color(0xff22A5FF) : Color(0xff0E2A46);
     }
   }
 }

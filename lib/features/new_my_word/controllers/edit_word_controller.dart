@@ -5,6 +5,7 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/services/excel_service.dart';
@@ -86,15 +87,21 @@ class EditWordController extends GetxController {
         convertMyWord,
       );
       if (convertMyWord.isNotEmpty && savedWordCnt == 0) {
-        SnackBarHelper.showErrorSnackBar('이미 저장된 단어(들) 이여서 단어 등록을 스킵했습니다');
+        SnackBarHelper.showErrorSnackBar(AppString.skipUploadWord.tr);
         return;
       }
+
       NewMyWordController.to.loadMyWords();
       SnackBarHelper.showSuccessSnackBar(
-        '중복 단어를 제외하고 $savedWordCnt개의 단어가 등록되었습니다',
+        isEn
+            ? "$savedWordCnt ${savedWordCnt == 1 ? "word" : "words"} have been added."
+            : '$savedWordCnt개의 단어가 등록되었습니다',
       );
     } catch (e) {
-      SnackBarHelper.showErrorSnackBar('엑셀 처리 중 오류: $e', isLog: true);
+      SnackBarHelper.showErrorSnackBar(
+        '${AppString.errorUploadingWord.tr}$e',
+        isLog: true,
+      );
     } finally {
       _isLoading.value = false;
     }
@@ -122,71 +129,83 @@ class EditWordController extends GetxController {
   late FocusNode exampleMeanFocusNode;
 
   bool isDropdownButtonOpen = false;
-  void onTapExternalType(ExternalDictType? type) async {
+
+  Future<void> onTapExternalType(ExternalDictType? type) async {
     toggleExternalDictType(type);
-    String sUrl;
-    String query;
-    switch (externalDictType.value) {
-      case ExternalDictType.naver:
-        sUrl = 'https://ja.dict.naver.com/#/';
-        query = meanController.text;
-        if (query.isEmpty) {
-          query = japaneseController.text;
-        }
-        if (query.isNotEmpty) {
-          sUrl += 'search?query=$query';
-        }
-        break;
-      case ExternalDictType.papago:
-        sUrl = 'http://papago.naver.com/';
 
-        if (meanController.text.isNotEmpty) {
-          query = meanController.text;
-          sUrl += '?sk=ko&tk=ja&hn=1&st=$query';
-        } else if (japaneseController.text.isNotEmpty) {
-          query = japaneseController.text;
-          sUrl += '?sk=ja&tk=ko&hn=1&st=$query';
-        }
+    String? sUrl;
+    String query = '';
 
-        break;
+    final mean = meanController.text.trim();
+    final jp = japaneseController.text.trim();
+
+    if (isKo) {
+      // 한국어 사용자: Naver / Papago
+      switch (externalDictType.value) {
+        case ExternalDictType.naver:
+          sUrl =
+              'https://ja.dict.naver.com/#/search?query=${Uri.encodeComponent(mean.isNotEmpty ? mean : jp)}';
+          break;
+
+        case ExternalDictType.papago:
+          if (mean.isNotEmpty) {
+            // ko -> ja
+            sUrl =
+                'https://papago.naver.com/?sk=ko&tk=ja&hn=1&st=${Uri.encodeComponent(mean)}';
+          } else if (jp.isNotEmpty) {
+            // ja -> ko
+            sUrl =
+                'https://papago.naver.com/?sk=ja&tk=ko&hn=1&st=${Uri.encodeComponent(jp)}';
+          }
+          break;
+      }
+    } else {
+      switch (externalDictType.value) {
+        case ExternalDictType.naver:
+          if (mean.isNotEmpty) {
+            // ko -> ja
+            sUrl =
+                'https://translate.google.com/?sl=en&tl=ja&text=${Uri.encodeComponent(mean)}&op=translate';
+          } else if (jp.isNotEmpty) {
+            // ja -> ko
+            sUrl =
+                'https://translate.google.com/?sl=ja&tl=en&text=${Uri.encodeComponent(jp)}&op=translate';
+          }
+          break;
+
+        case ExternalDictType.papago:
+          // == DeepL
+          if (mean.isNotEmpty) {
+            sUrl =
+                'https://www.deepl.com/translator#en/ja/${Uri.encodeComponent(mean)}';
+          } else if (jp.isNotEmpty) {
+            sUrl =
+                'https://www.deepl.com/translator#ja/en/${Uri.encodeComponent(jp)}';
+          }
+          break;
+      }
     }
+
     if (isDropdownButtonOpen) {
       Get.back();
     }
 
-    // FocusManager.instance.primaryFocus!.unfocus();
-
-    final url = Uri.parse(sUrl);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(
-        url,
-        mode: LaunchMode.inAppBrowserView, // ✅ 외부 브라우저
-      );
-    } else {
-      SnackBarHelper.showErrorSnackBar('브라우저를 열 수 없습니다.');
-    }
-  }
-
-  void openNaverDictionary() async {
-    String sUrl = 'https://ja.dict.naver.com/#/';
-
-    String query = meanController.text;
-    if (query.isEmpty) {
-      query = japaneseController.text;
-    }
-
-    if (query.isNotEmpty) {
-      sUrl += 'search?query=$query';
+    if (sUrl == null || sUrl.isEmpty) {
+      SnackBarHelper.showErrorSnackBar(AppString.plzEnterSearchTerm.tr);
+      return;
     }
 
     final url = Uri.parse(sUrl);
     if (await canLaunchUrl(url)) {
-      await launchUrl(
+      final ok = await launchUrl(
         url,
-        mode: LaunchMode.inAppBrowserView, // ✅ 외부 브라우저
+        mode: LaunchMode.inAppBrowserView, // 인앱 브라우저
       );
+      if (!ok) {
+        SnackBarHelper.showErrorSnackBar(AppString.cannotOpenBraoser.tr);
+      }
     } else {
-      SnackBarHelper.showErrorSnackBar('브라우저를 열 수 없습니다.');
+      SnackBarHelper.showErrorSnackBar(AppString.cannotOpenBraoser.tr);
     }
   }
 
@@ -287,34 +306,34 @@ class EditWordController extends GetxController {
       case TextInputEnum.japanese:
         if (value == null || value.isEmpty) {
           japaneseFocusNode.requestFocus();
-          return '${textInputEnum.name}을 입력해주세요.';
+          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
         }
         return null;
       // return '일본어';
       case TextInputEnum.yomikata:
         if (value == null || value.isEmpty) {
           yomikataFocusNode.requestFocus();
-          return '${textInputEnum.name}을 입력해주세요.';
+          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
         }
         return null;
 
       case TextInputEnum.mean:
         if (value == null || value.isEmpty) {
           meanFocusNode.requestFocus();
-          return '${textInputEnum.name}을 입력해주세요.';
+          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
         }
         return null;
 
       case TextInputEnum.exampleMean:
         if (value == null || value.isEmpty) {
           exampleMeanFocusNode.requestFocus();
-          return '${textInputEnum.name}을 입력해주세요.';
+          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
         }
         return null;
       case TextInputEnum.exampleSentence:
         if (value == null || value.isEmpty) {
           exampleWordFocusNode.requestFocus();
-          return '${textInputEnum.name}을 입력해주세요.';
+          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
         }
         return null;
     }

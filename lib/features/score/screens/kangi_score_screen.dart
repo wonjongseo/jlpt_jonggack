@@ -29,41 +29,6 @@ class KangiScoreScreen extends StatelessWidget {
     KangiTestController kangiQuestionController =
         Get.find<KangiTestController>();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Random randDom = Random();
-
-      int randomNumber =
-          randDom.nextInt(
-            AppConstant.INDUCE_USUALLY_WRONG_VOCA_PAGE_COUNT_MIN,
-          ) +
-          AppConstant.INDUCE_USUALLY_WRONG_VOCA_PAGE_COUNT_MAX;
-
-      if (kangiQuestionController.userController.clickUnKnownButtonCount >
-          randomNumber) {
-        //TODO
-        int savedDataCount = 0;
-        // int savedDataCount =
-        //     kangiQuestionController.userController.user.yokumatigaeruMyWords;
-        //TODO
-
-        bool result = await CommonDialog.askGoToMyVocaPageDialog(
-          savedDataCount,
-        );
-
-        if (result) {
-          kangiQuestionController.userController.clickUnKnownButtonCount = 0;
-          getBacks(3);
-          Get.toNamed(NewMyWordScreen.name);
-        } else {
-          randomNumber = randDom.nextInt(2) + 1;
-          kangiQuestionController.userController.clickUnKnownButtonCount =
-              (kangiQuestionController.userController.clickUnKnownButtonCount /
-                      randomNumber)
-                  .floor();
-        }
-      }
-    });
-
     return Scaffold(
       // appBar: _appBar(kangiQuestionController),
       appBar: PreferredSize(
@@ -71,7 +36,7 @@ class KangiScoreScreen extends StatelessWidget {
         child: AppBar(
           scrolledUnderElevation: 0.0,
           title: Text(
-            "점수 ${kangiQuestionController.scoreResult}",
+            "${AppString.score.tr} ${kangiQuestionController.scoreResult}",
             style: TextStyle(fontSize: appBarTextSize),
           ),
         ),
@@ -149,23 +114,6 @@ class KangiScoreScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  AppBar _appBar(KangiTestController qnController) {
-    return AppBar(
-      title: Text(
-        "점수 ${qnController.scoreResult}",
-        style: const TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-          color: Color(0xFF8B94BC),
-        ),
-      ),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-        onPressed: () => getBacks(3),
-      ),
     );
   }
 }

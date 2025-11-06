@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
-import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
@@ -30,6 +29,9 @@ class RelatedWords extends StatelessWidget {
   Widget build(BuildContext context) {
     TtsController ttsController = Get.find<TtsController>();
 
+    List<int> kangiIndex = getKangiIndex(japanese, kangiStepRepositroy);
+
+    if (kangiIndex.isEmpty) return SizedBox();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -41,29 +43,23 @@ class RelatedWords extends StatelessWidget {
             color: AppColors.mainBordColor,
           ),
         ),
+        SizedBox(height: 4),
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(vertical: 4),
+          padding: EdgeInsets.all(4),
           decoration: const BoxDecoration(color: Colors.grey),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: List.generate(japanese.length, (index) {
-                List<int> kangiIndex = getKangiIndex(
-                  japanese,
-                  kangiStepRepositroy,
-                );
-
                 if (kangiIndex.contains(index)) {
                   if (!temp.contains(japanese[index])) {
                     temp.add(japanese[index]);
                     Kangi kangi =
                         kangiStepRepositroy.getKangi(japanese[index])!;
                     return Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Responsive.width16 / 1.5,
-                      ),
+                      padding: EdgeInsets.symmetric(),
                       child: InkWell(
                         onTap: () {
                           ttsController.stop();
@@ -77,7 +73,7 @@ class RelatedWords extends StatelessWidget {
                           color: Colors.white,
                           shape: Border.all(color: AppColors.mainColor),
                           child: Padding(
-                            padding: EdgeInsets.all(Responsive.width16 / 4),
+                            padding: EdgeInsets.all(4),
                             child: Column(
                               children: [
                                 Text(

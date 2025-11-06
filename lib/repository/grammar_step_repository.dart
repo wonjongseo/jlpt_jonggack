@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
@@ -75,11 +76,12 @@ class GrammarRepositroy {
       stepCount++;
     }
     await box.put(nLevel, stepCount);
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.grammars.name}-$nLevel',
-      0,
-    );
+    getProgress('${CategoryEnum.grammars.name}-$nLevel', 0);
     return grammars.length;
+  }
+
+  static getProgress(String key, int index) {
+    LocalReposotiry.setProgress(key, index);
   }
 
   static Future<int> updateGrammarStepData(
@@ -113,7 +115,7 @@ class GrammarRepositroy {
       }
       String key = '$nLevel-$stepCount';
       GrammarStep? beforeGrammarStep = box.get(key);
-      if (beforeGrammarStep == null) return 0;
+      if (beforeGrammarStep == null) break;
 
       beforeGrammarStep.grammars = currentGrammers;
 
@@ -121,10 +123,6 @@ class GrammarRepositroy {
       stepCount++;
     }
     await box.put(nLevel, stepCount);
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.grammars.name}-$nLevel',
-      0,
-    );
     log('totalCount : ${grammars.length}');
 
     return grammars.length;

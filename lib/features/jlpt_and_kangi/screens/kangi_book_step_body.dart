@@ -2,11 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/calendar_step/kangi_calendar_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -28,15 +28,11 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
   void initState() {
     kangiController = Get.put(KangiStepController(level: widget.level));
 
-    progrssingIndex = LocalReposotiry.getCurrentProgressing(
+    progrssingIndex = LocalReposotiry.getProgress(
       '${CategoryEnum.kangis.name}-${widget.level}',
     );
 
     super.initState();
-  }
-
-  void goTo(String chapter) {
-    Get.to(() => KangiCalendarStepBody(chapter: chapter));
   }
 
   @override
@@ -73,20 +69,17 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                   CommonDialog.appealDownLoadThePaidVersion();
                   return;
                 }
-                if (progrssingIndex == index) {
-                  LocalReposotiry.putCurrentProgressing(
-                    '${CategoryEnum.kangis.name}-${widget.level}',
-                    progrssingIndex,
-                  );
-                  goTo('챕터${index + 1}');
-                } else if (progrssingIndex < index) {
-                  progrssingIndex++;
+
+                setState(() {
+                  progrssingIndex = index;
                   carouselController.animateToPage(progrssingIndex);
-                } else {
-                  progrssingIndex--;
-                  carouselController.animateToPage(progrssingIndex);
-                }
-                setState(() {});
+                });
+
+                LocalReposotiry.setProgress(
+                  '${CategoryEnum.kangis.name}-${widget.level}',
+                  progrssingIndex,
+                );
+                Get.to(() => KangiCalendarStepBody(index: index));
               },
               child: Card(
                 color: !isAllAccessable ? Colors.grey.shade400 : Colors.white,
@@ -97,28 +90,33 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                     child: Stack(
                       children: [
                         Center(
-                          child: RichText(
-                            text: TextSpan(
-                              text: '${CategoryEnum.kangis.id}\n',
-                              children: [
-                                TextSpan(
-                                  text: 'Chapter ${(index + 1)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                  ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                CategoryEnum.kangis.id,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: isEn ? 20 : 23,
+                                  color:
+                                      isAllAccessable
+                                          ? AppColors.mainBordColor
+                                          : Colors.grey,
                                 ),
-                              ],
-                              style: TextStyle(
-                                fontFamily: AppFonts.gMaretFont,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23,
-                                color:
-                                    isAllAccessable
-                                        ? AppColors.mainBordColor
-                                        : Colors.grey,
                               ),
-                            ),
+                              Text(
+                                'Chapter ${(index + 1)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color:
+                                      isAllAccessable
+                                          ? AppColors.mainBordColor
+                                          : Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         if (!isAllAccessable)

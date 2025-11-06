@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 

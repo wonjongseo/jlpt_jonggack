@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_test/components/kangi_test_card.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart';
@@ -44,6 +45,7 @@ class KangiTestScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 5),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Row(
@@ -51,14 +53,25 @@ class KangiTestScreen extends StatelessWidget {
                     children: [
                       Text.rich(
                         TextSpan(
-                          text:
-                              "問題 ${kangiQuestionController.questionNumber.value}",
-                          style: Theme.of(context).textTheme.headlineMedium!,
+                          text: "問題 ",
+                          style: Theme.of(context).textTheme.headlineSmall!
+                              .copyWith(fontFamily: AppFonts.japaneseFont),
                           children: [
                             TextSpan(
                               text:
+                                  '${kangiQuestionController.questionNumber.value}',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.headlineMedium!.copyWith(
+                                fontFamily: AppFonts.japaneseFont,
+                                color: AppColors.mainBordColor,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
                                   "/${kangiQuestionController.questions.length}",
-                              style: Theme.of(context).textTheme.headlineSmall!,
+                              style: Theme.of(context).textTheme.headlineSmall!
+                                  .copyWith(fontFamily: AppFonts.japaneseFont),
                             ),
                           ],
                         ),
@@ -66,8 +79,7 @@ class KangiTestScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Divider(thickness: 1.5),
-                const SizedBox(height: 10),
+                SizedBox(height: 20),
                 Expanded(
                   child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),

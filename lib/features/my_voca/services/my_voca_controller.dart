@@ -5,7 +5,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:jlpt_jonggack/common/commonDialog.dart';
-// import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+//
 // import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 // import 'dart:collection';
 

@@ -1,9 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/widget/animated_circular_progressIndicator.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class StudyCategoryAndProgress extends StatelessWidget {

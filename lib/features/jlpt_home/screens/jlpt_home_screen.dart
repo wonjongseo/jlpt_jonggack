@@ -7,13 +7,12 @@ import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/home/services/home_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/grammar_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/japanese_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/kangi_book_step_body.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
@@ -26,12 +25,11 @@ class JlptHomeScreen extends StatefulWidget {
 
 class _JlptHomeScreenState extends State<JlptHomeScreen> {
   late PageController pageController;
-  HomeController homeController = Get.find<HomeController>();
   TtsController ttsController = Get.find<TtsController>();
   String name = '';
-  int selectedCategoryIndex = 0;
+  int categoryIndex = 0;
   onPageChanged(int newPage) {
-    selectedCategoryIndex = newPage;
+    categoryIndex = newPage;
     setState(() {});
   }
 
@@ -39,14 +37,8 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
   void initState() {
     super.initState();
 
-    LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.jlpt,
-      widget.levelIndex,
-    );
-    selectedCategoryIndex = LocalReposotiry.getJlptOrKangiOrGrammar(
-      '${widget.levelIndex + 1}',
-    );
-    pageController = PageController(initialPage: selectedCategoryIndex);
+    categoryIndex = LocalReposotiry.getProgress('${widget.levelIndex + 1}');
+    pageController = PageController(initialPage: categoryIndex);
   }
 
   @override
@@ -85,54 +77,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
             children: [
               NewSearchWidget(isHomeScreen: true),
               SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(CategoryEnum.values.length, (index) {
-                  final type = CategoryEnum.values[index];
-                  return TextButton(
-                    onPressed: () {
-                      LocalReposotiry.putJlptOrKangiOrGrammar(
-                        '${widget.levelIndex + 1}',
-                        index,
-                      );
-                      pageController.animateToPage(
-                        index,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.ease,
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border:
-                            selectedCategoryIndex == index
-                                ? Border(
-                                  bottom: BorderSide(
-                                    width: 3,
-                                    color: Colors.cyan.shade600,
-                                  ),
-                                )
-                                : null,
-                      ),
-                      child: Text(
-                        isKo
-                            ? '${type.id} ${AppString.vocabulary.tr}'
-                            : type.id,
-                        style:
-                            index == selectedCategoryIndex
-                                ? TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.cyan.shade600,
-                                  fontSize: Responsive.height17,
-                                )
-                                : TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontSize: Responsive.height15,
-                                ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
+              _navigator(),
               Flexible(
                 flex: 6,
                 child: PageView.builder(
@@ -159,11 +104,11 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
               child: BottomBtn(
                 fontSize: isKo ? 18 : 16,
                 label:
-                    'N${widget.levelIndex + 1} ${CategoryEnum.values[selectedCategoryIndex].id} ${AppString.randomQuiz.tr}',
+                    'N${widget.levelIndex + 1} ${CategoryEnum.values[categoryIndex].id} ${AppString.randomQuiz.tr}',
                 onTap: () {
                   RandomTestGenerator.randomText(
                     widget.levelIndex + 1,
-                    CategoryEnum.values[selectedCategoryIndex],
+                    CategoryEnum.values[categoryIndex],
                   );
                 },
               ),
@@ -172,6 +117,53 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Row _navigator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List.generate(CategoryEnum.values.length, (index) {
+        final type = CategoryEnum.values[index];
+        return TextButton(
+          onPressed: () {
+            LocalReposotiry.setProgress('${widget.levelIndex + 1}', index);
+            pageController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.ease,
+            );
+          },
+          child: Container(
+            padding: isEn ? EdgeInsets.only(bottom: 2) : null,
+            decoration: BoxDecoration(
+              border:
+                  categoryIndex == index
+                      ? Border(
+                        bottom: BorderSide(
+                          width: isEn ? 2 : 3,
+                          color: Colors.cyan.shade600,
+                        ),
+                      )
+                      : null,
+            ),
+            child: Text(
+              isKo ? '${type.id} ${AppString.vocabulary.tr}' : type.id,
+              style:
+                  index == categoryIndex
+                      ? TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.cyan.shade600,
+                        fontSize: Responsive.height17,
+                      )
+                      : TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: Responsive.height15,
+                      ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

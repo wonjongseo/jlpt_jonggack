@@ -152,11 +152,11 @@ class _KangiCardState extends State<KangiCard> {
                 AppString.relatedWord.tr,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: Responsive.height10 * 1.8,
+                  fontSize: 18,
                   color: AppColors.mainBordColor,
                 ),
               ),
-              SizedBox(height: Responsive.height10),
+              SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   itemCount: relatedVocaFromJLPTWord.length,

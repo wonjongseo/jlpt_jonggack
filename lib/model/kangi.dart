@@ -42,7 +42,7 @@ class Kangi extends HiveObject {
     if (splited.isEmpty || splited.length == 1) {
       return english;
     } else {
-      return '${splited[0]}...';
+      return splited[0];
     }
   }
 

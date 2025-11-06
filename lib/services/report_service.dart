@@ -48,7 +48,7 @@ class ReportService {
   static Future<void> sendReport() async {
     final email = Email(
       body: _composeBody(),
-      subject: AppString.enableOpenEndQustion.tr,
+      subject: AppString.emailSubject.tr,
       recipients: [_supportEmail],
       isHTML: false,
     );
@@ -73,7 +73,7 @@ class ReportService {
       scheme: 'mailto',
       path: _supportEmail,
       queryParameters: {
-        'subject': AppString.enableOpenEndQustion.tr,
+        'subject': AppString.emailSubject.tr,
         'body': _composeBody(),
       },
     );

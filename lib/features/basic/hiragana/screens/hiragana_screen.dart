@@ -151,6 +151,7 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                 ),
                 Expanded(
                   child: Card(
+                    color: Theme.of(context).colorScheme.surface,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 8,

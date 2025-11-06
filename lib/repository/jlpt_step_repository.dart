@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
@@ -75,12 +76,9 @@ class JlptStepRepositroy {
     log('deleteAllWord start');
 
     final jlptStepBox = Hive.box(JlptStep.boxKey);
-    await jlptStepBox.deleteAll(jlptStepBox.keys);
-    // await jlptStepBox.deleteFromDisk();
-
-    final wordBox = Hive.box(Word.boxKey);
+    final wordBox = Hive.box<Word>(Word.boxKey);
     await wordBox.deleteAll(wordBox.keys);
-    // await wordBox.deleteFromDisk();
+    await jlptStepBox.deleteAll(jlptStepBox.keys);
   }
 
   static Future<int> init(String language, String nLevel) async {
@@ -135,22 +133,20 @@ class JlptStepRepositroy {
         );
 
         String key = '$nLevel-$hiragana-$stepCount';
-        LocalReposotiry.putCurrentProgressing(
-          '${CategoryEnum.japaneses.name}-$nLevel-$hiragana',
-          0,
-        );
+        getProgress('${CategoryEnum.japaneses.name}-$nLevel-$hiragana', 0);
         await box.put(key, tempJlptStep);
         stepCount++;
       }
 
       await box.put('$nLevel-$hiragana', stepCount);
     }
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.japaneses.name}-$nLevel',
-      0,
-    );
+    getProgress('${CategoryEnum.japaneses.name}-$nLevel', 0);
 
     return totalCount;
+  }
+
+  static getProgress(String key, int index) {
+    LocalReposotiry.setProgress(key, index);
   }
 
   List<JlptStep> getJlptStepByHeadTitle(String nLevel, String headTitle) {
@@ -229,23 +225,18 @@ class JlptStepRepositroy {
         String key = '$nLevel-$hiragana-$stepCount';
 
         JlptStep? beforeJlptStep = await box.get(key);
-        if (beforeJlptStep == null) return 0;
+
+        if (beforeJlptStep == null) break; //return totalCount;
         beforeJlptStep.words = currentWords;
 
-        LocalReposotiry.putCurrentProgressing(
-          '${CategoryEnum.japaneses.name}-$nLevel-$hiragana',
-          0,
-        );
+        // getProgress('${CategoryEnum.japaneses.name}-$nLevel-$hiragana', 0);
         await box.put(key, beforeJlptStep);
         stepCount++;
       }
 
       await box.put('$nLevel-$hiragana', stepCount);
     }
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.japaneses.name}-$nLevel',
-      0,
-    );
+    // getProgress('${CategoryEnum.japaneses.name}-$nLevel', 0);
 
     return totalCount;
   }

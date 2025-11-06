@@ -9,6 +9,8 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/grammar_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -30,7 +32,7 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
   void initState() {
     grammarController = Get.put(GrammarController(level: widget.level));
 
-    progrssingIndex = LocalReposotiry.getCurrentProgressing(
+    progrssingIndex = LocalReposotiry.getProgress(
       '${CategoryEnum.grammars.name}-${widget.level}',
     );
 
@@ -82,20 +84,15 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
                   CommonDialog.appealDownLoadThePaidVersion();
                   return;
                 }
-                if (progrssingIndex == index) {
-                  LocalReposotiry.putCurrentProgressing(
-                    '${CategoryEnum.grammars.name}-${widget.level}',
-                    progrssingIndex,
-                  );
-                  goTo(index, '${AppString.chapter.tr}${index + 1}');
-                } else if (progrssingIndex < index) {
-                  progrssingIndex++;
+                setState(() {
+                  progrssingIndex = index;
                   carouselController.animateToPage(progrssingIndex);
-                } else {
-                  progrssingIndex--;
-                  carouselController.animateToPage(progrssingIndex);
-                }
-                setState(() {});
+                });
+                LocalReposotiry.setProgress(
+                  '${CategoryEnum.grammars.name}-${widget.level}',
+                  progrssingIndex,
+                );
+                goTo(index, '${AppString.chapter.tr}${index + 1}');
               },
               child: Card(
                 color: !isAllAccessable ? Colors.grey.shade400 : Colors.white,
@@ -106,30 +103,36 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
                     child: Stack(
                       children: [
                         Center(
-                          child: RichText(
-                            text: TextSpan(
-                              text: '${CategoryEnum.grammars.id}\n',
-                              children: [
-                                TextSpan(
-                                  text: 'Chapter ${(index + 1)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                  ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                CategoryEnum.grammars.id,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: isEn ? 20 : 23,
+                                  color:
+                                      isAllAccessable
+                                          ? AppColors.mainBordColor
+                                          : Colors.grey,
                                 ),
-                              ],
-                              style: TextStyle(
-                                fontFamily: AppFonts.gMaretFont,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23,
-                                color:
-                                    isAllAccessable
-                                        ? AppColors.mainBordColor
-                                        : Colors.grey,
                               ),
-                            ),
+                              Text(
+                                'Chapter ${(index + 1)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color:
+                                      isAllAccessable
+                                          ? AppColors.mainBordColor
+                                          : Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
                         if (!isAllAccessable)
                           const Align(
                             alignment: Alignment.center,

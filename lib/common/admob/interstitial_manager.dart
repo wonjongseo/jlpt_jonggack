@@ -29,7 +29,6 @@ class InterstitialManager {
 
   // ---------- 공개 API ----------
 
-  /// 초기 설정 (앱 시작 시 1회)
   void configure({
     required int maxPerDay,
     required double showChance,
@@ -116,8 +115,8 @@ class InterstitialManager {
     final savedDay = SettingRepository.getString(_kDateKey);
     if (savedDay != today) {
       await SettingRepository.setString(_kDateKey, today);
-      await SettingRepository.setInt(_kCountKey, 0);
-      await SettingRepository.setInt(_kLastTsKey, 0);
+      await SettingRepository.setInt(_kCountKey, 0, isLog: true);
+      await SettingRepository.setInt(_kLastTsKey, 0, isLog: true);
       // 첫 노출 스킵은 광고가 실제 준비된 경우에만 소모되도록 여기선 설정하지 않음
     }
 
@@ -152,10 +151,11 @@ class InterstitialManager {
 
   Future<void> _markShown() async {
     final count = (SettingRepository.getInt(_kCountKey) ?? 0) + 1;
-    await SettingRepository.setInt(_kCountKey, count);
+    await SettingRepository.setInt(_kCountKey, count, isLog: true);
     await SettingRepository.setInt(
       _kLastTsKey,
       DateTime.now().millisecondsSinceEpoch,
+      isLog: true,
     );
   }
 }

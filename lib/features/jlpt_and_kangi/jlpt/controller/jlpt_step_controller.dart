@@ -2,11 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
-import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -143,7 +143,7 @@ class JlptStepController extends GetxController {
 
       if (showSnackBar) {
         SnackBarHelper.showSuccessSnackBar(
-          '${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
+          '${word.word}${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
         );
       }
     }
@@ -227,8 +227,6 @@ class JlptStepController extends GetxController {
   }
 
   JlptStep getJlptStep() {
-    print('step : ${step}');
-
     return jlptSteps[step];
   }
 
@@ -240,9 +238,7 @@ class JlptStepController extends GetxController {
       this.headTitle,
     );
 
-    currChapNumber = LocalReposotiry.getCurrentProgressing(
-      'Japaneses-$level-$headTitle',
-    );
+    currChapNumber = LocalReposotiry.getProgress('Japaneses-$level-$headTitle');
 
     setStep(currChapNumber);
     update();
@@ -251,7 +247,7 @@ class JlptStepController extends GetxController {
   late PageController pageController;
 
   void finishQuizAndchangeHeaderPageIndex() {
-    int currentHeaderPageIndex = LocalReposotiry.getCurrentProgressing(
+    int currentHeaderPageIndex = LocalReposotiry.getProgress(
       'Japaneses-$level-$headTitle',
     );
     if (currentHeaderPageIndex + 1 == jlptSteps.length) {
@@ -260,18 +256,17 @@ class JlptStepController extends GetxController {
       return;
     }
     step = currentHeaderPageIndex + 1;
-    LocalReposotiry.putCurrentProgressing('Japaneses-$level-$headTitle', step);
+    getProgress('Japaneses-$level-$headTitle', step);
     pageController.jumpToPage(step);
-    // pageController.animateToPage(
-    //   step,
-    //   duration: const Duration(milliseconds: 300),
-    //   curve: Curves.easeIn,
-    // );
+  }
+
+  void getProgress(String key, int index) {
+    LocalReposotiry.setProgress(key, index);
   }
 
   void changeHeaderPageIndex(int index) {
     step = index;
-    LocalReposotiry.putCurrentProgressing('Japaneses-$level-$headTitle', step);
+    getProgress('Japaneses-$level-$headTitle', step);
     pageController.animateToPage(
       step,
       duration: const Duration(milliseconds: 300),

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/utils.dart';
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 import 'package:jlpt_jonggack/model/hive_type.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
@@ -98,21 +99,14 @@ class Book extends HiveObject {
   }
 
   static List<Book> createDefaultBooks() {
-    bool isEn = PlatformDispatcher.instance.locale.languageCode == 'en';
     Book myWordBook1 = Book(
-      title: isEn ? 'JG Book' : '종각 단어장',
-      description:
-          isEn
-              ? 'This is a vocabulary book where words in the app are stored'
-              : '종각 앱에서 저장한 단어들을\n학습하는 단어장',
+      title: isEn ? AppString.jgVocaEn : AppString.jgVocaKr,
+      description: isEn ? AppString.jgVocaDescEn : AppString.jgVocaDescKr,
       bookNum: 1,
     );
     Book myWordBook2 = Book(
-      title: isEn ? 'My Book' : '나만의 단어장',
-      description:
-          isEn
-              ? 'This is a vocabulary book where the user stores the words directly'
-              : '종각 앱에서 저장한 단어들을\n학습하는 단어장',
+      title: isEn ? AppString.myVocaEn : AppString.myVocaKr,
+      description: isEn ? AppString.myVocaDescEn : AppString.myVocaDescKr,
       bookNum: 2,
     );
 

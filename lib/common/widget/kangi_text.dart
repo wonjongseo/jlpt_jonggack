@@ -18,6 +18,7 @@ class KangiText extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) {
+    print('asdadsd');
     // 동음 의이어가 있는가 없는가.
     bool isHomonym = japanese.contains('·');
     // 동음 이의어들

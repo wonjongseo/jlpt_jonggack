@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_voca/components/import_excel_file_widget.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/manual_add_word_widget.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 TextStyle accentTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
@@ -70,7 +71,10 @@ class NewAddMyWordScreen extends GetView<EditWordController> {
             ),
           ),
           body: TabBarView(
-            children: [ManualAddWordWidget(), ImportExcelFileWidget()],
+            children: [
+              ManualAddWordWidget(),
+              isEn ? ImportExcelFileWidgetEn() : ImportExcelFileWidget(),
+            ],
           ),
         ),
       ),

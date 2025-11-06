@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/widget/animated_circular_progressIndicator.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
@@ -9,44 +9,12 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
-import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/features/home/widgets/level_category_card.dart';
 import 'package:jlpt_jonggack/features/home/widgets/study_category_and_progress.dart';
-import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
-
-class HomeScreenBody extends StatefulWidget {
-  const HomeScreenBody({super.key, required this.index});
-
-  final int index;
-
-  @override
-  State<HomeScreenBody> createState() => _HomeScreenBodyState();
-}
-
-class _HomeScreenBodyState extends State<HomeScreenBody> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  List<Widget> bodys = const [BasicCard(), JLPTCards(), MyCards()];
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<UserController>(
-      builder: (userController) {
-        return bodys[widget.index];
-      },
-    );
-  }
-}
 
 class JLPTCards extends StatefulWidget {
   const JLPTCards({super.key});
@@ -57,18 +25,21 @@ class JLPTCards extends StatefulWidget {
 
 class _JLPTCardsState extends State<JLPTCards> {
   int _currentIndex = 0;
-
   CarouselSliderController carouselController = CarouselSliderController();
 
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.jlpt);
+    _currentIndex = LocalReposotiry.getProgress(KindOfStudy.jlpt.name) ?? 0;
+  }
+
+  void putBasicOrJlptOrMyDetail(int index) {
+    LocalReposotiry.setProgress(KindOfStudy.jlpt.name, index);
   }
 
   @override
   void dispose() {
-    LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.jlpt, _currentIndex);
+    putBasicOrJlptOrMyDetail(_currentIndex);
     super.dispose();
   }
 
@@ -86,6 +57,7 @@ class _JLPTCardsState extends State<JLPTCards> {
             enlargeCenterPage: true,
             onPageChanged: (index, reason) {
               _currentIndex = index;
+              putBasicOrJlptOrMyDetail(index);
             },
             scrollDirection: Axis.horizontal,
           ),
@@ -101,25 +73,36 @@ class _JLPTCardsState extends State<JLPTCards> {
                 children: [
                   StudyCategoryAndProgress(
                     caregory: AppString.word.tr,
-                    curCnt: userController.user!.currentJlptWordScroes[index],
                     totalCnt: userController.user!.jlptWordScroes[index],
+                    curCnt:
+                        kDebugMode
+                            ? (userController.user!.jlptWordScroes[index] / 1.2)
+                                .toInt()
+                            : userController.user!.currentJlptWordScroes[index],
                   ),
                   StudyCategoryAndProgress(
                     caregory: AppString.kangi.tr,
-                    curCnt: userController.user!.currentKangiScores[index],
                     totalCnt: userController.user!.kangiScores[index],
+                    curCnt:
+                        kDebugMode
+                            ? (userController.user!.kangiScores[index] / 2)
+                                .toInt()
+                            : userController.user!.currentKangiScores[index],
                   ),
                   StudyCategoryAndProgress(
                     caregory: AppString.grammar.tr,
-                    curCnt: userController.user!.currentGrammarScores[index],
                     totalCnt: userController.user!.grammarScores[index],
+                    curCnt:
+                        kDebugMode
+                            ? (userController.user!.grammarScores[index] / 1.5)
+                                .toInt()
+                            : userController.user!.currentGrammarScores[index],
                   ),
                 ],
               ),
               foot: Text(
                 'JLPT N${index + 1} ${AppString.jlptBookDescription.tr}',
                 style: TextStyle(
-                  fontFamily: AppFonts.gMaretFont,
                   fontWeight: FontWeight.w500,
                   // fontSize: 16,
                 ),
@@ -129,14 +112,6 @@ class _JLPTCardsState extends State<JLPTCards> {
         );
       },
     );
-  }
-
-  void onPageChanged(v) {
-    _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.jlpt,
-      v,
-    );
-    setState(() {});
   }
 }
 
@@ -154,18 +129,19 @@ class _MyCardsState extends State<MyCards> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.my);
+    _currentIndex = LocalReposotiry.getProgress(KindOfStudy.my.name) ?? 0;
 
     bodys = [];
   }
 
+  void putBasicOrJlptOrMyDetail(int index) {
+    LocalReposotiry.setProgress(KindOfStudy.my.name, index);
+  }
+
   @override
   void dispose() {
+    putBasicOrJlptOrMyDetail(_currentIndex);
     super.dispose();
-    _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.my,
-      _currentIndex,
-    );
   }
 
   List<Widget> bodys = [];
@@ -181,10 +157,8 @@ class _MyCardsState extends State<MyCards> {
           initialPage: _currentIndex,
           enlargeCenterPage: true,
           onPageChanged: (index, reason) {
-            _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-              KindOfStudy.my,
-              index,
-            );
+            _currentIndex = index;
+            putBasicOrJlptOrMyDetail(index);
           },
           scrollDirection: Axis.horizontal,
         ),
@@ -243,11 +217,6 @@ class _MyCardsState extends State<MyCards> {
       );
     });
   }
-
-  void onPageChanged(v) {
-    _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.my, v);
-    setState(() {});
-  }
 }
 
 class BasicCard extends StatefulWidget {
@@ -264,27 +233,22 @@ class _BasicCardState extends State<BasicCard> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getBasicOrJlptOrMyDetail(KindOfStudy.basic);
+    _currentIndex = LocalReposotiry.getProgress(KindOfStudy.basic.name) ?? 0;
+  }
+
+  void putBasicOrJlptOrMyDetail(int inedx) {
+    LocalReposotiry.setProgress(KindOfStudy.basic.name, inedx);
   }
 
   @override
   void dispose() {
+    putBasicOrJlptOrMyDetail(_currentIndex);
     super.dispose();
-    LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.basic, _currentIndex);
-  }
-
-  void onPageChanged(v) {
-    _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-      KindOfStudy.basic,
-      v,
-    );
-    setState(() {});
   }
 
   List<Widget> bodys = [
     LevelCategoryCard(
       onTap: () {
-        LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.basic, 0);
         Get.to(() => const HiraganaScreen(category: 'hiragana'));
       },
       title: AppString.hiraganaVocabulary.tr,
@@ -293,7 +257,6 @@ class _BasicCardState extends State<BasicCard> {
     ),
     LevelCategoryCard(
       onTap: () {
-        LocalReposotiry.putBasicOrJlptOrMyDetail(KindOfStudy.basic, 1);
         Get.to(() => const HiraganaScreen(category: 'katakana'));
       },
       title: AppString.katakanaVocabulary.tr,
@@ -312,10 +275,8 @@ class _BasicCardState extends State<BasicCard> {
         initialPage: _currentIndex,
         enlargeCenterPage: true,
         onPageChanged: (index, reason) {
-          _currentIndex = LocalReposotiry.putBasicOrJlptOrMyDetail(
-            KindOfStudy.basic,
-            index,
-          );
+          _currentIndex = index;
+          putBasicOrJlptOrMyDetail(index);
         },
         scrollDirection: Axis.horizontal,
       ),

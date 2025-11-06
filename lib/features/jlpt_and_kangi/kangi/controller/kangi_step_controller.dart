@@ -2,20 +2,17 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
-import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
-import 'package:jlpt_jonggack/model/word.dart';
 
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
-import 'package:jlpt_jonggack/repository/my_word_repository.dart';
 
 import '../../../../model/Question.dart';
 import '../../../kangi_study/widgets/screens/kangi_study_sceen.dart';
@@ -136,7 +133,7 @@ class KangiStepController extends GetxController {
 
       if (showSnackBar) {
         SnackBarHelper.showSuccessSnackBar(
-          '${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
+          '${newMyWord.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
         );
       }
     }
@@ -275,7 +272,7 @@ class KangiStepController extends GetxController {
       this.headTitle,
     );
 
-    step = LocalReposotiry.getCurrentProgressing(
+    step = LocalReposotiry.getProgress(
       '${CategoryEnum.kangis.name}-$level-$headTitle',
     );
     setStep(step);
@@ -284,7 +281,7 @@ class KangiStepController extends GetxController {
   }
 
   void finishQuizAndchangeHeaderPageIndex() {
-    int currentHeaderPageIndex = LocalReposotiry.getCurrentProgressing(
+    int currentHeaderPageIndex = LocalReposotiry.getProgress(
       '${CategoryEnum.kangis.name}-$level-$headTitle',
     );
     if (currentHeaderPageIndex + 1 == kangiSteps.length) {
@@ -293,10 +290,7 @@ class KangiStepController extends GetxController {
       return;
     }
     step = currentHeaderPageIndex + 1;
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.kangis.name}-$level-$headTitle',
-      step,
-    );
+    getProgress('${CategoryEnum.kangis.name}-$level-$headTitle', step);
     pageController.jumpToPage(step);
     // pageController.animateToPage(
     //   step,
@@ -305,12 +299,13 @@ class KangiStepController extends GetxController {
     // );
   }
 
+  void getProgress(String key, int index) {
+    LocalReposotiry.setProgress(key, index);
+  }
+
   void changeHeaderPageIndex(int index) {
     step = index;
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.kangis.name}-$level-$headTitle',
-      step,
-    );
+    getProgress('${CategoryEnum.kangis.name}-$level-$headTitle', step);
     pageController.animateToPage(
       step,
       duration: const Duration(milliseconds: 300),

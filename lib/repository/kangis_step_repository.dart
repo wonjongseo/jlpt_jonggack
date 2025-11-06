@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 
 import 'package:jlpt_jonggack/model/kangi.dart';
 
@@ -142,7 +143,8 @@ class KangiStepRepositroy {
         );
 
         String key = '$nLevel-$headTitle-$stepCount'; // "2-챕터1-0"
-        LocalReposotiry.putCurrentProgressing(
+
+        getProgress(
           '${CategoryEnum.kangis.name}-$nLevel-$headTitle', // "Kangis-2-챕터1"
           0,
         );
@@ -151,11 +153,12 @@ class KangiStepRepositroy {
       }
       await box.put('$nLevel-$headTitle', stepCount);
     }
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.kangis.name}-$nLevel',
-      0,
-    );
+    getProgress('${CategoryEnum.kangis.name}-$nLevel', 0);
     return totalCount;
+  }
+
+  static void getProgress(String key, int index) {
+    LocalReposotiry.setProgress(key, index);
   }
 
   List<KangiStep> getKangiStepByHeadTitle(String nLevel, String headTitle) {
@@ -199,7 +202,6 @@ class KangiStepRepositroy {
     for (int i = 0; i < kangis.length; i++) {
       totalCount += kangis[i].length;
     }
-    log('totalCount : ${totalCount}');
 
     box.put('$nLevel-step-count', kangis.length); // 2-step-count
 
@@ -236,22 +238,19 @@ class KangiStepRepositroy {
         String key = '$nLevel-$headTitle-$stepCount'; // "2-챕터1-0"
 
         KangiStep? beforeKangiStep = await box.get(key);
-        if (beforeKangiStep == null) return 0;
+        if (beforeKangiStep == null) break;
         beforeKangiStep.kangis = currentKangis;
 
-        LocalReposotiry.putCurrentProgressing(
-          '${CategoryEnum.kangis.name}-$nLevel-$headTitle', // "Kangis-2-챕터1"
-          0,
-        );
+        // getProgress(
+        //   '${CategoryEnum.kangis.name}-$nLevel-$headTitle', // "Kangis-2-챕터1"
+        //   0,
+        // );
         await box.put(key, beforeKangiStep);
         stepCount++;
       }
       await box.put('$nLevel-$headTitle', stepCount);
     }
-    LocalReposotiry.putCurrentProgressing(
-      '${CategoryEnum.kangis.name}-$nLevel',
-      0,
-    );
+    // getProgress('${CategoryEnum.kangis.name}-$nLevel', 0);
     return totalCount;
   }
 }

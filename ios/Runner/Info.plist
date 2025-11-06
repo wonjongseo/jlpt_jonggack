@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>JLPT 종각</string>
+	<string>JLPT Jg</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -38,11 +38,11 @@
 	<key>NSDownloadsFolderUsageDescription</key>
 	<string>Used to select files for upload</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>アプリの音声認識に利用します。</string>
+	<string>Uses the app’s speech recognition.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>앱에서 사진을 선택하거나 저장하기 위해 사진 보관함 접근 권한이 필요합니다.</string>
+	<string>We need access to your photo library to select or save photos in the app.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>종각엡애프리케이アプリの音声認識に利用します。</string>
+	<string>Uses the app’s speech recognition.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

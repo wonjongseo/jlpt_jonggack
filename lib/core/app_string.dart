@@ -4,9 +4,9 @@ class AppString extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
     'ko_KR': {
+      AppString.language: AppString.languageKr,
       AppString.koreanText: AppString.koreanTextKr,
       AppString.englishText: AppString.englishTextKr,
-      AppString.language: AppString.languageKr,
       AppString.vocabulary: AppString.vocabularyKr,
       AppString.hiraganaVocabulary: AppString.hiraganaVocabularyKr,
       AppString.hiraganaVocaDesc: AppString.hiraganaVocaDescKr,
@@ -35,10 +35,6 @@ class AppString extends Translations {
       AppString.hundoc: AppString.hundocKr,
       AppString.relatedWord: AppString.relatedWordKr,
       AppString.relatedKangis: AppString.relatedKangisKr,
-      AppString.jgVoca: AppString.jgVocaKr,
-      AppString.jgVocaDesc: AppString.jgVocaDescKr,
-      AppString.myVoca: AppString.myVocaKr,
-      AppString.myVocaDesc: AppString.myVocaDescKr,
       AppString.savedWordsCnt: AppString.savedWordsCntKr,
       AppString.noSavedWord: AppString.noSavedWordKr,
       AppString.addWord: AppString.addWordKr,
@@ -104,11 +100,30 @@ class AppString extends Translations {
       AppString.failLoadMailApp: AppString.failLoadMailAppKr,
       AppString.failLoadMailApp2: AppString.failLoadMailApp2Kr,
       AppString.settingScreen: AppString.settingScreenKr,
+      AppString.initalStart: AppString.initalStartKr,
+      AppString.plzReStart: AppString.plzReStartKr,
+      AppString.doneInital: AppString.doneInitalKr,
+      AppString.plzDontCloseApp: AppString.plzDontCloseAppKr,
+      AppString.complateChangeLangage: AppString.complateChangeLangageKr,
+      AppString.reading: AppString.readingKr,
+      AppString.plzEnterReading: AppString.plzEnterReadingKr,
+      AppString.openEndedDesc: AppString.openEndedDescKr,
+      AppString.cannotOpenBraoser: AppString.cannotOpenBraoserKr,
+      AppString.plzEnterNumberOfQuiz: AppString.plzEnterNumberOfQuizKr,
+      AppString.shuffleOrder: AppString.shuffleOrderKr,
+      AppString.confirm: AppString.confirmKr,
+      AppString.doneUpdate: AppString.doneUpdateKr,
+      AppString.doneCreate: AppString.doneCreateKr,
+      AppString.doneDelete: AppString.doneDeleteKr,
+      AppString.skipUploadWord: AppString.skipUploadWordKr,
+      AppString.errorUploadingWord: AppString.errorUploadingWordKr,
+      AppString.plzEnterSearchTerm: AppString.plzEnterSearchTermKr,
+      AppString.plzEnterMoreOne: AppString.plzEnterMoreOneKr,
     },
     'en_US': {
+      AppString.language: AppString.languageEn,
       AppString.koreanText: AppString.koreanTextEn,
       AppString.englishText: AppString.englishTextEn,
-      AppString.language: AppString.languageEn,
       AppString.vocabulary: AppString.vocabularyEn,
       AppString.hiraganaVocabulary: AppString.hiraganaVocabularyEn,
       AppString.hiraganaVocaDesc: AppString.hiraganaVocaDescEn,
@@ -137,10 +152,6 @@ class AppString extends Translations {
       AppString.hundoc: AppString.hundocEn,
       AppString.relatedWord: AppString.relatedWordEn,
       AppString.relatedKangis: AppString.relatedKangisEn,
-      AppString.jgVoca: AppString.jgVocaEn,
-      AppString.jgVocaDesc: AppString.jgVocaDescEn,
-      AppString.myVoca: AppString.myVocaEn,
-      AppString.myVocaDesc: AppString.myVocaDescEn,
       AppString.savedWordsCnt: AppString.savedWordsCntEn,
       AppString.noSavedWord: AppString.noSavedWordEn,
       AppString.addWord: AppString.addWordEn,
@@ -161,7 +172,6 @@ class AppString extends Translations {
       AppString.doChangeLanaguge2: AppString.doChangeLanaguge2En,
       AppString.yes: AppString.yesEn,
       AppString.no: AppString.noEn,
-
       AppString.mean: AppString.meanEn,
       AppString.description: AppString.descriptionEn,
       AppString.connectionWays: AppString.connectionWaysEn,
@@ -191,7 +201,6 @@ class AppString extends Translations {
       AppString.speedRate: AppString.speedRateEn,
       AppString.volumn: AppString.volumnEn,
       AppString.pitch: AppString.pitchEn,
-
       AppString.appSetting: AppString.appSettingEn,
       AppString.quizDuration: AppString.quizDurationEn,
       AppString.whenIncorrect: AppString.whenIncorrectEn,
@@ -200,7 +209,6 @@ class AppString extends Translations {
       AppString.systemSetting: AppString.systemSettingEn,
       AppString.setLanguage: AppString.setLanguageEn,
       AppString.reportMsgContect: AppString.reportMsgContectEn,
-
       AppString.enableOpenEndQustion: AppString.enableOpenEndQustionEn,
       AppString.emailSubject: AppString.emailSubjectEn,
       AppString.another: AppString.anotherEn,
@@ -209,6 +217,25 @@ class AppString extends Translations {
       AppString.failLoadMailApp: AppString.failLoadMailAppEn,
       AppString.failLoadMailApp2: AppString.failLoadMailApp2En,
       AppString.settingScreen: AppString.settingScreenEn,
+      AppString.initalStart: AppString.initalStartEn,
+      AppString.plzReStart: AppString.plzReStartEn,
+      AppString.doneInital: AppString.doneInitalEn,
+      AppString.plzDontCloseApp: AppString.plzDontCloseAppEn,
+      AppString.complateChangeLangage: AppString.complateChangeLangageEn,
+      AppString.reading: AppString.readingEn,
+      AppString.plzEnterReading: AppString.plzEnterReadingEn,
+      AppString.openEndedDesc: AppString.openEndedDescEn,
+      AppString.cannotOpenBraoser: AppString.cannotOpenBraoserEn,
+      AppString.plzEnterNumberOfQuiz: AppString.plzEnterNumberOfQuizEn,
+      AppString.shuffleOrder: AppString.shuffleOrderEn,
+      AppString.confirm: AppString.confirmEn,
+      AppString.doneUpdate: AppString.doneUpdateEn,
+      AppString.doneCreate: AppString.doneCreateEn,
+      AppString.doneDelete: AppString.doneDeleteEn,
+      AppString.skipUploadWord: AppString.skipUploadWordEn,
+      AppString.errorUploadingWord: AppString.errorUploadingWordEn,
+      AppString.plzEnterSearchTerm: AppString.plzEnterSearchTermEn,
+      AppString.plzEnterMoreOne: AppString.plzEnterMoreOneEn,
     },
   };
 
@@ -246,7 +273,7 @@ class AppString extends Translations {
 
   static String appName = "appNameTr";
   static String appNameKr = 'JLPT종각';
-  static String appNameEn = "JLPT JG ";
+  static String appNameEn = "JLPT Jg";
 
   static String word = "wordTr";
   static String wordKr = '단어';
@@ -265,8 +292,8 @@ class AppString extends Translations {
   static String jlptBookDescriptionEn = "Integrated Book";
 
   static String searchHintText = "searchHintTextTr";
-  static String searchHintTextKr = ' 일본어/한자/문법 검색...';
-  static String searchHintTextEn = " Search Japanese/Kangi/Grammar...";
+  static String searchHintTextKr = ' 일본어, 한자, 문법 검색...';
+  static String searchHintTextEn = " Search Japanese, Kangi, Grammar...";
 
   static String randomQuiz = "randomQuizTr";
   static String randomQuizKr = '랜덤 퀴즈';
@@ -336,20 +363,16 @@ class AppString extends Translations {
   static String relatedKangisKr = '연관 한자';
   static String relatedKangisEn = "Related Kangis";
 
-  static String jgVoca = "jgVocaTr";
   static String jgVocaKr = '종각 단어장';
-  static String jgVocaEn = "JG Book";
+  static String jgVocaEn = "Jg Book";
 
-  static String jgVocaDesc = "jgVocaDescTr";
   static String jgVocaDescKr = '종각 앱에서 저장한 단어들을\n학습하는 단어장';
   static String jgVocaDescEn =
       "This is a vocabulary book where words in the app are stored";
 
-  static String myVoca = "myVocaTr";
   static String myVocaKr = '나만의 단어장';
   static String myVocaEn = "My Book";
 
-  static String myVocaDesc = "myVocaDescTr";
   static String myVocaDescKr = '종각 앱에서 저장한 단어들을\n학습하는 단어장';
   static String myVocaDescEn =
       "This is a vocabulary book where the user stores the words directly";
@@ -535,9 +558,9 @@ class AppString extends Translations {
       "Please enter a book name with at least 20 characters.";
 
   static String plzEnterMess20Char = "plzEnterMess20CharTr";
-  static String plzEnterMess20CharKr = '단어장 설명은 50자 이하로 입력해주세요';
+  static String plzEnterMess20CharKr = '단어장 설명은 100자 이하로 입력해주세요';
   static String plzEnterMess20CharEn =
-      "Please enter a book name within 50 characters.";
+      "Please enter a book name within 100 characters.";
 
   static String plzSelectTheAnswer = "plzSelectTheAnswerTr";
   static String plzSelectTheAnswerKr = '빈칸에 맞는 답을 선택해 주세요.';
@@ -660,7 +683,7 @@ We’ll review it as soon as possible and work on improvements.
 
   static String emailSubject = "emailSubjectTr";
   static String emailSubjectKr = '[JLPT 종각] 버그・오류 제보';
-  static String emailSubjectEn = "[JLPT JG] Bug Report";
+  static String emailSubjectEn = "[JLPT Jg] Bug Report";
 
   static String another = "anotherTr";
   static String anotherKr = "그 외";
@@ -690,4 +713,89 @@ We’ll review it as soon as possible and work on improvements.
   static String settingScreen = "settingScreenTr";
   static String settingScreenKr = '설정 페이지';
   static String settingScreenEn = "Setting Page";
+
+  static String initalStart = "initalStart";
+  // static String plzReStartAppKr = '데이터를 불러오는 중입니다.\n완료 후 자동적으로 앱이 종료됩니다. ';
+  static String initalStartKr = '앱을 초기화 하는 중입니다.\n완료 후 자동적으로 앱이 종료됩니다.';
+  static String initalStartEn =
+      "Initializing the app...\nThe app will close automatically when finished.";
+
+  static String doneInital = "doneInitalTr";
+  static String doneInitalKr = '앱 초기화 완료';
+  static String doneInitalEn = "Initialization complete";
+
+  static String plzReStart = "plzReStartTr";
+  static String plzReStartKr = '앱을 재실행해주세요.';
+  static String plzReStartEn = "Please restart the app.";
+
+  static String plzDontCloseApp = "plzDontCloseAppTr";
+  static String plzDontCloseAppKr = '앱을 종료하지마세요.';
+  static String plzDontCloseAppEn = "Please do not close the app.";
+
+  static String complateChangeLangage = "complateChangeLangageTr";
+  static String complateChangeLangageKr = '시스템 언어 변경 완료';
+  static String complateChangeLangageEn =
+      "System language changed successfully";
+
+  static String reading = "readingTr";
+  static String readingKr = ' 읽는 법';
+  static String readingEn = " Reading";
+
+  static String plzEnterReading = "plzEnterReadingTr";
+  static String plzEnterReadingKr = '읽는 법을 먼저 입력해주세요.';
+  static String plzEnterReadingEn = "Please enter the reading first.";
+
+  static String openEndedDesc = "openEndedDescTr";
+  static String openEndedDescKr =
+      '1. 읽는 법을 입력하면 사지선다가 표시됩니다.\n2. 장음 (-, ー) 은 생략해도 됩니다.';
+  static String openEndedDescEn =
+      "1. Once you enter the reading, multiple-choice options will appear.\n2. You can omit long vowels (-, ー).";
+
+  static String cannotOpenBraoser = "cannotOpenBraoserTr";
+  static String cannotOpenBraoserKr = '브라우저를 열 수 없습니다.';
+  static String cannotOpenBraoserEn = "Unable to open browser";
+
+  static String plzEnterNumberOfQuiz = "plzEnterNumberOfQuizTr";
+  static String plzEnterNumberOfQuizKr = '퀴즈를 진행 할 단어수를 입력해주세요.';
+  static String plzEnterNumberOfQuizEn =
+      "Enter the number of words for the quiz.";
+
+  static String shuffleOrder = "shuffleOrderTr";
+  static String shuffleOrderKr = '순서 섞기';
+  static String shuffleOrderEn = "Shuffle order";
+
+  static String confirm = "confirmTr";
+  static String confirmKr = '확인';
+  static String confirmEn = "Confirm";
+
+  static String doneUpdate = "doneUpdateTr";
+  static String doneUpdateKr = '가 변경되었습니다';
+  static String doneUpdateEn = " is updated";
+
+  static String doneCreate = "doneCreateTr";
+  static String doneCreateKr = '가 생성되었습니다';
+  static String doneCreateEn = " is created";
+
+  static String doneDelete = "doneDeleteTr";
+  static String doneDeleteKr = '가 삭제되었습니다';
+  static String doneDeleteEn = " is deleted";
+
+  static String skipUploadWord = "skipUploadWordTr";
+  static String skipUploadWordKr = '이미 저장된 단어 이기에 단어 등록을 스킵했습니다';
+  static String skipUploadWordEn =
+      " This word is already saved, so it was skipped.";
+
+  static String errorUploadingWord = "errorUploadingWordTr";
+  static String errorUploadingWordKr = '엑셀 처리 중 오류: ';
+  static String errorUploadingWordEn = " Excel processing error: ";
+
+  static String plzEnterSearchTerm = "plzEnterSearchTermTr";
+  static String plzEnterSearchTermKr = '검색할 내용이 없습니다';
+  static String plzEnterSearchTermEn = " Please enter a search term";
+
+  static String plzEnterMoreOne = "plzEnterMoreOneTr";
+  static String plzEnterMoreOneKr = '1보다 큰 수를 입력해주세요';
+  static String plzEnterMoreOneEn = " Please enter a number greater than 1";
+
+  //
 }

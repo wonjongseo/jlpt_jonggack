@@ -2,7 +2,7 @@ name: jlpt_jonggack
 description: "A new Flutter project."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 2.9.0+20 # Android Plus = +5 , Nomal = +8
+version: 3.0.0+21 # Android Plus = +5 , Nomal = +8
 
 environment:
   sdk: ^3.7.2

@@ -5,128 +5,11 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/my_voca/components/custom_button.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommonDialog {
-  static Future<bool> askToDeleteAllMyWord(int countOfWords) async {
-    return selectionDialog(
-      title: Text(
-        '선택된 $countOfWords개의 단어를 삭제 하시겠습니까?',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: Responsive.height16,
-        ),
-      ),
-      connent: const Text(
-        '삭제 후 복구는 불가능합니다.\n그래도 삭제 하시겠습니까?',
-        style: TextStyle(color: AppColors.scaffoldBackground),
-      ),
-    );
-  }
-
-  static Future<bool> askToDeleteAllDataOneMore() async {
-    return selectionDialog(
-      title: Text(
-        '정말 초기화를 안하시나요?',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: Responsive.height20,
-          fontFamily: AppFonts.japaneseFont,
-        ),
-      ),
-      connent: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text:
-                  '수정된 데이터로 종각앱을 학습하면 더 정확하고 많은 예제로 학습할 수 있습니다.\n 문법 예시의 읽는 법도 추가 되었습니다.\n\n초기화 하시겠습니까??',
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: AppFonts.japaneseFont,
-                fontWeight: FontWeight.w100,
-                fontSize: Responsive.height16,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static Future<bool> askToDeleteAllDataForUpdateDatas() async {
-    return selectionDialog(
-      title: Text(
-        '데이터를 초기화 하시겠습니까?',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: Responsive.height20,
-          fontFamily: AppFonts.japaneseFont,
-        ),
-      ),
-      connent: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: '종각앱의 데이터가 대량 수정・추가 되었습니다.\n\n',
-              children: const [
-                TextSpan(text: '수정・추가된 데이터로 학습하려면 종각앱의 데이터를 '),
-                TextSpan(
-                  text: '1회',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextSpan(text: ' 초기화를 해야 합니다.\n\n데이터를 초기화하시겠습니까? '),
-                TextSpan(
-                  text: '(권장)',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: AppFonts.japaneseFont,
-                fontWeight: FontWeight.w100,
-                fontSize: Responsive.height16,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  static Future<bool> askSetSubjectQuestionOfJlptTestDialog() async {
-    return selectionDialog(
-      title: Text(
-        '주관식 문제를 활성화 하시겠습니까?',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: Responsive.height16,
-        ),
-      ),
-      connent: const Text(
-        '일본어 단어 퀴즈에 읽는 법을 직접 입력하는 기능이 있습니다.\n해당 기능을 활성화하면 일본어 학습하는데 도움이 됩니다.',
-        style: TextStyle(color: AppColors.scaffoldBackground),
-      ),
-    );
-  }
-
-  static Future<bool> askGoToMyVocaPageDialog(int savedCount) async {
-    return selectionDialog(
-      title: Text('단어가 $savedCount개 이상이나 저장되었어요!'),
-      connent: const Text(
-        '나만의 단어장 1에서 저장했던 단어를 학습하시겠습니까?',
-        style: TextStyle(color: AppColors.scaffoldBackground),
-      ),
-    );
-  }
-
   static Future<bool> errorNoEnrolledEmail() async {
     return selectionDialog(
       title: Text(
@@ -138,13 +21,6 @@ class CommonDialog {
         style: TextStyle(color: AppColors.scaffoldBackground),
       ),
     );
-  }
-
-  static Future<bool> noSelectionDialog({
-    Widget? title,
-    Widget? connent,
-  }) async {
-    return jonggackDialog(title: title, connent: connent);
   }
 
   static Future<bool> selectionDialog({Widget? title, Widget? connent}) async {
@@ -210,29 +86,16 @@ class CommonDialog {
 
   static Future<bool> askStartToRemainQuestionsDialog() async {
     return selectionDialog(
-      title: const Text('과거의 테스트에서 틀린 문제들이 있습니다.'),
-      connent: const Text(
-        '틀린 문제만으로 다시 테스트를 보시겠습니까?',
-        style: TextStyle(color: AppColors.scaffoldBackground),
-      ),
-    );
-  }
-
-  static Future<bool> askBeforeDeleteDatasDialog(
-    String category, {
-    message = AppConstantMsg.initDataAlertMsg,
-  }) async {
-    return selectionDialog(
       title: Text(
-        '$category 초기화 하시겠습니까?',
-        style: const TextStyle(
-          color: AppColors.scaffoldBackground,
-          fontWeight: FontWeight.bold,
-        ),
+        isEn
+            ? 'You still have some questions you got wrong in a previous test.'
+            : '과거에 테스트에서 틀린 문제들이 있습니다.',
       ),
       connent: Text(
-        message,
-        style: const TextStyle(color: AppColors.scaffoldBackground),
+        isEn
+            ? 'Would you like to retake the test using only the questions you answered incorrectly?'
+            : '틀린 문제만으로 다시 테스트를 보시겠습니까?',
+        style: TextStyle(color: AppColors.scaffoldBackground),
       ),
     );
   }
@@ -249,25 +112,32 @@ class CommonDialog {
                 text: '',
                 children: [
                   TextSpan(
-                    text: remainQuestions,
-                    style: TextStyle(
-                      color: Colors.redAccent,
-                      fontSize: Responsive.width18,
-                    ),
+                    text:
+                        isEn
+                            ? 'The following questions remain: '
+                            : remainQuestions,
+                    style: TextStyle(color: Colors.redAccent, fontSize: 18),
                   ),
-                  const TextSpan(text: '번이 남아 있습니다.\n\n'),
-                  const TextSpan(text: '그래도 제출 하시겠습니까?'),
+                  TextSpan(
+                    text: isEn ? '$remainQuestions.\n\n' : '번이 남아 있습니다.\n\n',
+                  ),
+                  TextSpan(
+                    text:
+                        isEn
+                            ? 'Do you want to submit anyway?'
+                            : '그래도 제출 하시겠습니까?',
+                  ),
                 ],
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: Responsive.width16,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-            SizedBox(height: Responsive.height20),
+            SizedBox(height: 20),
             const JonggackAvator(),
-            SizedBox(height: Responsive.height20),
+            SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -322,67 +192,7 @@ class CommonDialog {
   }
 
   static Future<void> appealDownLoadThePaidVersion() async {
-    Get.dialog(
-      AlertDialog(
-        shape: Border.all(),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RichText(
-              text: TextSpan(
-                text: 'JLPT N1을 더 학습하기 위해서는',
-                children: [
-                  TextSpan(
-                    text: '\nJLPT 종각앱 Plus',
-                    style: TextStyle(
-                      color: AppColors.mainColor,
-                      fontSize: Responsive.width20,
-                    ),
-                  ),
-                  const TextSpan(text: '를 이용해주세요'),
-                ],
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: Responsive.width18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            SizedBox(height: Responsive.height10),
-            const JonggackAvator(),
-            SizedBox(height: Responsive.height40),
-            TextButton(
-              onPressed: () async {
-                if (GetPlatform.isIOS) {
-                  launchUrl(
-                    Uri.parse('https://apps.apple.com/app/id6450434849'),
-                  );
-                } else if (GetPlatform.isAndroid) {
-                  launchUrl(
-                    Uri.parse(
-                      'https://play.google.com/store/apps/details?id=com.wonjongseo.jlpt_jonggack_plus',
-                    ),
-                  );
-                } else {
-                  launchUrl(
-                    Uri.parse('https://apps.apple.com/app/id6450434849'),
-                  );
-                }
-              },
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                minimumSize: const Size(0, 0),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                'JLPT종각 Plus 다운로드 하러가기 →',
-                style: TextStyle(color: AppColors.mainBordColor),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    Get.dialog(AppealUpgrade());
   }
 
   static Future<bool> jonggackDialog({
@@ -416,15 +226,15 @@ class CommonDialog {
     //       children: [
     //         if (title != null) ...[
     //           title,
-    //           SizedBox(height: Responsive.height20),
+    //           SizedBox(height: 20),
     //         ],
     //         if (connent != null) ...[
     //           connent,
-    //           SizedBox(height: Responsive.height20),
+    //           SizedBox(height: 20),
     //         ],
     //         const Align(alignment: Alignment.center, child: JonggackAvator()),
     //         if (action != null) ...[
-    //           SizedBox(height: Responsive.height20),
+    //           SizedBox(height: 20),
     //           action,
     //           SizedBox(height: Responsive.height10),
     //         ],
@@ -451,6 +261,92 @@ class JonggackAvator extends StatelessWidget {
           fit: BoxFit.fill,
           image: AssetImage('assets/images/my_avator.jpeg'),
         ),
+      ),
+    );
+  }
+}
+
+class AppealUpgrade extends StatelessWidget {
+  const AppealUpgrade({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog.adaptive(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          isEn
+              ? RichText(
+                text: TextSpan(
+                  text: 'To continue learning JLPT N1,\nplease use ',
+                  children: [
+                    TextSpan(
+                      text: 'JLPT Jonggack Plus',
+                      style: TextStyle(
+                        color: AppColors.mainBordColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                ),
+              )
+              : RichText(
+                text: TextSpan(
+                  text: 'JLPT N1을 더 학습하기 위해서는',
+                  children: [
+                    TextSpan(
+                      text: '\nJLPT 종각앱 Plus',
+                      style: TextStyle(
+                        color: AppColors.mainColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const TextSpan(text: '를 이용해주세요'),
+                  ],
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                ),
+              ),
+
+          SizedBox(height: 20),
+          Container(
+            width: double.infinity,
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColors.mainColor,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              isEn ? 'Download JLPT Jg Plus→' : 'JLPT종각 Plus 다운로드→',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          // TextButton(
+          //   onPressed: () async {
+          //     if (GetPlatform.isIOS) {
+          //       launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
+          //     } else if (GetPlatform.isAndroid) {
+          //       launchUrl(
+          //         Uri.parse(
+          //           'https://play.google.com/store/apps/details?id=com.wonjongseo.jlpt_jonggack_plus',
+          //         ),
+          //       );
+          //     } else {
+          //       launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
+          //     }
+          //   },
+
+          //   child: Text(
+          //     isEn ? 'Download JLPT Jg Plus→' : 'JLPT종각 Plus 다운로드→',
+          //     style: TextStyle(color: AppColors.mainColor),
+          //   ),
+          // ),
+        ],
       ),
     );
   }

@@ -12,6 +12,7 @@ class UserRepository {
   static Future<User> init(User user) async {
     final box = Hive.box(User.boxKey);
     await box.put('user', user);
+    log('Created user');
     return user;
   }
 
@@ -19,6 +20,12 @@ class UserRepository {
     final box = Hive.box(User.boxKey);
     User? user = box.get('user');
     return user;
+  }
+
+  static Future<void> deleteUser() async {
+    final box = Hive.box(User.boxKey);
+    await box.deleteAll(box.keys);
+    // await box.deleteFromDisk();
   }
 
   static Future<bool> updateUser(User user) async {

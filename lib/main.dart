@@ -5,12 +5,14 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/core/bindings/initial_bindings.dart';
 
 import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
-import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/book.dart';
+import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
+import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
+import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/routes.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:jlpt_jonggack/services/app_info_service.dart';
@@ -21,9 +23,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/model/user.dart';
-import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
-import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
-import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
@@ -56,17 +55,23 @@ STEP 2-1. 번들 이름 바꾸기
 STEP 3.
   앱 아이콘 바꾸기
 
-STEP 4. 
+STEP 4.  
   User isPremieum = false <-> true
 
 STEP 5. 
   버전 바꾸기
+
+STEP 6.
+안드로이드 이름 바꾸기
+ JLPT 종각 <-> JLPT 종각 Plus
+ JLPT Jg <-> JLPT Jg Plus
   
 
 Android Command - flutter build appbundle
 Hive - flutter pub run build_runner build --delete-conflicting-outputs
 
-
+1. 앱을 초기화 하는 중입니다.\n완료 후 자동적으로 앱이 종료됩니다.
+2. 앱의 초기화가 완료되었습니다.\n앱을 재실행해주세요. 
  */
 
 void main() async {
@@ -103,28 +108,30 @@ class _AppState extends State<App> {
   late String systemLanguage;
   @override
   Widget build(BuildContext context) {
+    Get.put(UserController());
+
     final controller = Get.put(SettingController(), permanent: true);
-    final Locale locale =
-        controller.systemLocale ?? Get.deviceLocale ?? const Locale('ko', 'KR');
+    if (controller.systemLocale == null) {
+      return loadingMaterialApp(context);
+    }
+
+    final effectiveLocale = controller.systemLocale!;
+    final langCode = normalizeLang(effectiveLocale);
 
     return FutureBuilder(
-      future: loadData(locale.languageCode),
+      future: loadData(langCode),
       builder: (context, snapshat) {
         if (snapshat.hasData == true) {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: HomeScreen.name,
             getPages: AppRoutes.getPages,
-            fallbackLocale: const Locale('ko', 'KR'),
+            fallbackLocale: const Locale('en', 'US'),
             initialBinding: InitialBindings(),
             theme: AppThemings.lightTheme,
-            locale: locale,
+            locale: effectiveLocale,
             translations: AppString(),
-
-            // themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
           );
-        } else if (snapshat.hasError) {
-          return errorMaterialApp(snapshat);
         } else {
           return loadingMaterialApp(context);
         }
@@ -132,101 +139,62 @@ class _AppState extends State<App> {
     );
   }
 
-  void getUsresSetting() {
-    systemLanguage =
-        SettingRepository.getString(AppConstant.settingLanguageKey) ?? "ko-KR";
-    print('systemLanguage : ${systemLanguage}');
-
-    isDarkMode =
-        SettingRepository.getBool(AppConstant.isDarkModeKey) ??
-        ThemeMode.system == ThemeMode.dark;
-  }
-
-  Future<bool> loadData(String systemLanguage) async {
-    List<int> jlptWordScroes = [];
-    List<int> grammarScores = [];
-    List<int> kangiScores = [];
+  Future<bool> loadData(String langCode) async {
     try {
-      // getUsresSetting();
-
-      jlptWordScroes = await WordLoadService.wordDataLoad(systemLanguage);
-      kangiScores = await WordLoadService.kangiDataLoad(systemLanguage);
-      grammarScores = await WordLoadService.grammarDataLoad(systemLanguage);
-
-      late User user;
-      if (await UserRepository.isExistData() == false) {
-        List<int> currentJlptWordScroes = List.generate(
-          jlptWordScroes.length,
-          (index) => 0,
-        );
-        List<int> currentGrammarScores = List.generate(
-          grammarScores.length,
-          (index) => 0,
-        );
-        List<int> currentKangiScores = List.generate(
-          kangiScores.length,
-          (index) => 0,
-        );
-
-        user = User(
-          jlptWordScroes: jlptWordScroes,
-          grammarScores: grammarScores,
-          kangiScores: kangiScores,
-          currentJlptWordScroes: currentJlptWordScroes,
-          currentGrammarScores: currentGrammarScores,
-          currentKangiScores: currentKangiScores,
-        );
-
-        user = await UserRepository.init(user);
-        if (!LocalReposotiry.isAskUpdateAllDataFor2_3_3()) {
-          LocalReposotiry.putIsNeedUpdateAllData(false);
-          LocalReposotiry.askedUpdateAllDataFor2_3_3(true);
-        }
-      } else {
-        if (!LocalReposotiry.isAskUpdateAllDataFor2_3_3()) {
-          LocalReposotiry.putIsNeedUpdateAllData(true);
-          LocalReposotiry.askedUpdateAllDataFor2_3_3(true);
-        }
-      }
-
-      UserController userController = Get.put(UserController());
-
-      if (userController.user!.grammarScores.length == 3) {
-        userController.addN4N5GrammarScore();
-      }
+      bool isUploaded = false;
       bool isPlus = await AppInfoService.isPlus();
+      final isUpdated =
+          SettingRepository.getBool(AppConstant.isUpdated) ?? false;
 
-      if (!isPlus) {
-        userController.user!.isPremieum = false;
-        UserRepository.updateUser(userController.user!);
-      }
+      final isUser = UserController.to.user != null;
 
-      bool isForceUpdate = await _isForceUpdate();
-      if (isForceUpdate) {
-        for (int i = 1; i < 6; i++) {
-          jlptWordScroes[i - 1] = await JlptStepRepositroy.updateJlptStepData(
-            systemLanguage,
-            "$i",
-          );
+      if (!isUser || isUpdated) {
+        if (isUpdated) {
+          await LocalReposotiry.deleteProgress();
+          await JlptStepRepositroy.deleteAllWord();
+          await KangiStepRepositroy.deleteAllKangiStep();
+          await GrammarRepositroy.deleteAllGrammar();
+          await SettingRepository.setBool(AppConstant.isUpdated, false);
         }
-        for (int i = 1; i < 7; i++) {
-          kangiScores[i - 1] = await KangiStepRepositroy.updateKangiStepData(
-            systemLanguage,
-            "$i",
-          );
+        isUploaded = true;
+
+        final results = await Future.wait([
+          WordLoadService.wordDataLoad(langCode),
+          WordLoadService.kangiDataLoad(langCode),
+          WordLoadService.grammarDataLoad(langCode),
+        ]);
+        final wordCnt = results[0];
+        final kangiCnt = results[1];
+        final grammarCnt = results[2];
+
+        final user = User(
+          jlptWordScroes: wordCnt,
+          grammarScores: grammarCnt,
+          kangiScores: kangiCnt,
+          currentJlptWordScroes: List.filled(wordCnt.length, 0),
+          currentGrammarScores: List.filled(grammarCnt.length, 0),
+          currentKangiScores: List.filled(kangiCnt.length, 0),
+        )..isPremieum = isPlus;
+
+        UserController.to.user = await UserRepository.init(user);
+
+        await SettingRepository.setString(
+          'createAt',
+          DateTime.now().toIso8601String(),
+        );
+      } else {
+        // 설정 잘못했을 경우.
+        if (UserController.to.user!.isPremieum != isPlus) {
+          UserController.to.user!.isPremieum = isPlus;
+          await UserRepository.updateUser(UserController.to.user!);
         }
-        for (int i = 1; i < 6; i++) {
-          grammarScores[i - 1] = await GrammarRepositroy.updateGrammarStepData(
-            systemLanguage,
-            "$i",
-          );
-        }
+        await _isForceUpdate(isUploaded);
       }
 
       final bookRepo = Get.find<HiveRepository<Book>>();
 
       if (bookRepo.getAll().isEmpty) {
-        await LocalReposotiry.migrationToBook(userController.user!);
+        await LocalReposotiry.migrationToBook(UserController.to.user!);
       }
 
       Get.put(JSearchController());
@@ -236,14 +204,39 @@ class _AppState extends State<App> {
     return true;
   }
 
-  Future<bool> _isForceUpdate() async {
-    return await LocalReposotiry.checkAndExecuteFunction();
+  Future<void> _isForceUpdate(bool isNew) async {
+    if (isNew) return;
+
+    final isForce = await LocalReposotiry.checkAndExecuteFunction();
+    if (isForce) {
+      String systemLang = SettingController.to.systemLocale!.languageCode;
+      List<int> jlptWordScroes = await WordLoadService.updateWordData(
+        systemLang,
+      );
+
+      List<int> kangiScores = await WordLoadService.updateKangisData(
+        systemLang,
+      );
+
+      List<int> grammarScores = await WordLoadService.updateGrammarData(
+        systemLang,
+      );
+
+      UserController.to.user = UserController.to.user!.copyWith(
+        jlptWordScroes: jlptWordScroes,
+        grammarScores: grammarScores,
+        kangiScores: kangiScores,
+      );
+      await UserRepository.updateUser(UserController.to.user!);
+    }
+  }
+
+  Locale resolveLocale(Locale? preferred, Locale? device) {
+    final lang = normalizeLang(preferred ?? device);
+    return lang == 'ko' ? Locale('ko', 'KR') : Locale('en', 'US');
   }
 
   MaterialApp loadingMaterialApp(BuildContext context) {
-    print('isKo : ${isKo}');
-    print('isEn : ${isEn}');
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -283,49 +276,8 @@ class _AppState extends State<App> {
       ),
     );
   }
-
-  MaterialApp errorMaterialApp(AsyncSnapshot<bool> snapshat) {
-    String errorMsg = snapshat.error.toString();
-    if (errorMsg.contains('Connection refused')) {
-      errorMsg = '서버와 연결이 불안정 합니다. 데이터 연결 혹은 Wifi환경에서 다시 요청해주시기 바랍니다.';
-      return const MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'JLPT종각 앱 이용 하기 앞서,',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                  ),
-                  Text(
-                    '데이터를 저장하기 위해 1회 서버와 연결을 해야합니다.',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    '데이터 연결 혹은 와이파이 환경에서 다시 요청해주시기 바랍니다.',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text(errorMsg)],
-          ),
-        ),
-      ),
-    );
-  }
 }
+
+
+// en [3035, 1727, 1692, 573, 657], grammarScores: [243, 195, 182, 130, 80], kangiScores: [951, 695, 184, 36, 81, 217]
+// ko [3195, 2586, 1537, 1018, 741], grammarScores: [213, 174, 144, 49, 19], kangiScores: [951, 695, 184, 36, 81, 217]

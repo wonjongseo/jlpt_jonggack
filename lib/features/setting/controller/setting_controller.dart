@@ -1,22 +1,42 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/app_constant.dart';
-import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 
 import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
+import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
+import 'package:jlpt_jonggack/repository/hive_repository.dart';
 import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
+import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
+import 'package:jlpt_jonggack/user/repository/user_repository.dart';
 
-bool get isKo => (Get.locale ?? Get.deviceLocale)?.languageCode == 'ko';
-bool get isEn => (Get.locale ?? Get.deviceLocale)?.languageCode == 'en';
+String normalizeLang(Locale? l) {
+  final code = l?.languageCode ?? 'en';
+  return (code == 'ko' || code == 'en') ? code : 'en';
+}
+
+Locale? _preferredLocale() {
+  try {
+    if (Get.isRegistered<SettingController>()) {
+      final c = Get.find<SettingController>();
+      if (c.systemLocale != null) return c.systemLocale;
+    }
+  } catch (_) {}
+  return Get.locale ?? Get.deviceLocale ?? const Locale('en', 'US');
+}
+
+String get _effectiveLang => normalizeLang(_preferredLocale());
+
+bool get isKo => _effectiveLang == 'ko';
+bool get isEn => _effectiveLang == 'en';
 
 class SettingController extends GetxController {
   static SettingController get to => Get.find<SettingController>();
@@ -25,6 +45,26 @@ class SettingController extends GetxController {
 
   final _isSubjective = true.obs;
   bool get isSubjective => _isSubjective.value;
+
+  final isAlertGranted = false.obs;
+
+  void setIsAlertGranted({bool? value}) {
+    if (value == null) {
+      isAlertGranted.value = !isAlertGranted.value;
+    } else {
+      isAlertGranted.value = value;
+    }
+
+    SettingRepository.setBool(
+      AppConstant.isAlertGrantedKey,
+      isAlertGranted.value,
+    );
+  }
+
+  void getIsSubjective() {
+    _isSubjective.value =
+        SettingRepository.getBool(HVKey.settingModelBox) ?? true;
+  }
 
   void toggleSubjective() {
     _isSubjective.value = !_isSubjective.value;
@@ -36,16 +76,44 @@ class SettingController extends GetxController {
   final volumn = 1.0.obs;
   final pitch = 1.0.obs;
 
-  void getSystemLanguage() {
-    final device = PlatformDispatcher.instance.locale;
+  Locale _toSupportedLocale(Locale? l) {
+    final code = normalizeLang(l);
+    return (code == 'ko') ? const Locale('ko', 'KR') : const Locale('en', 'US');
+  }
+
+  void setSystemLanguage(Locale locale) {
+    SettingRepository.setString(
+      AppConstant.settingLanguageKey,
+      locale.languageCode,
+    );
+  }
+
+  Future<void> getSystemLanguage() async {
     final saved = SettingRepository.getString(AppConstant.settingLanguageKey);
 
-    if (saved == null) {
-      _systemLocale.value = device;
-    } else {
-      _systemLocale.value =
-          (saved == 'ko') ? const Locale('ko', 'KR') : const Locale('en', 'US');
+    bool isLegacyUser = UserController.to.user != null;
+
+    if (saved == null || saved.isEmpty || saved == 'system') {
+      final Locale decided =
+          isLegacyUser
+              ? const Locale('ko', 'KR')
+              : _toSupportedLocale(PlatformDispatcher.instance.locale);
+
+      _systemLocale.value = decided;
+      await SettingRepository.setString(
+        AppConstant.settingLanguageKey,
+        decided.languageCode,
+      );
+      return;
     }
+
+    final savedLangCode = saved.split(RegExp(r'[-_]')).first.toLowerCase();
+    print('savedLangCode : ${savedLangCode}');
+
+    _systemLocale.value =
+        (savedLangCode == 'ko')
+            ? const Locale('ko', 'KR')
+            : const Locale('en', 'US'); // ko 외엔 전부 en
   }
 
   void getTtsValue() {
@@ -140,19 +208,25 @@ class SettingController extends GetxController {
   }
 
   @override
-  void onInit() {
-    getSystemLanguage();
+  void onInit() async {
+    await getSystemLanguage();
+    getIsSubjective();
     getTtsValue();
     getQuizValue();
     super.onInit();
   }
 
-  void changeSystemLanguage(String? displayLanguage) async {
-    // if (displayLanguage == null) return;
-    // if (isKo && displayLanguage == 'ko') return;
-    // if (isEn && displayLanguage == 'en') return;
+  final isDeletingFinish = false.obs;
 
-    final result = await Get.dialog(
+  void changeSystemLanguage(String? changedSystemLang) async {
+    if (changedSystemLang == null) return;
+    if (isKo && changedSystemLang == 'ko') return;
+    if (isEn && changedSystemLang == 'en') return;
+
+    isDeletingFinish.value = false;
+
+    bool? result = await Get.dialog(
+      name: "changeSystemLanguage",
       AlertDialog.adaptive(
         title: Text(AppString.doChangeLanaguge.tr),
         content: Text(AppString.doChangeLanaguge2.tr),
@@ -168,42 +242,152 @@ class SettingController extends GetxController {
         ],
       ),
     );
-    if (result == true) {
-      if (displayLanguage == 'ko') {
-        await SettingRepository.setString(AppConstant.settingLanguageKey, 'ko');
-        Get.updateLocale(const Locale('ko', 'KR'));
-      } else if (displayLanguage == 'en') {
-        await SettingRepository.setString(AppConstant.settingLanguageKey, 'en');
-        Get.updateLocale(const Locale('en', 'US'));
-      }
 
-      GrammarRepositroy.deleteAllGrammar();
-      JlptStepRepositroy.deleteAllWord();
-      KangiStepRepositroy.deleteAllKangiStep();
-      await Future.delayed(const Duration(milliseconds: 500));
+    if (result == true) {
+      Get.dialog(
+        // barrierDismissible: false,
+        AlertDialog.adaptive(
+          title: Obx(
+            () =>
+                isDeletingFinish.value
+                    ? Text(AppString.doneInital.tr)
+                    : Text(
+                      AppString.plzDontCloseApp.tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
+                    ),
+          ),
+          content: Obx(
+            () =>
+                isDeletingFinish.value
+                    ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: 20),
+                        Text(
+                          AppString.plzReStart.tr,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                    )
+                    : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: 10),
+                        CircularProgressIndicator.adaptive(),
+                        SizedBox(height: 10),
+
+                        Text(AppString.initalStart.tr),
+                      ],
+                    ),
+          ),
+        ),
+      );
+
+      await SettingRepository.setBool(AppConstant.isUpdated, true);
+
+      if (changedSystemLang == 'ko') {
+        // _systemLocale.value = Locale('ko', 'KR');
+        await SettingRepository.setString(AppConstant.settingLanguageKey, 'ko');
+      } else if (changedSystemLang == 'en') {
+        // _systemLocale.value = Locale('en', 'US');
+        await SettingRepository.setString(AppConstant.settingLanguageKey, 'en');
+      }
+      bool isEn = changedSystemLang == 'en';
+      allDataDelete(isEn);
     }
   }
 
-  void allDataDelete() {
-    UserController.to.initializeProgress(TotalProgressType.JLPT);
-    JlptStepRepositroy.deleteAllWord();
-    UserController.to.initializeProgress(TotalProgressType.KANGI);
-    KangiStepRepositroy.deleteAllKangiStep();
-    UserController.to.initializeProgress(TotalProgressType.GRAMMAR);
-    GrammarRepositroy.deleteAllGrammar();
-    successDeleteAndQuitApp();
+  void allDataDelete(bool isEn, {bool isUserDelete = true}) async {
+    try {
+      await _changeMy12Book(isEn);
+
+      await LocalReposotiry.deleteProgress();
+      await JlptStepRepositroy.deleteAllWord();
+      await KangiStepRepositroy.deleteAllKangiStep();
+      await GrammarRepositroy.deleteAllGrammar();
+
+      if (isUserDelete) {
+        await UserRepository.deleteUser();
+      }
+
+      isDeletingFinish.value = true;
+
+      await Future.delayed(const Duration(milliseconds: 1500), () {
+        if (kReleaseMode) {
+          exit(0);
+        } else {
+          Get.back();
+        }
+      });
+    } catch (e) {
+      SnackBarHelper.showErrorSnackBar('$e');
+    }
   }
 
-  Future<void> successDeleteAndQuitApp() async {
-    Get.closeAllSnackbars();
-    showSnackBar(
-      '초기화 완료, 재실행 해주세요!\n3초 뒤 자동적으로 앱이 종료됩니다.',
-      duration: const Duration(seconds: 4),
-    );
-    await Future.delayed(const Duration(seconds: 4), () {
-      if (kReleaseMode) {
-        exit(0);
+  Future<void> _changeMy12Book(bool isEn) async {
+    final repo = Get.find<HiveRepository<Book>>();
+    final books = repo.getAll();
+
+    // 1) bookNum 1, 2 찾기 (없으면 조용히 리턴)
+    final jgBook = books.firstWhere((b) => b.bookNum == 1);
+    final myBook = books.firstWhere((b) => b.bookNum == 2);
+
+    // 2) 타깃 문구
+    final jgTitle = isEn ? AppString.jgVocaEn : AppString.jgVocaKr;
+    final jgDesc = isEn ? AppString.jgVocaDescEn : AppString.jgVocaDescKr;
+
+    final myTitleDefaultKo = AppString.myVocaKr;
+    final myTitleDefaultEn = AppString.myVocaEn;
+    final myDescDefaultKo = AppString.myVocaDescKr;
+    final myDescDefaultEn = AppString.myVocaDescEn;
+
+    // 3) 변경 계산 (불필요한 put 피하기)
+    final toSave = <String, Book>{};
+
+    final updated = jgBook.copyWith(title: jgTitle, description: jgDesc);
+    if (updated != jgBook) {
+      toSave[jgBook.id] = updated;
+    }
+
+    if (myBook != null) {
+      Book updated = myBook;
+
+      if (isEn) {
+        // "사용자가 손대지 않은 기본값"으로 보일 때만 언어 스위치
+        if (myBook.title == myTitleDefaultKo) {
+          updated = updated.copyWith(title: myTitleDefaultEn);
+        }
+        if (myBook.description == myDescDefaultKo) {
+          updated = updated.copyWith(description: myDescDefaultEn);
+        }
+      } else {
+        if (myBook.title == myTitleDefaultEn) {
+          updated = updated.copyWith(title: myTitleDefaultKo);
+        }
+        if (myBook.description == myDescDefaultEn) {
+          updated = updated.copyWith(description: myDescDefaultKo);
+        }
       }
-    });
+
+      if (updated != myBook) {
+        toSave[myBook.id] = updated;
+      }
+    }
+
+    // 4) 저장 (배치 지원 시)
+    if (toSave.isNotEmpty) {
+      // repo.putAll(toSave); // 지원하면 이걸 사용
+      for (final entry in toSave.entries) {
+        await repo.put(entry.key, entry.value);
+      }
+    }
   }
 }

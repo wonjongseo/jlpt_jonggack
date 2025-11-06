@@ -7,6 +7,7 @@ import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/date_picker_bottom_sheet.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
 class MyVocaDateSection extends StatelessWidget {
@@ -26,7 +27,8 @@ class MyVocaDateSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final header = DateFormat("yyyy년 M월 d일").format(date);
+    // final header = DateFormat(isEn ? 'yyymd' : "yyyy년 M월 d일").format(date);
+    final header = DateFormat.yMMMEd(Get.locale.toString()).format(date);
     return ExpansionTile(
       initiallyExpanded: true,
       childrenPadding: EdgeInsets.all(8),
@@ -36,9 +38,16 @@ class MyVocaDateSection extends StatelessWidget {
           children: [
             TextSpan(
               text: header,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            TextSpan(text: ' (${words.length}개)'),
+            TextSpan(
+              text:
+                  ' (${words.length}${isKo
+                      ? '개'
+                      : words.length > 1
+                      ? 's'
+                      : ''})',
+            ),
           ],
         ),
       ),

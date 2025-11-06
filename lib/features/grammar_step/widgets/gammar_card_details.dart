@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
-import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
@@ -100,7 +99,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                     child: Card(
                       child: Center(
                         child: Text(
-                          '퀴즈 풀러 가기!',
+                          AppString.goToQuiz.tr,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.cyan.shade600,
@@ -141,7 +140,6 @@ class _GrammarCardState extends State<GrammarCard> {
   int maxLine = 1;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     maxLine = (widget.grammar.grammar.length / 18).ceil();
@@ -173,21 +171,18 @@ class _GrammarCardState extends State<GrammarCard> {
                 SizedBox(height: 20),
                 if (widget.grammar.means.isNotEmpty) ...[
                   GrammarDescriptionCard(
-                    fontSize: 18,
                     title: AppString.mean.tr,
                     content: widget.grammar.means,
                   ),
                 ],
                 if (widget.grammar.description.isNotEmpty) ...[
                   GrammarDescriptionCard(
-                    fontSize: 18,
                     title: AppString.description.tr,
                     content: widget.grammar.description,
                   ),
                 ],
                 if (widget.grammar.connectionWays.isNotEmpty) ...[
                   GrammarDescriptionCard(
-                    fontSize: 18,
                     title: AppString.connectionWays.tr,
                     content: widget.grammar.connectionWays,
                   ),

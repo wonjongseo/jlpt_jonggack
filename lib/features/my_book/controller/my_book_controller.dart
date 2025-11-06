@@ -1,14 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
-import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
-import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/screens/widgets/edit_book_screen.dart';
-import 'package:jlpt_jonggack/features/my_voca/components/custom_text_form.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
-import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
@@ -89,7 +84,9 @@ class MyBookController extends GetxController {
   void _deleteBook(Book book) async {
     await bookRepo.delete(book.id);
     Get.back();
-    SnackBarHelper.showSuccessSnackBar('${book.title}가 삭제되었습니다.');
+    SnackBarHelper.showSuccessSnackBar(
+      '${book.title}${AppString.doneDelete.tr}',
+    );
 
     loadBooks();
   }
@@ -118,7 +115,9 @@ class MyBookController extends GetxController {
     _updateBook(newBook);
     loadBooks();
     SnackBarHelper.showSuccessSnackBar(
-      '${newBook.title}가 ${isEditMode ? '변경' : '생셩'}되었습니다',
+      isEditMode
+          ? '${newBook.title}${AppString.doneUpdate.tr}'
+          : '${newBook.title}${AppString.doneCreate.tr}',
     );
   }
 

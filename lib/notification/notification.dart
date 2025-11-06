@@ -176,12 +176,14 @@ class FlutterLocalNotification {
     );
   }
 
-  static requestNotificationPermission() async {
-    await flutterLocalNotificationsPlugin
+  static Future<bool> requestNotificationPermission() async {
+    bool? isGranted = await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin
         >()
         ?.requestPermissions(alert: true, badge: true, sound: true);
+
+    return isGranted ?? false;
   }
 
   static Future<void> showNotificationImi() async {
@@ -258,7 +260,6 @@ class FlutterLocalNotification {
 
   static tz.TZDateTime _nextInstanceOf8AM() {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    // https://velog.io/@tygerhwang/Flutter-Local-Notifications-%EC%82%AC%EC%9A%A9%ED%95%B4-%EB%B3%B4%EA%B8%B0#:~:text=%EC%82%AC%EC%9A%A9%EC%9E%90%EC%97%90%EA%B2%8C%20%EB%A7%A4%EC%9D%BC%20%EC%98%A4%EC%A0%84%209,%EC%9D%84%20%EC%A0%84%EC%86%A1%ED%95%A0%20%ED%95%84%EC%9A%94%EA%B0%80%20%EC%97%86%EB%8B%A4.
     payload = word!.toJson();
     print('payload : ${payload}');
     print('CALLED ');

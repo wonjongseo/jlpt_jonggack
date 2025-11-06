@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class VeryGoodScreen extends StatelessWidget {
   const VeryGoodScreen({super.key});
@@ -58,7 +60,7 @@ class _CelebrationScreenState extends State<CelebrationScreen> {
           children: [
             ConfettiWidget(
               confettiController: _confettiController,
-              blastDirectionality: BlastDirectionality.explosive, // 모든 방향으로 폭발
+              blastDirectionality: BlastDirectionality.explosive,
               shouldLoop: false,
               colors: const [
                 Colors.red,
@@ -67,42 +69,44 @@ class _CelebrationScreenState extends State<CelebrationScreen> {
                 Colors.yellow,
               ],
             ),
+
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: '축하합니다!\n',
+                text: isEn ? 'Congratulations!\n' : '축하합니다!\n',
                 children: [
                   TextSpan(
-                    text: '100점',
-                    style: TextStyle(
-                      fontSize: Responsive.height30 * 1.5,
-                      color: Colors.redAccent,
-                    ),
+                    text: isEn ? 'Perfect Score: 100\n' : '100점',
+                    style: TextStyle(fontSize: 40, color: Colors.redAccent),
                   ),
-                  const TextSpan(text: '입니다!!\n\n'),
+                  TextSpan(text: isEn ? '\n\n' : '입니다!!\n\n'),
                   TextSpan(
-                    text: 'JLPT합격까지 한 발자국 나아가셨습니다.\n조금만 더 화이팅합시다~',
+                    text:
+                        isEn
+                            ? 'You’re one step closer to passing the JLPT!\nKeep it up and stay motivated!'
+                            : 'JLPT합격까지 한 발자국 나아가셨습니다.\n조금만 더 화이팅합시다~',
                     style: TextStyle(
-                      fontSize: Responsive.height18,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
                 ],
                 style: TextStyle(
-                  fontSize: Responsive.height30,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
+                  fontFamily: AppFonts.japaneseFont,
                 ),
               ),
             ),
-            SizedBox(height: Responsive.height30),
+            SizedBox(height: 30),
             const JonggackAvator(),
           ],
         ),
         ConfettiWidget(
           confettiController: _confettiController,
-          blastDirectionality: BlastDirectionality.explosive, // 모든 방향으로 폭발
+          blastDirectionality: BlastDirectionality.explosive,
           shouldLoop: false,
           colors: const [Colors.red, Colors.blue, Colors.green, Colors.yellow],
         ),

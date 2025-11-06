@@ -5,10 +5,12 @@ import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_study_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -65,8 +67,9 @@ class NewMyWordController extends GetxController {
 
     final day = keys[dateIndex];
     final bucket = myWordsMap.value[day];
-    if (bucket == null || wordIndex < 0 || wordIndex >= bucket.length)
+    if (bucket == null || wordIndex < 0 || wordIndex >= bucket.length) {
       return null;
+    }
 
     return bucket[wordIndex];
   }
@@ -320,7 +323,10 @@ class NewMyWordController extends GetxController {
 
     // 단일일 해제하고 범위 적용
     selectedDay.value = null;
-    scrollController.jumpTo(0);
+
+    try {
+      scrollController.jumpTo(0);
+    } catch (_) {}
     _applyCurrentFilters(); // ✅ 타입 + 범위 반영
   }
 
@@ -330,7 +336,9 @@ class NewMyWordController extends GetxController {
     rangeEnd.value = null;
     selectedDay.value = null;
 
-    scrollController.jumpTo(0);
+    try {
+      scrollController.jumpTo(0);
+    } catch (_) {}
     _applyCurrentFilters(); // ✅ 타입만 반영해 전체 보기
   }
 
@@ -378,10 +386,14 @@ class NewMyWordController extends GetxController {
 
     int iQuizCnt = int.tryParse(quizCnt) ?? 0;
     if (iQuizCnt < 1) {
-      SnackBarHelper.showErrorSnackBar('1보다 큰 수를 입력해주세요');
+      SnackBarHelper.showErrorSnackBar(AppString.plzEnterMoreOne.tr);
       return;
     } else if (iQuizCnt > allMyWords.length) {
-      SnackBarHelper.showErrorSnackBar('${allMyWords.length}보다 작은 수를 입력해주세요');
+      SnackBarHelper.showErrorSnackBar(
+        isEn
+            ? 'Please enter a number less than ${allMyWords.length}'
+            : '${allMyWords.length}보다 작은 수를 입력해주세요',
+      );
       return;
     }
 
@@ -437,7 +449,7 @@ class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '퀴즈를 진행 할 단어수를 입력해주세요.',
+            AppString.plzEnterNumberOfQuiz.tr,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 12),
@@ -448,7 +460,7 @@ class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
               hintText: '15',
               controller: teCrl,
               sufficIcon: Text(
-                '최대 ${widget.maxCnt}개',
+                isEn ? 'Up to ${widget.maxCnt} words' : '최대 ${widget.maxCnt}개',
                 style: TextStyle(fontSize: 12, color: Colors.black54),
               ),
               keyboardType: TextInputType.number,
@@ -457,7 +469,7 @@ class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text('랜덤 퀴즈'),
+              Text(AppString.shuffleOrder.tr),
               SizedBox(width: 4),
               Checkbox.adaptive(
                 value: isRandom,
@@ -467,7 +479,7 @@ class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
           ),
           SizedBox(height: 12),
           BottomBtn(
-            label: '확인',
+            label: AppString.confirm.tr,
             onTap: () {
               Get.back(result: {'quizCnt': teCrl.text, 'isRandom': isRandom});
             },

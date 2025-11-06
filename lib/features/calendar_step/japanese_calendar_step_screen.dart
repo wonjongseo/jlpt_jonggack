@@ -15,13 +15,8 @@ import 'package:jlpt_jonggack/model/jlpt_step.dart';
 class JapaneseStepScreen extends StatefulWidget {
   static String name = '/japanese-step-screen';
 
-  const JapaneseStepScreen({
-    super.key,
-    required this.chapter,
-    required this.index,
-  });
+  const JapaneseStepScreen({super.key, required this.index});
   final int index;
-  final String chapter;
   @override
   State<JapaneseStepScreen> createState() => _JapaneseStepScreenState();
 }

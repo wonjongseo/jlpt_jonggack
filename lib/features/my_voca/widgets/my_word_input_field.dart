@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:jlpt_jonggack/common/admob/controller/ad_controller.dart';
-// import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+//
 // import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 // import 'package:jlpt_jonggack/config/colors.dart';
 // import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';

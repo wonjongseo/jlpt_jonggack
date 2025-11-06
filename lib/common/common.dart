@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
+import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../model/kangi.dart';
@@ -59,8 +60,9 @@ List<int> getKangiIndex(
 void copyWord(String text) {
   Clipboard.setData(ClipboardData(text: text));
 
-  if (!Get.isSnackbarOpen) {
-    Get.closeAllSnackbars();
-    showSnackBar('「$text」가\n 복사(Ctrl + C) 되었습니다.');
-  }
+  SnackBarHelper.showSuccessSnackBar(
+    isEn
+        ? "[$text]\nhas been copied (Ctrl+C)."
+        : '[$text]가\n 복사(Ctrl + C) 되었습니다.',
+  );
 }

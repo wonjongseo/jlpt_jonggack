@@ -39,7 +39,6 @@ class LevelCategoryCard extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          fontFamily: AppFonts.gMaretFont,
                           color: Colors.black,
                           fontWeight: FontWeight.w600,
                           fontSize: 23,

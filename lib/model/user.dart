@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+
 import 'package:jlpt_jonggack/model/hive_type.dart';
 
 part 'user.g.dart';
@@ -54,5 +55,24 @@ class User extends HiveObject {
   @override
   String toString() {
     return 'User(jlptWordScroes: $jlptWordScroes, grammarScores: $grammarScores, kangiScores: $kangiScores\ncurrentJlptWordScroes: $currentJlptWordScroes, currentGrammarScores: $currentGrammarScores, currentKangiScores: $currentKangiScores)';
+  }
+
+  User copyWith({
+    List<int>? jlptWordScroes,
+    List<int>? grammarScores,
+    List<int>? kangiScores,
+    List<int>? currentJlptWordScroes,
+    List<int>? currentGrammarScores,
+    List<int>? currentKangiScores,
+  }) {
+    return User(
+      jlptWordScroes: jlptWordScroes ?? this.jlptWordScroes,
+      grammarScores: grammarScores ?? this.grammarScores,
+      kangiScores: kangiScores ?? this.kangiScores,
+      currentJlptWordScroes:
+          currentJlptWordScroes ?? this.currentJlptWordScroes,
+      currentGrammarScores: currentGrammarScores ?? this.currentGrammarScores,
+      currentKangiScores: currentKangiScores ?? this.currentKangiScores,
+    );
   }
 }

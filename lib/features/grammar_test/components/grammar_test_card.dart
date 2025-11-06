@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
@@ -11,14 +10,14 @@ import 'package:jlpt_jonggack/model/Question.dart';
 
 class GrammarTestCard extends StatefulWidget {
   GrammarTestCard({
-    Key? key,
+    super.key,
     required this.questionIndex,
     required this.question,
     this.onChanged,
     required this.size,
     this.isCorrect = false,
     this.isSubmitted = false,
-  }) : super(key: key);
+  });
 
   final int questionIndex;
   final Size size;
@@ -39,7 +38,7 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
   Widget build(BuildContext context) {
     String question = widget.question.question.word;
     return Padding(
-      padding: EdgeInsets.only(right: 0, bottom: Responsive.height60),
+      padding: EdgeInsets.only(right: 0, bottom: 50),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,20 +95,6 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
                   },
                 ),
               ),
-              // Expanded(
-              //   child: InkWell(
-              //     onTap: () => copyWord(question),
-              //     child: Text(
-              //       question,
-              //       style: TextStyle(
-              //         color: AppColors.scaffoldBackground,
-              //         fontWeight: FontWeight.w700,
-              //         fontSize: Responsive.width16,
-              //         fontFamily: AppFonts.japaneseFont,
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           // 제출 되었으면 정답 공개.
@@ -130,7 +115,6 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
               ),
             ),
 
-          // 사지선다 버튼.
           Column(
             children: List.generate(widget.question.options.length, (index2) {
               String value =
@@ -227,6 +211,7 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
                   leading: Radio<String>(
                     groupValue: selectedAnswer,
                     value: value,
+
                     activeColor: AppColors.scaffoldBackground,
                     focusColor: AppColors.scaffoldBackground,
                     onChanged: (String? value) {

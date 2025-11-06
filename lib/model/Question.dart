@@ -78,7 +78,8 @@ class Question {
           tempMean = speartea[randomIndex];
         }
       } else {
-        var splited = tempMean.split(';');
+        // 한자는 , 로 구분되어있고
+        var splited = splitMeanings(tempMean);
 
         if (splited.length > 1) {
           if (splited.length > 2) {
@@ -115,5 +116,35 @@ class Question {
     map.shuffle();
 
     return map;
+  }
+
+  static List<String> splitMeanings(String s) {
+    // 1) 전각/특수 구분자와 공백 정규화
+    s = s
+        .replaceAll('（', '(')
+        .replaceAll('）', ')')
+        .replaceAll('／', '/')
+        .replaceAll('；', ';')
+        .replaceAll('，', ',')
+        .replaceAll('\u00A0', ' ') // non-breaking space
+        .replaceAll('\u3000', ' '); // 전각 스페이스
+
+    // 2) 괄호 블록 전부 제거 (여러 개 가능)
+    //    "(...)" 전체를 지워서 콤마가 안 남도록
+    while (true) {
+      final next = s.replaceAll(RegExp(r'\s*\([^()]*\)'), '');
+      if (next == s) break;
+      s = next;
+    }
+
+    // 3) 원하는 구분자로 split (콤마까지 포함해도 이제 안전)
+    final parts =
+        s
+            .split(RegExp(r'\s*[;,/]\s*')) // , ; /
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .toList();
+
+    return parts;
   }
 }

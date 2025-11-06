@@ -9,14 +9,14 @@ import 'package:jlpt_jonggack/model/Question.dart';
 
 class KangiQuestionOption extends StatelessWidget {
   const KangiQuestionOption({
-    Key? key,
+    super.key,
     required this.question,
     required this.index,
     this.press,
     required this.isAnswered,
     required this.color,
     required this.text,
-  }) : super(key: key);
+  });
 
   // final Word test;
   final bool isAnswered;
@@ -43,42 +43,30 @@ class KangiQuestionOption extends StatelessWidget {
         ) {
           return Container(
             margin: const EdgeInsets.only(top: 20),
-            padding: EdgeInsets.all(8),
+            width: double.infinity,
             height: size.height * 0.1,
             decoration: BoxDecoration(
               border: Border.all(color: color),
               borderRadius: BorderRadius.circular(15),
             ),
+            alignment: Alignment.center,
             child:
                 multMean.length == 1
-                    ? Center(
-                      child: AutoSizeText(
-                        text,
-                        style: TextStyle(
-                          color: color,
-                          fontFamily: AppFonts.japaneseFont,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                      ),
+                    ? AutoSizeText(
+                      text,
+                      style: TextStyle(color: color),
+                      maxLines: 1,
                     )
                     : Center(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(
-                            multMean.length,
-                            (index) => Text(
-                              '${index + 1}. ${multMean[index].trim()}',
-                              style: TextStyle(
-                                color: color,
-                                fontFamily: AppFonts.japaneseFont,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                          multMean.length,
+                          (index) => AutoSizeText(
+                            '${index + 1}. ${multMean[index].trim()}',
+                            style: TextStyle(color: color),
+                            maxLines: 1,
                           ),
                         ),
                       ),

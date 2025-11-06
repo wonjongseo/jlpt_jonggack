@@ -56,12 +56,17 @@ class SettingRepository {
   }
 
   // int 저장 (비동기)
-  static Future<void> setInt(String key, int value) async {
+  static Future<void> setInt(
+    String key,
+    int value, {
+    bool isLog = false,
+  }) async {
     final box = _box ?? Hive.box(AppConstant.settingModelBox);
 
     // 유저가 마지막으로 학습한 Category, Subject, Chapter 확인하기 위해
 
     LogManager.info('키: $key, 값: $value 저장');
+    if (isLog) {}
     await box.put(key, value);
   }
 

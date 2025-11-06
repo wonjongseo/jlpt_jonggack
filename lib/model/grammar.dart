@@ -63,7 +63,6 @@ class Grammar extends HiveObject {
     String language,
     String nLevel,
   ) async {
-    print('jsonToObjectGrammar');
     var jsonGrammars = await NetWorkManager.getDataToServer(
       '${language}_grammars/n$nLevel',
     );

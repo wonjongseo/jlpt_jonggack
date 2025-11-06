@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
-import 'package:jlpt_jonggack/common/widget/app_bar_progress_bar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_test/controller/grammar_test_controller.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_test_card.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/score_and_message.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 import '../../common/admob/banner_ad/global_banner_admob.dart';
@@ -120,7 +119,7 @@ class GrammarTestScreen extends StatelessWidget {
         builder: (grammarTestController) {
           double currentProgressValue =
               grammarTestController.getCurrentProgressValue();
-          return AppBarProgressBar(
+          return _AppBarProgressBar(
             size: size,
             currentValue: currentProgressValue,
           );
@@ -191,6 +190,37 @@ class GrammarTestScreen extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+}
+
+class _AppBarProgressBar extends StatelessWidget {
+  const _AppBarProgressBar({
+    super.key,
+    required this.currentValue,
+    required this.size,
+  });
+  final Size size;
+  final double currentValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return FAProgressBar(
+      currentValue: currentValue,
+      maxValue: 100,
+      displayText: '%',
+      size: Responsive.height10 * 3.5,
+      formatValueFixed: 0,
+      backgroundColor: AppColors.darkGrey,
+      progressColor: AppColors.lightGreen,
+      borderRadius:
+          size.width > 500
+              ? BorderRadius.circular(30)
+              : BorderRadius.circular(12),
+      displayTextStyle: TextStyle(
+        color: const Color(0xFFFFFFFF),
+        fontSize: size.width > 500 ? 18 : 14,
+      ),
     );
   }
 }

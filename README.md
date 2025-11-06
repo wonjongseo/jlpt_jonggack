@@ -1,79 +1,69 @@
-# JLPT 종각
+<
 
-## 간단한 설명
+JLPT 대비를 위한 일본어·한자·문법 통합 학습 앱. 풍부한 예문과 다양한 퀴즈로 “정확하게, 오래 가는” 학습을 돕습니다.
 
-JLPT 한자, 단어, 문법 한번에 학습하는 통합 앱 입니다.
+-- JLPT 종각 플러스 기능 --
 
-## 자세한 설명
+・ 모든 N1급 일본어/한자/문법 학습 가능
+・ 광고 제거
 
-일본어 단어를 공부하시면서 모르는 한자가 있을 때 매번 검색하기 번거럽고 불편하셨죠?!
+-- 핵심 기능 --
 
-저희 종각 앱은 약 2500개의 한자 ( + 연관 단어 ) 가 포함 되어 있어 보다 효율적으로 일본어 학습 할 수 있습니다!
+・ 일본어 학습 페이지: 의미·예문 학습 + 연동 한자 즉시 보기
+・ 한자 학습 페이지: 의미·음독·훈독·예문을 구조화해 표기
+・ 문법 학습 페이지: 형식(접속)·의미·용법·주의점 정리 + 풍부한 예문
+・ 퀴즈 전면 지원: 세 학습 페이지 모두 객관식 퀴즈 및 오답 복습
+・ 단어 저장 & 재학습: 앱 내 단어를 저장해 나중에 빠른 복습
+・ 커스텀 단어장: 나만의 개인화 단어장으로 학습 루틴 최적화
+・ 레벨별 구성: JLPT N1~N5 단계 학습 및 진도 관리
 
-- 상세 보기 \*
+-- 학습 경험 --
 
-JLPT 종각 앱은 개발자 본인이 10년 정도 여러 일본어 앱을 이용해 오면서 불편한 기능을 사용하기 쉽게 또는 희망하는 기능들을 포함하여 개발 하였습니다.
+・ 끊김 최소화: 일본어 학습 중 한자 의미를 즉시 확인해 흐름 유지
+・ 집중형 화면: 목적별로 분리된 페이지로 정보 과부하 없이 학습
+・ 정확 학습 루프: 오답/취약 포인트 중심 스마트 반복
+・ 나만의 컬렉션: 저장/커스텀 단어장으로 맞춤 복습 세트 구성
 
------ JLPT 종각 기능 -----
+-- 이렇게 좋아요 --
 
-- 1. JLPT 단어
-  1. N1급~N5급 단어 학습. (1급 데이터는 일부만 표시)
-  1. 일본어, 한국어 음성 기능.
-  1. 자동 듣기 기능.
-  1. 테스트 기능.
-     [단어의 의미 (사지선다형) + 단어의 읽는 법 (주관식)]
-  1. 각 단어의 한자 [읽는 법, 훈독, 음독] 보기.
+・ 단어-한자 동시 연결로 기억 고정력 ↑
+・ 문법은 설명+다양한 예문으로 규칙/뉘앙스가 또렷
+・ 객·주관식 병행으로 회상·쓰기 정확도 강화
+・ 커스텀 단어장으로 개인화 학습 속도 확보
 
-- 2. JLPT 문법
-  1. N1급~N3급 문법 학습. (1급 데이터는 일부만 표시)
-  1. 문법 예제 보기 / 듣기.
-  1. 테스트 기능.
+>
 
-- 3. JLPT 한자
-  1. N1~N5급 한자 학습. (1급 데이터는 일부만 표시)
-  1. 일본어 음성 기능.
-  1. 테스트 기능.
-  1. 한자 [읽는 법, 훈독, 음독] 보기.
-  1. 한자 획수 보기
+<
 
-- 4. 나만의 단어장.
-  1. 직접 나만의 단어 저장.
-  1. 엑셀 데이터 종각앱에 저장
+All-in-one JLPT study app for Japanese, Kanji, and Grammar—learn accurately and remember longer with rich examples and varied quizzes.
 
-- 5. 자주 틀리는 문제 단어장
-  1. J LPT 단어 혹은 JLPT 한자를 학습 중 모르는 단어를 저장하여 반복 학습.
+--JLPT Jg Plus Features--
 
------ JLPT 종각 Plus 기능 -----
+• Full access to all N1-level Japanese / Kanji / Grammar
+• Ad-free experience"
 
-- 1. JLPT N1 모든 기능 활성화
-- 2. 광고 제거
-- 3. 하트 무제한
-- 4. 모르는 단어 자동 저장 기능 활성화
-- 5. 한자 연관 단어 학습 기능 활성화
+-- Core Features --
 
-# JLPT 종각 PLUS
+・ Japanese Learning Page: Study meanings and example sentences + instantly view the linked kanji
+・ Kanji Learning Page: Structured view of meaning, on-yomi, kun-yomi, and examples
+・ Grammar Learning Page: Clear explanations of form (connection), meaning, usage, and caveats, plus abundant examples
+・ Full Quiz Support: Multiple-choice quizzes on all three pages, with wrong-answer review
+・ Save & Review Words: Save in-app vocabulary for quick future review
+・ Custom Wordbook: Build your own personalized word lists to fit your study style
+・ Level-Based Structure: JLPT N1–N5 courses with progress tracking
 
-## 간단한 설명
+-- Learning Experience --
 
-JLPT 한자, 단어, 문법 한번에 학습하는 통합 앱 입니다.
+・ Minimal Disruption: Instantly check kanji meanings while studying Japanese to keep your flow
+・ Focused Screens: Purpose-specific pages reduce information overload
+・ Accurate Study Loop: Smart repetition centered on mistakes and weak points
+・ Your Own Collection: Use saved words and custom wordbooks to create tailored review sets
 
-## 자세한 설명
+-- Why You’ll Love It --
 
-일본어 단어를 공부하시면서 모르는 한자가 있을 때 매번 검색하기 번거럽고 불편하셨죠?!
+・ Word–Kanji pairing boosts memory retention ↑
+・ Grammar clarity through rich explanations and varied examples
+・ Better recall & writing accuracy with multiple-choice practice and targeted review
+・ Faster, personalized learning with custom wordbooks
 
-저희 종각 앱은 약 2500개의 한자 ( + 연관 단어 ) 가 포함 되어 있어 보다 효율적으로 일본어 학습 할 수 있습니다!
-
-- 상세 보기 \*
-
-JLPT 종각 앱은 개발자 본인이 10년 정도 여러 일본어 앱을 이용해 오면서 불편한 기능을 사용하기 쉽게 또는 희망하는 기능들을 포함하여 개발 하였습니다.
-
------ JLPT 종각 Plus 기능 -----
-
-- 1. JLPT N1 모든 기능 활성화
-- 2. 광고 제거
-- 3. 하트 무제한
-- 4. 모르는 단어 자동 저장 기능 활성화
-- 5. 한자 연관 단어 학습 기능 활성화
-
-## 추가 기능
-# jlpt_jonggack
+>

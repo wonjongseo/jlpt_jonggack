@@ -37,8 +37,6 @@ class WordCard extends StatelessWidget {
       yomikata = '[$yomikata]';
     }
 
-    print('yomikata : ${yomikata}');
-
     KangiStepRepositroy kangiStepRepositroy = KangiStepRepositroy();
 
     return Padding(
@@ -124,35 +122,27 @@ class WordCard extends StatelessWidget {
                 ),
               ),
               const Divider(),
-              SizedBox(height: 8),
-              if (temp.isNotEmpty)
-                RelatedWords(
-                  japanese: japanese,
-                  kangiStepRepositroy: kangiStepRepositroy,
-                  temp: temp,
-                ),
-              SizedBox(height: 20),
+              RelatedWords(
+                japanese: japanese,
+                kangiStepRepositroy: kangiStepRepositroy,
+                temp: temp,
+              ),
+
               if (word.examples != null && word.examples!.isNotEmpty) ...[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppString.examples.tr,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: AppColors.mainBordColor,
-                      ),
-                    ),
-                  ],
+                SizedBox(height: 12),
+                Text(
+                  AppString.examples.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.mainBordColor,
+                  ),
                 ),
 
                 if (controller == null)
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: Responsive.height16 / 2,
-                      ),
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,9 +161,7 @@ class WordCard extends StatelessWidget {
                 else ...[
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: Responsive.height16 / 2,
-                      ),
+                      padding: EdgeInsets.symmetric(vertical: 4),
                       child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

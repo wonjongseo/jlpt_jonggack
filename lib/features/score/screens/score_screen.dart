@@ -27,40 +27,6 @@ class _ScoreScreenState extends State<ScoreScreen> {
   JlptTestController jlptController = Get.find<JlptTestController>();
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Random randDom = Random();
-
-      int randomNumber = randDom.nextInt(20) + 20; // is >=20 and40
-
-      if (jlptController.userController.clickUnKnownButtonCount >
-          randomNumber) {
-        //TODO
-        int savedDataCount = 0;
-        // jlptController.userController.user.yokumatigaeruMyWords;
-        //TODO
-
-        bool result = await CommonDialog.askGoToMyVocaPageDialog(
-          savedDataCount,
-        );
-
-        if (result) {
-          jlptController.userController.clickUnKnownButtonCount = 0;
-          jlptController.isMyWordTest ? getBacks(2) : getBacks(3);
-          Get.toNamed(NewMyWordScreen.name);
-        } else {
-          randomNumber = randDom.nextInt(2) + 2;
-          jlptController.userController.clickUnKnownButtonCount =
-              (jlptController.userController.clickUnKnownButtonCount /
-                      randomNumber)
-                  .floor();
-        }
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
@@ -95,7 +61,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
             style: TextStyle(
               color: AppColors.mainBordColor,
               fontWeight: FontWeight.bold,
-              fontSize: 20,
+              fontSize: 18,
             ),
           ),
         ),

@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/calendar_step/japanese_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -28,7 +30,7 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
   void initState() {
     jlptWordController = Get.put(JlptStepController(level: widget.level));
 
-    progrssingIndex = LocalReposotiry.getCurrentProgressing(
+    progrssingIndex = LocalReposotiry.getProgress(
       '${CategoryEnum.japaneses.name}-${widget.level}',
     );
 
@@ -46,12 +48,12 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
       carouselController.animateToPage(progrssingIndex);
     });
 
-    LocalReposotiry.putCurrentProgressing(
+    LocalReposotiry.setProgress(
       '${CategoryEnum.japaneses.name}-${widget.level}',
       progrssingIndex,
     );
 
-    Get.to(() => JapaneseStepScreen(index: index, chapter: '챕터${index + 1}'));
+    Get.to(() => JapaneseStepScreen(index: index));
   }
 
   @override
@@ -90,28 +92,33 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
                     child: Stack(
                       children: [
                         Center(
-                          child: RichText(
-                            text: TextSpan(
-                              text: '${CategoryEnum.japaneses.id}\n',
-                              children: [
-                                TextSpan(
-                                  text: 'Chapter ${(index + 1)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                  ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                CategoryEnum.japaneses.id,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: isEn ? 20 : 23,
+                                  color:
+                                      isAllAccessable
+                                          ? AppColors.mainBordColor
+                                          : Colors.grey,
                                 ),
-                              ],
-                              style: TextStyle(
-                                fontFamily: AppFonts.gMaretFont,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23,
-                                color:
-                                    isAllAccessable
-                                        ? AppColors.mainBordColor
-                                        : Colors.grey,
                               ),
-                            ),
+                              Text(
+                                'Chapter ${(index + 1)}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30,
+                                  color:
+                                      isAllAccessable
+                                          ? AppColors.mainBordColor
+                                          : Colors.grey,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         if (!isAllAccessable)

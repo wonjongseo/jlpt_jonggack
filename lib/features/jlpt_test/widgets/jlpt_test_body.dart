@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_card.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/widgets/toggle_subjective_qustion_button.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
-import 'package:jlpt_jonggack/repository/local_repository.dart';
-
 class JlptTestBody extends StatelessWidget {
-  const JlptTestBody({Key? key}) : super(key: key);
+  const JlptTestBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +22,9 @@ class JlptTestBody extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: Responsive.height10 / 2),
+                    SizedBox(height: 5),
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: Responsive.width20,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -72,7 +65,7 @@ class JlptTestBody extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: Responsive.height20),
+                    SizedBox(height: 20),
                     Expanded(
                       child: PageView.builder(
                         physics: const NeverScrollableScrollPhysics(),

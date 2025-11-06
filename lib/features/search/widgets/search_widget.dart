@@ -139,7 +139,7 @@ class NewSearchWidget extends GetView<JSearchController> {
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         hintText: AppString.searchHintText.tr,
-                        hintStyle: TextStyle(fontSize: isKo ? 14 : 12),
+                        hintStyle: TextStyle(fontSize: isKo ? 14 : 11),
                         filled: true,
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,

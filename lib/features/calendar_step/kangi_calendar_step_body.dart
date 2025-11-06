@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
+import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
@@ -14,15 +15,15 @@ import 'package:jlpt_jonggack/model/kangi_step.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class KangiCalendarStepBody extends StatefulWidget {
-  const KangiCalendarStepBody({super.key, required this.chapter});
-  final String chapter;
+  const KangiCalendarStepBody({super.key, required this.index});
+  final int index;
+
   @override
   State<KangiCalendarStepBody> createState() => _KangiCalendarStepBodyState();
 }
 
 class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
   late String level;
-  late String category;
   int currChapNumber = 0;
   UserController userController = Get.find<UserController>();
   late PageController pageController;
@@ -30,11 +31,10 @@ class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
   late KangiStepController kangiController;
   @override
   void initState() {
-    category = '한자';
     kangiController = Get.find<KangiStepController>();
     level = kangiController.level;
 
-    kangiController.setKangiSteps(widget.chapter);
+    kangiController.setKangiSteps('챕터${widget.index + 1}');
 
     gKeys = List.generate(
       kangiController.kangiSteps.length,
@@ -136,8 +136,8 @@ class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
       child: AppBar(
         scrolledUnderElevation: 0.0,
         title: Text(
-          'JLPT N$level $category - ${widget.chapter}',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          'JLPT N$level ${CategoryEnum.kangis.id} - ${AppString.chapter.tr}${widget.index + 1}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [_bottomSheet()],
       ),

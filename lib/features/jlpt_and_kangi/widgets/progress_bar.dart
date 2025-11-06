@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/utils.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
 
@@ -46,7 +48,9 @@ class ProgressBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${(controller.animation.value * 60).round()} 초"),
+                    Text(
+                      "${(controller.animation.value * 60).round()} ${AppString.second.tr}",
+                    ),
                   ],
                 ),
               ),
@@ -82,7 +86,9 @@ class ProgressBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${(controller.animation.value * 60).round()} 초"),
+                    Text(
+                      "${(controller.animation.value * 60).round()} ${AppString.second.tr}",
+                    ),
                   ],
                 ),
               ),

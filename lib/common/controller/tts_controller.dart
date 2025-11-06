@@ -2,7 +2,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/logger/logger_service.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 /// 앱 전역에서 하나만 생성되어 사용하는 TTS 컨트롤러.
@@ -18,12 +17,6 @@ class TtsController extends GetxController {
 
   /// 현재 재생 중인 단어 (''이면 재생 중 아님)
   final RxString currentWord = ''.obs;
-
-  Future _setAwaitOptions() async {
-    await _tts.awaitSpeakCompletion(true);
-
-    await _tts.awaitSynthCompletion(true);
-  }
 
   @override
   void onInit() async {

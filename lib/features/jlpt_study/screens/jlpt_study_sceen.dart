@@ -5,6 +5,7 @@ import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
@@ -12,7 +13,6 @@ import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
 
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
-import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 
 // ignore: must_be_immutable
 class JlptStudyScreen extends StatefulWidget {

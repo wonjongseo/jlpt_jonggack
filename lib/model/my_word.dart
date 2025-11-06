@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 
-import 'package:jlpt_jonggack/common/widget/custom_snack_bar.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';

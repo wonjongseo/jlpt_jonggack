@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 
 import '../../../config/colors.dart';
 import '../controller/jlpt_test_controller.dart';
@@ -32,14 +33,14 @@ class JlptTestTextFormField extends StatelessWidget {
           decoration: InputDecoration(
             suffixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: Responsive.height8),
-              child: const Tooltip(
+              child: Tooltip(
                 showDuration: Duration(seconds: 5),
                 triggerMode: TooltipTriggerMode.tap,
-                message: '1. 읽는 법을 입력하면 사지선다가 표시됩니다.\n2. 장음 (-, ー) 은 생략해도 됩니다.',
+                message: AppString.openEndedDesc.tr,
                 child: Icon(Icons.help, size: 20, color: Colors.grey),
               ),
             ),
-            hintText: '읽는 법을 먼저 입력해주세요.',
+            hintText: AppString.plzEnterReading.tr,
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: controller.getTheTextEditerBorderRightColor(),
@@ -52,11 +53,12 @@ class JlptTestTextFormField extends StatelessWidget {
               ),
               borderRadius: const BorderRadius.all(Radius.circular(15)),
             ),
+            hintStyle: TextStyle(fontSize: 12),
             label: Text(
-              ' 읽는 법',
+              AppString.reading.tr,
               style: TextStyle(
                 color: AppColors.scaffoldBackground.withOpacity(0.5),
-                fontSize: Responsive.height16,
+                fontSize: 16,
               ),
             ),
           ),

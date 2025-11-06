@@ -52,7 +52,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
 
     String description = descriptionTController.text.trim();
 
-    if (description.length >= 50) {
+    if (description.length >= 100) {
       SnackBarHelper.showErrorSnackBar(AppString.plzEnterMess20Char.tr);
       return;
     }
