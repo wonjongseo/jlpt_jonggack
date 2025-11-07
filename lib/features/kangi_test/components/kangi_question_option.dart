@@ -2,8 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 
@@ -18,7 +16,6 @@ class KangiQuestionOption extends StatelessWidget {
     required this.text,
   });
 
-  // final Word test;
   final bool isAnswered;
   final int index;
   final Question question;
@@ -43,7 +40,6 @@ class KangiQuestionOption extends StatelessWidget {
         ) {
           return Container(
             margin: const EdgeInsets.only(top: 20),
-            width: double.infinity,
             height: size.height * 0.1,
             decoration: BoxDecoration(
               border: Border.all(color: color),
@@ -52,9 +48,9 @@ class KangiQuestionOption extends StatelessWidget {
             alignment: Alignment.center,
             child:
                 multMean.length == 1
-                    ? AutoSizeText(
+                    ? Text(
                       text,
-                      style: TextStyle(color: color),
+                      style: TextStyle(color: color, fontSize: 13),
                       maxLines: 1,
                     )
                     : Center(
@@ -63,10 +59,13 @@ class KangiQuestionOption extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: List.generate(
                           multMean.length,
-                          (index) => AutoSizeText(
-                            '${index + 1}. ${multMean[index].trim()}',
-                            style: TextStyle(color: color),
-                            maxLines: 1,
+                          (index) => Container(
+                            padding: EdgeInsets.symmetric(horizontal: 2),
+                            child: AutoSizeText(
+                              '${index + 1}. ${multMean[index].trim()}',
+                              style: TextStyle(color: color, fontSize: 13),
+                              maxLines: 1,
+                            ),
                           ),
                         ),
                       ),

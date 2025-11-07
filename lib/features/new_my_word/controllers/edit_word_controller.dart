@@ -81,7 +81,8 @@ class EditWordController extends GetxController {
   void addWordsByExcel() async {
     try {
       _isLoading.value = true;
-      List<MyWord> convertMyWord = await ExcelService.postExcelData();
+      List<MyWord>? convertMyWord = await ExcelService.postExcelData();
+      if (convertMyWord == null) return;
 
       int savedWordCnt = await MyBookController.to.bulkHandleMyWords(
         convertMyWord,

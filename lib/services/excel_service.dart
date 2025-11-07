@@ -2,10 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 
 import 'package:jlpt_jonggack/model/my_word.dart';
-import 'package:jlpt_jonggack/repository/my_word_repository.dart';
 
 class ExcelService {
   static String _cellToTrimmed(List<Data?> row, int index) {
@@ -13,11 +11,10 @@ class ExcelService {
     final data = row[index];
     final value = data?.value;
     if (value == null) return '';
-    // 엑셀에서 오는 문자열/숫자/날짜 등 어떤 타입이든 문자열화 + 공백 제거
     return value.toString().replaceAll(RegExp(r'\s+'), '');
   }
 
-  static Future<List<MyWord>> postExcelData() async {
+  static Future<List<MyWord>?> postExcelData() async {
     FilePickerResult? picked = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx'],
@@ -27,8 +24,9 @@ class ExcelService {
 
     List<MyWord> mywords = [];
 
-    int saved = 0;
-    if (picked == null) return mywords;
+    if (picked == null) {
+      return null;
+    }
 
     // 1) bytes 우선, 없으면 경로로 읽기 (플랫폼별 안전 처리)
     Uint8List? bytes = picked.files.single.bytes;
@@ -39,7 +37,6 @@ class ExcelService {
     }
 
     final excel = Excel.decodeBytes(bytes);
-    print("Start");
     try {
       for (final tableKey in excel.tables.keys) {
         final sheet = excel.tables[tableKey];

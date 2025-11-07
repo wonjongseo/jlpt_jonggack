@@ -38,7 +38,7 @@ class Kangi extends HiveObject {
       return korea;
     }
 
-    final splited = english.split(',');
+    final splited = english.split('; ');
     if (splited.isEmpty || splited.length == 1) {
       return english;
     } else {
