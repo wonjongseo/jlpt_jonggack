@@ -70,8 +70,7 @@ STEP 6.
 Android Command - flutter build appbundle
 Hive - flutter pub run build_runner build --delete-conflicting-outputs
 
-1. 앱을 초기화 하는 중입니다.\n완료 후 자동적으로 앱이 종료됩니다.
-2. 앱의 초기화가 완료되었습니다.\n앱을 재실행해주세요. 
+
  */
 
 void main() async {

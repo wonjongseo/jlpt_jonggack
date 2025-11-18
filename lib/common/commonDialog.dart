@@ -309,43 +309,39 @@ class AppealUpgrade extends StatelessWidget {
               ),
 
           SizedBox(height: 20),
-          Container(
-            width: double.infinity,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.mainColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              isEn ? 'Download JLPT Jg Plus→' : 'JLPT종각 Plus 다운로드→',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+          GestureDetector(
+            onTap: () async {
+              if (GetPlatform.isIOS) {
+                launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
+              } else if (GetPlatform.isAndroid) {
+                launchUrl(
+                  Uri.parse(
+                    'https://play.google.com/store/apps/details?id=com.wonjongseo.jlpt_jonggack_plus',
+                  ),
+                );
+              } else {
+                launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
+              }
+            },
+
+            child: Container(
+              width: double.infinity,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.mainColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                isEn ? 'Download JLPT Jg Plus→' : 'JLPT종각 Plus 다운로드→',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
               ),
             ),
           ),
-          // TextButton(
-          //   onPressed: () async {
-          //     if (GetPlatform.isIOS) {
-          //       launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
-          //     } else if (GetPlatform.isAndroid) {
-          //       launchUrl(
-          //         Uri.parse(
-          //           'https://play.google.com/store/apps/details?id=com.wonjongseo.jlpt_jonggack_plus',
-          //         ),
-          //       );
-          //     } else {
-          //       launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
-          //     }
-          //   },
-
-          //   child: Text(
-          //     isEn ? 'Download JLPT Jg Plus→' : 'JLPT종각 Plus 다운로드→',
-          //     style: TextStyle(color: AppColors.mainColor),
-          //   ),
-          // ),
         ],
       ),
     );

@@ -225,7 +225,8 @@ class LocalReposotiry {
     int? lastRunDate = list.get('lastRunDate');
 
     if (lastRunDate == null) {
-      return true;
+      await saveLastRunDate();
+      return false;
     }
 
     DateTime lastRun = DateTime.fromMillisecondsSinceEpoch(lastRunDate);
@@ -235,8 +236,6 @@ class LocalReposotiry {
     Duration difference = currentDate.difference(lastRun);
 
     return difference.inDays >= 30;
-    return difference.inMinutes >= 3;
-    return difference.inSeconds >= 15;
   }
 
   static Future<bool> checkAndExecuteFunction() async {
