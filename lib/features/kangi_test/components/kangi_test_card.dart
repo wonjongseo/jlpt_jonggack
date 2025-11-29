@@ -20,8 +20,8 @@ class KangiQuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       decoration: const BoxDecoration(
         color: AppColors.whiteGrey,
         borderRadius: BorderRadius.only(

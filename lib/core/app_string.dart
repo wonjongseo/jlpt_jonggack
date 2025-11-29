@@ -119,6 +119,7 @@ class AppString extends Translations {
       AppString.errorUploadingWord: AppString.errorUploadingWordKr,
       AppString.plzEnterSearchTerm: AppString.plzEnterSearchTermKr,
       AppString.plzEnterMoreOne: AppString.plzEnterMoreOneKr,
+      AppString.randomQuizArntScored: AppString.randomQuizArntScoredKr,
     },
     'en_US': {
       AppString.language: AppString.languageEn,
@@ -236,6 +237,7 @@ class AppString extends Translations {
       AppString.errorUploadingWord: AppString.errorUploadingWordEn,
       AppString.plzEnterSearchTerm: AppString.plzEnterSearchTermEn,
       AppString.plzEnterMoreOne: AppString.plzEnterMoreOneEn,
+      AppString.randomQuizArntScored: AppString.randomQuizArntScoredEn,
     },
   };
 
@@ -783,19 +785,23 @@ We’ll review it as soon as possible and work on improvements.
   static String skipUploadWord = "skipUploadWordTr";
   static String skipUploadWordKr = '이미 저장된 단어 이기에 단어 등록을 스킵했습니다';
   static String skipUploadWordEn =
-      " This word is already saved, so it was skipped.";
+      "This word is already saved, so it was skipped.";
 
   static String errorUploadingWord = "errorUploadingWordTr";
   static String errorUploadingWordKr = '엑셀 처리 중 오류: ';
-  static String errorUploadingWordEn = " Excel processing error: ";
+  static String errorUploadingWordEn = "Excel processing error: ";
 
   static String plzEnterSearchTerm = "plzEnterSearchTermTr";
   static String plzEnterSearchTermKr = '검색할 내용이 없습니다';
-  static String plzEnterSearchTermEn = " Please enter a search term";
+  static String plzEnterSearchTermEn = "Please enter a search term";
 
   static String plzEnterMoreOne = "plzEnterMoreOneTr";
   static String plzEnterMoreOneKr = '1보다 큰 수를 입력해주세요';
-  static String plzEnterMoreOneEn = " Please enter a number greater than 1";
+  static String plzEnterMoreOneEn = "Please enter a number greater than 1";
+
+  static String randomQuizArntScored = "randomQuizArntScoredTr";
+  static String randomQuizArntScoredKr = '! 랜덤 퀴즈는 점수 기록이 되지 않습니다.';
+  static String randomQuizArntScoredEn = "! Random quizzes aren't recorded.";
 
   //
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/common/widget/random_quiz_not_score_text.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_test/components/kangi_test_card.dart';
@@ -37,10 +38,12 @@ class KangiTestScreen extends StatelessWidget {
   }
 
   Widget _body(BuildContext context) {
+    final theme = Theme.of(context).textTheme;
+
     return GetBuilder<KangiTestController>(
-      builder: (kangiQuestionController) {
+      builder: (controller) {
         return IgnorePointer(
-          ignoring: kangiQuestionController.isDisTouchable,
+          ignoring: controller.isDisTouchable,
           child: SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,12 +57,12 @@ class KangiTestScreen extends StatelessWidget {
                       Text.rich(
                         TextSpan(
                           text: "問題 ",
-                          style: Theme.of(context).textTheme.headlineSmall!
-                              .copyWith(fontFamily: AppFonts.japaneseFont),
+                          style: theme.headlineSmall!.copyWith(
+                            fontFamily: AppFonts.japaneseFont,
+                          ),
                           children: [
                             TextSpan(
-                              text:
-                                  '${kangiQuestionController.questionNumber.value}',
+                              text: '${controller.questionNumber.value}',
                               style: Theme.of(
                                 context,
                               ).textTheme.headlineMedium!.copyWith(
@@ -68,10 +71,10 @@ class KangiTestScreen extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text:
-                                  "/${kangiQuestionController.questions.length}",
-                              style: Theme.of(context).textTheme.headlineSmall!
-                                  .copyWith(fontFamily: AppFonts.japaneseFont),
+                              text: "/${controller.questions.length}",
+                              style: theme.headlineSmall!.copyWith(
+                                fontFamily: AppFonts.japaneseFont,
+                              ),
                             ),
                           ],
                         ),
@@ -79,16 +82,17 @@ class KangiTestScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                RandomQuizNotScoreText(isRandom: controller.isRandom),
+
                 Expanded(
                   child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
-                    controller: kangiQuestionController.pageController,
-                    onPageChanged: kangiQuestionController.updateTheQnNum,
-                    itemCount: kangiQuestionController.questions.length,
+                    controller: controller.pageController,
+                    onPageChanged: controller.updateTheQnNum,
+                    itemCount: controller.questions.length,
                     itemBuilder: (context, index) {
                       return KangiQuestionCard(
-                        question: kangiQuestionController.questions[index],
+                        question: controller.questions[index],
                       );
                     },
                   ),
@@ -101,7 +105,7 @@ class KangiTestScreen extends StatelessWidget {
     );
   }
 
-  AppBar _appBar(KangiTestController kangiQuestionController) {
+  AppBar _appBar(KangiTestController controller) {
     return AppBar(
       title: const ProgressBar(isKangi: true),
       actions: [
@@ -110,7 +114,7 @@ class KangiTestScreen extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.only(right: Responsive.width15),
               child: TextButton(
-                onPressed: kangiQuestionController.skipQuestion,
+                onPressed: controller.skipQuestion,
                 child: Text(
                   controller.text,
                   style: TextStyle(

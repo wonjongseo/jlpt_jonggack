@@ -61,7 +61,7 @@ class GrammarTestController extends GetxController {
       saveScore();
     }
     Get.offNamed(
-      GRAMMAR_TEST_SCREEN,
+      GrammarTestScreen.name,
       preventDuplicates: false,
       arguments: {
         'grammar': Get.arguments['grammar'],

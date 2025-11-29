@@ -3,6 +3,7 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/common/widget/random_quiz_not_score_text.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_test/controller/grammar_test_controller.dart';
@@ -12,15 +13,14 @@ import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dar
 
 import '../../common/admob/banner_ad/global_banner_admob.dart';
 
-const GRAMMAR_TEST_SCREEN = '/grammar_test';
-
 // ignore: must_be_immutable
 class GrammarTestScreen extends StatelessWidget {
-  late GrammarTestController grammarTestController;
+  static String name = '/grammar_test';
+  late GrammarTestController controller;
   GrammarTestScreen({super.key}) {
-    grammarTestController = Get.put(GrammarTestController());
+    controller = Get.put(GrammarTestController());
 
-    grammarTestController.init(Get.arguments);
+    controller.init(Get.arguments);
   }
 
   @override
@@ -42,56 +42,47 @@ class GrammarTestScreen extends StatelessWidget {
   Widget _body(Size size) {
     return GetBuilder<GrammarTestController>(
       builder: (controller) {
-        double score = grammarTestController.getScore();
-        return Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 10, left: 15, right: 15),
-              child: Container(
-                color: AppColors.whiteGrey,
-                child: SingleChildScrollView(
-                  controller: controller.scrollController,
-                  child: Padding(
-                    padding: EdgeInsets.all(Responsive.height16),
-                    child: Column(
-                      children: [
-                        if (controller.isSubmitted)
-                          ScoreAndMessage(score: score, size: size)
-                        else
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 16),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(AppString.plzSelectTheAnswer.tr),
-                            ),
-                          ),
-                        ...List.generate(controller.questions.length, (
-                          questionIndex,
-                        ) {
-                          return GrammarTestCard(
-                            size: size,
-                            questionIndex: questionIndex,
-                            question: controller.questions[questionIndex],
-                            onChanged: (int selectedAnswerIndex) {
-                              controller.clickButton(
-                                questionIndex,
-                                selectedAnswerIndex,
-                              );
-                            },
-                            isCorrect:
-                                !controller.wrongQIndList.contains(
-                                  questionIndex,
-                                ),
-                            isSubmitted: controller.isSubmitted,
-                          );
-                        }),
-                      ],
+        double score = controller.getScore();
+        return Card(
+          margin: EdgeInsets.only(top: 10, left: 15, right: 15),
+          color: AppColors.whiteGrey,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(2),
+            controller: controller.scrollController,
+            child: Padding(
+              padding: EdgeInsets.all(Responsive.height16),
+              child: Column(
+                children: [
+                  if (controller.isSubmitted)
+                    ScoreAndMessage(score: score, size: size)
+                  else
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(AppString.plzSelectTheAnswer.tr),
                     ),
+                  RandomQuizNotScoreText(
+                    isRandom: controller.isRandom,
+                    isGrammar: true,
                   ),
-                ),
+
+                  Column(
+                    children: List.generate(controller.questions.length, (idx) {
+                      return GrammarTestCard(
+                        size: size,
+                        questionIndex: idx,
+                        question: controller.questions[idx],
+                        onChanged: (int selectedAnswerIndex) {
+                          controller.clickButton(idx, selectedAnswerIndex);
+                        },
+                        isCorrect: !controller.wrongQIndList.contains(idx),
+                        isSubmitted: controller.isSubmitted,
+                      );
+                    }),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         );
       },
     );
@@ -103,11 +94,10 @@ class GrammarTestScreen extends StatelessWidget {
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_ios),
         onPressed: () async {
-          if (grammarTestController.isSubmitted ||
-              grammarTestController.isRandom) {
+          if (controller.isSubmitted || controller.isRandom) {
             return Get.back();
           }
-          bool result = await CommonDialog.beforeExitTestPageDialog();
+          final result = await CommonDialog.beforeExitTestPageDialog();
 
           if (result) {
             Get.back();
@@ -116,9 +106,8 @@ class GrammarTestScreen extends StatelessWidget {
         },
       ),
       title: GetBuilder<GrammarTestController>(
-        builder: (grammarTestController) {
-          double currentProgressValue =
-              grammarTestController.getCurrentProgressValue();
+        builder: (controller) {
+          double currentProgressValue = controller.getCurrentProgressValue();
           return _AppBarProgressBar(
             size: size,
             currentValue: currentProgressValue,
@@ -127,8 +116,8 @@ class GrammarTestScreen extends StatelessWidget {
       ),
       actions: [
         GetBuilder<GrammarTestController>(
-          builder: (grammarTestController) {
-            if (grammarTestController.isSubmitted) {
+          builder: (controller) {
+            if (controller.isSubmitted) {
               return Container(
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(right: 8),
@@ -144,7 +133,7 @@ class GrammarTestScreen extends StatelessWidget {
                   ],
                 ),
                 child: InkWell(
-                  onTap: () => grammarTestController.againTest(),
+                  onTap: () => controller.againTest(),
                   child: Text(
                     AppString.again.tr,
                     style: TextStyle(
@@ -173,9 +162,7 @@ class GrammarTestScreen extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  grammarTestController.submit(
-                    grammarTestController.getScore(),
-                  );
+                  controller.submit(controller.getScore());
                 },
                 child: Text(
                   AppString.submit.tr,

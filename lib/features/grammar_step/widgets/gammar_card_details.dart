@@ -92,7 +92,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                   child: InkWell(
                     onTap: () {
                       Get.offAndToNamed(
-                        GRAMMAR_TEST_SCREEN,
+                        GrammarTestScreen.name,
                         arguments: {'grammar': widget.grammars},
                       );
                     },

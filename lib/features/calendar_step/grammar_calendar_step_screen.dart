@@ -57,7 +57,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
                 label: AppString.quiz.tr,
                 onTap: () {
                   Get.toNamed(
-                    GRAMMAR_TEST_SCREEN,
+                    GrammarTestScreen.name,
                     arguments: {
                       'grammar': grammarController.getGrammarStep().grammars,
                     },

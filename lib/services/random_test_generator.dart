@@ -210,7 +210,6 @@ class RandomTestGenerator {
           UserController.to.user!.isPremieum || UserController.to.user!.isTrik;
     }
     List<Word> tempWords = [];
-    bool isHasCategory = false;
     List<Grammar> tempGrammars = [];
     List<Kangi> tempKangis = [];
 
@@ -218,29 +217,11 @@ class RandomTestGenerator {
       case CategoryEnum.japaneses:
         tempWords = await getAllJapaneseByLevel(level, isPremium);
 
-        // final tempword = tempWords.firstOrNull;
-
-        // isHasCategory =
-        //     tempword == null
-        //         ? false
-        //         : tempword.category == null
-        //         ? false
-        //         : true;
-        String? result;
-        if (isHasCategory) {
-          //  TODO
-          // result = await Get.dialog(
-          //   name: 'RandomQuizDialog',
-          //   RandomQuizDialog(),
-          // );
-          // if (result == null) return;
-        }
-
         List<Word> words = await _createJlptQuiz(
           level,
           AppConstant.MINIMUM_STEP_COUNT,
           tempWords,
-          result ?? '랜덤',
+          '랜덤',
         );
 
         Get.toNamed(
@@ -270,7 +251,7 @@ class RandomTestGenerator {
           tempGrammars,
         );
         Get.toNamed(
-          GRAMMAR_TEST_SCREEN,
+          GrammarTestScreen.name,
           arguments: {'grammar': grammars, IS_RANDOM: true},
         );
     }
@@ -332,7 +313,7 @@ class RandomTestGenerator {
           tempGrammars,
         );
         Get.toNamed(
-          GRAMMAR_TEST_SCREEN,
+          GrammarTestScreen.name,
           arguments: {'grammar': grammars, IS_RANDOM: true},
         );
     }
