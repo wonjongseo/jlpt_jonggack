@@ -43,13 +43,13 @@ com.wonjongseo.jlpt-jonggack-plus
 
 STEP 2. 앱 이름 바꾸기 
   JLPT 종각 <-> JLPT 종각 Plus
-
+   JLPT Jg <-> JLPT Jg Plus
+   
 STEP 2-1. 번들 이름 바꾸기 
 
   iOS Path- ios/Runner/Info.plist
   Android Path- android/app/src/main/AndroidManifest.xml
 
-  japanese_voca <-> japanese_voca_plus
   
 
 STEP 3.
@@ -61,11 +61,6 @@ STEP 4.
 STEP 5. 
   버전 바꾸기
 
-STEP 6.
-안드로이드 이름 바꾸기
- JLPT 종각 <-> JLPT 종각 Plus
- JLPT Jg <-> JLPT Jg Plus
-  
 
 Android Command - flutter build appbundle
 Hive - flutter pub run build_runner build --delete-conflicting-outputs

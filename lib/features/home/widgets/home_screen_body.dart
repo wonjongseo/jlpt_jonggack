@@ -64,39 +64,24 @@ class _JLPTCardsState extends State<JLPTCards> {
           items: List.generate(5, (index) {
             return LevelCategoryCard(
               title: 'N${index + 1}',
-              onTap: () {
-                Get.to(() => JlptHomeScreen(levelIndex: index));
-                return;
-              },
+              onTap: () => Get.to(() => JlptHomeScreen(levelIndex: index)),
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   StudyCategoryAndProgress(
                     caregory: AppString.word.tr,
                     totalCnt: userController.user!.jlptWordScroes[index],
-                    curCnt:
-                        kDebugMode
-                            ? (userController.user!.jlptWordScroes[index] / 1.2)
-                                .toInt()
-                            : userController.user!.currentJlptWordScroes[index],
+                    curCnt: userController.user!.currentJlptWordScroes[index],
                   ),
                   StudyCategoryAndProgress(
                     caregory: AppString.kangi.tr,
                     totalCnt: userController.user!.kangiScores[index],
-                    curCnt:
-                        kDebugMode
-                            ? (userController.user!.kangiScores[index] / 2)
-                                .toInt()
-                            : userController.user!.currentKangiScores[index],
+                    curCnt: userController.user!.currentKangiScores[index],
                   ),
                   StudyCategoryAndProgress(
                     caregory: AppString.grammar.tr,
                     totalCnt: userController.user!.grammarScores[index],
-                    curCnt:
-                        kDebugMode
-                            ? (userController.user!.grammarScores[index] / 1.5)
-                                .toInt()
-                            : userController.user!.currentGrammarScores[index],
+                    curCnt: userController.user!.currentGrammarScores[index],
                   ),
                 ],
               ),
@@ -130,8 +115,6 @@ class _MyCardsState extends State<MyCards> {
   void initState() {
     super.initState();
     _currentIndex = LocalReposotiry.getProgress(KindOfStudy.my.name) ?? 0;
-
-    bodys = [];
   }
 
   void putBasicOrJlptOrMyDetail(int index) {
@@ -144,7 +127,6 @@ class _MyCardsState extends State<MyCards> {
     super.dispose();
   }
 
-  List<Widget> bodys = [];
   @override
   Widget build(BuildContext context) {
     return Obx(() {

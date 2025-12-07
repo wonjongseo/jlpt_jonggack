@@ -3,12 +3,15 @@ import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/screens/widgets/edit_book_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
-import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
 
 class MyBookController extends GetxController {
+  bool isSavedInJgBook(MyWord myWord) {
+    return books[0].mywords.contains(myWord);
+  }
+
   static MyBookController get to => Get.find<MyBookController>();
   final books = <Book>[].obs;
 

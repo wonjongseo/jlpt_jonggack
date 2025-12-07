@@ -12,7 +12,6 @@ import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_description_
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 
 class GrammarCardDetails extends StatefulWidget {
@@ -44,8 +43,6 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
     pageController.dispose();
   }
 
-  UserController userController = Get.find<UserController>();
-
   TtsController ttsController = Get.find<TtsController>();
   bool isShowMoreExample = false;
 
@@ -60,6 +57,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                   curIndex: _currentPageIndex + 1,
                   totalIndex: widget.grammars.length,
                 ),
+        actions: [],
       ),
     );
   }
@@ -77,10 +75,11 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
             controller: pageController,
             onPageChanged: (value) {
               ttsController.stop();
-              isShowMoreExample = false;
-              setState(() {});
-              _currentPageIndex = value;
-              setState(() {});
+
+              setState(() {
+                isShowMoreExample = false;
+                _currentPageIndex = value;
+              });
             },
             itemBuilder: (context, index) {
               if (index == len) {

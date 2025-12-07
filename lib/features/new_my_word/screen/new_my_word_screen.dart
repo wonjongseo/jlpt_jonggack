@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
+
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/date_picker_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/myVoca_date_section.dart';
@@ -20,55 +21,24 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Obx(() {
-          return Text(controller.book.title);
-        }),
-        actions: [
-          if (controller.book.bookNum != 1)
-            IconButton(
-              onPressed: () {
-                MyBookController.to.goToEditBook(book: controller.book);
-              },
-              icon: Icon(Icons.mode_edit_outline_outlined),
-            ),
-        ],
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (controller.book.bookNum != 1) ...[
-                    Expanded(
-                      child: BottomBtn(
-                        label: AppString.addWord.tr,
-                        onTap: () {
-                          controller.goToAddMyWord();
-                        },
-                      ),
-                    ),
-                    SizedBox(width: 6),
-                  ],
-                  if (controller.allMyWords.isNotEmpty)
-                    Expanded(
-                      child: BottomBtn(
-                        label: AppString.quiz.tr,
-                        onTap: () {
-                          controller.goToQuiz();
-                        },
-                      ),
-                    ),
-                ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: AppBar(
+          title: Obx(() {
+            return Text(controller.book.title);
+          }),
+          actions: [
+            if (controller.book.bookNum != 1)
+              IconButton(
+                onPressed: () {
+                  MyBookController.to.goToEditBook(book: controller.book);
+                },
+                icon: Icon(Icons.mode_edit_outline_outlined),
               ),
-            ),
-            const GlobalBannerAdmob(),
           ],
         ),
       ),
+      bottomNavigationBar: _bottomNavigationBar(),
       body: SafeArea(
         child: Column(
           children: [
@@ -98,6 +68,38 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                 ],
               ),
             ),
+            if (controller.book.bookNum == 1)
+              Obx(() {
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () => controller.toggleGrammarAnd(),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 14,
+                      ),
+
+                      margin: EdgeInsets.only(top: 4, bottom: 2, right: 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.mainBordColor,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            blurRadius: 40,
+                            color: Colors.black.withValues(alpha: .1),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        controller.isShowGrammar ? '일본어/한자 보기' : '문법 보기',
+                        style: TextStyle(color: Colors.white, fontSize: 13),
+                      ),
+                    ),
+                  ),
+                );
+              }),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading) {
@@ -106,6 +108,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                   );
                 }
                 final map = controller.myWordsMap.value;
+
                 if (map.isEmpty) {
                   return Center(child: Text(AppString.noSavedWord.tr));
                 }
@@ -119,7 +122,13 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                   separatorBuilder: (_, __) => const Divider(height: 1),
                   itemBuilder: (context, i) {
                     final day = keys[i];
-                    final words = map[day] ?? const <MyWord>[];
+                    var words = map[day] ?? const <MyWord>[];
+                    words =
+                        words
+                            .where(
+                              (w) => w.isGrammar == controller.isShowGrammar,
+                            )
+                            .toList();
                     return MyVocaDateSection(
                       date: day,
                       words: words,
@@ -139,6 +148,44 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  SafeArea _bottomNavigationBar() {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (controller.book.bookNum != 1) ...[
+                  Expanded(
+                    child: BottomBtn(
+                      label: AppString.addWord.tr,
+                      onTap: () {
+                        controller.goToAddMyWord();
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                ],
+                if (controller.allMyWords.isNotEmpty)
+                  Expanded(
+                    child: BottomBtn(
+                      label: AppString.quiz.tr,
+                      onTap: () {
+                        controller.goToQuiz();
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const GlobalBannerAdmob(),
+        ],
       ),
     );
   }

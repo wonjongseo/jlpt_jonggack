@@ -1,10 +1,10 @@
 import 'package:hive/hive.dart';
 
 import 'package:jlpt_jonggack/model/example.dart';
+import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/word.dart';
-import 'package:jlpt_jonggack/repository/my_word_repository.dart';
 
 part 'my_word.g.dart';
 
@@ -17,18 +17,21 @@ class MyWord {
   late String mean;
   @HiveField(3)
   late String? yomikata = '';
-
   @HiveField(2)
   bool isKnown = false;
-
   @HiveField(4)
   late DateTime? createdAt;
-
   @HiveField(5)
   bool? isManuelSave = false;
-
   @HiveField(6)
   late List<Example> examples;
+
+  @HiveField(7, defaultValue: false)
+  late bool isGrammar;
+  @HiveField(8)
+  late String? connectionWays;
+  @HiveField(9)
+  late String? description;
 
   String getWord() {
     return word;
@@ -40,10 +43,12 @@ class MyWord {
     required this.yomikata,
     List<Example>? examples,
     this.isManuelSave = false,
+    this.isGrammar = false,
+    this.connectionWays,
+    this.description,
   }) : examples =
            examples == null
                ? <Example>[]
-               // ✅ 얕은 복사 방지: 새로운 리스트로 복제
                : List<Example>.from(
                  examples.map((e) => e.copyWith()), // deep copy 권장
                ),
@@ -59,6 +64,7 @@ class MyWord {
     mean = map['mean'] ?? '';
     createdAt = map['createdAt'] ?? '';
     yomikata = map['yomikata'] ?? '';
+    isGrammar = map['isGrammar'] ?? false;
     isKnown = false;
     examples = map['examples'] ?? [];
   }
@@ -75,6 +81,18 @@ class MyWord {
     return newMyWord;
   }
 
+  static MyWord grammerToWord(Grammar g) {
+    return MyWord(
+      word: g.grammar,
+      mean: g.means,
+      yomikata: '',
+      description: g.description,
+      connectionWays: g.connectionWays,
+      examples: g.examples,
+      isGrammar: true,
+    );
+  }
+
   static MyWord wordToMyWord(Word word) {
     MyWord newMyWord = MyWord(
       word: word.word,
@@ -83,8 +101,6 @@ class MyWord {
       examples: word.examples,
     );
     newMyWord.createdAt = DateTime.now();
-    // final now = DateTime.now();
-    // newMyWord.createdAt = DateTime(now.year, now.month, now.day - 7);
 
     return newMyWord;
   }

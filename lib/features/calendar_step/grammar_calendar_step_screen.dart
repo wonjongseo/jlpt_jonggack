@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
@@ -11,18 +10,12 @@ import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_list_tile.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
-
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 // ignore: must_be_immutable
 class GrammarCalendarStepScreen extends StatefulWidget {
   static String name = '/grammar-step';
-  late CategoryEnum categoryEnum;
 
-  GrammarCalendarStepScreen({super.key}) {
-    categoryEnum = Get.arguments['categoryEnum'];
-  }
+  const GrammarCalendarStepScreen({super.key});
 
   @override
   State<GrammarCalendarStepScreen> createState() =>
@@ -30,17 +23,13 @@ class GrammarCalendarStepScreen extends StatefulWidget {
 }
 
 class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
-  late GrammarController grammarController;
+  late GrammarStepController grammarController;
 
-  late String level;
-  late String chapter;
   @override
   void initState() {
     super.initState();
-    chapter = Get.arguments['chapter'];
 
-    grammarController = Get.find<GrammarController>();
-    level = grammarController.level;
+    grammarController = Get.find<GrammarStepController>();
   }
 
   @override
@@ -52,14 +41,14 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (grammarController.getGrammarStep().grammars.length >= 4)
+            if (grammarController.grammarStep.grammars.length >= 4)
               BottomBtn(
                 label: AppString.quiz.tr,
                 onTap: () {
                   Get.toNamed(
                     GrammarTestScreen.name,
                     arguments: {
-                      'grammar': grammarController.getGrammarStep().grammars,
+                      'grammar': grammarController.grammarStep.grammars,
                     },
                   );
                 },
@@ -73,7 +62,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
 
   SafeArea _body() {
     return SafeArea(
-      child: GetBuilder<GrammarController>(
+      child: GetBuilder<GrammarStepController>(
         builder: (controller) {
           return Column(
             children: [
@@ -86,11 +75,11 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: List.generate(
-                          controller.getGrammarStep().grammars.length,
+                          controller.grammarStep.grammars.length,
                           (index) {
                             return GrammarListTile(
                               index: index,
-                              grammars: controller.getGrammarStep().grammars,
+                              grammars: controller.grammarStep.grammars,
                             );
                           },
                         ),
@@ -112,7 +101,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
       child: AppBar(
         scrolledUnderElevation: 0.0,
         title: Text(
-          'JLPT N$level ${CategoryEnum.grammars.id} - $chapter',
+          'JLPT N${grammarController.lebel} ${CategoryEnum.grammars.id} - ${grammarController.chapter}',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [_bottomSheet()],

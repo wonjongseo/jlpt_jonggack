@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
@@ -7,9 +8,6 @@ import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 
-import '../../../common/admob/controller/ad_controller.dart';
-
-// ignore: must_be_immutable
 class GrammarListTile extends StatefulWidget {
   const GrammarListTile({
     super.key,
@@ -48,6 +46,17 @@ class _GrammarListTileState extends State<GrammarListTile> {
         child: ListTile(
           isThreeLine: true,
           minLeadingWidth: 150,
+          trailing: Obx(() {
+            return IconButton(
+              onPressed: () {
+                GrammarStepController.to.toggleSaved(widget.index);
+              },
+              icon:
+                  GrammarStepController.to.isSaveds[widget.index]
+                      ? Icon(FontAwesomeIcons.solidBookmark)
+                      : Icon(FontAwesomeIcons.bookmark),
+            );
+          }),
           title: Text(
             widget.grammars[widget.index].grammar,
             style: TextStyle(

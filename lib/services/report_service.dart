@@ -39,6 +39,8 @@ class ReportService {
           'OS: Android ${info.version.release}';
     } else {
       final info = await plugin.iosInfo;
+      print('info : ${info}');
+
       _deviceInfo =
           'Device: ${info.name} ${info.model}\n'
           'OS: iOS ${info.systemVersion}';

@@ -22,6 +22,7 @@ class GrammarStep extends HiveObject {
 
   @HiveField(4)
   int scores = 0;
+
   @HiveField(5)
   bool? isFinished = false;
 

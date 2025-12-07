@@ -11,7 +11,7 @@ import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart'
 
 import '../../config/colors.dart';
 
-const KANGI_TEST = 'kangi';
+const KANGI_TEST = 'kanji';
 const CONTINUTE_KANGI_TEST = 'continue_kangi_test';
 
 class KangiTestScreen extends StatelessWidget {

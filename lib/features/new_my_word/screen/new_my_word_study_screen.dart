@@ -8,9 +8,10 @@ import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
+import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 
@@ -41,7 +42,10 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int itemCount = controller.allMyWords.length;
+    int itemCount =
+        controller.allMyWords
+            .where((w) => w.isGrammar == controller.isShowGrammar)
+            .length;
 
     bool hasKangi = false;
     String japanese = '';
@@ -59,7 +63,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                   ? null
                   : CustomAppBarTitle(
                     curIndex: pageIndex + 1,
-                    totalIndex: controller.allMyWords.length,
+                    totalIndex: itemCount,
                   ),
           actions: [if (hasKangi) howToRightBtn(context, japanese)],
         ),
@@ -81,8 +85,9 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
         child: Center(
           child: PageView.builder(
             onPageChanged: (value) {
-              pageIndex = value;
-              setState(() {});
+              setState(() {
+                pageIndex = value;
+              });
             },
             itemCount: itemCount + 1,
             controller: pageController,
@@ -110,6 +115,9 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                 );
               }
               final word = controller.allMyWords[index];
+              if (word.isGrammar) {
+                return GrammarCard(grammar: Grammar.fromMyWord(word));
+              }
               return WordCard(
                 word: Word.myWordToWord(word),
                 myWordIcon: _myWordIcon(word),

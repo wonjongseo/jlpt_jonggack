@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
-import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/date_picker_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
@@ -27,11 +26,10 @@ class MyVocaDateSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final header = DateFormat(isEn ? 'yyymd' : "yyyy년 M월 d일").format(date);
     final header = DateFormat.yMMMEd(Get.locale.toString()).format(date);
     return ExpansionTile(
       initiallyExpanded: true,
-      childrenPadding: EdgeInsets.all(8),
+      childrenPadding: EdgeInsets.symmetric(horizontal: 8),
       shape: Border.all(color: Colors.transparent),
       title: Text.rich(
         TextSpan(
@@ -74,15 +72,17 @@ class MyVocaDateSection extends StatelessWidget {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        AutoSizeText(
-                          w.word,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontFamily: AppFonts.japaneseFont,
-                            fontWeight: FontWeight.w500,
-                            color: textColor,
+                        Flexible(
+                          child: AutoSizeText(
+                            w.word,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: AppFonts.japaneseFont,
+                              fontWeight: FontWeight.w500,
+                              color: textColor,
+                            ),
+                            maxLines: 1,
                           ),
-                          maxLines: 1,
                         ),
                         SizedBox(width: 12),
                         Icon(

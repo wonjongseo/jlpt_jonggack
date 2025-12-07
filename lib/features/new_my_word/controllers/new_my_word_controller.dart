@@ -6,12 +6,15 @@ import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
+import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_study_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/book.dart';
+import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
@@ -266,6 +269,7 @@ class NewMyWordController extends GetxController {
 
       List<MyWord> myWord = myBookController.selectedBook!.mywords;
 
+      // myWord = myWord.where((w) => !w.isGrammar).toList();
       // 최신순 정렬
       myWord.sort((a, b) {
         final ad = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
@@ -375,6 +379,19 @@ class NewMyWordController extends GetxController {
   }
 
   void goToQuiz({int backCnt = 0}) async {
+    if (isShowGrammar) {
+      if (!Get.isRegistered<GrammarController>()) {
+        Get.put(GrammarController(level: '0'));
+      }
+      List<MyWord> tempWords = List.from(allMyWords);
+
+      List<Grammar> grammar =
+          tempWords.map((tempWord) => Grammar.fromMyWord(tempWord)).toList();
+      print('grammar : ${grammar}');
+
+      Get.toNamed(GrammarTestScreen.name, arguments: {'grammar': grammar});
+    }
+    return;
     final result = await Get.dialog(
       name: 'InputQuizCntDialog',
       InputQuizCntDialog(maxCnt: allMyWords.length),
@@ -412,6 +429,14 @@ class NewMyWordController extends GetxController {
 
   void goToAddMyWord() {
     Get.toNamed(NewAddMyWordScreen.name);
+  }
+
+  final _isShowGrammar = false.obs;
+  bool get isShowGrammar => _isShowGrammar.value;
+
+  void toggleGrammarAnd() {
+    _isShowGrammar.value = !_isShowGrammar.value;
+    myWordsMap.refresh();
   }
 }
 

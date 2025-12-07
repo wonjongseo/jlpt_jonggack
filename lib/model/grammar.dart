@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/common/network_manager.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
 
 part 'grammar.g.dart';
 
@@ -41,6 +40,19 @@ class Grammar extends HiveObject {
   @override
   String toString() {
     return 'Grammar(id: $id, step: $step, level: "$level", grammar: "$grammar", connectionWays: "$connectionWays", means: "$means", examples: $examples, description: "$description")';
+  }
+
+  factory Grammar.fromMyWord(MyWord mw) {
+    return Grammar(
+      id: 0,
+      step: 0,
+      description: mw.description ?? '',
+      level: '0',
+      grammar: mw.word,
+      connectionWays: mw.connectionWays ?? '',
+      means: mw.mean,
+      examples: mw.examples,
+    );
   }
 
   Grammar.fromMap(Map<String, dynamic> map) {

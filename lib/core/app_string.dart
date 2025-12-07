@@ -283,7 +283,7 @@ class AppString extends Translations {
 
   static String kangi = "kangiTr";
   static String kangiKr = '한자';
-  static String kangiEn = "Kangi";
+  static String kangiEn = "Kanji";
 
   static String grammar = "grammarTr";
   static String grammarKr = '문법';

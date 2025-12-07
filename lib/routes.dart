@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
 
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/calendar_step/grammar_calendar_step_screen.dart';
@@ -11,6 +12,7 @@ import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 
 import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
+import 'package:jlpt_jonggack/model/grammar_step.dart';
 
 import 'features/home/screens/home_screen.dart';
 
@@ -30,6 +32,12 @@ class AppRoutes {
     GetPage(
       name: GrammarCalendarStepScreen.name,
       page: () => GrammarCalendarStepScreen(),
+      binding: BindingsBuilder.put(() {
+        final level = Get.arguments['level'] as String;
+        final chapter = Get.arguments['chapter'] as String;
+        final grammarStep = Get.arguments['grammarStep'] as GrammarStep;
+        return GrammarStepController(level, chapter, grammarStep);
+      }),
     ),
     GetPage(name: JlptTestScreen.name, page: () => const JlptTestScreen()),
     GetPage(name: KangiTestScreen.name, page: () => const KangiTestScreen()),

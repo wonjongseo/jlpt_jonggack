@@ -2,15 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/grammar_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -40,10 +37,13 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
   }
 
   void goTo(int index, String chapter) {
-    grammarController.setStep(index);
     Get.toNamed(
       GrammarCalendarStepScreen.name,
-      arguments: {'chapter': chapter, 'categoryEnum': CategoryEnum.grammars},
+      arguments: {
+        'chapter': chapter,
+        'level': widget.level,
+        'grammarStep': grammarController.grammers[index],
+      },
     );
   }
 

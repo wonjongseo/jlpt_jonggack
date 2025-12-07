@@ -16,6 +16,7 @@ import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
 import 'package:jlpt_jonggack/notification/notification.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/appReviewRequest.dart';
+import 'package:jlpt_jonggack/services/report_service.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 StreamController<String> streamController = StreamController.broadcast();
@@ -99,6 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
         return GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                ReportService.init();
+              },
+            ),
             resizeToAvoidBottomInset: false,
             body: SafeArea(
               child: Column(

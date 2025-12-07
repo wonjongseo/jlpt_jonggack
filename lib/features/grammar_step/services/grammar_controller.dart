@@ -1,18 +1,57 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
 
-import '../../../common/app_constant.dart';
 import '../../../user/controller/user_controller.dart';
+
+class GrammarStepController extends GetxController {
+  static GrammarStepController get to => Get.find<GrammarStepController>();
+  late final Rx<GrammarStep> _grammars;
+  late final RxList<bool> isSaveds;
+  GrammarStep get grammarStep => _grammars.value;
+
+  GrammarStepController(this.lebel, this.chapter, GrammarStep grammarStep)
+    : _grammars = grammarStep.obs,
+      isSaveds = List.filled(grammarStep.grammars.length, false).obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    for (var i = 0; i < _grammars.value.grammars.length; i++) {
+      final grammer = _grammars.value.grammars[i];
+      isSaveds[i] = MyBookController.to.isSavedInJgBook(
+        MyWord.grammerToWord(grammer),
+      );
+    }
+  }
+
+  void toggleSaved(int index) {
+    final grammar = _grammars.value.grammars[index];
+    final savedGrammar = MyWord.grammerToWord(grammar);
+    if (isSaveds[index]) {
+      isSaveds[index] = false;
+      MyBookController.to.deleteMyWord(savedGrammar);
+    } else {
+      isSaveds[index] = true;
+      MyBookController.to.addMyWord(savedGrammar);
+    }
+  }
+
+  final String lebel;
+  final String chapter;
+}
 
 class GrammarController extends GetxController {
   List<GrammarStep> grammers = [];
   late int step;
   late String level;
-  GrammarRepositroy grammarRepositroy = GrammarRepositroy();
+  final grammarRepositroy = GrammarRepositroy();
 
   bool isSeeMean = true;
+
+  void isSaved() {}
 
   void toggleSeeMean(bool? v) {
     isSeeMean = !v!;
@@ -20,44 +59,17 @@ class GrammarController extends GetxController {
   }
 
   int clickedIndex = 0;
-  late PageController pageController;
   UserController userController = Get.find<UserController>();
 
   GrammarController({required this.level}) {
     grammers = grammarRepositroy.getGrammarStepByLevel(level);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    pageController.dispose();
-    super.dispose();
-  }
-
   void setStep(int step) {
     this.step = step;
-
-    // if (grammers[step].scores == grammers[step].grammars.length) {
-    //   clearScore();
-    // }
-  }
-
-  void clearScore() {
-    print('clearScore');
-
-    int subtrackScore = grammers[step].scores;
-    grammers[step].scores = 0;
-    update();
-    grammarRepositroy.updateGrammerStep(grammers[step]);
-    userController.updateCurrentProgress(
-      TotalProgressType.GRAMMAR,
-      int.parse(level) - 1,
-      -subtrackScore,
-    );
   }
 
   void updateScore(int score, {bool isRetry = false}) {
-    print('updateScore');
     if (grammers[step].isFinished ?? false) {
       return;
     }
@@ -88,21 +100,5 @@ class GrammarController extends GetxController {
     );
   }
 
-  GrammarStep getGrammarStep() {
-    return grammers[step];
-  }
-
-  void setGrammarSteps(String level) {
-    this.level = level;
-
-    update();
-  }
-
-  bool isSuccessedAllGrammar(int subStep) {
-    return grammers[subStep].scores == grammers[subStep].grammars.length;
-  }
-
-  bool isFinishedPreviousSubStep(int subStep) {
-    return grammers[subStep - 1].isFinished ?? false;
-  }
+  // GrammarStep get grammarStep => grammers[step];
 }
