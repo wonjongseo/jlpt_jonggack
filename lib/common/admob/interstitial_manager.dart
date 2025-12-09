@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
-import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:jlpt_jonggack/common/admob/ad_unit_id.dart';
 import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
@@ -119,12 +117,13 @@ class InterstitialManager {
       await SettingRepository.setInt(_kLastTsKey, 0, isLog: true);
       // 첫 노출 스킵은 광고가 실제 준비된 경우에만 소모되도록 여기선 설정하지 않음
     }
+    final r = Random().nextDouble();
 
     // ★ 추가: 오늘의 첫 "광고 노출 기회"는 무조건 스킵
     final firstSkipDay = SettingRepository.getString(_kFirstSkipDayKey);
     if (firstSkipDay != today) {
       await SettingRepository.setString(_kFirstSkipDayKey, today);
-      return false; // 첫 기회 스킵
+      return r <= 0.35;
     }
 
     // 일일 캡
@@ -143,7 +142,6 @@ class InterstitialManager {
     }
 
     // 랜덤 확률
-    final r = Random().nextDouble();
     if (r > _showChance) return false;
 
     return true;
