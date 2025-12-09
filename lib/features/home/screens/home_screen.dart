@@ -129,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: (index) => animateToPage(index),
                             currentPageIndex: categoryIndex,
                           ),
+                          SizedBox(height: 4),
                           const Spacer(flex: 1),
                           Expanded(
                             flex: 25,

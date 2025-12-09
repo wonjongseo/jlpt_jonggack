@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,6 +27,7 @@ class ReportService {
 
   static Future<void> _loadAppInfo() async {
     final pkg = await PackageInfo.fromPlatform();
+
     _appInfo = 'App Version: ${pkg.version} (build ${pkg.buildNumber})';
   }
 
@@ -39,10 +41,11 @@ class ReportService {
           'OS: Android ${info.version.release}';
     } else {
       final info = await plugin.iosInfo;
-      print('info : ${info}');
+      final machine = info.utsname.machine;
 
       _deviceInfo =
-          'Device: ${info.name} ${info.model}\n'
+          '${(UserController.to.user?.isPremieum ?? false) ? AppString.appName.tr : '${AppString.appName.tr} Plus'}'
+          'Device: ${info.name} ${info.model} ($machine\n'
           'OS: iOS ${info.systemVersion}';
     }
   }

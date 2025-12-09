@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:flutter/material.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 
 class KangiText extends StatelessWidget {
@@ -9,13 +7,11 @@ class KangiText extends StatelessWidget {
     super.key,
     required this.japanese,
     required this.clickTwice,
-    this.color = Colors.black,
   });
 
   final String japanese;
   final bool clickTwice;
 
-  final Color color;
   @override
   Widget build(BuildContext context) {
     // 동음 의이어가 있는가 없는가.
@@ -30,7 +26,6 @@ class KangiText extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 40,
-          color: AppColors.scaffoldBackground,
           fontFamily: AppFonts.japaneseFont,
         ),
         maxLines: 1,
@@ -44,7 +39,6 @@ class KangiText extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 40,
-              color: AppColors.scaffoldBackground,
               fontFamily: AppFonts.japaneseFont,
             ),
             maxLines: 1,
@@ -72,7 +66,6 @@ class KangiText extends StatelessWidget {
                 return Text(
                   japanese,
                   style: TextStyle(
-                    color: color,
                     fontSize: 20,
                     fontFamily: AppFonts.japaneseFont,
                   ),

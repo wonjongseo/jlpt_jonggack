@@ -59,7 +59,6 @@ class CustomTextFormField extends StatelessWidget {
               maxLines: maxLines ?? 1,
               controller: controller,
               decoration: InputDecoration(
-                hintStyle: hintStyle,
                 counterText: "",
                 prefixIconConstraints: const BoxConstraints(
                   minHeight: 0,
@@ -80,6 +79,7 @@ class CustomTextFormField extends StatelessWidget {
                     maxLines != null
                         ? EdgeInsets.all(15)
                         : EdgeInsets.symmetric(horizontal: 15),
+                hintStyle: hintStyle,
                 hintText: hintText,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide.none,

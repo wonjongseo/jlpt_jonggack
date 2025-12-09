@@ -40,7 +40,10 @@ class AnimatedLeanerProgressIndicator extends StatelessWidget {
                   child: Text(
                     "${(value * 100).toInt()}%",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: Responsive.width10 * 1.2),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: Responsive.width10 * 1.2,
+                    ),
                   ),
                 ),
               ],

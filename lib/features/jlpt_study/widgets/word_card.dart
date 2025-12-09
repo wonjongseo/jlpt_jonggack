@@ -68,7 +68,7 @@ class WordCard extends StatelessWidget {
                               !controller!.isSavedInLocal(word)
                                   ? FontAwesomeIcons.bookmark
                                   : FontAwesomeIcons.solidBookmark,
-                              color: AppColors.mainBordColor,
+                              color: SettingController.to.mainBordColor,
                               size: 22,
                             ),
                           ),
@@ -106,7 +106,7 @@ class WordCard extends StatelessWidget {
                         TtsController.to.isPlaying
                             ? FontAwesomeIcons.volumeLow
                             : FontAwesomeIcons.volumeOff,
-                        color: AppColors.mainBordColor,
+                        color: SettingController.to.mainBordColor,
                         size: 26,
                       ),
                     ),
@@ -135,7 +135,7 @@ class WordCard extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: AppColors.mainBordColor,
+                    color: SettingController.to.mainBordColor,
                   ),
                 ),
 
@@ -180,7 +180,7 @@ class WordCard extends StatelessWidget {
                                     AppString.seeMoreExamples.tr,
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: AppColors.mainBordColor,
+                                      color: SettingController.to.mainBordColor,
                                     ),
                                   ),
                                 ),

@@ -117,12 +117,21 @@ class _AppState extends State<App> {
       builder: (context, snapshat) {
         if (snapshat.hasData == true) {
           return GetMaterialApp(
+            builder: (context, child) {
+              final mediaQuery = MediaQuery.of(context);
+              return MediaQuery(
+                data: mediaQuery.copyWith(textScaleFactor: 0.85),
+                child: child!,
+              );
+            },
             debugShowCheckedModeBanner: false,
             initialRoute: HomeScreen.name,
             getPages: AppRoutes.getPages,
             fallbackLocale: const Locale('en', 'US'),
             initialBinding: InitialBindings(),
-            theme: AppThemings.lightTheme,
+            theme: AppThemings.lightTheme2,
+            darkTheme: AppThemings.darkTheme,
+            themeMode: controller.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             locale: effectiveLocale,
             translations: AppString(),
           );

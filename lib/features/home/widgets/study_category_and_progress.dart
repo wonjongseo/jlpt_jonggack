@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/widget/animated_circular_progressIndicator.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class StudyCategoryAndProgress extends StatelessWidget {
@@ -33,7 +34,6 @@ class StudyCategoryAndProgress extends StatelessWidget {
             Text(
               caregory,
               style: TextStyle(
-                color: Colors.black,
                 fontWeight: FontWeight.w700,
                 fontSize: Responsive.height15,
               ),
@@ -45,14 +45,16 @@ class StudyCategoryAndProgress extends StatelessWidget {
                 return RichText(
                   text: TextSpan(
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 3, 3, 3),
+                      color: SettingController.to.realBlackOrWhite,
                       fontSize: Responsive.width10 * 1.2,
                       letterSpacing: 2,
                     ),
                     children: [
                       TextSpan(
                         text: '${(value * 100).ceil()}',
-                        style: TextStyle(color: AppColors.mainBordColor),
+                        style: TextStyle(
+                          color: SettingController.to.mainBordColor,
+                        ),
                       ),
                       const TextSpan(text: '/'),
                       TextSpan(text: '$totalCnt'),
@@ -79,11 +81,7 @@ class StudyCategoryAndProgress extends StatelessWidget {
       children: [
         Text(
           caregory,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w700,
-            fontSize: Responsive.height15,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
         ),
         SizedBox(width: 5),
         Expanded(
@@ -97,14 +95,16 @@ class StudyCategoryAndProgress extends StatelessWidget {
                   return RichText(
                     text: TextSpan(
                       style: TextStyle(
-                        color: const Color.fromARGB(255, 3, 3, 3),
-                        fontSize: Responsive.width10 * 1.2,
+                        color: SettingController.to.realBlackOrWhite,
+                        fontSize: 12,
                         letterSpacing: 2,
                       ),
                       children: [
                         TextSpan(
                           text: '${(value * 100).ceil()}',
-                          style: TextStyle(color: AppColors.mainBordColor),
+                          style: TextStyle(
+                            color: SettingController.to.mainBordColor,
+                          ),
                         ),
                         const TextSpan(text: '/'),
                         TextSpan(text: '$totalCnt'),
@@ -113,6 +113,7 @@ class StudyCategoryAndProgress extends StatelessWidget {
                   );
                 },
               ),
+              SizedBox(height: 4),
               AnimatedLeanerProgressIndicator(
                 currentProgressCount: curCnt,
                 totalProgressCount: totalCnt,

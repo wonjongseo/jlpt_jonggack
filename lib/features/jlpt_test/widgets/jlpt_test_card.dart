@@ -27,7 +27,7 @@ class JlptTestCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: Responsive.width20),
       padding: EdgeInsets.all(Responsive.width20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: SettingController.to.blackOrWhite,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -43,7 +43,7 @@ class JlptTestCard extends StatelessWidget {
               fontFamily: AppFonts.japaneseFont,
             ),
           ),
-          SizedBox(height: Responsive.height40),
+          SizedBox(height: Responsive.height25),
           if (SettingController.to.isSubjective) const JlptTestTextFormField(),
           Expanded(
             child: SingleChildScrollView(

@@ -6,6 +6,7 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/setting/screen/widgets/sound_setting_slider.dart';
 import 'package:jlpt_jonggack/services/report_service.dart';
@@ -24,7 +25,10 @@ class SettingScreen extends GetView<SettingController> {
         shape: Border(),
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: FSController.to.baseFS - 1,
+          ),
         ),
         childrenPadding: EdgeInsets.symmetric(horizontal: 8),
         children: children,
@@ -38,24 +42,34 @@ class SettingScreen extends GetView<SettingController> {
   }) {
     return ExpansionTile(
       shape: Border(),
-      title: Text(title, style: TextStyle(fontSize: 12)),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: FSController.to.baseFS - 2),
+      ),
       children: children,
     );
   }
 
-  TextStyle get _listTileTitleStyle => TextStyle(fontSize: 12);
+  TextStyle get _listTileTitleStyle =>
+      TextStyle(fontSize: FSController.to.baseFS - 2);
+
   Widget _listTile({
     required String title,
     String? subTitle,
+    Widget? subTitleWidget,
     Widget? trailing,
     Function()? onTap,
   }) {
     return ListTile(
       title: Text(title, style: _listTileTitleStyle),
       subtitle:
-          subTitle == null
+          subTitleWidget ??
+          (subTitle == null
               ? null
-              : Text(subTitle, style: TextStyle(fontSize: 11)),
+              : Text(
+                subTitle,
+                style: TextStyle(fontSize: FSController.to.baseFS - 3),
+              )),
       trailing: trailing,
       onTap: onTap,
     );
@@ -205,6 +219,54 @@ class SettingScreen extends GetView<SettingController> {
                           items: items,
                         );
                       }),
+                    ),
+
+                    _listTile(
+                      title: AppString.themeMode.tr,
+                      trailing: Switch.adaptive(
+                        value: controller.isDarkMode,
+                        onChanged: (v) => controller.toggleDarkMode(v),
+                      ),
+                    ),
+
+                    ExpansionTile(
+                      shape: Border.all(color: Colors.transparent),
+                      title: Text(
+                        AppString.fontSize.tr,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: FSController.to.baseFS,
+                        ),
+                      ),
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed:
+                                  () => FSController.to.updateBaseFontSize(
+                                    isIncrease: true,
+                                  ),
+                              icon: Icon(Icons.arrow_drop_up_outlined),
+                            ),
+                            Obx(() => Text('${FSController.to.baseFS}')),
+                            IconButton(
+                              onPressed:
+                                  () => FSController.to.updateBaseFontSize(
+                                    isIncrease: false,
+                                  ),
+                              icon: Icon(Icons.arrow_drop_down_outlined),
+                            ),
+                            TextButton(
+                              onPressed:
+                                  () => FSController.to.updateBaseFontSize(
+                                    fontSize: 14,
+                                  ),
+                              child: Text(AppString.defaultValue.tr),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),

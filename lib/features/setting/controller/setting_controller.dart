@@ -2,12 +2,14 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
+import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-
+import 'package:flutter_debouncer/flutter_debouncer.dart' as FB;
 import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
@@ -108,7 +110,6 @@ class SettingController extends GetxController {
     }
 
     final savedLangCode = saved.split(RegExp(r'[-_]')).first.toLowerCase();
-    print('savedLangCode : ${savedLangCode}');
 
     _systemLocale.value =
         (savedLangCode == 'ko')
@@ -210,6 +211,7 @@ class SettingController extends GetxController {
   @override
   void onInit() async {
     await getSystemLanguage();
+    await getIsDarkMode();
     getIsSubjective();
     getTtsValue();
     getQuizValue();
@@ -390,4 +392,43 @@ class SettingController extends GetxController {
       }
     }
   }
+
+  final Rx<bool> _isDarkMode = false.obs;
+  bool get isDarkMode => _isDarkMode.value;
+
+  Future<void> toggleDarkMode(v) async {
+    _isDarkMode.value = v;
+    ThemeMode themeMode = _isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
+    Get.changeThemeMode(themeMode);
+
+    await SettingRepository.setBool(AppConstant.isDarkMode, _isDarkMode.value);
+  }
+
+  Future<void> getIsDarkMode() async {
+    final isDarkMode = SettingRepository.getBool(AppConstant.isDarkMode);
+    if (isDarkMode == null) {
+      final brightness =
+          SchedulerBinding.instance.platformDispatcher.platformBrightness;
+      final deviceIsDark = brightness == Brightness.dark;
+      await toggleDarkMode(deviceIsDark);
+    }
+    _isDarkMode.value = SettingRepository.getBool(AppConstant.isDarkMode)!;
+  }
+
+  Color get realBlackOrWhite =>
+      _isDarkMode.value ? AppColors.whiteGrey : Colors.black;
+
+  Color get mainColor =>
+      _isDarkMode.value ? AppColors.darkMainColor : AppColors.mainColor;
+
+  Color get mainBordColor =>
+      _isDarkMode.value ? AppColors.darkMainBordColor : AppColors.mainBordColor;
+
+  Color get blackOrWhite =>
+      _isDarkMode.value ? AppColors.scaffoldBackground : Colors.white;
+
+  Color get nonSelectedColor =>
+      _isDarkMode.value
+          ? Colors.white.withOpacity(.8)
+          : AppColors.scaffoldBackground.withOpacity(0.5);
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
@@ -22,8 +21,8 @@ class KangiQuestionCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-      decoration: const BoxDecoration(
-        color: AppColors.whiteGrey,
+      decoration: BoxDecoration(
+        color: SettingController.to.blackOrWhite,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),
@@ -34,7 +33,6 @@ class KangiQuestionCard extends StatelessWidget {
           Text(
             question.question.word,
             style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color: const Color(0xFF101010),
               fontSize: 30,
               fontWeight: FontWeight.w500,
               fontFamily: AppFonts.japaneseFont,
@@ -130,10 +128,7 @@ class KangiQuestionCard extends StatelessWidget {
   Widget _selectHundoc() {
     return Column(
       children: [
-        Text(
-          AppString.hundoc.tr,
-          style: TextStyle(color: AppColors.scaffoldBackground, fontSize: 14),
-        ),
+        Text(AppString.hundoc.tr),
         Column(
           children: List.generate(question.options.length, (index) {
             return GetBuilder<KangiTestController>(
@@ -159,7 +154,7 @@ class KangiQuestionCard extends StatelessWidget {
                       return const Color(0xFFE92E30);
                     }
                   }
-                  return AppColors.scaffoldBackground.withOpacity(0.5);
+                  return SettingController.to.nonSelectedColor;
                 }
 
                 return KangiQuestionOption(
@@ -203,13 +198,7 @@ class KangiQuestionCard extends StatelessWidget {
   Widget _selectUndoc() {
     return Column(
       children: [
-        Text(
-          AppString.undoc.tr,
-          style: TextStyle(
-            color: AppColors.scaffoldBackground,
-            fontSize: Responsive.height14,
-          ),
-        ),
+        Text(AppString.undoc.tr),
         Column(
           children: List.generate(question.options.length, (index) {
             return GetBuilder<KangiTestController>(
@@ -236,7 +225,7 @@ class KangiQuestionCard extends StatelessWidget {
                       return const Color(0xFFE92E30);
                     }
                   }
-                  return AppColors.scaffoldBackground.withOpacity(0.5);
+                  return SettingController.to.nonSelectedColor;
                 }
 
                 return KangiQuestionOption(
@@ -278,9 +267,14 @@ class KangiQuestionCard extends StatelessWidget {
       children: [
         Text(isKo ? '한자' : 'Mean'),
         Column(
-          children: List.generate(
-            question.options.length,
-            (index) => GetBuilder<KangiTestController>(
+          children: List.generate(question.options.length, (index) {
+            final splitedMean = question.options[index].mean.split('/');
+            final text =
+                splitedMean.length == 1
+                    ? splitedMean.first
+                    : splitedMean.last.trim();
+
+            return GetBuilder<KangiTestController>(
               builder: (controller1) {
                 Color getTheRightColor() {
                   if (controller1.isAnswered1) {
@@ -294,11 +288,11 @@ class KangiQuestionCard extends StatelessWidget {
                       return const Color(0xFFE92E30);
                     }
                   }
-                  return AppColors.scaffoldBackground.withOpacity(0.5);
+                  return SettingController.to.nonSelectedColor;
                 }
 
                 return KangiQuestionOption(
-                  text: question.options[index].mean,
+                  text: text,
                   color: getTheRightColor(),
                   isAnswered: controller1.isAnswered1,
                   question: question,
@@ -313,8 +307,8 @@ class KangiQuestionCard extends StatelessWidget {
                           ),
                 );
               },
-            ),
-          ),
+            );
+          }),
         ),
       ],
     );

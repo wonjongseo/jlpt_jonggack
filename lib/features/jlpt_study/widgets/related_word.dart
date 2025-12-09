@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/kangi_card.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
@@ -40,7 +40,7 @@ class RelatedWords extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
-            color: AppColors.mainBordColor,
+            color: SettingController.to.mainBordColor,
           ),
         ),
         SizedBox(height: 4),
@@ -69,9 +69,7 @@ class RelatedWords extends StatelessWidget {
                           );
                         },
                         child: Card(
-                          shadowColor: Colors.white,
-                          color: Colors.white,
-                          shape: Border.all(color: AppColors.mainColor),
+                          shape: Border.all(color: Colors.transparent),
                           child: Padding(
                             padding: EdgeInsets.all(4),
                             child: Column(
@@ -81,7 +79,6 @@ class RelatedWords extends StatelessWidget {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontFamily: AppFonts.japaneseFont,
-                                    color: Colors.black,
                                     fontSize: 22,
                                   ),
                                 ),
@@ -90,18 +87,12 @@ class RelatedWords extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
-                                        color: AppColors.mainColor,
+                                        color: SettingController.to.mainColor,
                                         width: 1.5,
                                       ),
                                     ),
                                   ),
-                                  child: Text(
-                                    kangi.shortMean,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: Responsive.height14,
-                                    ),
-                                  ),
+                                  child: Text(kangi.shortMean),
                                 ),
                               ],
                             ),

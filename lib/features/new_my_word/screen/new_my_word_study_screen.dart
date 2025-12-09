@@ -5,12 +5,12 @@ import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -149,7 +149,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                       AppString.known.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.mainBordColor,
+                        color: SettingController.to.mainBordColor,
                       ),
                     )
                   else

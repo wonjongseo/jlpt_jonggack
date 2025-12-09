@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
@@ -97,7 +98,7 @@ class KangiTestController extends GetxController
   // 맞춘 정답
   int numOfCorrectAns = 0;
   String text = 'skip';
-  Color color = Colors.black;
+  Color color = SettingController.to.realBlackOrWhite;
   bool isDisTouchable = false;
 
   void manualSaveToMyVoca(int index) {
@@ -306,7 +307,7 @@ class KangiTestController extends GetxController
       }
       isWrong = false;
       text = 'skip';
-      color = Colors.black;
+      color = SettingController.to.realBlackOrWhite;
       isAnswered1 = false;
       isAnswered2 = false;
       isAnswered3 = false;

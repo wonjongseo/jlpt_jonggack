@@ -11,6 +11,7 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_description_card.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 
@@ -150,10 +151,7 @@ class _GrammarCardState extends State<GrammarCard> {
       height: double.infinity,
       child: Card(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: Responsive.height18,
-            horizontal: Responsive.width16,
-          ),
+          padding: EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +189,7 @@ class _GrammarCardState extends State<GrammarCard> {
                 Text(
                   AppString.examples.tr,
                   style: TextStyle(
-                    color: AppColors.mainBordColor,
+                    color: SettingController.to.mainBordColor,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -223,7 +221,7 @@ class _GrammarCardState extends State<GrammarCard> {
                         child: Text(
                           AppString.seeMoreExamples.tr,
                           style: TextStyle(
-                            color: AppColors.mainBordColor,
+                            color: SettingController.to.mainBordColor,
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
                           ),

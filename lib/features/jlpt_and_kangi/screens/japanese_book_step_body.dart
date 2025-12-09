@@ -2,13 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/features/calendar_step/japanese_calendar_step_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -86,7 +84,7 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
                 },
                 onTap: () => _onTap(isAllAccessable, index),
                 child: Card(
-                  color: !isAllAccessable ? Colors.grey.shade400 : Colors.white,
+                  color: !isAllAccessable ? Colors.grey.shade400 : null,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Stack(
@@ -103,7 +101,7 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
                                   fontSize: isEn ? 20 : 23,
                                   color:
                                       isAllAccessable
-                                          ? AppColors.mainBordColor
+                                          ? SettingController.to.mainBordColor
                                           : Colors.grey,
                                 ),
                               ),
@@ -114,7 +112,7 @@ class _JapaneseBookStepBodyState extends State<JapaneseBookStepBody> {
                                   fontSize: 30,
                                   color:
                                       isAllAccessable
-                                          ? AppColors.mainBordColor
+                                          ? SettingController.to.mainBordColor
                                           : Colors.grey,
                                 ),
                               ),

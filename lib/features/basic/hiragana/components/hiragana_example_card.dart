@@ -5,6 +5,7 @@ import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 
 class HiraganaExampleCard extends StatelessWidget {
@@ -14,7 +15,11 @@ class HiraganaExampleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     TtsController ttsController = Get.find<TtsController>();
     return Container(
-      decoration: BoxDecoration(border: Border.all(width: 0.2)),
+      decoration: BoxDecoration(
+        border: Border.all(width: 0.2),
+        color: SettingController.to.blackOrWhite,
+      ),
+      margin: EdgeInsets.only(bottom: 4),
       child: ListTile(
         onTap: () => ttsController.speak(example.word),
         leading: Text(
@@ -22,14 +27,13 @@ class HiraganaExampleCard extends StatelessWidget {
           style: TextStyle(
             fontSize: Responsive.width10 * 1.8,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
             fontFamily: AppFonts.japaneseFont,
           ),
         ),
         minLeadingWidth: 120,
         title: FaIcon(
           FontAwesomeIcons.volumeOff,
-          color: AppColors.mainBordColor,
+          color: SettingController.to.mainBordColor,
           size: Responsive.height17,
         ),
         trailing: Text(
@@ -37,7 +41,6 @@ class HiraganaExampleCard extends StatelessWidget {
           style: TextStyle(
             fontSize: Responsive.width10 * 1.6,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
             fontFamily: AppFonts.japaneseFont,
           ),
         ),

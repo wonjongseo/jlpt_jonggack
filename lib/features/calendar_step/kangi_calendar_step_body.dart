@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/check_row_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/kangi_list_tile.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/top_navigation_btn.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -60,7 +61,7 @@ class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
       onPressed: () {
         Get.bottomSheet(
           Container(
-            color: Colors.white,
+            color: SettingController.to.blackOrWhite,
             child: GetBuilder<KangiStepController>(
               builder: (controller) {
                 return Column(
@@ -162,36 +163,35 @@ class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
                   isFinished:
                       (index) => controller.kangiSteps[index].isFinished,
                 ),
+                SizedBox(height: 6),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Container(
-                      color: Colors.white,
-                      child: PageView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        controller: kangiController.pageController,
-                        itemCount: controller.kangiSteps.length,
-                        itemBuilder: (context, subStep) {
-                          controller.setStep(subStep);
-                          KangiStep kangiStep = controller.getKangiStep();
-                          return SingleChildScrollView(
-                            child: Column(
-                              children: List.generate(kangiStep.kangis.length, (
-                                index,
-                              ) {
-                                bool isSaved = controller.isSavedInLocal(
-                                  kangiStep.kangis[index],
-                                );
-                                return KangiListTile(
-                                  kangi: kangiStep.kangis[index],
-                                  index: index,
-                                  isSaved: isSaved,
-                                );
-                              }),
-                            ),
-                          );
-                        },
-                      ),
+                  child: Card(
+                    shape: RoundedRectangleBorder(),
+                    margin: EdgeInsets.zero,
+                    child: PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: kangiController.pageController,
+                      itemCount: controller.kangiSteps.length,
+                      itemBuilder: (context, subStep) {
+                        controller.setStep(subStep);
+                        KangiStep kangiStep = controller.getKangiStep();
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: List.generate(kangiStep.kangis.length, (
+                              index,
+                            ) {
+                              bool isSaved = controller.isSavedInLocal(
+                                kangiStep.kangis[index],
+                              );
+                              return KangiListTile(
+                                kangi: kangiStep.kangis[index],
+                                index: index,
+                                isSaved: isSaved,
+                              );
+                            }),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

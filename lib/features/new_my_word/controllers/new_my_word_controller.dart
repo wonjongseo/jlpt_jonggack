@@ -475,7 +475,7 @@ class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
         children: [
           Text(
             AppString.plzEnterNumberOfQuiz.tr,
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 12),
 
@@ -486,7 +486,7 @@ class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
               controller: teCrl,
               sufficIcon: Text(
                 isEn ? 'Up to ${widget.maxCnt} words' : '최대 ${widget.maxCnt}개',
-                style: TextStyle(fontSize: 12, color: Colors.black54),
+                style: TextStyle(fontSize: 12),
               ),
               keyboardType: TextInputType.number,
             ),

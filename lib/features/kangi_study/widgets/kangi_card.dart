@@ -76,7 +76,6 @@ class _KangiCardState extends State<KangiCard> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: Responsive.height60,
-                      color: Colors.black,
                       fontFamily: AppFonts.japaneseFont,
                     ),
                   ),
@@ -90,7 +89,7 @@ class _KangiCardState extends State<KangiCard> {
                           },
                           icon: FaIcon(
                             FontAwesomeIcons.bookmark,
-                            color: AppColors.mainBordColor,
+                            color: SettingController.to.mainBordColor,
                             size: 22,
                           ),
                         )
@@ -102,7 +101,7 @@ class _KangiCardState extends State<KangiCard> {
                           },
                           icon: FaIcon(
                             FontAwesomeIcons.solidBookmark,
-                            color: AppColors.mainBordColor,
+                            color: SettingController.to.mainBordColor,
                             size: 22,
                           ),
                         ),
@@ -153,7 +152,7 @@ class _KangiCardState extends State<KangiCard> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: AppColors.mainBordColor,
+                  color: SettingController.to.mainBordColor,
                 ),
               ),
               SizedBox(height: 10),
@@ -170,9 +169,9 @@ class _KangiCardState extends State<KangiCard> {
                     }
                     return Container(
                       decoration: BoxDecoration(border: Border.all(width: 0.5)),
-                      padding: EdgeInsets.only(bottom: Responsive.height10),
+                      padding: EdgeInsets.only(bottom: 10),
                       child: ListTile(
-                        minLeadingWidth: Responsive.width10 * 7,
+                        minLeadingWidth: 10 * 7,
                         visualDensity: const VisualDensity(
                           horizontal: VisualDensity.minimumDensity,
                           vertical: VisualDensity.minimumDensity,
@@ -192,7 +191,6 @@ class _KangiCardState extends State<KangiCard> {
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: Responsive.height20,
-                            color: Colors.black,
                             fontFamily: AppFonts.japaneseFont,
                           ),
                         ),

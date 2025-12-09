@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class StepSelectorButton extends StatelessWidget {
   const StepSelectorButton({
@@ -16,7 +17,10 @@ class StepSelectorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: isCurrent ? AppColors.mainColor : Colors.cyan.shade200,
+      color:
+          isCurrent
+              ? SettingController.to.mainColor
+              : SettingController.to.mainColor.withOpacity(.6),
       elevation: isCurrent ? 3 : 0,
       child: Container(
         width: Responsive.height10 * 8.5, //

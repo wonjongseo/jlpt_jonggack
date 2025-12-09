@@ -6,6 +6,8 @@ import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
@@ -61,8 +63,7 @@ class _GrammarExampleCardState extends State<GrammarExampleCard> {
                         '${widget.index + 1}. $grammarWrod',
                         textStyle: TextStyle(
                           fontFamily: AppFonts.japaneseFont,
-                          fontSize: Responsive.height17,
-                          color: Colors.black,
+                          fontSize: FSController.to.baseFS + 3,
                           fontWeight: FontWeight.w600,
                         ),
                         customStylesBuilder: (element) {
@@ -80,13 +81,14 @@ class _GrammarExampleCardState extends State<GrammarExampleCard> {
                         },
                       ),
                     ),
+                    SizedBox(height: 4),
                     Container(
                       color: Colors.transparent,
                       child: Text(
                         widget.examples[widget.index].mean,
                         style: TextStyle(
                           color: Colors.grey,
-                          fontSize: Responsive.height16,
+                          fontSize: FSController.to.baseFS + 2,
                         ),
                       ),
                     ),
@@ -117,7 +119,7 @@ class _GrammarExampleCardState extends State<GrammarExampleCard> {
                 TtsController.to.isPlaying
                     ? FontAwesomeIcons.volumeLow
                     : FontAwesomeIcons.volumeOff,
-                color: AppColors.mainBordColor,
+                color: SettingController.to.mainBordColor,
                 size: Responsive.height10 * 2.6,
               ),
             ),

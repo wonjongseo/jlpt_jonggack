@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
@@ -56,14 +56,21 @@ class MyVocaDateSection extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 8),
           child: GetBuilder<NewMyWordController>(
             builder: (controller) {
-              Color textColor = w.isKnown ? Colors.white : Colors.black;
+              final sController = SettingController.to;
+
+              Color textColor =
+                  w.isKnown ? Colors.white : sController.realBlackOrWhite;
+
+              Color containerCoclor =
+                  w.isKnown ? sController.mainColor : sController.blackOrWhite;
+
               return Slidable(
                 startActionPane: _startActionPane(w, index),
                 endActionPane: _endActionPane(index),
                 child: Container(
                   padding: EdgeInsets.only(top: 8),
                   decoration: BoxDecoration(
-                    color: w.isKnown ? AppColors.mainColor : Colors.white,
+                    color: containerCoclor,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ListTile(
@@ -76,12 +83,11 @@ class MyVocaDateSection extends StatelessWidget {
                           child: AutoSizeText(
                             w.word,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: FSController.to.baseFS + 6,
                               fontFamily: AppFonts.japaneseFont,
                               fontWeight: FontWeight.w500,
                               color: textColor,
                             ),
-                            maxLines: 1,
                           ),
                         ),
                         SizedBox(width: 12),
@@ -104,7 +110,10 @@ class MyVocaDateSection extends StatelessWidget {
                                 child: Text(
                                   w.mean,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: textColor),
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: FSController.to.baseFS,
+                                  ),
                                 ),
                               ),
                             ],
@@ -149,7 +158,7 @@ class MyVocaDateSection extends StatelessWidget {
               onScrollLeft(index);
             },
             backgroundColor: Colors.grey,
-            label: '미암기로 변경',
+            label: isEn ? 'UnKnown' : '미암기로 변경',
             icon: Icons.remove,
           )
         else
@@ -157,8 +166,8 @@ class MyVocaDateSection extends StatelessWidget {
             onPressed: (context) {
               onScrollLeft(index);
             },
-            backgroundColor: AppColors.mainColor,
-            label: '암기로 변경',
+            backgroundColor: SettingController.to.mainColor,
+            label: isEn ? 'Known' : '암기로 변경',
             icon: Icons.check,
             foregroundColor: Colors.white,
           ),

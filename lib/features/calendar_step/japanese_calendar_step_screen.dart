@@ -4,12 +4,14 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/check_row_btn.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/japanese_list_tile.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/top_navigation_btn.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 
 class JapaneseStepScreen extends StatefulWidget {
@@ -91,7 +93,7 @@ class _JapaneseStepScreenState extends State<JapaneseStepScreen> {
       onPressed: () {
         Get.bottomSheet(
           Container(
-            color: Colors.white,
+            color: SettingController.to.blackOrWhite,
             child: GetBuilder<JlptStepController>(
               builder: (controller) {
                 return Column(
@@ -150,10 +152,11 @@ class _JapaneseStepScreenState extends State<JapaneseStepScreen> {
                 isCurrent: (index) => jlptStepController.step == index,
                 isFinished: (index) => controller.jlptSteps[index].isFinished,
               ),
+              SizedBox(height: 4),
               Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 8),
-                  color: Colors.white,
+                child: Card(
+                  shape: RoundedRectangleBorder(),
+                  margin: EdgeInsets.zero,
                   child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: jlptStepController.pageController,

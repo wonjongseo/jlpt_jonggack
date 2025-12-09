@@ -102,11 +102,7 @@ class ScoreAndMessage extends StatelessWidget {
           delay: const Duration(milliseconds: 300),
           child: Text(
             message,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-              color: AppColors.scaffoldBackground,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           ),
         ),
         SizedBox(height: 30),

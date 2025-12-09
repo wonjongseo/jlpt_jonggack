@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
-import 'package:jlpt_jonggack/features/my_voca/screens/save_voca_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class CustomTextForm extends StatelessWidget {
   const CustomTextForm({
@@ -42,7 +41,10 @@ class CustomTextForm extends StatelessWidget {
           hintText: textInputEnum.name,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: AppColors.mainColor, width: 2),
+            borderSide: BorderSide(
+              color: SettingController.to.mainColor,
+              width: 2,
+            ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

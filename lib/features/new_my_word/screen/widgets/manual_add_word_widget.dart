@@ -7,7 +7,6 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/my_voca/components/custom_text_form.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 TextStyle accentTextStyle = TextStyle(
   fontWeight: FontWeight.bold,

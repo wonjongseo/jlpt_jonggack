@@ -20,6 +20,8 @@ class AppConstant {
   static const String correctDurationKey = 'correctDurationKey';
 
   static const String isAlertGrantedKey = 'isAlertGrantedKey';
+  static const String isDarkMode = 'isDarkMode';
+  static const String fontSizeKey = 'fontSizeKey';
 
   static const String basicOrJlptOrMyKey = 'basicOrJlptOrMy';
   static const String progressBox = 'progressBox';

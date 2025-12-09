@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_test/components/kangi_test_card.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 import '../../config/colors.dart';
 
@@ -67,7 +68,7 @@ class KangiTestScreen extends StatelessWidget {
                                 context,
                               ).textTheme.headlineMedium!.copyWith(
                                 fontFamily: AppFonts.japaneseFont,
-                                color: AppColors.mainBordColor,
+                                color: SettingController.to.mainBordColor,
                               ),
                             ),
                             TextSpan(

@@ -6,6 +6,7 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 
 class GrammarListTile extends StatefulWidget {
@@ -60,7 +61,7 @@ class _GrammarListTileState extends State<GrammarListTile> {
           title: Text(
             widget.grammars[widget.index].grammar,
             style: TextStyle(
-              fontSize: Responsive.height16,
+              fontSize: FSController.to.baseFS + 2,
               fontWeight: FontWeight.bold,
               overflow: TextOverflow.ellipsis,
               fontFamily: AppFonts.japaneseFont,
@@ -74,7 +75,7 @@ class _GrammarListTileState extends State<GrammarListTile> {
                       ? Text(
                         widget.grammars[widget.index].means,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: FSController.to.baseFS,
                           fontFamily: AppFonts.descriptionFont,
                         ),
                       )
