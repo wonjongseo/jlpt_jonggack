@@ -25,6 +25,12 @@ class MyBookController extends GetxController {
     Get.toNamed(NewMyWordScreen.name);
   }
 
+  // void addMyWordJG(MyWord myWord) {
+  //   _selectedBook.value = books[0];
+  //   addMyWord(myWord);
+  //   //TODO CHECK
+  // }
+
   void addMyWord(MyWord myWord) {
     if (selectedBook == null) return;
 

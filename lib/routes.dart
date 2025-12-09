@@ -2,8 +2,9 @@ import 'package:get/get.dart';
 
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/calendar_step/grammar_calendar_step_screen.dart';
-import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
-import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
+import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
+import 'package:jlpt_jonggack/features/quiz/screen/jlpt_test_screen.dart';
+import 'package:jlpt_jonggack/features/quiz/screen/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/screens/widgets/edit_book_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
@@ -31,7 +32,15 @@ class AppRoutes {
       name: GrammarCalendarStepScreen.name,
       page: () => GrammarCalendarStepScreen(),
     ),
-    GetPage(name: JlptTestScreen.name, page: () => const JlptTestScreen()),
+    GetPage(
+      name: JlptTestScreen.name,
+      page: () => const JlptTestScreen(),
+      binding: BindingsBuilder.put(() {
+        final controller = JlptTestController();
+        controller.init(Get.arguments);
+        return controller;
+      }),
+    ),
     GetPage(name: KangiTestScreen.name, page: () => const KangiTestScreen()),
     GetPage(name: SettingScreen.name, page: () => const SettingScreen()),
     GetPage(name: ScoreScreen.name, page: () => const ScoreScreen()),

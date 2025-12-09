@@ -4,7 +4,7 @@ import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
-import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
+import 'package:jlpt_jonggack/features/quiz/screen/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
@@ -17,6 +17,7 @@ import '../../../../model/Question.dart';
 import '../../../../user/controller/user_controller.dart';
 
 class JlptStepController extends GetxController {
+  static JlptStepController get to => Get.find<JlptStepController>();
   int currChapNumber = 0;
 
   void toggleAllSave() {
@@ -149,6 +150,32 @@ class JlptStepController extends GetxController {
 
     update();
   }
+  // void toggleSaveWord(
+  //   Word word, {
+  //   bool isForceSave = false,
+  //   bool showSnackBar = true,
+  // }) {
+  //   MyWord newMyWord = MyWord.wordToMyWord(word);
+  //   List<MyWord> book1Words = MyBookController.to.books[0].mywords;
+
+  //   if (isForceSave) {
+  //     MyBookController.to.addMyWord(newMyWord);
+  //   } else {
+  //     if (book1Words.contains(newMyWord)) {
+  //       MyBookController.to.deleteMyWord(newMyWord);
+  //     } else {
+  //       MyBookController.to.addMyWord(newMyWord);
+
+  //       if (showSnackBar) {
+  //         SnackBarHelper.showSuccessSnackBar(
+  //           '${word.word}${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
+  //         );
+  //       }
+  //     }
+  //   }
+
+  // update();
+  // }
 
   List<JlptStep> jlptSteps = [];
   final String level;

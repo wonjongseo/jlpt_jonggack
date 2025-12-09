@@ -5,9 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
-import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/quiz/screen/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
@@ -18,7 +16,7 @@ import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 
 import '../../../user/controller/user_controller.dart';
-import '../kangi_test_screen.dart';
+import '../../quiz/screen/kangi_test_screen.dart';
 
 class KangiTestController extends GetxController
     with SingleGetTickerProviderMixin {

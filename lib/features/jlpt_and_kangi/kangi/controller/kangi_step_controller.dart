@@ -5,7 +5,7 @@ import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
+import 'package:jlpt_jonggack/features/quiz/screen/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';

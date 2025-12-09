@@ -69,7 +69,6 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
           child: Column(
             children: [
               NewSearchWidget(isHomeScreen: true),
-              SizedBox(height: 8),
               _navigator(),
               SizedBox(height: 4),
               Flexible(

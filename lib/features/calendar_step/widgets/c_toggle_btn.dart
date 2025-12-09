@@ -5,9 +5,9 @@ import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dar
 class CToggleBtn extends StatelessWidget {
   const CToggleBtn({
     super.key,
-    required this.toggle,
-    required this.value,
     required this.label,
+    required this.value,
+    required this.toggle,
   });
 
   final String label;

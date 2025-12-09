@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
-import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_option.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
@@ -20,12 +18,13 @@ import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
 import '../../../model/my_word.dart';
-import '../screens/jlpt_test_screen.dart';
+import '../../quiz/screen/jlpt_test_screen.dart';
 import '../../../user/controller/user_controller.dart';
 
 class JlptTestController extends GetxController
     with SingleGetTickerProviderMixin {
   static JlptTestController get to => Get.find<JlptTestController>();
+
   @override
   void onInit() {
     animationController = AnimationController(
@@ -107,7 +106,10 @@ class JlptTestController extends GetxController
   late int selectedAns;
   RxInt questionNumber = 1.obs;
   int numOfCorrectAns = 0;
-  String nextOrSkipText = 'skip';
+
+  final _nextOrSkipText = 'skip'.obs;
+  String get nextOrSkipText => _nextOrSkipText.value;
+
   Color color = SettingController.to.realBlackOrWhite;
 
   void toggleSubjective() {
@@ -267,9 +269,18 @@ class JlptTestController extends GetxController
   }
 
   void saveWrongQuestion() {
-    if (!wrongQuestions.contains(questions[questionNumber.value - 1])) {
-      wrongQuestions.add(questions[questionNumber.value - 1]);
+    final wrongWord = questions[questionNumber.value - 1];
+    if (!wrongQuestions.contains(wrongWord)) {
+      wrongQuestions.add(wrongWord);
     }
+    //TODO
+    // if (!isRandom && SettingController.to.isAutoSaveJapanese) {
+    //   JlptStepController.to.toggleSaveWord(
+    //     wrongWord.question,
+    //     isForceSave: true,
+    //     showSnackBar: false,
+    //   );
+    // }
   }
 
   Color getTheTextEditerBorderRightColor({bool isBorder = true}) {
@@ -336,7 +347,7 @@ class JlptTestController extends GetxController
     saveWrongQuestion();
     isWrong = true;
     color = Colors.pink;
-    nextOrSkipText = 'next';
+    _nextOrSkipText.value = 'next';
     Future.delayed(
       Duration(milliseconds: SettingController.to.incorrectDuration.value),
       () {
@@ -346,10 +357,10 @@ class JlptTestController extends GetxController
   }
 
   testCorect() {
-    nextOrSkipText = 'skip';
+    _nextOrSkipText.value = 'skip';
     numOfCorrectAns++;
     color = Colors.blue;
-    nextOrSkipText = 'next';
+    _nextOrSkipText.value = 'next';
     if (isMyWordTest) {
       // 나만의 단어 알고 있음으로 변경.
       myVocaController!.autoUpdateWordInQuiz(correctQuestion, true);
@@ -389,7 +400,7 @@ class JlptTestController extends GetxController
     saveWrongQuestion();
     isWrong = true;
     color = Colors.pink;
-    nextOrSkipText = 'next';
+    _nextOrSkipText.value = 'next';
     nextQuestion();
   }
 
@@ -402,7 +413,7 @@ class JlptTestController extends GetxController
         saveWrongQuestion();
       }
       isWrong = false;
-      nextOrSkipText = 'skip';
+      _nextOrSkipText.value = 'skip';
       color = SettingController.to.realBlackOrWhite;
       isAnswered = false;
 

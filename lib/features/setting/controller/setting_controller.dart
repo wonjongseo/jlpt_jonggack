@@ -215,6 +215,7 @@ class SettingController extends GetxController {
     getIsSubjective();
     getTtsValue();
     getQuizValue();
+    getIsAuthSaveJapanese();
     super.onInit();
   }
 
@@ -431,4 +432,21 @@ class SettingController extends GetxController {
       _isDarkMode.value
           ? Colors.white.withOpacity(.8)
           : AppColors.scaffoldBackground.withOpacity(0.5);
+
+  final _isAutoSaveJapanese = false.obs;
+  bool get isAutoSaveJapanese => _isAutoSaveJapanese.value;
+
+  void getIsAuthSaveJapanese() {
+    _isAutoSaveJapanese.value =
+        SettingRepository.getBool(AppConstant.isAutoSaveJapanese) ?? false;
+  }
+
+  void toggleIsAuthSaveJapanese(bool v) {
+    _isAutoSaveJapanese.value = !v;
+
+    SettingRepository.setBool(
+      AppConstant.isAutoSaveJapanese,
+      _isAutoSaveJapanese.value,
+    );
+  }
 }

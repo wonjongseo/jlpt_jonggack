@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
-
-import 'package:jlpt_jonggack/repository/local_repository.dart';
 
 class ToggleSubjectiveQustionButton extends StatelessWidget {
   const ToggleSubjectiveQustionButton({

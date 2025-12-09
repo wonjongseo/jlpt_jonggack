@@ -9,11 +9,9 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/related_word.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 
 // ignore: must_be_immutable
 class WordCard extends StatelessWidget {

@@ -2,9 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
@@ -71,38 +69,23 @@ class _JLPTCardsState extends State<JLPTCards> {
                   StudyCategoryAndProgress(
                     caregory: AppString.word.tr,
                     totalCnt: userController.user!.jlptWordScroes[index],
-                    curCnt:
-                        kDebugMode
-                            ? (userController.user!.jlptWordScroes[index] / 1.2)
-                                .toInt()
-                            : userController.user!.currentJlptWordScroes[index],
+                    curCnt: userController.user!.currentJlptWordScroes[index],
                   ),
                   StudyCategoryAndProgress(
                     caregory: AppString.kangi.tr,
                     totalCnt: userController.user!.kangiScores[index],
-                    curCnt:
-                        kDebugMode
-                            ? (userController.user!.kangiScores[index] / 2)
-                                .toInt()
-                            : userController.user!.currentKangiScores[index],
+                    curCnt: userController.user!.currentKangiScores[index],
                   ),
                   StudyCategoryAndProgress(
                     caregory: AppString.grammar.tr,
                     totalCnt: userController.user!.grammarScores[index],
-                    curCnt:
-                        kDebugMode
-                            ? (userController.user!.grammarScores[index] / 1.5)
-                                .toInt()
-                            : userController.user!.currentGrammarScores[index],
+                    curCnt: userController.user!.currentGrammarScores[index],
                   ),
                 ],
               ),
               foot: Text(
                 'JLPT N${index + 1} ${AppString.jlptBookDescription.tr}',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  // fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w500),
               ),
             );
           }),

@@ -22,6 +22,7 @@ class AppConstant {
   static const String isAlertGrantedKey = 'isAlertGrantedKey';
   static const String isDarkMode = 'isDarkMode';
   static const String fontSizeKey = 'fontSizeKey';
+  static const String isAutoSaveJapanese = 'isAutoSaveJapanese';
 
   static const String basicOrJlptOrMyKey = 'basicOrJlptOrMy';
   static const String progressBox = 'progressBox';
