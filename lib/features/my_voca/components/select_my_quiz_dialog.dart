@@ -4,6 +4,7 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
 class SelectMyQuizDialog extends StatelessWidget {
@@ -77,7 +78,9 @@ class SelectMyQuizDialog extends StatelessWidget {
                   ),
                   Checkbox(
                     activeColor:
-                        isClickedFisrt ? Colors.grey : AppColors.mainColor,
+                        isClickedFisrt
+                            ? Colors.grey
+                            : SettingController.to.mainColor,
                     value: isKnwonCheck,
                     onChanged:
                         isClickedFisrt
@@ -103,7 +106,9 @@ class SelectMyQuizDialog extends StatelessWidget {
                   Checkbox(
                     value: isUnKnwonCheck,
                     activeColor:
-                        isClickedFisrt ? Colors.grey : AppColors.mainColor,
+                        isClickedFisrt
+                            ? Colors.grey
+                            : SettingController.to.mainColor,
                     onChanged:
                         isClickedFisrt
                             ? null
@@ -164,7 +169,7 @@ class SelectMyQuizDialog extends StatelessWidget {
                     isClickedFisrt
                         ? ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.mainColor,
+                            backgroundColor: SettingController.to.mainColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -220,7 +225,7 @@ class SelectMyQuizDialog extends StatelessWidget {
                         )
                         : ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.mainColor,
+                            backgroundColor: SettingController.to.mainColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -370,7 +375,7 @@ class SelectMyQuizDialog extends StatelessWidget {
 //                 Checkbox(
 //                   value: isUnKnwonCheck,
 //                   activeColor:
-//                       isClickedFisrt ? Colors.grey : AppColors.mainColor,
+//                       isClickedFisrt ? Colors.grey : SettingController.to.mainColor,
 //                   onChanged: isClickedFisrt
 //                       ? null
 //                       : (value) {
@@ -393,7 +398,7 @@ class SelectMyQuizDialog extends StatelessWidget {
 //                 ),
 //                 Checkbox(
 //                   activeColor:
-//                       isClickedFisrt ? Colors.grey : AppColors.mainColor,
+//                       isClickedFisrt ? Colors.grey : SettingController.to.mainColor,
 //                   value: isKnwonCheck,
 //                   onChanged: isClickedFisrt
 //                       ? null
@@ -454,7 +459,7 @@ class SelectMyQuizDialog extends StatelessWidget {
 //               child: isClickedFisrt
 //                   ? ElevatedButton(
 //                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: AppColors.mainColor,
+//                         backgroundColor: SettingController.to.mainColor,
 //                         shape: RoundedRectangleBorder(
 //                           borderRadius: BorderRadius.circular(10),
 //                         ),
@@ -506,7 +511,7 @@ class SelectMyQuizDialog extends StatelessWidget {
 //                     )
 //                   : ElevatedButton(
 //                       style: ElevatedButton.styleFrom(
-//                         backgroundColor: AppColors.mainColor,
+//                         backgroundColor: SettingController.to.mainColor,
 //                         shape: RoundedRectangleBorder(
 //                           borderRadius: BorderRadius.circular(10),
 //                         ),

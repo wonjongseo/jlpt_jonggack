@@ -1,105 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
 import 'package:jlpt_jonggack/features/search/screens/search_screen.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
-
-List<String> list = ['일본어', '한자', '문법'];
-
-// class NewSearchWidget extends StatelessWidget {
-//   const NewSearchWidget({super.key, required this.isHomeScreen});
-//   final bool isHomeScreen;
-
-//   void search(query) {
-//     print('isHomeScreen : ${isHomeScreen}');
-
-//     if (isHomeScreen) {
-//       Get.to(
-//         () => SearchScreen(),
-//         binding: BindingsBuilder.put(() => JSearchController()),
-//         arguments: query,
-//       );
-//     }
-//     if (Get.isRegistered<JSearchController>()) {
-//       JSearchController.to.sendQuery();
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     TextEditingController teCtl = TextEditingController();
-//     return Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         Stack(
-//           children: [
-//             Card(
-//               child: Form(
-//                 child: TextFormField(
-//                   keyboardType: TextInputType.text,
-//                   controller: teCtl,
-//                   onEditingComplete: () {
-//                     search(teCtl.text);
-//                   },
-//                   style: const TextStyle(
-//                     fontWeight: FontWeight.w600,
-//                     fontFamily: AppFonts.japaneseFont,
-//                   ),
-//                   decoration: InputDecoration(
-//                     fillColor: Colors.white,
-//                     hintText: ' 일본어/한자/문법 검색...',
-//                     hintStyle: TextStyle(fontSize: Responsive.height14),
-//                     filled: true,
-//                     border: OutlineInputBorder(
-//                       borderSide: BorderSide.none,
-//                       borderRadius: BorderRadius.circular(15),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             Positioned.fill(
-//               right: 10,
-//               child: Align(
-//                 alignment: Alignment.centerRight,
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.end,
-//                   children: [
-//                     Card(
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(6),
-//                       ),
-//                       color: AppColors.mainBordColor,
-//                       child: InkWell(
-//                         onTap: () async {
-//                           search(teCtl.text);
-//                         },
-//                         child: Padding(
-//                           padding: EdgeInsets.all(Responsive.height10 / 2),
-//                           child: Icon(
-//                             Icons.search,
-//                             size: Responsive.height30,
-//                             color: Colors.white70,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-// }
 
 class NewSearchWidget extends GetView<JSearchController> {
   const NewSearchWidget({super.key, required this.isHomeScreen});
@@ -116,8 +22,7 @@ class NewSearchWidget extends GetView<JSearchController> {
       }
 
       return Padding(
-        // padding: const EdgeInsets.symmetric(vertical: 10),
-        padding: const EdgeInsets.only(top: 10, bottom: 6),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -137,9 +42,13 @@ class NewSearchWidget extends GetView<JSearchController> {
                         fontFamily: AppFonts.japaneseFont,
                       ),
                       decoration: InputDecoration(
-                        fillColor: Colors.white,
                         hintText: AppString.searchHintText.tr,
-                        hintStyle: TextStyle(fontSize: isKo ? 14 : 11),
+                        hintStyle: TextStyle(
+                          fontSize:
+                              isKo
+                                  ? FSController.to.baseFS
+                                  : FSController.to.baseFS - 3,
+                        ),
                         filled: true,
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
@@ -163,14 +72,14 @@ class NewSearchWidget extends GetView<JSearchController> {
                           color:
                               controller.isLoading.value
                                   ? Colors.grey.shade300
-                                  : AppColors.mainBordColor,
+                                  : SettingController.to.mainColor,
                           child: InkWell(
                             onTap: () async => search(),
                             child: Padding(
-                              padding: EdgeInsets.all(Responsive.height10 / 2),
+                              padding: EdgeInsets.all(5),
                               child: Icon(
                                 Icons.search,
-                                size: Responsive.height30,
+                                size: 25,
                                 color:
                                     controller.isLoading.value
                                         ? Colors.grey.shade100

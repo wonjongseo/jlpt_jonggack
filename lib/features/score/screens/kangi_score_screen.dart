@@ -1,21 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
-import 'package:jlpt_jonggack/common/app_constant.dart';
-import 'package:jlpt_jonggack/common/common.dart';
-import 'package:jlpt_jonggack/common/commonDialog.dart';
+
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/my_voca/screens/my_voca_sceen.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
-import 'package:jlpt_jonggack/model/my_word.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 const KANGI_SCORE_PATH = '/kangi_score';
 
@@ -63,16 +57,16 @@ class KangiScoreScreen extends StatelessWidget {
           child: Text(
             AppString.wrongAnswer.tr,
             style: TextStyle(
-              color: AppColors.mainBordColor,
+              color: SettingController.to.mainBordColor,
               fontWeight: FontWeight.bold,
-              fontSize: Responsive.height10 * 2,
+              fontSize: 22,
             ),
           ),
         ),
         Expanded(
           child: SingleChildScrollView(
             child: Container(
-              color: Colors.white,
+              color: SettingController.to.blackOrWhite,
               child: Column(
                 children: List.generate(qnController.wrongQuestions.length, (
                   index,
@@ -97,14 +91,20 @@ class KangiScoreScreen extends StatelessWidget {
                         leading: Text(
                           word,
                           style: TextStyle(
-                            fontSize: Responsive.height10 * 2,
+                            fontSize: FSController.to.baseFS + 6,
                             fontWeight: FontWeight.w700,
                             fontFamily: AppFonts.japaneseFont,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        title: Text(mean),
-                        subtitle: Text(yomikata),
+                        title: Text(
+                          mean,
+                          style: TextStyle(fontSize: FSController.to.baseFS),
+                        ),
+                        subtitle: Text(
+                          yomikata,
+                          style: TextStyle(fontSize: FSController.to.baseFS),
+                        ),
                       ),
                     ),
                   );

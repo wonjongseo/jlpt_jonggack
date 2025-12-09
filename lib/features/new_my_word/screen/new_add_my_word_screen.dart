@@ -8,11 +8,12 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_voca/components/import_excel_file_widget.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/manual_add_word_widget.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 TextStyle accentTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
-  color: AppColors.mainColor,
+  color: SettingController.to.mainColor,
   fontSize: 16,
 );
 
@@ -34,18 +35,18 @@ class NewAddMyWordScreen extends GetView<EditWordController> {
               bottom: TabBar(
                 onTap: (value) => controller.toggleTab(value),
                 isScrollable: false, // 많으면 true로 스와이프형
-                labelColor: AppColors.mainColor,
-                unselectedLabelColor: Colors.black,
-                labelStyle: const TextStyle(
+                labelColor: SettingController.to.mainColor,
+                // unselectedLabelColor: Colors.black,
+                labelStyle: TextStyle(
                   fontWeight: FontWeight.w700,
-                  fontSize: 17,
+                  fontSize: FSController.to.baseFS + 3,
                 ),
                 unselectedLabelStyle: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: FSController.to.baseFS,
                 ),
                 dividerColor: Colors.transparent,
-                indicatorColor: AppColors.mainColor, // 기본 밑줄 색
+                indicatorColor: SettingController.to.mainColor, // 기본 밑줄 색
                 tabs: [
                   Tab(text: AppString.direclyEnter.tr),
                   Tab(text: AppString.importExcel.tr),

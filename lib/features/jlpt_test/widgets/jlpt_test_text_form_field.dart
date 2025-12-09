@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
-import '../../../config/colors.dart';
 import '../controller/jlpt_test_controller.dart';
 
 class JlptTestTextFormField extends StatelessWidget {
@@ -18,7 +18,8 @@ class JlptTestTextFormField extends StatelessWidget {
         return TextFormField(
           autofocus: true,
           style: TextStyle(
-            color: controller.getTheTextEditerBorderRightColor(isBorder: false),
+            color: SettingController.to.realBlackOrWhite,
+            fontSize: FSController.to.baseFS + .5,
             fontFamily: AppFonts.japaneseFont,
           ),
           onChanged: (value) {
@@ -30,6 +31,7 @@ class JlptTestTextFormField extends StatelessWidget {
             FocusScope.of(context).unfocus();
           },
           controller: controller.textEditingController,
+
           decoration: InputDecoration(
             suffixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: Responsive.height8),
@@ -40,6 +42,7 @@ class JlptTestTextFormField extends StatelessWidget {
                 child: Icon(Icons.help, size: 20, color: Colors.grey),
               ),
             ),
+
             hintText: AppString.plzEnterReading.tr,
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
@@ -57,7 +60,7 @@ class JlptTestTextFormField extends StatelessWidget {
             label: Text(
               AppString.reading.tr,
               style: TextStyle(
-                color: AppColors.scaffoldBackground.withOpacity(0.5),
+                color: SettingController.to.nonSelectedColor,
                 fontSize: 16,
               ),
             ),

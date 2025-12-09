@@ -6,7 +6,6 @@ import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/random_quiz_not_score_text.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
-import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_card.dart';
@@ -69,7 +68,7 @@ class JlptTestScreen extends StatelessWidget {
                                   text: '${controller.questionNumber.value}',
                                   style: theme.headlineSmall!.copyWith(
                                     fontFamily: AppFonts.japaneseFont,
-                                    color: AppColors.mainBordColor,
+                                    color: SettingController.to.mainBordColor,
                                   ),
                                 ),
                                 TextSpan(

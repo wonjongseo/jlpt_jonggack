@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 
 // N1~N5, My Word 등 카드
 class LevelCategoryCard extends StatelessWidget {
@@ -39,7 +37,6 @@ class LevelCategoryCard extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          color: Colors.black,
                           fontWeight: FontWeight.w600,
                           fontSize: 23,
                         ),

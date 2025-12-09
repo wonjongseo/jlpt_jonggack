@@ -12,7 +12,6 @@ import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/japanese_book_step
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/kangi_book_step_body.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
@@ -63,13 +62,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        title: Text(
-          'JLPT N${widget.levelIndex + 1}',
-          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
-        ),
-      ),
+      appBar: AppBar(title: Text('JLPT N${widget.levelIndex + 1}')),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: Responsive.width20),
@@ -78,6 +71,7 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
               NewSearchWidget(isHomeScreen: true),
               SizedBox(height: 8),
               _navigator(),
+              SizedBox(height: 4),
               Flexible(
                 flex: 6,
                 child: PageView.builder(

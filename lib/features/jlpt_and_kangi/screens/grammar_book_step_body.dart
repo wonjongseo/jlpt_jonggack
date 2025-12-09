@@ -95,7 +95,7 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
                 goTo(index, '${AppString.chapter.tr}${index + 1}');
               },
               child: Card(
-                color: !isAllAccessable ? Colors.grey.shade400 : Colors.white,
+                color: !isAllAccessable ? Colors.grey.shade400 : null,
                 child: SizedBox(
                   width: double.infinity,
                   child: Padding(
@@ -114,7 +114,7 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
                                   fontSize: isEn ? 20 : 23,
                                   color:
                                       isAllAccessable
-                                          ? AppColors.mainBordColor
+                                          ? SettingController.to.mainBordColor
                                           : Colors.grey,
                                 ),
                               ),
@@ -125,7 +125,7 @@ class _GrammarBookStepBodyState extends State<GrammarBookStepBody> {
                                   fontSize: 30,
                                   color:
                                       isAllAccessable
-                                          ? AppColors.mainBordColor
+                                          ? SettingController.to.mainBordColor
                                           : Colors.grey,
                                 ),
                               ),

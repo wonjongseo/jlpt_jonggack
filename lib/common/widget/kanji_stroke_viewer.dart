@@ -6,6 +6,7 @@ import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
 
 TextButton howToRightBtn(BuildContext context, String word) {
@@ -19,7 +20,7 @@ TextButton howToRightBtn(BuildContext context, String word) {
     },
     child: Text(
       AppString.strokeOrder.tr,
-      style: TextStyle(color: AppColors.mainBordColor),
+      style: TextStyle(color: SettingController.to.mainBordColor),
     ),
   );
 }
@@ -75,7 +76,7 @@ class _KanjiStrokeViewerState extends State<KanjiStrokeViewer> {
                 fontFamily: AppFonts.japaneseFont,
                 fontSize: isHL ? 40 : 30,
                 fontWeight: isHL ? FontWeight.bold : FontWeight.normal,
-                color: isHL ? AppColors.mainColor : null,
+                color: isHL ? SettingController.to.mainColor : null,
               ),
             );
           }),
@@ -95,6 +96,7 @@ class _KanjiStrokeViewerState extends State<KanjiStrokeViewer> {
                 height: 140,
                 child: KanjiDrawingAnimation(
                   _kanji[idx],
+
                   speed: 50, // 필요시 조절
                   key: ValueKey('kanji-${_kanji[idx]}-$idx'),
                 ),
@@ -141,7 +143,8 @@ class _KanjiStrokeViewerState extends State<KanjiStrokeViewer> {
                 margin: const EdgeInsets.symmetric(horizontal: 6),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: active ? AppColors.mainBordColor : Colors.grey,
+                  color:
+                      active ? SettingController.to.mainBordColor : Colors.grey,
                 ),
               );
             }),
@@ -149,8 +152,7 @@ class _KanjiStrokeViewerState extends State<KanjiStrokeViewer> {
         else
           Container(height: 18),
 
-        const SizedBox(height: 32),
-        const SizedBox(height: 16),
+        const SizedBox(height: 48),
       ],
     );
   }

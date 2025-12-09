@@ -5,6 +5,9 @@ class AppString extends Translations {
   Map<String, Map<String, String>> get keys => {
     'ko_KR': {
       AppString.language: AppString.languageKr,
+      AppString.defaultValue: AppString.defaultValueKr,
+      AppString.themeMode: AppString.themeModeKr,
+      AppString.fontSize: AppString.fontSizeKr,
       AppString.koreanText: AppString.koreanTextKr,
       AppString.englishText: AppString.englishTextKr,
       AppString.vocabulary: AppString.vocabularyKr,
@@ -123,6 +126,9 @@ class AppString extends Translations {
     },
     'en_US': {
       AppString.language: AppString.languageEn,
+      AppString.defaultValue: AppString.defaultValueEn,
+      AppString.themeMode: AppString.themeModeEn,
+      AppString.fontSize: AppString.fontSizeEn,
       AppString.koreanText: AppString.koreanTextEn,
       AppString.englishText: AppString.englishTextEn,
       AppString.vocabulary: AppString.vocabularyEn,
@@ -245,6 +251,18 @@ class AppString extends Translations {
   static String languageKr = '언어';
   static String languageEn = "Language";
 
+  static String defaultValue = "initTr";
+  static String defaultValueKr = '초기값';
+  static String defaultValueEn = "default";
+
+  static String themeMode = "themeModeTr";
+  static String themeModeKr = '다크 모드';
+  static String themeModeEn = "Dark Mode";
+
+  static String fontSize = "fontSizeTr";
+  static String fontSizeKr = '폰트 사이즈';
+  static String fontSizeEn = "Font Size";
+
   static String koreanText = "koreanTextTr";
   static String koreanTextKr = '한국어';
   static String koreanTextEn = "Korean";
@@ -283,7 +301,7 @@ class AppString extends Translations {
 
   static String kangi = "kangiTr";
   static String kangiKr = '한자';
-  static String kangiEn = "Kangi";
+  static String kangiEn = "Kanji";
 
   static String grammar = "grammarTr";
   static String grammarKr = '문법';
@@ -339,11 +357,11 @@ class AppString extends Translations {
 
   static String hideUndoc = "hideUndocTr";
   static String hideUndocKr = '음독 가르기';
-  static String hideUndocEn = "Hide Pronunciation";
+  static String hideUndocEn = "Hide on Reading";
 
   static String hideHundoc = "hideHundocTr";
-  static String hideHundocKr = '음독 가르기';
-  static String hideHundocEn = "Hide Pronunciation";
+  static String hideHundocKr = '훈독 가르기';
+  static String hideHundocEn = "Hide kun Reading";
 
   static String saveAllWords = "saveAllWordsTr";
   static String saveAllWordsKr = '단어 전체 저장';

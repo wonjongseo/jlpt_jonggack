@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_option.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
@@ -106,7 +108,7 @@ class JlptTestController extends GetxController
   RxInt questionNumber = 1.obs;
   int numOfCorrectAns = 0;
   String nextOrSkipText = 'skip';
-  Color color = Colors.black;
+  Color color = SettingController.to.realBlackOrWhite;
 
   void toggleSubjective() {
     SettingController.to.toggleSubjective();
@@ -279,7 +281,7 @@ class JlptTestController extends GetxController
       }
     }
     return isBorder
-        ? AppColors.scaffoldBackground.withOpacity(0.5)
+        ? SettingController.to.nonSelectedColor
         : AppColors.scaffoldBackground;
   }
 
@@ -401,7 +403,7 @@ class JlptTestController extends GetxController
       }
       isWrong = false;
       nextOrSkipText = 'skip';
-      color = Colors.black;
+      color = SettingController.to.realBlackOrWhite;
       isAnswered = false;
 
       textEditingController?.clear();

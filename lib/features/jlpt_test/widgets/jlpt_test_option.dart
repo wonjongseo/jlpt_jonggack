@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/word.dart';
-
-import '../../../config/colors.dart';
 
 class JlptTestOption extends StatelessWidget {
   const JlptTestOption({
-    Key? key,
+    super.key,
     required this.test,
     required this.index,
     required this.press,
-  }) : super(key: key);
+  });
 
   final Word test;
   final int index;
@@ -46,7 +45,7 @@ class JlptTestOption extends StatelessWidget {
               return const Color(0xFFE92E30);
             }
           }
-          return AppColors.scaffoldBackground.withOpacity(0.5);
+          return SettingController.to.nonSelectedColor;
         }
 
         IconData getTheRightIcon() {
@@ -106,16 +105,14 @@ class JlptTestOption extends StatelessWidget {
             width: Responsive.width10 * 2.6,
             decoration: BoxDecoration(
               color:
-                  getTheRightColor() ==
-                          AppColors.scaffoldBackground.withOpacity(0.5)
+                  getTheRightColor() == SettingController.to.nonSelectedColor
                       ? Colors.transparent
                       : getTheRightColor(),
               borderRadius: BorderRadius.circular(50),
               border: Border.all(color: getTheRightColor()),
             ),
             child:
-                getTheRightColor() ==
-                        AppColors.scaffoldBackground.withOpacity(0.5)
+                getTheRightColor() == SettingController.to.nonSelectedColor
                     ? null
                     : Icon(getTheRightIcon(), size: Responsive.height16),
           ),

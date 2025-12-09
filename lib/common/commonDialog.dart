@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/my_voca/components/custom_button.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,71 +14,18 @@ class CommonDialog {
         AppString.failLoadMailApp.tr,
         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.redAccent),
       ),
-      connent: Text(
-        AppString.failLoadMailApp2.tr,
-        style: TextStyle(color: AppColors.scaffoldBackground),
-      ),
+      connent: Text(AppString.failLoadMailApp2.tr),
     );
   }
 
   static Future<bool> selectionDialog({Widget? title, Widget? connent}) async {
-    return jonggackDialog(
-      title: title,
-      connent: connent,
-      action: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Card(
-            shape: const CircleBorder(),
-            child: InkWell(
-              onTap: () async {
-                return Get.back(result: true);
-              },
-              child: Padding(
-                padding: EdgeInsets.all(Responsive.width15),
-                child: Text(
-                  '네',
-                  style: TextStyle(
-                    // fontSize: Responsive.height14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.cyan.shade600,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: Responsive.height10),
-          Card(
-            shape: const CircleBorder(),
-            child: InkWell(
-              onTap: () async {
-                return Get.back(result: false);
-              },
-              child: Padding(
-                padding: EdgeInsets.all(Responsive.width15),
-                child: Text(
-                  '아뇨',
-                  style: TextStyle(
-                    // fontSize: Responsive.height14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.cyan.shade600,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return jonggackDialog(title: title, connent: connent);
   }
 
   static Future<bool> beforeExitTestPageDialog() async {
     return selectionDialog(
       title: Text(AppString.doExitText.tr),
-      connent: Text(
-        AppString.doExitText2.tr,
-        style: TextStyle(color: AppColors.scaffoldBackground),
-      ),
+      connent: Text(AppString.doExitText2.tr),
     );
   }
 
@@ -95,98 +40,75 @@ class CommonDialog {
         isEn
             ? 'Would you like to retake the test using only the questions you answered incorrectly?'
             : '틀린 문제만으로 다시 테스트를 보시겠습니까?',
-        style: TextStyle(color: AppColors.scaffoldBackground),
       ),
     );
   }
 
   static Future<bool> confirmToSubmitGrammarTest(String remainQuestions) async {
-    bool result = await Get.dialog(
-      AlertDialog(
-        shape: Border.all(),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RichText(
-              text: TextSpan(
-                text: '',
+    bool? result =
+        isEn
+            ? (await jonggackDialog(
+              title: Text(
+                'There are questions you haven\'t answered.',
+                style: TextStyle(fontSize: FSController.to.baseFS + 2),
+              ),
+              connent: Column(
                 children: [
-                  TextSpan(
-                    text:
-                        isEn
-                            ? 'The following questions remain: '
-                            : remainQuestions,
-                    style: TextStyle(color: Colors.redAccent, fontSize: 18),
+                  SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(text: 'Remaining questions: '),
+                        TextSpan(
+                          text: remainQuestions,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                      style: TextStyle(
+                        fontSize: FSController.to.baseFS,
+                        color: SettingController.to.realBlackOrWhite,
+                      ),
+                    ),
                   ),
-                  TextSpan(
-                    text: isEn ? '$remainQuestions.\n\n' : '번이 남아 있습니다.\n\n',
-                  ),
-                  TextSpan(
-                    text:
-                        isEn
-                            ? 'Do you want to submit anyway?'
-                            : '그래도 제출 하시겠습니까?',
+                  SizedBox(height: 4),
+                  Text(
+                    'Would you like to submit?',
+                    style: TextStyle(
+                      fontSize: FSController.to.baseFS,
+                      color: SettingController.to.realBlackOrWhite,
+                    ),
                   ),
                 ],
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
               ),
-            ),
-            SizedBox(height: 20),
-            const JonggackAvator(),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Card(
-                  shape: const CircleBorder(),
-                  child: InkWell(
-                    onTap: () async {
-                      return Get.back(result: true);
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.all(Responsive.width15),
-                      child: Text(
-                        '네',
-                        style: TextStyle(
-                          // fontSize: Responsive.height14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.cyan.shade600,
+            ))
+            : (await jonggackDialog(
+              title: Text(
+                '답을 선택하지 않은 문제가 있습니다.',
+                style: TextStyle(fontSize: FSController.to.baseFS + 2),
+              ),
+              connent: Column(
+                children: [
+                  SizedBox(height: 2),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(text: '남은 문제: '),
+                        TextSpan(
+                          text: remainQuestions,
+                          style: TextStyle(color: Colors.red),
                         ),
+                      ],
+                      style: TextStyle(
+                        fontSize: FSController.to.baseFS,
+                        color: SettingController.to.realBlackOrWhite,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: Responsive.height10),
-                Card(
-                  shape: const CircleBorder(),
-                  child: InkWell(
-                    onTap: () async {
-                      return Get.back(result: false);
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.all(Responsive.width15),
-                      child: Text(
-                        '아뇨',
-                        style: TextStyle(
-                          // fontSize: Responsive.height14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.cyan.shade600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: Responsive.height10),
-          ],
-        ),
-      ),
-    );
+                  SizedBox(height: 4),
+                  Text('제출하시겠습니까 ?'),
+                ],
+              ),
+            ));
 
     return result;
   }
@@ -195,55 +117,38 @@ class CommonDialog {
     Get.dialog(AppealUpgrade());
   }
 
-  static Future<bool> jonggackDialog({
-    Widget? title,
-    Widget? connent,
-    Widget? action,
-  }) async {
-    bool result = await Get.dialog(
+  static Future<bool> jonggackDialog({Widget? title, Widget? connent}) async {
+    bool? result = await Get.dialog(
       AlertDialog.adaptive(
         title: title,
         content: connent,
+
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
-            child: Text(AppString.no.tr),
+            child: Text(
+              AppString.no.tr,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: SettingController.to.mainColor,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => Get.back(result: true),
-            child: Text(AppString.yes.tr),
+            child: Text(
+              AppString.yes.tr,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: SettingController.to.mainColor,
+              ),
+            ),
           ),
         ],
       ),
     );
-    // bool result = await Get.dialog(
-    //   barrierDismissible: false,
-    //   AlertDialog(
-    //     shape: Border.all(),
-    //     content: Column(
-    //       mainAxisSize: MainAxisSize.min,
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         if (title != null) ...[
-    //           title,
-    //           SizedBox(height: 20),
-    //         ],
-    //         if (connent != null) ...[
-    //           connent,
-    //           SizedBox(height: 20),
-    //         ],
-    //         const Align(alignment: Alignment.center, child: JonggackAvator()),
-    //         if (action != null) ...[
-    //           SizedBox(height: 20),
-    //           action,
-    //           SizedBox(height: Responsive.height10),
-    //         ],
-    //       ],
-    //     ),
-    //   ),
-    // );
 
-    return result;
+    return result ?? false;
   }
 }
 
@@ -283,7 +188,7 @@ class AppealUpgrade extends StatelessWidget {
                     TextSpan(
                       text: 'JLPT Jonggack Plus',
                       style: TextStyle(
-                        color: AppColors.mainBordColor,
+                        color: SettingController.to.mainBordColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -298,7 +203,7 @@ class AppealUpgrade extends StatelessWidget {
                     TextSpan(
                       text: '\nJLPT 종각앱 Plus',
                       style: TextStyle(
-                        color: AppColors.mainColor,
+                        color: SettingController.to.mainColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

@@ -82,7 +82,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                 Get.to(() => KangiCalendarStepBody(index: index));
               },
               child: Card(
-                color: !isAllAccessable ? Colors.grey.shade400 : Colors.white,
+                color: !isAllAccessable ? Colors.grey.shade400 : null,
                 child: SizedBox(
                   width: double.infinity,
                   child: Padding(
@@ -101,7 +101,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                                   fontSize: isEn ? 20 : 23,
                                   color:
                                       isAllAccessable
-                                          ? AppColors.mainBordColor
+                                          ? SettingController.to.mainBordColor
                                           : Colors.grey,
                                 ),
                               ),
@@ -112,7 +112,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
                                   fontSize: 30,
                                   color:
                                       isAllAccessable
-                                          ? AppColors.mainBordColor
+                                          ? SettingController.to.mainBordColor
                                           : Colors.grey,
                                 ),
                               ),

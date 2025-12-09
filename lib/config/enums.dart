@@ -99,7 +99,7 @@ extension CategoryEnumExtension on CategoryEnum {
       case CategoryEnum.japaneses:
         return isKo ? '일본어' : 'Japanese';
       case CategoryEnum.kangis:
-        return isKo ? '한자' : "Kangi";
+        return isKo ? '한자' : "Kanji";
       case CategoryEnum.grammars:
         return isKo ? '문법' : "Grammar";
     }

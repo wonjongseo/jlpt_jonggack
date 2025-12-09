@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
@@ -11,9 +10,7 @@ import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_list_tile.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
-
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 // ignore: must_be_immutable
 class GrammarCalendarStepScreen extends StatefulWidget {
@@ -75,31 +72,23 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
     return SafeArea(
       child: GetBuilder<GrammarController>(
         builder: (controller) {
-          return Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Container(
-                    color: Colors.white,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: List.generate(
-                          controller.getGrammarStep().grammars.length,
-                          (index) {
-                            return GrammarListTile(
-                              index: index,
-                              grammars: controller.getGrammarStep().grammars,
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+          return Card(
+            shape: RoundedRectangleBorder(),
+            margin: EdgeInsets.zero,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: List.generate(
+                  controller.getGrammarStep().grammars.length,
+                  (index) {
+                    return GrammarListTile(
+                      index: index,
+                      grammars: controller.getGrammarStep().grammars,
+                    );
+                  },
                 ),
               ),
-            ],
+            ),
           );
         },
       ),
@@ -125,7 +114,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
       onPressed: () {
         Get.bottomSheet(
           Container(
-            color: Colors.white,
+            color: SettingController.to.blackOrWhite,
             child: GetBuilder<GrammarController>(
               builder: (controller) {
                 return Column(

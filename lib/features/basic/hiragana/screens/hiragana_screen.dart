@@ -11,6 +11,7 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/components/hiragana_example_card.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/models/hiragana.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
 
 class HiraganaScreen extends StatefulWidget {
@@ -68,16 +69,20 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                         buttonStyleData: ButtonStyleData(
                           padding: EdgeInsets.zero,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: SettingController.to.blackOrWhite,
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.mainColor),
+                            border: Border.all(
+                              color: SettingController.to.mainColor,
+                            ),
                           ),
                         ),
                         dropdownStyleData: DropdownStyleData(
                           padding: EdgeInsets.zero,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.mainColor),
+                            border: Border.all(
+                              color: SettingController.to.mainColor,
+                            ),
                           ),
                         ),
                         underline: SizedBox(),
@@ -126,18 +131,16 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                                   elevation: 0,
                                   color:
                                       index == selectedIndex
-                                          ? AppColors.mainColor
+                                          ? SettingController.to.mainColor
+                                          : Get.isDarkMode
+                                          ? Colors.black12
                                           : Colors.grey.shade200,
                                   child: Center(
                                     child: Text(
                                       selectedHiragana
                                           .subHiragana[index]
                                           .hiragana,
-                                      style: const TextStyle(
-                                        fontFamily: AppFonts.japaneseFont,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 20,
-                                      ),
+                                      style: TextStyle(fontSize: 20),
                                     ),
                                   ),
                                 ),
@@ -151,7 +154,7 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                 ),
                 Expanded(
                   child: Card(
-                    color: Theme.of(context).colorScheme.surface,
+                    // color:  Theme.of(context).colorScheme.surface,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         vertical: 8,
@@ -169,8 +172,7 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                                     .hiragana,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: Responsive.height60,
-                                  color: Colors.black,
+                                  fontSize: 60,
                                   fontFamily: AppFonts.japaneseFont,
                                 ),
                               ),
@@ -190,9 +192,8 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                               Text(
                                 '${selectedHiragana.subHiragana[selectedIndex].kSound} [${selectedHiragana.subHiragana[selectedIndex].eSound}]',
                                 style: TextStyle(
-                                  color: Colors.black,
                                   fontFamily: AppFonts.japaneseFont,
-                                  fontSize: Responsive.height18,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -213,20 +214,20 @@ class _HiraganaScreenState extends State<HiraganaScreen> {
                                 },
                                 icon: FaIcon(
                                   FontAwesomeIcons.volumeOff,
-                                  color: AppColors.mainBordColor,
+                                  color: SettingController.to.mainBordColor,
                                   size: 24,
                                 ),
                               ),
                             ],
                           ),
                           const Divider(),
-                          SizedBox(height: 30),
+                          SizedBox(height: 10),
                           Text(
                             AppString.examples.tr,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
-                              color: AppColors.mainBordColor,
+                              color: SettingController.to.mainBordColor,
                               fontFamily: AppFonts.japaneseFont,
                             ),
                           ),

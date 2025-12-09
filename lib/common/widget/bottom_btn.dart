@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class BottomBtn extends StatelessWidget {
   const BottomBtn({
@@ -25,7 +26,7 @@ class BottomBtn extends StatelessWidget {
         horizontal: 16,
       ).copyWith(top: 4, bottom: 10),
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.mainColor,
+        color: backgroundColor ?? SettingController.to.mainColor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: InkWell(

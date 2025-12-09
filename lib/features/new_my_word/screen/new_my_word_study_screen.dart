@@ -11,6 +11,7 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
 import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 
@@ -141,7 +142,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                       AppString.known.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: AppColors.mainBordColor,
+                        color: SettingController.to.mainBordColor,
                       ),
                     )
                   else

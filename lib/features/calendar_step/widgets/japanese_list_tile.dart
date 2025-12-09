@@ -6,6 +6,8 @@ import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -61,8 +63,8 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
                   isWantToSeeYomikata || controller.isSeeYomikata
                       ? Text(
                         widget.word.yomikata,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: FSController.to.baseFS + 2,
                           fontWeight: FontWeight.w600,
                           fontFamily: AppFonts.descriptionFont,
                         ),
@@ -87,8 +89,8 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
                 isWantToSeeMean || controller.isSeeMean
                     ? Text(
                       mean,
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: FSController.to.baseFS + 2,
                         fontFamily: AppFonts.descriptionFont,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -108,7 +110,7 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
             child: AutoSizeText(
               changedWord,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: FSController.to.baseFS + 6,
                 fontWeight: FontWeight.w700,
                 fontFamily: AppFonts.japaneseFont,
               ),
@@ -125,7 +127,7 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
               widget.isSaved
                   ? FontAwesomeIcons.solidBookmark
                   : FontAwesomeIcons.bookmark,
-              color: widget.isSaved ? AppColors.mainBordColor : null,
+              color: widget.isSaved ? SettingController.to.mainBordColor : null,
               size: 22,
             ),
             onPressed: () => controller.toggleSaveWord(widget.word),

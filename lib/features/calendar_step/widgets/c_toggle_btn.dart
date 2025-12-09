@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
+
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class CToggleBtn extends StatelessWidget {
   const CToggleBtn({
@@ -20,7 +21,7 @@ class CToggleBtn extends StatelessWidget {
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: AppColors.mainColor,
+          color: SettingController.to.mainColor,
         ),
       ),
       trailing: ToggleButtons(
@@ -35,7 +36,7 @@ class CToggleBtn extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: AppColors.mainColor,
+              color: SettingController.to.mainColor,
             ),
           ),
           Text(
@@ -43,7 +44,7 @@ class CToggleBtn extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: AppColors.mainColor,
+              color: SettingController.to.mainColor,
             ),
           ),
         ],

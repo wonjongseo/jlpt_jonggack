@@ -6,6 +6,8 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/screens/kangi_study_sceen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
@@ -44,89 +46,83 @@ class _KangiListTileState extends State<KangiListTile> {
           isThreeLine: true,
           subtitle: Column(
             children: [
-              SizedBox(
-                height: 20,
-                child: Row(
-                  children: [
-                    Text(
-                      '${AppString.undoc.tr}：',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: AppFonts.japaneseFont,
-                      ),
+              Row(
+                children: [
+                  Text(
+                    '${AppString.undoc.tr}：',
+                    style: TextStyle(
+                      fontSize: FSController.to.baseFS,
+                      fontFamily: AppFonts.japaneseFont,
                     ),
-                    SizedBox(width: 4),
-                    if (isWantToSeeUndoc || !controller.isHidenUndoc)
-                      Flexible(
-                        child: Text(
-                          widget.kangi.undoc,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            overflow: TextOverflow.ellipsis,
-                            fontFamily: AppFonts.japaneseFont,
-                          ),
-                        ),
-                      )
-                    else
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            isWantToSeeUndoc = true;
-                            setState(() {});
-                          },
-                          child: Container(color: Colors.grey),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: SizedBox(
-                  height: 20,
-                  child: Row(
-                    children: [
-                      Text(
-                        '${AppString.hundoc.tr}：',
+                  ),
+                  SizedBox(width: 4),
+                  if (isWantToSeeUndoc || !controller.isHidenUndoc)
+                    Flexible(
+                      child: Text(
+                        widget.kangi.undoc,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: FSController.to.baseFS + 2,
+                          overflow: TextOverflow.ellipsis,
                           fontFamily: AppFonts.japaneseFont,
                         ),
                       ),
-                      SizedBox(width: 4),
-                      if (isWantToSeeHundoc || !controller.isHidenHundoc)
-                        Flexible(
-                          child: Text(
-                            widget.kangi.hundoc,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: AppFonts.japaneseFont,
-                            ),
-                          ),
-                        )
-                      else
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              isWantToSeeHundoc = true;
-                              setState(() {});
-                            },
-                            child: Container(height: 20, color: Colors.grey),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
+                    )
+                  else
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          isWantToSeeUndoc = true;
+                          setState(() {});
+                        },
+                        child: Container(color: Colors.grey),
+                      ),
+                    ),
+                ],
               ),
+              SizedBox(height: 2),
+              Row(
+                children: [
+                  Text(
+                    '${AppString.hundoc.tr}：',
+                    style: TextStyle(
+                      fontSize: FSController.to.baseFS,
+                      fontFamily: AppFonts.japaneseFont,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  if (isWantToSeeHundoc || !controller.isHidenHundoc)
+                    Flexible(
+                      child: Text(
+                        widget.kangi.hundoc,
+                        style: TextStyle(
+                          fontSize: FSController.to.baseFS + 2,
+                          overflow: TextOverflow.ellipsis,
+                          fontFamily: AppFonts.japaneseFont,
+                        ),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          isWantToSeeHundoc = true;
+                          setState(() {});
+                        },
+                        child: Container(height: 20, color: Colors.grey),
+                      ),
+                    ),
+                ],
+              ),
+
+              SizedBox(height: 2),
             ],
           ),
           title: _title(),
           leading: Text(
             widget.kangi.japan,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 30,
-              color: Colors.black,
+              // color: realBlackOrWhite,
               fontFamily: AppFonts.japaneseFont,
             ),
           ),
@@ -140,7 +136,7 @@ class _KangiListTileState extends State<KangiListTile> {
               widget.isSaved
                   ? FontAwesomeIcons.solidBookmark
                   : FontAwesomeIcons.bookmark,
-              color: widget.isSaved ? AppColors.mainBordColor : null,
+              color: widget.isSaved ? SettingController.to.mainBordColor : null,
               size: 22,
             ),
             onPressed:

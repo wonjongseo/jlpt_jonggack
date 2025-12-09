@@ -27,7 +27,7 @@ class ImportExcelFileWidget extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.mainColor),
+                      border: Border.all(color: SettingController.to.mainColor),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     width: double.infinity,
@@ -113,9 +113,7 @@ class _ExcelHeader extends StatelessWidget {
 
 DataRow _excelRow(List<String> cells, {required bool zebra}) {
   return DataRow(
-    color: MaterialStateProperty.all(
-      zebra ? const Color(0xFFF5F9F5) : Colors.white, // 엑셀 느낌의 줄무늬
-    ),
+    color: MaterialStateProperty.all(SettingController.to.blackOrWhite),
     cells:
         cells
             .map(
@@ -155,7 +153,7 @@ class ImportExcelFileWidgetEn extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.mainColor),
+                      border: Border.all(color: SettingController.to.mainColor),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     width: double.infinity,

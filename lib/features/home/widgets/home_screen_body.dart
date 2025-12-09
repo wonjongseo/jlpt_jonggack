@@ -64,10 +64,7 @@ class _JLPTCardsState extends State<JLPTCards> {
           items: List.generate(5, (index) {
             return LevelCategoryCard(
               title: 'N${index + 1}',
-              onTap: () {
-                Get.to(() => JlptHomeScreen(levelIndex: index));
-                return;
-              },
+              onTap: () => Get.to(() => JlptHomeScreen(levelIndex: index)),
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -168,7 +165,11 @@ class _MyCardsState extends State<MyCards> {
               onTap: () => controller.goToEditBook(),
               title: AppString.createBook.tr,
               body: Center(
-                child: Icon(Icons.add, color: AppColors.mainColor, size: 30),
+                child: Icon(
+                  Icons.add,
+                  color: SettingController.to.mainColor,
+                  size: 30,
+                ),
               ),
             );
           }
@@ -186,7 +187,7 @@ class _MyCardsState extends State<MyCards> {
                   TextSpan(text: '${AppString.savedWordsCnt.tr}: '),
                   TextSpan(
                     text: book.mywords.length.toString(),
-                    style: TextStyle(color: AppColors.mainBordColor),
+                    style: TextStyle(color: SettingController.to.mainBordColor),
                   ),
                   TextSpan(
                     text:
@@ -197,20 +198,12 @@ class _MyCardsState extends State<MyCards> {
                             : '',
                   ),
                 ],
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: AppFonts.gMaretFont,
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
             foot: Align(
               alignment: Alignment.centerLeft,
-              child: Text(
-                book.description,
-                style: TextStyle(fontFamily: AppFonts.gMaretFont, fontSize: 15),
-              ),
+              child: Text(book.description, style: TextStyle(fontSize: 15)),
             ),
           );
         }),

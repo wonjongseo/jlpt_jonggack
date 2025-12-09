@@ -5,11 +5,11 @@ import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
-import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
 import 'package:jlpt_jonggack/features/search/screens/searched_word_detail_screen.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class SearchScreen extends GetView<JSearchController> {
   const SearchScreen({super.key});
@@ -61,15 +61,15 @@ class SearchScreen extends GetView<JSearchController> {
                         '${controller.query} ',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: FSController.to.baseFS + 2,
                           fontFamily: AppFonts.japaneseFont,
+                          color: SettingController.to.mainBordColor,
                         ),
                       ),
                       Text(
                         '${AppString.seacrhResult.tr}: ${controller.totalResultCnt}',
                         style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          fontSize: FSController.to.baseFS,
                           fontFamily: AppFonts.japaneseFont,
                         ),
                       ),
@@ -201,7 +201,7 @@ class SearchHeader extends StatelessWidget {
       style: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
-        color: AppColors.mainBordColor,
+        color: SettingController.to.mainBordColor,
       ),
     );
   }
@@ -221,21 +221,24 @@ class SearchListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
-
       child: ListTile(
+        contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         onTap: onTap,
         isThreeLine: true,
         title: Text(
           title,
           style: TextStyle(
+            fontSize: FSController.to.baseFS + 6,
             fontFamily: AppFonts.japaneseFont,
             fontWeight: FontWeight.bold,
           ),
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
-          child: Text(subTitle),
+          child: Text(
+            subTitle,
+            style: TextStyle(fontSize: FSController.to.baseFS + 1),
+          ),
         ),
       ),
     );

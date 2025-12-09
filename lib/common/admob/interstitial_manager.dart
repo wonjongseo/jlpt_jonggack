@@ -121,11 +121,11 @@ class InterstitialManager {
     }
 
     // ★ 추가: 오늘의 첫 "광고 노출 기회"는 무조건 스킵
-    // final firstSkipDay = SettingRepository.getString(_kFirstSkipDayKey);
-    // if (firstSkipDay != today) {
-    //   await SettingRepository.setString(_kFirstSkipDayKey, today);
-    //   return false; // 첫 기회 스킵
-    // }
+    final firstSkipDay = SettingRepository.getString(_kFirstSkipDayKey);
+    if (firstSkipDay != today) {
+      await SettingRepository.setString(_kFirstSkipDayKey, today);
+      return false; // 첫 기회 스킵
+    }
 
     // 일일 캡
     final count = SettingRepository.getInt(_kCountKey) ?? 0;

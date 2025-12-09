@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key, required this.onTap, required this.label});
@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.mainColor,
+        color: SettingController.to.mainColor,
         borderRadius: BorderRadius.circular(5),
       ),
       child: InkWell(

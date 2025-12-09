@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
-import 'package:jlpt_jonggack/common/common.dart';
-import 'package:jlpt_jonggack/common/commonDialog.dart';
+
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
@@ -11,8 +8,6 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/controller/jlpt_test_controller.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class ScoreScreen extends StatefulWidget {
@@ -59,16 +54,16 @@ class _ScoreScreenState extends State<ScoreScreen> {
           child: Text(
             AppString.wrongAnswer.tr,
             style: TextStyle(
-              color: AppColors.mainBordColor,
+              color: SettingController.to.mainBordColor,
               fontWeight: FontWeight.bold,
-              fontSize: 18,
+              fontSize: 22,
             ),
           ),
         ),
         Expanded(
           child: SingleChildScrollView(
             child: Container(
-              color: Colors.white,
+              color: SettingController.to.blackOrWhite,
               child: Column(
                 children: List.generate(qnController.wrongQuestions.length, (
                   index,

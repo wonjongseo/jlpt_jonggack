@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 
 class GrammarTestCard extends StatefulWidget {
@@ -80,7 +80,6 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
                     // margin: Margins.zero,
                     fontFamily: AppFonts.japaneseFont,
                     fontSize: Responsive.height17,
-                    color: Colors.black,
                     fontWeight: FontWeight.w600,
                   ),
                   customStylesBuilder: (element) {
@@ -106,13 +105,7 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
                 right: 10,
                 top: 8,
               ),
-              child: Text(
-                widget.question.question.yomikata,
-                style: TextStyle(
-                  color: AppColors.scaffoldBackground,
-                  fontSize: Responsive.width14,
-                ),
-              ),
+              child: Text(widget.question.question.yomikata),
             ),
 
           Column(
@@ -138,10 +131,7 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
                     ),
                     title: Text(
                       value,
-                      style: TextStyle(
-                        color: AppColors.scaffoldBackground,
-                        fontFamily: AppFonts.japaneseFont,
-                      ),
+                      style: TextStyle(fontFamily: AppFonts.japaneseFont),
                     ),
                     leading: Radio<String>(
                       groupValue: value,
@@ -164,11 +154,7 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
                   return ListTile(
                     title: Text(
                       value,
-                      style: TextStyle(
-                        color: AppColors.scaffoldBackground,
-                        fontFamily: AppFonts.japaneseFont,
-                        fontSize: Responsive.height14,
-                      ),
+                      style: TextStyle(fontFamily: AppFonts.japaneseFont),
                     ),
                     leading: Radio<String>(
                       groupValue: '',
@@ -201,19 +187,14 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
                     },
                     child: Text(
                       value,
-                      style: TextStyle(
-                        color: AppColors.scaffoldBackground,
-                        fontFamily: AppFonts.japaneseFont,
-                        fontSize: Responsive.height14,
-                      ),
+                      style: TextStyle(fontFamily: AppFonts.japaneseFont),
                     ),
                   ),
                   leading: Radio<String>(
                     groupValue: selectedAnswer,
                     value: value,
-
-                    activeColor: AppColors.scaffoldBackground,
-                    focusColor: AppColors.scaffoldBackground,
+                    activeColor: SettingController.to.realBlackOrWhite,
+                    focusColor: SettingController.to.realBlackOrWhite,
                     onChanged: (String? value) {
                       if (widget.isSubmitted == false) {
                         widget.onChanged!(index2);
@@ -237,10 +218,7 @@ class _GrammarTestCardState extends State<GrammarTestCard> {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Text(
         '${widget.questionIndex + 1}. ',
-        style: TextStyle(
-          fontSize: Responsive.height25,
-          color: AppColors.scaffoldBackground,
-        ),
+        style: TextStyle(fontSize: Responsive.height25),
       ),
     );
   }

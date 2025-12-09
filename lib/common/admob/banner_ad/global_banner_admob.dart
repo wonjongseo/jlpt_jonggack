@@ -63,7 +63,7 @@ class _GlobalBannerAdmobState extends State<GlobalBannerAdmob> {
     // return Container(height: 0);
     // || !kReleaseMode
 
-    if (_bannerAd == null || kDebugMode) {
+    if (_bannerAd == null) {
       //|| !kReleaseMode) {
       return Container(height: 0);
     }

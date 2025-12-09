@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:get/get.dart';
+
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/random_quiz_not_score_text.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/grammar_test/controller/grammar_test_controller.dart';
-import 'package:jlpt_jonggack/features/grammar_test/components/grammar_test_card.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/score_and_message.dart';
+import 'package:jlpt_jonggack/features/grammar_test/components/grammar_test_card.dart';
+import 'package:jlpt_jonggack/features/grammar_test/controller/grammar_test_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 import '../../common/admob/banner_ad/global_banner_admob.dart';
@@ -45,7 +47,7 @@ class GrammarTestScreen extends StatelessWidget {
         double score = controller.getScore();
         return Card(
           margin: EdgeInsets.only(top: 10, left: 15, right: 15),
-          color: AppColors.whiteGrey,
+          color: SettingController.to.blackOrWhite,
           child: SingleChildScrollView(
             padding: EdgeInsets.all(2),
             controller: controller.scrollController,
@@ -122,7 +124,7 @@ class GrammarTestScreen extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(right: 8),
                 decoration: BoxDecoration(
-                  color: AppColors.mainColor,
+                  color: SettingController.to.mainColor,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -150,7 +152,7 @@ class GrammarTestScreen extends StatelessWidget {
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.only(right: 8),
               decoration: BoxDecoration(
-                color: AppColors.mainColor,
+                color: SettingController.to.mainColor,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -183,10 +185,10 @@ class GrammarTestScreen extends StatelessWidget {
 
 class _AppBarProgressBar extends StatelessWidget {
   const _AppBarProgressBar({
-    super.key,
-    required this.currentValue,
+    Key? key,
     required this.size,
-  });
+    required this.currentValue,
+  }) : super(key: key);
   final Size size;
   final double currentValue;
 

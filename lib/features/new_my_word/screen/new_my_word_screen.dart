@@ -6,11 +6,13 @@ import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/date_picker_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/myVoca_date_section.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
 class NewMyWordScreen extends GetView<NewMyWordController> {
@@ -90,7 +92,10 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                       () => Icon(
                         Icons.calendar_month,
                         size: 30,
-                        color: controller.isRanged ? AppColors.mainColor : null,
+                        color:
+                            controller.isRanged
+                                ? SettingController.to.mainColor
+                                : null,
                       ),
                     ),
                   ),
@@ -150,18 +155,17 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
         buttonStyleData: ButtonStyleData(
           padding: EdgeInsets.zero,
           height: 40,
-
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: SettingController.to.blackOrWhite,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.mainColor),
+            border: Border.all(color: SettingController.to.mainColor),
           ),
         ),
         dropdownStyleData: DropdownStyleData(
           padding: EdgeInsets.zero,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.mainColor),
+            border: Border.all(color: SettingController.to.mainColor),
           ),
         ),
         underline: SizedBox(),

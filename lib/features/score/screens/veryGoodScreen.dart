@@ -1,9 +1,7 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
@@ -85,17 +83,12 @@ class _CelebrationScreenState extends State<CelebrationScreen> {
                         isEn
                             ? 'You’re one step closer to passing the JLPT!\nKeep it up and stay motivated!'
                             : 'JLPT합격까지 한 발자국 나아가셨습니다.\n조금만 더 화이팅합시다~',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
                   fontFamily: AppFonts.japaneseFont,
                 ),
               ),

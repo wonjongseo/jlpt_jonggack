@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class WelcomeWidget extends StatelessWidget {
@@ -29,10 +30,7 @@ class WelcomeWidget extends StatelessWidget {
           children: [
             Text(
               gretting,
-              style: TextStyle(
-                fontSize: Responsive.height22,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -40,26 +38,23 @@ class WelcomeWidget extends StatelessWidget {
                 Text(
                   AppString.appName.tr,
                   style: TextStyle(
-                    fontSize: Responsive.height25,
+                    fontSize: 22,
                     fontWeight: FontWeight.w900,
-                    color: AppColors.mainBordColor,
+                    color: SettingController.to.mainBordColor,
                   ),
                 ),
                 if (userController.user!.isPremieum)
                   Text(
                     '+',
                     style: TextStyle(
-                      fontSize: Responsive.height25,
+                      fontSize: 22,
                       fontWeight: FontWeight.w900,
                       color: Colors.redAccent,
                     ),
                   ),
                 Text(
                   'へようこそ',
-                  style: TextStyle(
-                    fontSize: Responsive.height25,
-                    fontWeight: FontWeight.w900,
-                  ),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
                 ),
               ],
             ),
