@@ -41,23 +41,25 @@ class StudyCategoryAndProgress extends StatelessWidget {
               tween: Tween<double>(begin: 0, end: curCnt / 100),
               duration: const Duration(milliseconds: 1500),
               builder: (context, value, child) {
-                return RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      color: SettingController.to.realBlackOrWhite,
-                      fontSize: Responsive.width10 * 1.2,
-                      letterSpacing: 2,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '${(value * 100).ceil()}',
-                        style: TextStyle(
-                          color: SettingController.to.mainBordColor,
-                        ),
+                return Obx(
+                  () => RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: SettingController.to.realBlackOrWhite,
+                        fontSize: Responsive.width10 * 1.2,
+                        letterSpacing: 2,
                       ),
-                      const TextSpan(text: '/'),
-                      TextSpan(text: '$totalCnt'),
-                    ],
+                      children: [
+                        TextSpan(
+                          text: '${(value * 100).ceil()}',
+                          style: TextStyle(
+                            color: SettingController.to.mainBordColor,
+                          ),
+                        ),
+                        const TextSpan(text: '/'),
+                        TextSpan(text: '$totalCnt'),
+                      ],
+                    ),
                   ),
                 );
               },
