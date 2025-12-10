@@ -14,7 +14,6 @@ import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 
 class GrammarCardDetails extends StatefulWidget {
   const GrammarCardDetails({

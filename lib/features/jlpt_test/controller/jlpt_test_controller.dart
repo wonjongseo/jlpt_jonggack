@@ -6,10 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
-import 'package:jlpt_jonggack/features/jlpt_test/widgets/jlpt_test_option.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
@@ -101,11 +98,12 @@ class JlptTestController extends GetxController
   List<Question> wrongQuestions = [];
 
   late Word correctQuestion;
-  int step = 0;
   bool isAnswered = false;
   int correctAns = 0;
   late int selectedAns;
-  RxInt questionNumber = 1.obs;
+  final _currentQuizIdx = 0.obs;
+  int get currentQuizIdx => _currentQuizIdx.value;
+
   int numOfCorrectAns = 0;
   String nextOrSkipText = 'skip';
   Color color = SettingController.to.realBlackOrWhite;
@@ -214,6 +212,7 @@ class JlptTestController extends GetxController
         questions.add(question);
       }
     }
+    // correctQuestion = questions.first.question;
   }
 
   void setQuestions2(List<Word> words) async {
@@ -260,6 +259,7 @@ class JlptTestController extends GetxController
         return word != null;
       });
     }
+    // correctQuestion = questions.first.question;
     for (var i = 0; i < questions.length; i++) {
       final q = questions[i];
       print('${i + 1}번 : ${q.answer + 1}');
@@ -267,8 +267,14 @@ class JlptTestController extends GetxController
   }
 
   void saveWrongQuestion() {
-    if (!wrongQuestions.contains(questions[questionNumber.value - 1])) {
-      wrongQuestions.add(questions[questionNumber.value - 1]);
+    final question = questions[_currentQuizIdx.value];
+
+    if (!wrongQuestions.contains(question)) {
+      wrongQuestions.add(question);
+    }
+
+    if (isMyWordTest) {
+      myVocaController!.autoUpdateWordInQuiz(question.question, false);
     }
   }
 
@@ -329,7 +335,7 @@ class JlptTestController extends GetxController
     }
   }
 
-  textWrong() {
+  void textWrong() {
     if (isMyWordTest) {
       myVocaController!.autoUpdateWordInQuiz(correctQuestion, false);
     }
@@ -345,7 +351,7 @@ class JlptTestController extends GetxController
     );
   }
 
-  testCorect() {
+  void testCorect() {
     nextOrSkipText = 'skip';
     numOfCorrectAns++;
     color = Colors.blue;
@@ -386,6 +392,9 @@ class JlptTestController extends GetxController
     isAnswered = true;
 
     animationController.stop();
+    // if (isMyWordTest) {
+    //   myVocaController!.autoUpdateWordInQuiz(correctQuestion, false);
+    // }
     saveWrongQuestion();
     isWrong = true;
     color = Colors.pink;
@@ -397,7 +406,7 @@ class JlptTestController extends GetxController
     isSubmittedYomikata = false;
     isDisTouchable = false;
     inputValue = '';
-    if (questionNumber.value != questions.length) {
+    if (_currentQuizIdx.value + 1 != questions.length) {
       if (!isAnswered) {
         saveWrongQuestion();
       }
@@ -407,6 +416,7 @@ class JlptTestController extends GetxController
       isAnswered = false;
 
       textEditingController?.clear();
+      // correctQuestion = questions[_currentQuizIdx.value].question;
 
       pageController.nextPage(
         duration: const Duration(milliseconds: 250),
@@ -465,7 +475,7 @@ class JlptTestController extends GetxController
   }
 
   void updateTheQnNum(int index) {
-    questionNumber.value = index + 1;
+    _currentQuizIdx.value = index;
   }
 
   String get scoreResult => '$numOfCorrectAns / ${questions.length}';

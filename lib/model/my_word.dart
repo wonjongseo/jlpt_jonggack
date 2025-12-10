@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import 'package:jlpt_jonggack/model/example.dart';
@@ -82,9 +85,21 @@ class MyWord {
       yomikata: word.yomikata,
       examples: word.examples,
     );
+
     newMyWord.createdAt = DateTime.now();
-    // final now = DateTime.now();
-    // newMyWord.createdAt = DateTime(now.year, now.month, now.day - 7);
+
+    return newMyWord;
+  }
+
+  static MyWord wordToMyWordForTest(int index, Word word, DateTime dateTime) {
+    MyWord newMyWord = MyWord(
+      word: '${index}_${word.word}',
+      mean: word.mean,
+      yomikata: word.yomikata,
+      examples: word.examples,
+    );
+
+    newMyWord.createdAt = dateTime;
 
     return newMyWord;
   }

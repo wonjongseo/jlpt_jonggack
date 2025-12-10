@@ -82,10 +82,8 @@ class Question {
         var splited = splitMeanings(tempMean);
 
         if (splited.length > 1) {
-          if (splited.length > 2) {
-            final splitedMeanIdx = random.nextInt(splited.length);
-            tempMean = splited[splitedMeanIdx];
-          }
+          final splitedMeanIdx = random.nextInt(splited.length);
+          tempMean = splited[splitedMeanIdx];
         }
       }
 
