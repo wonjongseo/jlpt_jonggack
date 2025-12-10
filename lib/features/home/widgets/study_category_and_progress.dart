@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:jlpt_jonggack/common/widget/animated_circular_progressIndicator.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class StudyCategoryAndProgress extends StatelessWidget {
@@ -92,23 +91,25 @@ class StudyCategoryAndProgress extends StatelessWidget {
                 tween: Tween<double>(begin: 0, end: curCnt / 100),
                 duration: const Duration(milliseconds: 1500),
                 builder: (context, value, child) {
-                  return RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        color: SettingController.to.realBlackOrWhite,
-                        fontSize: 12,
-                        letterSpacing: 2,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: '${(value * 100).ceil()}',
-                          style: TextStyle(
-                            color: SettingController.to.mainBordColor,
-                          ),
+                  return Obx(
+                    () => RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: SettingController.to.realBlackOrWhite,
+                          fontSize: 12,
+                          letterSpacing: 2,
                         ),
-                        const TextSpan(text: '/'),
-                        TextSpan(text: '$totalCnt'),
-                      ],
+                        children: [
+                          TextSpan(
+                            text: '${(value * 100).ceil()}',
+                            style: TextStyle(
+                              color: SettingController.to.mainBordColor,
+                            ),
+                          ),
+                          const TextSpan(text: '/'),
+                          TextSpan(text: '$totalCnt'),
+                        ],
+                      ),
                     ),
                   );
                 },

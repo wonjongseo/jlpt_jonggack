@@ -45,8 +45,14 @@ class NewMyWordController extends GetxController {
 
   // ✅ 타입 변경 시 표시 데이터 재적용
   void changeType(MyWordType? type) {
-    if (type == null) return;
+    if (type == null || _selectedType.value == type) return;
     _selectedType.value = type;
+
+    try {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
+    } catch (_) {}
     _applyCurrentFilters();
   }
 
@@ -255,12 +261,6 @@ class NewMyWordController extends GetxController {
       ..clear()
       ..addAll(filtered);
     myWordsMap.refresh();
-
-    try {
-      if (scrollController.hasClients) {
-        scrollController.jumpTo(0);
-      }
-    } catch (_) {}
   }
 
   void onDaySelected(DateTime selected, DateTime focused) {
@@ -327,18 +327,22 @@ class NewMyWordController extends GetxController {
     rangeStart.value = start;
     rangeEnd.value = end;
 
-    if (start != null && end == null) {
-      print("start != null && end == null");
-      // 단일일로 간주
-      selectedDay.value = _dayKey(start);
-      _applyCurrentFilters();
-      return;
-    } else if (start == null || end == null) {
-      print("start != null && end == null2");
-      clearRange();
-      return;
-    }
-
+    try {
+      if (start != null && end == null) {
+        selectedDay.value = _dayKey(start);
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(0);
+        }
+        _applyCurrentFilters();
+        return;
+      } else if (start == null || end == null) {
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(0);
+        }
+        clearRange();
+        return;
+      }
+    } catch (_) {}
     // 단일일 해제하고 범위 적용
     selectedDay.value = null;
 
@@ -351,11 +355,7 @@ class NewMyWordController extends GetxController {
     rangeEnd.value = null;
     selectedDay.value = null;
 
-    try {
-      if (scrollController.hasClients) {
-        scrollController.jumpTo(0);
-      }
-    } catch (_) {}
+    try {} catch (_) {}
     _applyCurrentFilters(); // ✅ 타입만 반영해 전체 보기
   }
 

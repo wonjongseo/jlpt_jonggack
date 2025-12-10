@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/utils.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 enum TextInputEnum { japanese, yomikata, mean, exampleSentence, exampleMean }
@@ -43,34 +41,6 @@ extension ExternalDictTypeExtension on ExternalDictType {
         return isKo ? Color(0xff03E363) : Color(0xff4485F5);
       case ExternalDictType.papago:
         return isKo ? Color(0xff22A5FF) : Color(0xff0E2A46);
-    }
-  }
-}
-
-enum MyVocaPageFilter1 { ALL_VOCA, KNOWN_VOCA, UNKNOWN_VOCA }
-
-enum MyVocaPageFilter2 { JAPANESE, MEAN }
-
-extension Filter1Extension on MyVocaPageFilter1 {
-  String get id {
-    switch (this) {
-      case MyVocaPageFilter1.ALL_VOCA:
-        return '모든 단어';
-      case MyVocaPageFilter1.KNOWN_VOCA:
-        return '암기 단어';
-      case MyVocaPageFilter1.UNKNOWN_VOCA:
-        return '미암기 단어';
-    }
-  }
-}
-
-extension Filter2Extension on MyVocaPageFilter2 {
-  String get id {
-    switch (this) {
-      case MyVocaPageFilter2.JAPANESE:
-        return '일본어';
-      case MyVocaPageFilter2.MEAN:
-        return '의미';
     }
   }
 }

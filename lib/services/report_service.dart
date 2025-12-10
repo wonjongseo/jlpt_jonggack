@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,8 +26,11 @@ class ReportService {
 
   static Future<void> _loadAppInfo() async {
     final pkg = await PackageInfo.fromPlatform();
+    final isPlus = pkg.packageName.contains('plus');
 
-    _appInfo = 'App Version: ${pkg.version} (build ${pkg.buildNumber})';
+    _appInfo = """
+${isPlus ? '${AppString.appName.tr}+' : AppString.appName.tr}
+App Version: ${pkg.version} (build ${pkg.buildNumber})""";
   }
 
   static Future<void> _loadDeviceInfo() async {
@@ -44,7 +46,6 @@ class ReportService {
       final machine = info.utsname.machine;
 
       _deviceInfo =
-          '${(UserController.to.user?.isPremieum ?? false) ? AppString.appName.tr : '${AppString.appName.tr} Plus'}'
           'Device: ${info.name} ${info.model} ($machine\n'
           'OS: iOS ${info.systemVersion}';
     }
