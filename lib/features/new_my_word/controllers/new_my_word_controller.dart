@@ -51,14 +51,30 @@ class NewMyWordController extends GetxController {
   }
 
   int _getIndexMapToList(int dateIndex, int wordIndex) {
+    final map = myWordsMap.value;
+    final days = map.keys.toList()..sort((a, b) => b.compareTo(a)); // 화면과 동일 순서
+
+    if (dateIndex < 0 || dateIndex >= days.length) return -1;
+
     int index = 0;
-    if (dateIndex != 0) {
-      final wordPerDate = _allMap.values.toList()[dateIndex - 1];
-      index = (dateIndex * wordPerDate.length) + wordIndex;
-    } else {
-      index = dateIndex + wordIndex;
+
+    // 0 ~ (dateIndex-1) 날짜까지의 단어 수를 모두 합산
+    for (int d = 0; d < dateIndex; d++) {
+      index += map[days[d]]?.length ?? 0;
     }
+
+    // 현재 날짜의 wordIndex 를 더함
+    index += wordIndex;
+
     return index;
+  }
+
+  void goToStudyScreen(int dateIndex, int wordIndex) {
+    final index = _getIndexMapToList(dateIndex, wordIndex);
+    if (index < 0) return;
+
+    selectedIndex = index;
+    Get.to(() => NewMyWordStudyScreen());
   }
 
   MyWord? _getVisibleItem(int dateIndex, int wordIndex) {
@@ -130,12 +146,6 @@ class NewMyWordController extends GetxController {
   Future<void> deleteWord(MyWord myWord) async {
     myBookController.deleteMyWord(myWord);
     await loadMyWords();
-  }
-
-  void goToStudyScreen(int dateIndex, int wordIndex) {
-    int index = _getIndexMapToList(dateIndex, wordIndex);
-    selectedIndex = index;
-    Get.to(() => NewMyWordStudyScreen());
   }
 
   final _isLoading = false.obs;
@@ -245,6 +255,12 @@ class NewMyWordController extends GetxController {
       ..clear()
       ..addAll(filtered);
     myWordsMap.refresh();
+
+    try {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
+    } catch (_) {}
   }
 
   void onDaySelected(DateTime selected, DateTime focused) {
@@ -312,11 +328,13 @@ class NewMyWordController extends GetxController {
     rangeEnd.value = end;
 
     if (start != null && end == null) {
+      print("start != null && end == null");
       // 단일일로 간주
       selectedDay.value = _dayKey(start);
       _applyCurrentFilters();
       return;
     } else if (start == null || end == null) {
+      print("start != null && end == null2");
       clearRange();
       return;
     }
@@ -324,9 +342,6 @@ class NewMyWordController extends GetxController {
     // 단일일 해제하고 범위 적용
     selectedDay.value = null;
 
-    try {
-      scrollController.jumpTo(0);
-    } catch (_) {}
     _applyCurrentFilters(); // ✅ 타입 + 범위 반영
   }
 
@@ -337,7 +352,9 @@ class NewMyWordController extends GetxController {
     selectedDay.value = null;
 
     try {
-      scrollController.jumpTo(0);
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
     } catch (_) {}
     _applyCurrentFilters(); // ✅ 타입만 반영해 전체 보기
   }
@@ -361,6 +378,7 @@ class NewMyWordController extends GetxController {
     if (index == -1) {
       return;
     }
+    print('index : ${index}');
 
     allMyWords[index].isKnown = value;
     MyBookController.to.updateMyWord(allMyWords[index]);

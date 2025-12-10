@@ -90,6 +90,7 @@ class _CelebrationScreenState extends State<CelebrationScreen> {
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   fontFamily: AppFonts.japaneseFont,
+                  color: SettingController.to.realBlackOrWhite,
                 ),
               ),
             ),

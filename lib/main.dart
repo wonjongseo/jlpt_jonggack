@@ -65,11 +65,16 @@ STEP 6.
 안드로이드 이름 바꾸기
  JLPT 종각 <-> JLPT 종각 Plus
  JLPT Jg <-> JLPT Jg Plus
-  
-
+  10 9 8 1
+ 6 5 3
 Android Command - flutter build appbundle
 Hive - flutter pub run build_runner build --delete-conflicting-outputs
 
+
+Runner.xcscheme
+
+buildConfiguration = "Debug"
+buildConfiguration = "Release"
 
  */
 

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
-
-import '../../../common/admob/controller/ad_controller.dart';
 
 // ignore: must_be_immutable
 class GrammarListTile extends StatefulWidget {

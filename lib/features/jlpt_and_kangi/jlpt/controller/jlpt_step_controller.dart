@@ -132,6 +132,16 @@ class JlptStepController extends GetxController {
   }
 
   void toggleSaveWord(Word word, {bool showSnackBar = true}) {
+    // if (kDebugMode) {
+    //   for (var i = 0; i < 1000; i++) {
+    //     final randomeDay = Random().nextInt(90);
+    //     DateTime now = DateTime.now();
+    //     final dateTime = now.subtract(Duration(days: randomeDay));
+    //     final newMyWord = MyWord.wordToMyWordForTest(i, word, dateTime);
+
+    //     MyBookController.to.addMyWord(newMyWord);
+    //   }
+    // }
     MyWord newMyWord = MyWord.wordToMyWord(word);
     List<MyWord> book1Words = MyBookController.to.books[0].mywords;
 

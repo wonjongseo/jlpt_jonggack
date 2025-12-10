@@ -19,6 +19,19 @@ class GrammarDescriptionCard extends StatefulWidget {
 
 class _GrammarDescriptionCardState extends State<GrammarDescriptionCard> {
   bool isSeen = true;
+
+  String content = '';
+  @override
+  void initState() {
+    content = widget.content;
+
+    if (content.contains('; ')) {
+      content = widget.content.replaceAll('; ', '\n');
+    }
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -48,13 +61,13 @@ class _GrammarDescriptionCardState extends State<GrammarDescriptionCard> {
         ),
         if (isSeen)
           Text(
-            widget.content,
+            content,
             style: TextStyle(
               fontFamily: AppFonts.descriptionFont,
-              fontSize: FSController.to.baseFS,
+              fontSize: FSController.to.baseFS + 2,
             ),
           ),
-        if (isSeen) SizedBox(height: Responsive.height10 * 1.5),
+        if (isSeen) SizedBox(height: 15),
         SizedBox(height: 8),
       ],
     );
