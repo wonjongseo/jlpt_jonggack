@@ -1,5 +1,3 @@
-<
-
 JLPT 대비를 위한 일본어·한자·문법 통합 학습 앱. 풍부한 예문과 다양한 퀴즈로 “정확하게, 오래 가는” 학습을 돕습니다.
 
 -- JLPT 종각 플러스 기능 --
@@ -31,10 +29,6 @@ JLPT 대비를 위한 일본어·한자·문법 통합 학습 앱. 풍부한 예
 ・ 객·주관식 병행으로 회상·쓰기 정확도 강화
 ・ 커스텀 단어장으로 개인화 학습 속도 확보
 
->
-
-<
-
 All-in-one JLPT study app for Japanese, Kanji, and Grammar—learn accurately and remember longer with rich examples and varied quizzes.
 
 --JLPT Jg Plus Features--
@@ -65,5 +59,3 @@ All-in-one JLPT study app for Japanese, Kanji, and Grammar—learn accurately an
 ・ Grammar clarity through rich explanations and varied examples
 ・ Better recall & writing accuracy with multiple-choice practice and targeted review
 ・ Faster, personalized learning with custom wordbooks
-
->
