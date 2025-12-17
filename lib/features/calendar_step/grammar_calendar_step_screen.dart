@@ -131,7 +131,7 @@ class _GrammarCalendarStepScreenState extends State<GrammarCalendarStepScreen> {
                     ),
                     CToggleBtn(
                       label: AppString.hideMean.tr,
-                      toggle: controller.toggleSeeMean,
+                      onChanged: controller.toggleSeeMean,
                       value: controller.isSeeMean,
                     ),
                     const SizedBox(height: 40),

@@ -78,20 +78,20 @@ class _KangiCalendarStepBodyState extends State<KangiCalendarStepBody> {
                     ),
                     CToggleBtn(
                       label: AppString.hideMean.tr,
-                      toggle: controller.toggleSeeMean,
-                      value: !controller.isHidenMean,
+                      onChanged: controller.toggleSeeMean,
+                      value: controller.isHidenMean,
                     ),
                     const SizedBox(height: 10),
                     CToggleBtn(
                       label: AppString.hideUndoc.tr,
-                      toggle: controller.toggleSeeUndoc,
-                      value: !controller.isHidenUndoc,
+                      onChanged: controller.toggleSeeUndoc,
+                      value: controller.isHidenUndoc,
                     ),
                     const SizedBox(height: 10),
                     CToggleBtn(
                       label: AppString.hideUndoc.tr,
-                      toggle: controller.toggleSeeHundoc,
-                      value: !controller.isHidenHundoc,
+                      onChanged: controller.toggleSeeHundoc,
+                      value: controller.isHidenHundoc,
                     ),
                     CheckRowBtn(
                       label: AppString.saveAllWords.tr,

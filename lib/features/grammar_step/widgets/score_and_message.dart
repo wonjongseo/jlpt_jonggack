@@ -1,18 +1,13 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class ScoreAndMessage extends StatelessWidget {
-  const ScoreAndMessage({Key? key, required this.score, required this.size})
-    : super(key: key);
+  const ScoreAndMessage({Key? key, required this.score}) : super(key: key);
 
   final double score;
-  final Size size;
   @override
   Widget build(BuildContext context) {
     String message = '';

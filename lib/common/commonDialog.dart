@@ -40,6 +40,7 @@ class CommonDialog {
         isEn
             ? 'Would you like to retake the test using only the questions you answered incorrectly?'
             : '틀린 문제만으로 다시 테스트를 보시겠습니까?',
+        style: TextStyle(fontSize: 12),
       ),
     );
   }

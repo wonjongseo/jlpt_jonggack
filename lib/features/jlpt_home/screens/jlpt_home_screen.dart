@@ -10,6 +10,8 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/grammar_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/japanese_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/kangi_book_step_body.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_grammar_book_step_body.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
@@ -53,7 +55,8 @@ class _JlptHomeScreenState extends State<JlptHomeScreen> {
       case CategoryEnum.japaneses:
         return JapaneseBookStepBody(level: level);
       case CategoryEnum.grammars:
-        return GrammarBookStepBody(level: level);
+        Get.put(NewGrammarController(level));
+        return NewGrammarBookStepBody();
       case CategoryEnum.kangis:
         return KangiBookStepBody(level: level);
     }

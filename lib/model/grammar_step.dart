@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
 
@@ -22,6 +23,7 @@ class GrammarStep extends HiveObject {
 
   @HiveField(4)
   int scores = 0;
+
   @HiveField(5)
   bool? isFinished = false;
 
@@ -29,10 +31,33 @@ class GrammarStep extends HiveObject {
     required this.level,
     required this.step,
     required this.grammars,
-  });
+    List<Grammar>? unKnownGrammars,
+    int? scores,
+    bool? isFinished,
+  }) : isFinished = isFinished ?? false,
+       scores = scores ?? 0,
+       unKnownGrammars = unKnownGrammars ?? [];
 
   @override
   String toString() {
     return 'GrammarStep(step: $step, scores: $scores, grammars: $grammars, unKnownGrammars: $unKnownGrammars, isFinished: $isFinished)';
+  }
+
+  GrammarStep copyWith({
+    String? level,
+    int? step,
+    List<Grammar>? grammars,
+    List<Grammar>? unKnownGrammars,
+    int? scores,
+    bool? isFinished,
+  }) {
+    return GrammarStep(
+      level: level ?? this.level,
+      step: step ?? this.step,
+      grammars: grammars ?? this.grammars,
+      unKnownGrammars: unKnownGrammars ?? this.unKnownGrammars,
+      scores: scores ?? this.scores,
+      isFinished: isFinished ?? this.isFinished,
+    );
   }
 }

@@ -5,12 +5,18 @@ import 'package:jlpt_jonggack/features/calendar_step/grammar_calendar_step_scree
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/screens/widgets/edit_book_screen.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_test_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_step_screen.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 
 import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
+import 'package:jlpt_jonggack/model/grammar.dart';
+import 'package:jlpt_jonggack/model/grammar_step.dart';
 
 import 'features/home/screens/home_screen.dart';
 
@@ -30,6 +36,30 @@ class AppRoutes {
     GetPage(
       name: GrammarCalendarStepScreen.name,
       page: () => GrammarCalendarStepScreen(),
+    ),
+    GetPage(
+      name: NewGrammarStepScreen.name,
+      page: () => NewGrammarStepScreen(),
+      binding: BindingsBuilder.put(() {
+        final grammars = Get.arguments['grammars'] as GrammarStep;
+        final chapter = Get.arguments['chapter'] as String;
+
+        return NewGrammarStepController(grammars, chapter);
+      }),
+    ),
+    GetPage(
+      name: NewGrammarTestScreen.name,
+      page: () => NewGrammarTestScreen(),
+      binding: BindingsBuilder.put(() {
+        final grammars = Get.arguments['grammarStep'] as GrammarStep;
+        final isRandom = Get.arguments['isRandom'] as bool?;
+        final isTextAgain = Get.arguments['isTextAgain'] as bool?;
+        return NewGrammarTestController(
+          grammars,
+          isRandom ?? false,
+          isTextAgain ?? false,
+        );
+      }),
     ),
     GetPage(name: JlptTestScreen.name, page: () => const JlptTestScreen()),
     GetPage(name: KangiTestScreen.name, page: () => const KangiTestScreen()),

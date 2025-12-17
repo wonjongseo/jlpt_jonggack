@@ -38,11 +38,6 @@ class Grammar extends HiveObject {
     required this.examples,
   });
 
-  @override
-  String toString() {
-    return 'Grammar(id: $id, step: $step, level: "$level", grammar: "$grammar", connectionWays: "$connectionWays", means: "$means", examples: $examples, description: "$description")';
-  }
-
   Grammar.fromMap(Map<String, dynamic> map) {
     List<Example> myWords = List.generate(
       map['examples'].length,

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
 
-import '../../../common/app_constant.dart';
 import '../../../user/controller/user_controller.dart';
 
 class GrammarController extends GetxController {

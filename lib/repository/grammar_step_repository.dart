@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
@@ -148,11 +146,11 @@ class GrammarRepositroy {
     return grammarStepList;
   }
 
-  void updateGrammerStep(GrammarStep newGrammarStep) {
+  Future<void> updateGrammerStep(GrammarStep newGrammarStep) async {
     final box = Hive.box(GrammarStep.boxKey);
 
     String key = '${newGrammarStep.level}-${newGrammarStep.step}';
-    box.put(key, newGrammarStep);
+    await box.put(key, newGrammarStep);
   }
 
   static Future<List<Grammar>> searchGrammars(String query) async {

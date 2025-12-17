@@ -110,14 +110,14 @@ class _JapaneseStepScreenState extends State<JapaneseStepScreen> {
                     ),
                     CToggleBtn(
                       label: AppString.hideMean.tr,
-                      toggle: controller.toggleSeeMean,
-                      value: controller.isSeeMean,
+                      onChanged: controller.toggleSeeMean,
+                      value: controller.isHideMean,
                     ),
                     const SizedBox(height: 10),
                     CToggleBtn(
                       label: AppString.hideYomikata.tr,
-                      toggle: controller.toggleSeeYomikata,
-                      value: controller.isSeeYomikata,
+                      onChanged: controller.toggleSeeYomikata,
+                      value: controller.isHideYomikata,
                     ),
                     CheckRowBtn(
                       label: AppString.saveAllWords.tr,

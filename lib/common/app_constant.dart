@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 class AppConstant {
   // 챕터 당 단어 수
-  static const int MINIMUM_STEP_COUNT = kDebugMode ? 15 : 15; //TODO
+  static const int MINIMUM_STEP_COUNT = kDebugMode ? 8 : 15; //TODO
 
   static const String settingModelBox = 'settingsBox';
   static const String settingLanguageKey = 'settingLanguage';

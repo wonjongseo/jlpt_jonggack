@@ -313,7 +313,7 @@ class AppString extends Translations {
 
   static String searchHintText = "searchHintTextTr";
   static String searchHintTextKr = ' 일본어, 한자, 문법 검색...';
-  static String searchHintTextEn = " Search Japanese, Kangi, Grammar...";
+  static String searchHintTextEn = " Search Japanese, Kanji, Grammar...";
 
   static String randomQuiz = "randomQuizTr";
   static String randomQuizKr = '랜덤 퀴즈';
@@ -381,7 +381,7 @@ class AppString extends Translations {
 
   static String relatedKangis = "relatedKangisTr";
   static String relatedKangisKr = '연관 한자';
-  static String relatedKangisEn = "Related Kangis";
+  static String relatedKangisEn = "Related Kanjis";
 
   static String jgVocaKr = '종각 단어장';
   static String jgVocaEn = "Jg Book";

@@ -7,7 +7,7 @@ import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 
-// ignore: must_be_immutable
+// OK
 class GrammarListTile extends StatefulWidget {
   const GrammarListTile({
     super.key,

@@ -6,7 +6,6 @@ import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/random_quiz_not_score_text.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/score_and_message.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_test_card.dart';
@@ -15,7 +14,7 @@ import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dar
 
 import '../../common/admob/banner_ad/global_banner_admob.dart';
 
-// ignore: must_be_immutable
+// ignore: must_NewGrammarTestControllerbe_immutable
 class GrammarTestScreen extends StatelessWidget {
   static String name = '/grammar_test';
   late GrammarTestController controller;
@@ -49,40 +48,36 @@ class GrammarTestScreen extends StatelessWidget {
           margin: EdgeInsets.only(top: 10, left: 15, right: 15),
           color: SettingController.to.blackOrWhite,
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(2),
+            padding: EdgeInsets.all(18),
             controller: controller.scrollController,
-            child: Padding(
-              padding: EdgeInsets.all(Responsive.height16),
-              child: Column(
-                children: [
-                  if (controller.isSubmitted)
-                    ScoreAndMessage(score: score, size: size)
-                  else
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(AppString.plzSelectTheAnswer.tr),
-                    ),
-                  RandomQuizNotScoreText(
-                    isRandom: controller.isRandom,
-                    isGrammar: true,
+            child: Column(
+              children: [
+                if (controller.isSubmitted)
+                  ScoreAndMessage(score: score)
+                else
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(AppString.plzSelectTheAnswer.tr),
                   ),
+                RandomQuizNotScoreText(
+                  isRandom: controller.isRandom,
+                  isGrammar: true,
+                ),
 
-                  Column(
-                    children: List.generate(controller.questions.length, (idx) {
-                      return GrammarTestCard(
-                        size: size,
-                        questionIndex: idx,
-                        question: controller.questions[idx],
-                        onChanged: (int selectedAnswerIndex) {
-                          controller.clickButton(idx, selectedAnswerIndex);
-                        },
-                        isCorrect: !controller.wrongQIndList.contains(idx),
-                        isSubmitted: controller.isSubmitted,
-                      );
-                    }),
-                  ),
-                ],
-              ),
+                Column(
+                  children: List.generate(controller.questions.length, (idx) {
+                    return GrammarTestCard(
+                      questionIndex: idx,
+                      question: controller.questions[idx],
+                      onChanged: (int selectedAnswerIndex) {
+                        controller.clickButton(idx, selectedAnswerIndex);
+                      },
+                      isCorrect: !controller.wrongQIndList.contains(idx),
+                      isSubmitted: controller.isSubmitted,
+                    );
+                  }),
+                ),
+              ],
             ),
           ),
         );
@@ -110,7 +105,7 @@ class GrammarTestScreen extends StatelessWidget {
       title: GetBuilder<GrammarTestController>(
         builder: (controller) {
           double currentProgressValue = controller.getCurrentProgressValue();
-          return _AppBarProgressBar(
+          return AppBarProgressBar(
             size: size,
             currentValue: currentProgressValue,
           );
@@ -183,8 +178,8 @@ class GrammarTestScreen extends StatelessWidget {
   }
 }
 
-class _AppBarProgressBar extends StatelessWidget {
-  const _AppBarProgressBar({
+class AppBarProgressBar extends StatelessWidget {
+  const AppBarProgressBar({
     Key? key,
     required this.size,
     required this.currentValue,

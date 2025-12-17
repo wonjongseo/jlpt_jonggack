@@ -32,6 +32,8 @@ class UserController extends GetxController {
     int index,
     int addScore,
   ) {
+    int current;
+    int max;
     switch (totalProgressType) {
       case TotalProgressType.JLPT:
         if (user!.currentJlptWordScroes[index] + addScore >= 0) {
@@ -45,16 +47,11 @@ class UserController extends GetxController {
 
         break;
       case TotalProgressType.GRAMMAR:
-        if (user!.currentGrammarScores[index] + addScore >= 0) {
-          if (user!.currentGrammarScores[index] + addScore >
-              user!.grammarScores[index]) {
-            user!.currentGrammarScores[index] = user!.grammarScores[index];
-          } else {
-            user!.currentGrammarScores[index] += addScore;
-          }
-        }
-
+        current = user!.currentGrammarScores[index];
+        max = user!.grammarScores[index];
+        user!.currentGrammarScores[index] = (current + addScore).clamp(0, max);
         break;
+
       case TotalProgressType.KANGI:
         if (user!.currentKangiScores[index] + addScore >= 0) {
           if (user!.currentKangiScores[index] + addScore >

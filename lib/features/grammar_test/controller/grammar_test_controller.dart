@@ -15,6 +15,9 @@ import '../../../user/controller/user_controller.dart';
 import '../grammar_test_screen.dart';
 
 class GrammarTestController extends GetxController {
+  bool isRandom = false;
+  bool isTestAgain = false;
+
   late ScrollController scrollController;
 
   List<Question> questions = [];
@@ -23,7 +26,6 @@ class GrammarTestController extends GetxController {
 
   // [제출] 버튼 누르면 true
   bool isSubmitted = false;
-  bool isTestAgain = false;
   late GrammarController grammarController;
 
   // 틀린 문제
@@ -78,7 +80,6 @@ class GrammarTestController extends GetxController {
     );
   }
 
-  bool isRandom = false;
   void init(dynamic arguments) {
     scrollController = ScrollController();
     startGrammarTest(arguments['grammar']);

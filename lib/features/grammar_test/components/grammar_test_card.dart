@@ -14,13 +14,11 @@ class GrammarTestCard extends StatefulWidget {
     required this.questionIndex,
     required this.question,
     this.onChanged,
-    required this.size,
     this.isCorrect = false,
     this.isSubmitted = false,
   });
 
   final int questionIndex;
-  final Size size;
   final Question question;
   Function(int)? onChanged;
 

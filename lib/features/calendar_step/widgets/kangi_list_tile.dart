@@ -36,6 +36,8 @@ class _KangiListTileState extends State<KangiListTile> {
 
   @override
   Widget build(BuildContext context) {
+    bool isShowUndoc = isWantToSeeUndoc || !controller.isHidenUndoc;
+
     return InkWell(
       onTap: () => Get.to(() => KangiStudySceen(currentIndex: widget.index)),
       child: Container(
@@ -56,6 +58,35 @@ class _KangiListTileState extends State<KangiListTile> {
                     ),
                   ),
                   SizedBox(width: 4),
+
+                  // Expanded(
+                  //   child: InkWell(
+                  //     onTap:
+                  //         !isShowUndoc
+                  //             ? () {
+                  //               isWantToSeeUndoc = true;
+                  //               setState(() {});
+                  //             }
+                  //             : null,
+                  //     child: Container(
+                  //       padding: EdgeInsets.all(8),
+                  //       decoration: BoxDecoration(
+                  //         color: !isShowUndoc ? Colors.grey : null,
+                  //       ),
+                  //       child:
+                  //           !isShowUndoc
+                  //               ? Text('')
+                  //               : Text(
+                  //                 widget.kangi.undoc,
+                  //                 style: TextStyle(
+                  //                   fontSize: FSController.to.baseFS + 2,
+                  //                   overflow: TextOverflow.ellipsis,
+                  //                   fontFamily: AppFonts.japaneseFont,
+                  //                 ),
+                  //               ),
+                  //     ),
+                  //   ),
+                  // ),
                   if (isWantToSeeUndoc || !controller.isHidenUndoc)
                     Flexible(
                       child: Text(
@@ -74,7 +105,7 @@ class _KangiListTileState extends State<KangiListTile> {
                           isWantToSeeUndoc = true;
                           setState(() {});
                         },
-                        child: Container(color: Colors.grey),
+                        child: Container(height: 20, color: Colors.grey),
                       ),
                     ),
                 ],

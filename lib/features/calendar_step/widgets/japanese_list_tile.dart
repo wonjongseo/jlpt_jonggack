@@ -60,7 +60,7 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
             child: SizedBox(
               height: 30,
               child:
-                  isWantToSeeYomikata || controller.isSeeYomikata
+                  isWantToSeeYomikata || !controller.isHideYomikata
                       ? Text(
                         widget.word.yomikata,
                         style: TextStyle(
@@ -86,7 +86,7 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
           title: SizedBox(
             height: 30,
             child:
-                isWantToSeeMean || controller.isSeeMean
+                isWantToSeeMean || !controller.isHideMean
                     ? Text(
                       mean,
                       style: TextStyle(

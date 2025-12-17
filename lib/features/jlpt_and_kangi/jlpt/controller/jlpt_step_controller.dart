@@ -45,17 +45,17 @@ class JlptStepController extends GetxController {
   }
 
   void toggleSeeMean(bool? v) {
-    isSeeMean = !v!;
+    isHideMean = v!;
     update();
   }
 
   void toggleSeeYomikata(bool? v) {
-    isSeeYomikata = !v!;
+    isHideYomikata = v!;
     update();
   }
 
-  bool isSeeMean = true;
-  bool isSeeYomikata = true;
+  bool isHideMean = false;
+  bool isHideYomikata = false;
   bool isMoreExample = false;
 
   void onTapMoreExample() {
