@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/widgets/c_toggle_btn.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_step_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
@@ -40,16 +41,19 @@ class NewGrammarStepScreen extends GetView<NewGrammarStepController> {
 
   SafeArea _body() {
     return SafeArea(
-      child: Card(
-        shape: RoundedRectangleBorder(),
-        margin: EdgeInsets.zero,
-        child: ListView.builder(
-          shrinkWrap: false,
-          itemCount: controller.grammarStep.grammars.length,
-          itemBuilder: (context, index) {
-            final grammars = controller.grammarStep.grammars;
-            return _grammarListTile(index, grammars);
-          },
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Card(
+          shape: RoundedRectangleBorder(),
+          margin: EdgeInsets.zero,
+          child: ListView.builder(
+            shrinkWrap: false,
+            itemCount: controller.grammarStep.grammars.length,
+            itemBuilder: (context, index) {
+              final grammars = controller.grammarStep.grammars;
+              return _grammarListTile(index, grammars);
+            },
+          ),
         ),
       ),
     );

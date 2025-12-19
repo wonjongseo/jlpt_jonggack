@@ -6,11 +6,11 @@ import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
-import 'package:jlpt_jonggack/model/Question.dart';
+
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
+import 'package:jlpt_jonggack/model/grammar_question.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
-import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -24,10 +24,11 @@ class NewGrammarTestController extends GetxController {
   final scrollController = ScrollController();
   final repository = GrammarRepositroy();
 
-  final questions = <Question>[].obs;
+  final questions = <GrammarQuestion>[].obs;
 
-  List<Map<int, List<Word>>> map = List.empty(growable: true);
+  List<Map<int, List<GrammarQustionWord>>> map = List.empty(growable: true);
 
+  List<Grammar> _wrongGrammar = [];
   final _isSubmitted = false.obs;
   bool get isSubmitted => _isSubmitted.value;
 
@@ -37,7 +38,7 @@ class NewGrammarTestController extends GetxController {
   // 틀린 문제
   final wrongQuizIdxs = <int>[].obs;
   // 선택된 인덱스
-  final checkedQuizIdxs = <int>[].obs;
+  final unCheckedQuizIdxs = <int>[].obs;
 
   @override
   void onInit() {
@@ -49,7 +50,7 @@ class NewGrammarTestController extends GetxController {
   double get getCurrentProgressValue {
     final total = questions.length;
     if (total == 0) return 0;
-    return ((total - checkedQuizIdxs.length) / total) * 100;
+    return ((total - unCheckedQuizIdxs.length) / total) * 100;
   }
 
   double getScore() {
@@ -60,9 +61,9 @@ class NewGrammarTestController extends GetxController {
 
   void submit() async {
     // double score = getScore();
-    if (checkedQuizIdxs.isNotEmpty) {
+    if (unCheckedQuizIdxs.isNotEmpty) {
       String remainQuestions =
-          checkedQuizIdxs.map((e) => '${e + 1}').toString();
+          unCheckedQuizIdxs.map((e) => '${e + 1}').toString();
 
       if (!await CommonDialog.confirmToSubmitGrammarTest(remainQuestions)) {
         return;
@@ -77,6 +78,8 @@ class NewGrammarTestController extends GetxController {
     if (wrongQuizIdxs.isNotEmpty &&
         wrongQuizIdxs.length != quizGrammars.length) {
       _saveWrongQuiz();
+
+      await NewGrammarController.to.getDatas();
     }
   }
 
@@ -111,28 +114,28 @@ class NewGrammarTestController extends GetxController {
   }
 
   void _saveWrongQuiz() async {
-    List<Grammar> unKnownGrammars =
-        wrongQuizIdxs.map((i) => quizGrammars[i]).toList();
-
-    _grammarStep = _grammarStep.copyWith(unKnownGrammars: unKnownGrammars);
+    _grammarStep = _grammarStep.copyWith(unKnownGrammars: _wrongGrammar);
 
     await repository.updateGrammerStep(_grammarStep);
-
-    await NewGrammarController.to.getDatas();
   }
 
   void clickButton(int quizIndex, int selectedIndex) {
     final question = questions[quizIndex];
+    final grammar = question.question.originGrammar;
     int correctAns = question.answer;
 
     if (correctAns == selectedIndex) {
       wrongQuizIdxs.remove(quizIndex);
+      _wrongGrammar.remove(grammar);
     } else {
       if (!wrongQuizIdxs.contains(quizIndex)) {
         wrongQuizIdxs.add(quizIndex);
       }
+      if (!_wrongGrammar.contains(grammar)) {
+        _wrongGrammar.add(grammar);
+      }
     }
-    checkedQuizIdxs.remove(quizIndex);
+    unCheckedQuizIdxs.remove(quizIndex);
   }
 
   ///
@@ -145,18 +148,12 @@ class NewGrammarTestController extends GetxController {
     quizGrammars.assignAll(_grammarStep.grammars);
 
     if (isTestAgain) {
-      print(
-        '_grammarStep.unKnownGrammars.length : ${_grammarStep.unKnownGrammars.length}',
-      );
-
       quizGrammars.assignAll(_grammarStep.unKnownGrammars);
     }
 
-    print('quizGrammars.length : ${quizGrammars.length}');
-
     Random random = Random();
 
-    List<Word> words = [];
+    List<GrammarQustionWord> words = [];
 
     for (int i = 0; i < quizGrammars.length; i++) {
       List<Example> examples = quizGrammars[i].examples;
@@ -166,48 +163,38 @@ class NewGrammarTestController extends GetxController {
       int randomExampleIndex = random.nextInt(examples.length);
       String word = examples[randomExampleIndex].word;
 
-      word = word.replaceAll('<span class=\"bold\">', '');
-      word = word.replaceAll('</span>', '');
+      word = word
+          .replaceAll('<span class="bold">', '')
+          .replaceAll('</span>', '');
 
       String answer = examples[randomExampleIndex].answer!;
 
-      if (word.contains('<span class=\"bold\">') && word.contains('</span>')) {
-        String pattern = '<span class="bold">';
-        bool result = _containsMoreThanOnce(word, pattern);
-        if (result) {
-          word = word.replaceAll(answer, '_____');
-        } else {
-          word = word.replaceAll(answer, '_____');
-          List<String> tt = word.split('<span class=\"bold\">');
-          word = "${tt[0]}_____${tt[1].split('</span>')[1]}";
-        }
-      } else {
-        word = word.replaceAll(answer, '_____');
-      }
+      word = word.replaceAll(answer, '_____');
 
       String yomikata = examples[randomExampleIndex].mean;
 
-      Word tempWord = Word(
+      final tempWord = GrammarQustionWord(
         word: word,
         mean: answer,
         yomikata: yomikata,
-        headTitle: quizGrammars[i].level,
+        originGrammar: quizGrammars[i],
       );
 
       words.add(tempWord);
     }
 
-    map = Question.generateQustion(words);
+    map = GrammarQuestion.generateQustion(words);
+
     _setQuestions();
   }
 
   void _setQuestions() {
-    for (var vocas in map) {
-      for (var e in vocas.entries) {
-        List<Word> optionsVoca = e.value;
-        Word questionVoca = optionsVoca[e.key];
+    for (var grammars in map) {
+      for (var e in grammars.entries) {
+        List<GrammarQustionWord> optionsVoca = e.value;
+        GrammarQustionWord questionVoca = optionsVoca[e.key];
 
-        Question question = Question(
+        GrammarQuestion question = GrammarQuestion(
           question: questionVoca,
           answer: e.key,
           options: optionsVoca,
@@ -220,17 +207,10 @@ class NewGrammarTestController extends GetxController {
       print('${i + 1} ${questions[i].answer + 1}');
     }
 
-    questions.shuffle();
     wrongQuizIdxs.assignAll(List.generate(questions.length, (index) => index));
-    checkedQuizIdxs.assignAll(
+    unCheckedQuizIdxs.assignAll(
       List.generate(questions.length, (index) => index),
     );
-  }
-
-  bool _containsMoreThanOnce(String str, String pattern) {
-    RegExp regExp = RegExp(pattern);
-    Iterable<RegExpMatch> matches = regExp.allMatches(str);
-    return matches.length >= 2;
   }
 
   void againTest() {

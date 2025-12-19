@@ -5,8 +5,8 @@ import 'package:jlpt_jonggack/common/widget/quiz_progress_text.dart';
 import 'package:jlpt_jonggack/common/widget/random_quiz_not_score_text.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/score_and_message.dart';
-import 'package:jlpt_jonggack/features/grammar_test/components/grammar_test_card.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_test_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_grammar_test_card.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_grammar_test_progress_bar.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
@@ -40,7 +40,7 @@ class NewGrammarTestScreen extends GetView<NewGrammarTestController> {
               child: QuizProgressText(
                 currentIdx:
                     controller.quizGrammars.length -
-                    controller.checkedQuizIdxs.length,
+                    controller.unCheckedQuizIdxs.length,
                 totalCnt: controller.quizGrammars.length,
               ),
             ),
@@ -70,7 +70,7 @@ class NewGrammarTestScreen extends GetView<NewGrammarTestController> {
                         ) {
                           final question = controller.questions[index];
 
-                          return GrammarTestCard(
+                          return NewGrammarTestCard(
                             questionIndex: index,
                             question: question,
                             onChanged:

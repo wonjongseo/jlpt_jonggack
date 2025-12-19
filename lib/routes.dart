@@ -6,6 +6,7 @@ import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/screens/widgets/edit_book_screen.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_step_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_test_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_step_screen.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
