@@ -122,7 +122,11 @@ class AppString extends Translations {
       AppString.errorUploadingWord: AppString.errorUploadingWordKr,
       AppString.plzEnterSearchTerm: AppString.plzEnterSearchTermKr,
       AppString.plzEnterMoreOne: AppString.plzEnterMoreOneKr,
+      AppString.plzEnterMoreFour: AppString.plzEnterMoreFourKr,
       AppString.randomQuizArntScored: AppString.randomQuizArntScoredKr,
+      AppString.plzFourMoreGrammar1: AppString.plzFourMoreGrammar1Kr,
+      AppString.allDay: AppString.allDayKr,
+      AppString.filter: AppString.filterKr,
     },
     'en_US': {
       AppString.language: AppString.languageEn,
@@ -243,7 +247,11 @@ class AppString extends Translations {
       AppString.errorUploadingWord: AppString.errorUploadingWordEn,
       AppString.plzEnterSearchTerm: AppString.plzEnterSearchTermEn,
       AppString.plzEnterMoreOne: AppString.plzEnterMoreOneEn,
+      AppString.plzEnterMoreFour: AppString.plzEnterMoreFourEn,
       AppString.randomQuizArntScored: AppString.randomQuizArntScoredEn,
+      AppString.plzFourMoreGrammar1: AppString.plzFourMoreGrammar1En,
+      AppString.allDay: AppString.allDayEn,
+      AppString.filter: AppString.filterEn,
     },
   };
 
@@ -817,9 +825,26 @@ We’ll review it as soon as possible and work on improvements.
   static String plzEnterMoreOneKr = '1보다 큰 수를 입력해주세요';
   static String plzEnterMoreOneEn = "Please enter a number greater than 1";
 
+  static String plzEnterMoreFour = "plzEnterMoreFourTr";
+  static String plzEnterMoreFourKr = '4보다 큰 수를 입력해주세요';
+  static String plzEnterMoreFourEn = "Please enter a number greater than 4";
+
   static String randomQuizArntScored = "randomQuizArntScoredTr";
   static String randomQuizArntScoredKr = '! 랜덤 퀴즈는 점수 기록이 되지 않습니다.';
   static String randomQuizArntScoredEn = "! Random quizzes aren't recorded.";
+
+  static String plzFourMoreGrammar1 = "plzFourMoreGrammar1Tr";
+  static String plzFourMoreGrammar1Kr = '문법 퀴즈는 최소 4개부터 시작할 수 있어요.';
+  static String plzFourMoreGrammar1En =
+      "You need at least 4 grammar items to start the grammar quiz.";
+
+  static String allDay = "allDayTr";
+  static String allDayKr = '모든 날짜';
+  static String allDayEn = "All Dates";
+
+  static String filter = "filterTr";
+  static String filterKr = '필터';
+  static String filterEn = "Filter";
 
   //
 }

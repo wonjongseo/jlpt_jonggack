@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
+import 'package:jlpt_jonggack/common/widget/like_icon.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
@@ -80,31 +81,14 @@ class _KangiCardState extends State<KangiCard> {
                     ),
                   ),
                   if (widget.controller != null)
-                    !widget.controller!.isSavedInLocal(widget.kangi)
-                        ? IconButton(
-                          onPressed: () {
-                            widget.controller!.toggleSaveWord(
-                              MyWord.kangiToMyWord(widget.kangi),
-                            );
-                          },
-                          icon: FaIcon(
-                            FontAwesomeIcons.bookmark,
-                            color: SettingController.to.mainBordColor,
-                            size: 22,
-                          ),
-                        )
-                        : IconButton(
-                          onPressed: () {
-                            widget.controller!.toggleSaveWord(
-                              MyWord.kangiToMyWord(widget.kangi),
-                            );
-                          },
-                          icon: FaIcon(
-                            FontAwesomeIcons.solidBookmark,
-                            color: SettingController.to.mainBordColor,
-                            size: 22,
-                          ),
-                        ),
+                    LikeIcon(
+                      isSaved: widget.controller!.isSavedInLocal(widget.kangi),
+                      onTap: () {
+                        widget.controller!.toggleSaveWord(
+                          MyWord.kangiToMyWord(widget.kangi),
+                        );
+                      },
+                    ),
                 ],
               ),
               AutoSizeText(

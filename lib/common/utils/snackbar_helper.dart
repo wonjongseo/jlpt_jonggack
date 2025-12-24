@@ -41,4 +41,48 @@ class SnackBarHelper {
       icon: Icon(Icons.check_circle, color: Colors.white),
     );
   }
+
+  static void showSelectableSuccessSnackBar(
+    String message, {
+    String title = "Success",
+    bool isLog = false,
+  }) {
+    if (Get.isSnackbarOpen) return;
+    if (isLog) {
+      LogManager.info(message);
+    }
+    Get.snackbar(
+      title,
+      message,
+      mainButton: TextButton(
+        onPressed: () {
+          Get.back();
+        },
+        child: Icon(Icons.settings),
+      ),
+      backgroundColor: Colors.green,
+      borderRadius: 20,
+      margin: EdgeInsets.symmetric(horizontal: 20),
+      duration: Duration(seconds: 5),
+      snackPosition: SnackPosition.TOP,
+      icon: Icon(Icons.check_circle, color: Colors.white),
+    );
+  }
+
+  //   Get.rawSnackbar(
+  //     mainButton: IconButton(
+  //       onPressed: () {
+  //         Get.back();
+  //       },
+  //       icon: Icon(Icons.settings),
+  //     ),
+  //     message: message,
+  //     backgroundColor: Colors.green,
+  //     borderRadius: 20,
+  //     margin: EdgeInsets.symmetric(horizontal: 20),
+  //     duration: Duration(seconds: 5),
+  //     snackPosition: SnackPosition.TOP,
+  //     icon: Icon(Icons.check_circle, color: Colors.white),
+  //   );
+  // }
 }

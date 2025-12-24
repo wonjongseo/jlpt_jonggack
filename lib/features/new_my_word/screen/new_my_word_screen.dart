@@ -2,14 +2,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
-import 'package:jlpt_jonggack/common/utils/show_bottom_sheet.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
-import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/date_picker_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/myVoca_date_section.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/my_word_screen_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
@@ -32,6 +31,11 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
               },
               icon: Icon(Icons.mode_edit_outline_outlined),
             ),
+
+          IconButton(
+            onPressed: () => Get.bottomSheet(MyWordScreenBottomSheet()),
+            icon: Icon(Icons.menu),
+          ),
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -72,35 +76,11 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-              ).copyWith(bottom: 12, top: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      showCustomBottomSheet(
-                        context: context,
-                        child: const DatePickerBottomSheet(),
-                      );
-                    },
-                    child: Obx(
-                      () => Icon(
-                        Icons.calendar_month,
-                        size: 30,
-                        color:
-                            controller.isRanged
-                                ? SettingController.to.mainColor
-                                : null,
-                      ),
-                    ),
-                  ),
-                  _typeSelecgor(),
-                ],
-              ),
-            ),
+            if (controller.book.bookNum == 1) ...[
+              _wordOrGrammarSelector(),
+              SizedBox(height: 6),
+            ],
+
             Expanded(
               child: Obx(() {
                 if (controller.isLoading) {
@@ -146,33 +126,46 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
     );
   }
 
-  Widget _typeSelecgor() {
+  Obx _wordOrGrammarSelector() {
     return Obx(
-      () => DropdownButton2(
-        value: controller.selectedType,
-        buttonStyleData: ButtonStyleData(
-          padding: EdgeInsets.zero,
-          height: 40,
-          decoration: BoxDecoration(
-            color: SettingController.to.blackOrWhite,
+      () => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: List.generate(WordOrGrammar.values.length, (i) {
+          final type = WordOrGrammar.values[i];
+          final controllerType =
+              controller.isSelectedWord
+                  ? WordOrGrammar.word
+                  : WordOrGrammar.grammar;
+          final isSelected = controllerType == type;
+
+          return InkWell(
+            onTap: () => controller.toggleIsSelectedWord(),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: SettingController.to.mainColor),
-          ),
-        ),
-        dropdownStyleData: DropdownStyleData(
-          padding: EdgeInsets.zero,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: SettingController.to.mainColor),
-          ),
-        ),
-        underline: SizedBox(),
-        onChanged: controller.changeType,
-        items: List.generate(MyWordType.values.length, (index) {
-          final type = MyWordType.values[index];
-          return DropdownMenuItem(
-            value: type,
-            child: Text(type.label, style: TextStyle(fontSize: 14)),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 3),
+              decoration: BoxDecoration(
+                border:
+                    isSelected
+                        ? Border(
+                          bottom: BorderSide(
+                            color: SettingController.to.mainColor,
+                            width: 3,
+                          ),
+                        )
+                        : null,
+              ),
+              child: Text(
+                type.label,
+                style:
+                    isSelected
+                        ? TextStyle(
+                          color: SettingController.to.mainColor,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        )
+                        : TextStyle(fontSize: 17),
+              ),
+            ),
           );
         }),
       ),

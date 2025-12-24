@@ -1,13 +1,10 @@
-import 'dart:math';
-
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import 'package:jlpt_jonggack/model/example.dart';
+import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/word.dart';
-import 'package:jlpt_jonggack/repository/my_word_repository.dart';
 
 part 'my_word.g.dart';
 
@@ -33,6 +30,13 @@ class MyWord {
   @HiveField(6)
   late List<Example> examples;
 
+  @HiveField(7, defaultValue: false)
+  late bool isGrammar;
+  @HiveField(8, defaultValue: null)
+  late String? connectionWays;
+  @HiveField(9, defaultValue: null)
+  late String? description;
+
   String getWord() {
     return word;
   }
@@ -43,10 +47,12 @@ class MyWord {
     required this.yomikata,
     List<Example>? examples,
     this.isManuelSave = false,
+    this.isGrammar = false,
+    this.connectionWays,
+    this.description,
   }) : examples =
            examples == null
                ? <Example>[]
-               // ✅ 얕은 복사 방지: 새로운 리스트로 복제
                : List<Example>.from(
                  examples.map((e) => e.copyWith()), // deep copy 권장
                ),
@@ -62,6 +68,7 @@ class MyWord {
     mean = map['mean'] ?? '';
     createdAt = map['createdAt'] ?? '';
     yomikata = map['yomikata'] ?? '';
+    isGrammar = map['isGrammar'] ?? false;
     isKnown = false;
     examples = map['examples'] ?? [];
   }
@@ -78,6 +85,18 @@ class MyWord {
     return newMyWord;
   }
 
+  static MyWord grammerToWord(Grammar g) {
+    return MyWord(
+      word: g.grammar,
+      mean: g.means,
+      yomikata: '',
+      description: g.description,
+      connectionWays: g.connectionWays,
+      examples: g.examples,
+      isGrammar: true,
+    );
+  }
+
   static MyWord wordToMyWord(Word word) {
     MyWord newMyWord = MyWord(
       word: word.word,
@@ -85,21 +104,7 @@ class MyWord {
       yomikata: word.yomikata,
       examples: word.examples,
     );
-
     newMyWord.createdAt = DateTime.now();
-
-    return newMyWord;
-  }
-
-  static MyWord wordToMyWordForTest(int index, Word word, DateTime dateTime) {
-    MyWord newMyWord = MyWord(
-      word: '${index}_${word.word}',
-      mean: word.mean,
-      yomikata: word.yomikata,
-      examples: word.examples,
-    );
-
-    newMyWord.createdAt = dateTime;
 
     return newMyWord;
   }

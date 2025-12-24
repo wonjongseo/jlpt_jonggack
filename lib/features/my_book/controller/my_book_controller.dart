@@ -163,4 +163,8 @@ class MyBookController extends GetxController {
       _isLoading.value = false;
     }
   }
+
+  bool isSavedInJgBook(MyWord myWord) {
+    return books[0].mywords.contains(myWord);
+  }
 }

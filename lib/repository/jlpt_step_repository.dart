@@ -1,10 +1,7 @@
 import 'dart:developer';
-import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
@@ -42,7 +39,7 @@ class JlptRepositry {
           }
           return false;
         }).toList();
-    if (words.isEmpty || words.length == 0) {
+    if (words.isEmpty) {
       return relatedWords;
     } else {
       return words;

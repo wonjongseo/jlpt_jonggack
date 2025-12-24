@@ -10,19 +10,21 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_description_card.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
-import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_gramar_card.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
+import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class GrammarCardDetails extends StatefulWidget {
   const GrammarCardDetails({
     super.key,
     required this.index,
-    required this.grammars,
+    required this.grammerStep,
   });
   final int index;
-  final List<Grammar> grammars;
+  final GrammarStep grammerStep;
   @override
   State<GrammarCardDetails> createState() => _GrammarCardDetailsState();
 }
@@ -58,7 +60,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                 ? null
                 : CustomAppBarTitle(
                   curIndex: _currentPageIndex + 1,
-                  totalIndex: widget.grammars.length,
+                  totalIndex: widget.grammerStep.grammars.length,
                 ),
       ),
     );
@@ -66,7 +68,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
 
   @override
   Widget build(BuildContext context) {
-    int len = widget.grammars.length;
+    int len = widget.grammerStep.grammars.length;
     return Scaffold(
       appBar: _appBar(len),
       body: SafeArea(
@@ -92,8 +94,8 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                   child: InkWell(
                     onTap: () {
                       Get.offAndToNamed(
-                        GrammarTestScreen.name,
-                        arguments: {'grammar': widget.grammars},
+                        NewGrammarTestScreen.name,
+                        arguments: {'grammerStep': widget.grammerStep},
                       );
                     },
                     child: Card(
@@ -111,7 +113,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                   ),
                 );
               }
-              return GrammarCard(grammar: widget.grammars[index]);
+              return GrammarCard(grammar: widget.grammerStep.grammars[index]);
             },
           ),
         ),
@@ -120,119 +122,6 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [const GlobalBannerAdmob()],
-        ),
-      ),
-    );
-  }
-}
-
-class GrammarCard extends StatefulWidget {
-  const GrammarCard({super.key, required this.grammar});
-
-  final Grammar grammar;
-
-  @override
-  State<GrammarCard> createState() => _GrammarCardState();
-}
-
-class _GrammarCardState extends State<GrammarCard> {
-  bool isShowMoreExample = false;
-  int maxLine = 1;
-  @override
-  void initState() {
-    super.initState();
-
-    maxLine = (widget.grammar.grammar.length / 18).ceil();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
-      child: Card(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AutoSizeText(
-                  widget.grammar.grammar,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: AppFonts.japaneseFont,
-                    fontSize: 30,
-                  ),
-                  maxLines: maxLine,
-                ),
-                SizedBox(height: 20),
-                if (widget.grammar.means.isNotEmpty) ...[
-                  GrammarDescriptionCard(
-                    title: AppString.mean.tr,
-                    content: widget.grammar.means,
-                  ),
-                ],
-                if (widget.grammar.description.isNotEmpty) ...[
-                  GrammarDescriptionCard(
-                    title: AppString.description.tr,
-                    content: widget.grammar.description,
-                  ),
-                ],
-                if (widget.grammar.connectionWays.isNotEmpty) ...[
-                  GrammarDescriptionCard(
-                    title: AppString.connectionWays.tr,
-                    content: widget.grammar.connectionWays,
-                  ),
-                ],
-                const Divider(),
-                SizedBox(height: 20),
-                Text(
-                  AppString.examples.tr,
-                  style: TextStyle(
-                    color: SettingController.to.mainBordColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...List.generate(
-                      isShowMoreExample ? widget.grammar.examples.length : 2,
-                      (index2) {
-                        return GrammarExampleCard(
-                          index: index2,
-                          examples: widget.grammar.examples,
-                        );
-                      },
-                    ),
-                    if (!isShowMoreExample)
-                      TextButton(
-                        onPressed: () {
-                          isShowMoreExample = true;
-                          setState(() {});
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(0, 0),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text(
-                          AppString.seeMoreExamples.tr,
-                          style: TextStyle(
-                            color: SettingController.to.mainBordColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                SizedBox(height: Responsive.height15),
-              ],
-            ),
-          ),
         ),
       ),
     );

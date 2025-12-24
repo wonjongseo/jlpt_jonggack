@@ -4,21 +4,21 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/kangi_text.dart';
+import 'package:jlpt_jonggack/common/widget/like_icon.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/related_word.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 
 // ignore: must_be_immutable
 class WordCard extends StatelessWidget {
   WordCard({super.key, required this.word, this.controller, this.myWordIcon});
   JlptStepController? controller;
+
   final Widget? myWordIcon;
   final Word word;
   @override
@@ -62,15 +62,9 @@ class WordCard extends StatelessWidget {
                           ),
                         ),
                         if (controller != null)
-                          IconButton(
-                            onPressed: () => controller!.toggleSaveWord(word),
-                            icon: FaIcon(
-                              !controller!.isSavedInLocal(word)
-                                  ? FontAwesomeIcons.bookmark
-                                  : FontAwesomeIcons.solidBookmark,
-                              color: SettingController.to.mainBordColor,
-                              size: 22,
-                            ),
+                          LikeIcon(
+                            isSaved: controller!.isSavedInLocal(word),
+                            onTap: () => controller!.toggleSaveWord(word),
                           ),
                       ],
                     ),

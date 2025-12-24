@@ -23,7 +23,7 @@ import 'features/home/screens/home_screen.dart';
 
 class AppRoutes {
   static List<GetPage<dynamic>> getPages = [
-    GetPage(name: GrammarTestScreen.name, page: () => GrammarTestScreen()),
+    // GetPage(name: GrammarTestScreen.name, page: () => GrammarTestScreen()),
     GetPage(
       name: HomeScreen.name,
       page: () => const HomeScreen(),
@@ -34,10 +34,10 @@ class AppRoutes {
     GetPage(name: EditBookScreen.name, page: () => EditBookScreen()),
     GetPage(name: NewMyWordScreen.name, page: () => NewMyWordScreen()),
     GetPage(name: NewAddMyWordScreen.name, page: () => NewAddMyWordScreen()),
-    GetPage(
-      name: GrammarCalendarStepScreen.name,
-      page: () => GrammarCalendarStepScreen(),
-    ),
+    // GetPage(
+    //   name: GrammarCalendarStepScreen.name,
+    //   page: () => GrammarCalendarStepScreen(),
+    // ),
     GetPage(
       name: NewGrammarStepScreen.name,
       page: () => NewGrammarStepScreen(),
@@ -55,10 +55,14 @@ class AppRoutes {
         final grammars = Get.arguments['grammarStep'] as GrammarStep;
         final isRandom = Get.arguments['isRandom'] as bool?;
         final isTextAgain = Get.arguments['isTextAgain'] as bool?;
+        final isRecord = Get.arguments['isRecord'] as bool?;
+        final isMyWord = Get.arguments['isMyWord'] as bool?;
         return NewGrammarTestController(
           grammars,
           isRandom ?? false,
           isTextAgain ?? false,
+          isRecord ?? true,
+          isMyWord ?? false,
         );
       }),
     ),

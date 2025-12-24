@@ -40,7 +40,7 @@ class NewGrammarTestScreen extends GetView<NewGrammarTestController> {
               child: QuizProgressText(
                 currentIdx:
                     controller.quizGrammars.length -
-                    controller.unCheckedQuizIdxs.length,
+                    controller.unansweredIdxs.length,
                 totalCnt: controller.quizGrammars.length,
               ),
             ),
@@ -78,8 +78,7 @@ class NewGrammarTestScreen extends GetView<NewGrammarTestController> {
                                   index,
                                   selectedIndex,
                                 ),
-                            isCorrect:
-                                !controller.wrongQuizIdxs.contains(index),
+                            isCorrect: !controller.wrongIdxs.contains(index),
                             isSubmitted: controller.isSubmitted,
                           );
                         }),

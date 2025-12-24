@@ -1,201 +1,201 @@
-import 'dart:math';
+// import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
-import 'package:jlpt_jonggack/common/commonDialog.dart';
-import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
-import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
-import 'package:jlpt_jonggack/model/Question.dart';
-import 'package:jlpt_jonggack/model/example.dart';
-import 'package:jlpt_jonggack/model/grammar.dart';
-import 'package:jlpt_jonggack/model/word.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:get/get.dart';
+// import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
+// import 'package:jlpt_jonggack/common/commonDialog.dart';
+// import 'package:jlpt_jonggack/features/grammar_step/services/grammar_controller.dart';
+// import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
+// import 'package:jlpt_jonggack/model/Question.dart';
+// import 'package:jlpt_jonggack/model/example.dart';
+// import 'package:jlpt_jonggack/model/grammar.dart';
+// import 'package:jlpt_jonggack/model/word.dart';
 
-import '../../../user/controller/user_controller.dart';
-import '../grammar_test_screen.dart';
+// import '../../../user/controller/user_controller.dart';
+// import '../grammar_test_screen.dart';
 
-class GrammarTestController extends GetxController {
-  bool isRandom = false;
-  bool isTestAgain = false;
+// class GrammarTestController extends GetxController {
+//   bool isRandom = false;
+//   bool isTestAgain = false;
 
-  late ScrollController scrollController;
+//   late ScrollController scrollController;
 
-  List<Question> questions = [];
+//   List<Question> questions = [];
 
-  List<Map<int, List<Word>>> map = List.empty(growable: true);
+//   List<Map<int, List<Word>>> map = List.empty(growable: true);
 
-  // [제출] 버튼 누르면 true
-  bool isSubmitted = false;
-  late GrammarController grammarController;
+//   // [제출] 버튼 누르면 true
+//   bool isSubmitted = false;
+//   late GrammarController grammarController;
 
-  // 틀린 문제
-  late List<int> wrongQIndList;
-  // 선택된 인덱스
-  late List<int> checkedQNumIndList;
+//   // 틀린 문제
+//   late List<int> wrongQIndList;
+//   // 선택된 인덱스
+//   late List<int> checkedQNumIndList;
 
-  UserController userController = Get.find<UserController>();
+//   UserController userController = Get.find<UserController>();
 
-  @override
-  void onClose() {
-    if (isSubmitted && !isRandom) {
-      saveScore();
-    }
-    super.onClose();
-  }
+//   @override
+//   void onClose() {
+//     if (isSubmitted && !isRandom) {
+//       saveScore();
+//     }
+//     super.onClose();
+//   }
 
-  void submit(double score) async {
-    if (checkedQNumIndList.isNotEmpty) {
-      String remainQuestions =
-          checkedQNumIndList.map((e) => '${e + 1}').toString();
+//   void submit(double score) async {
+//     if (checkedQNumIndList.isNotEmpty) {
+//       String remainQuestions =
+//           checkedQNumIndList.map((e) => '${e + 1}').toString();
 
-      if (!await CommonDialog.confirmToSubmitGrammarTest(remainQuestions)) {
-        return;
-      }
-    }
-    InterstitialManager.instance.maybeShow();
-    isSubmitted = true;
-    scrollController.jumpTo(0);
-    update();
-  }
+//       if (!await CommonDialog.confirmToSubmitGrammarTest(remainQuestions)) {
+//         return;
+//       }
+//     }
+//     InterstitialManager.instance.maybeShow();
+//     isSubmitted = true;
+//     scrollController.jumpTo(0);
+//     update();
+//   }
 
-  void againTest() {
-    if (!isRandom) {
-      saveScore();
-    }
-    Get.offNamed(
-      GrammarTestScreen.name,
-      preventDuplicates: false,
-      arguments: {
-        'grammar': Get.arguments['grammar'],
-        'isTestAgain': true,
-        IS_RANDOM: isRandom,
-      },
-    );
-  }
+//   void againTest() {
+//     if (!isRandom) {
+//       saveScore();
+//     }
+//     Get.offNamed(
+//       GrammarTestScreen.name,
+//       preventDuplicates: false,
+//       arguments: {
+//         'grammar': Get.arguments['grammar'],
+//         'isTestAgain': true,
+//         IS_RANDOM: isRandom,
+//       },
+//     );
+//   }
 
-  void saveScore() {
-    grammarController.updateScore(
-      questions.length - wrongQIndList.length,
-      isRetry: isTestAgain,
-    );
-  }
+//   void saveScore() {
+//     grammarController.updateScore(
+//       questions.length - wrongQIndList.length,
+//       isRetry: isTestAgain,
+//     );
+//   }
 
-  void init(dynamic arguments) {
-    scrollController = ScrollController();
-    startGrammarTest(arguments['grammar']);
-    isRandom = arguments[IS_RANDOM] ?? false;
-    if (arguments['isTestAgain'] != null) {
-      isTestAgain = true;
-    }
+//   void init(dynamic arguments) {
+//     scrollController = ScrollController();
+//     startGrammarTest(arguments['grammar']);
+//     isRandom = arguments[IS_RANDOM] ?? false;
+//     if (arguments['isTestAgain'] != null) {
+//       isTestAgain = true;
+//     }
 
-    wrongQIndList = List.generate(questions.length, (index) => index);
-    checkedQNumIndList = List.generate(questions.length, (index) => index);
-  }
+//     wrongQIndList = List.generate(questions.length, (index) => index);
+//     checkedQNumIndList = List.generate(questions.length, (index) => index);
+//   }
 
-  void clickButton(int questionIndex, int selectedAnswerIndex) {
-    Question question = questions[questionIndex];
-    int correctAns = question.answer;
+//   void clickButton(int questionIndex, int selectedAnswerIndex) {
+//     Question question = questions[questionIndex];
+//     int correctAns = question.answer;
 
-    if (correctAns == selectedAnswerIndex) {
-      wrongQIndList.remove(questionIndex);
-    } else {
-      if (!wrongQIndList.contains(questionIndex)) {
-        wrongQIndList.add(questionIndex);
-      }
-    }
-    checkedQNumIndList.remove(questionIndex);
+//     if (correctAns == selectedAnswerIndex) {
+//       wrongQIndList.remove(questionIndex);
+//     } else {
+//       if (!wrongQIndList.contains(questionIndex)) {
+//         wrongQIndList.add(questionIndex);
+//       }
+//     }
+//     checkedQNumIndList.remove(questionIndex);
 
-    update();
-  }
+//     update();
+//   }
 
-  double getCurrentProgressValue() {
-    double currentProgressValue =
-        ((questions.length - checkedQNumIndList.length).toDouble() /
-            questions.length.toDouble()) *
-        100;
+//   double getCurrentProgressValue() {
+//     double currentProgressValue =
+//         ((questions.length - checkedQNumIndList.length).toDouble() /
+//             questions.length.toDouble()) *
+//         100;
 
-    return currentProgressValue;
-  }
+//     return currentProgressValue;
+//   }
 
-  double getScore() {
-    double score =
-        ((questions.length - wrongQIndList.length).toDouble() /
-            questions.length.toDouble()) *
-        100;
+//   double getScore() {
+//     double score =
+//         ((questions.length - wrongQIndList.length).toDouble() /
+//             questions.length.toDouble()) *
+//         100;
 
-    return score;
-  }
+//     return score;
+//   }
 
-  void startGrammarTest(List<Grammar> grammars) {
-    Random random = Random();
-    grammarController = Get.find<GrammarController>();
+//   void startGrammarTest(List<Grammar> grammars) {
+//     Random random = Random();
+//     grammarController = Get.find<GrammarController>();
 
-    List<Word> words = [];
+//     List<Word> words = [];
 
-    for (int i = 0; i < grammars.length; i++) {
-      List<Example> examples = grammars[i].examples;
+//     for (int i = 0; i < grammars.length; i++) {
+//       List<Example> examples = grammars[i].examples;
 
-      int randomExampleIndex = random.nextInt(examples.length);
-      String word = examples[randomExampleIndex].word;
+//       int randomExampleIndex = random.nextInt(examples.length);
+//       String word = examples[randomExampleIndex].word;
 
-      word = word.replaceAll('<span class=\"bold\">', '');
-      word = word.replaceAll('</span>', '');
+//       word = word.replaceAll('<span class=\"bold\">', '');
+//       word = word.replaceAll('</span>', '');
 
-      String answer = examples[randomExampleIndex].answer!;
+//       String answer = examples[randomExampleIndex].answer!;
 
-      if (word.contains('<span class=\"bold\">') && word.contains('</span>')) {
-        String pattern = '<span class="bold">';
-        bool result = containsMoreThanOnce(word, pattern);
-        if (result) {
-          word = word.replaceAll(answer, '_____');
-        } else {
-          word = word.replaceAll(answer, '_____');
-          List<String> tt = word.split('<span class=\"bold\">');
-          word = "${tt[0]}_____${tt[1].split('</span>')[1]}";
-        }
-      } else {
-        word = word.replaceAll(answer, '_____');
-      }
+//       if (word.contains('<span class=\"bold\">') && word.contains('</span>')) {
+//         String pattern = '<span class="bold">';
+//         bool result = containsMoreThanOnce(word, pattern);
+//         if (result) {
+//           word = word.replaceAll(answer, '_____');
+//         } else {
+//           word = word.replaceAll(answer, '_____');
+//           List<String> tt = word.split('<span class=\"bold\">');
+//           word = "${tt[0]}_____${tt[1].split('</span>')[1]}";
+//         }
+//       } else {
+//         word = word.replaceAll(answer, '_____');
+//       }
 
-      String yomikata = examples[randomExampleIndex].mean;
+//       String yomikata = examples[randomExampleIndex].mean;
 
-      Word tempWord = Word(
-        word: word,
-        mean: answer,
-        yomikata: yomikata,
-        headTitle: grammars[i].level,
-      );
+//       Word tempWord = Word(
+//         word: word,
+//         mean: answer,
+//         yomikata: yomikata,
+//         headTitle: grammars[i].level,
+//       );
 
-      words.add(tempWord);
-    }
+//       words.add(tempWord);
+//     }
 
-    map = Question.generateQustion(words);
-    setQuestions();
-  }
+//     map = Question.generateQustion(words);
+//     setQuestions();
+//   }
 
-  bool containsMoreThanOnce(String str, String pattern) {
-    RegExp regExp = RegExp(pattern);
-    Iterable<RegExpMatch> matches = regExp.allMatches(str);
-    return matches.length >= 2;
-  }
+//   bool containsMoreThanOnce(String str, String pattern) {
+//     RegExp regExp = RegExp(pattern);
+//     Iterable<RegExpMatch> matches = regExp.allMatches(str);
+//     return matches.length >= 2;
+//   }
 
-  void setQuestions() {
-    for (var vocas in map) {
-      for (var e in vocas.entries) {
-        List<Word> optionsVoca = e.value;
-        Word questionVoca = optionsVoca[e.key];
+//   void setQuestions() {
+//     for (var vocas in map) {
+//       for (var e in vocas.entries) {
+//         List<Word> optionsVoca = e.value;
+//         Word questionVoca = optionsVoca[e.key];
 
-        Question question = Question(
-          question: questionVoca,
-          answer: e.key,
-          options: optionsVoca,
-        );
+//         Question question = Question(
+//           question: questionVoca,
+//           answer: e.key,
+//           options: optionsVoca,
+//         );
 
-        questions.add(question);
-      }
-    }
-    for (int i = 0; i < questions.length; i++) {
-      print('${i + 1} ${questions[i].answer + 1}');
-    }
-  }
-}
+//         questions.add(question);
+//       }
+//     }
+//     for (int i = 0; i < questions.length; i++) {
+//       print('${i + 1} ${questions[i].answer + 1}');
+//     }
+//   }
+// }

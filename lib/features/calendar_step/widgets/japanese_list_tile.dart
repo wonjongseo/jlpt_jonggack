@@ -1,8 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/common/widget/like_icon.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
@@ -117,20 +116,10 @@ class _JapaneseListTileState extends State<JapaneseListTile> {
               maxLines: 1,
             ),
           ),
-          trailing: IconButton(
-            style: IconButton.styleFrom(
-              padding: const EdgeInsets.all(2),
-              minimumSize: const Size(0, 0),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            icon: FaIcon(
-              widget.isSaved
-                  ? FontAwesomeIcons.solidBookmark
-                  : FontAwesomeIcons.bookmark,
-              color: widget.isSaved ? SettingController.to.mainBordColor : null,
-              size: 22,
-            ),
-            onPressed: () => controller.toggleSaveWord(widget.word),
+
+          trailing: LikeIcon(
+            isSaved: widget.isSaved,
+            onTap: () => controller.toggleSaveWord(widget.word),
           ),
         ),
       ),

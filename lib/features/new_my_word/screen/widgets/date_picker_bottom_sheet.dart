@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
@@ -21,7 +20,7 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: AspectRatio(
-              aspectRatio: 3 / 5,
+              aspectRatio: .65,
               child: TableCalendar<MyWord>(
                 headerStyle: HeaderStyle(
                   titleCentered: true,

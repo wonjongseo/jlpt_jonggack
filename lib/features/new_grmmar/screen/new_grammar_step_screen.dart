@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
+import 'package:jlpt_jonggack/common/widget/like_icon.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
@@ -12,6 +14,7 @@ import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_step_c
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
+import 'package:jlpt_jonggack/model/grammar_step.dart';
 
 // OK
 class NewGrammarStepScreen extends GetView<NewGrammarStepController> {
@@ -50,8 +53,7 @@ class NewGrammarStepScreen extends GetView<NewGrammarStepController> {
             shrinkWrap: false,
             itemCount: controller.grammarStep.grammars.length,
             itemBuilder: (context, index) {
-              final grammars = controller.grammarStep.grammars;
-              return _grammarListTile(index, grammars);
+              return _grammarListTile(index, controller.grammarStep);
             },
           ),
         ),
@@ -107,15 +109,15 @@ class NewGrammarStepScreen extends GetView<NewGrammarStepController> {
     );
   }
 
-  Widget _grammarListTile(int index, List<Grammar> grammars) {
-    final grammar = grammars[index];
+  Widget _grammarListTile(int index, GrammarStep grammerStep) {
+    final grammar = grammerStep.grammars[index];
 
     return Obx(() {
       final isHideMean =
           controller.isHideMean && controller.isHideMeanIdxs[index];
 
       return InkWell(
-        onTap: () => controller.goToDetailScreen(grammars, index),
+        onTap: () => controller.goToDetailScreen(grammerStep, index),
         child: Container(
           decoration: BoxDecoration(border: Border.all(width: 0.3)),
           child: ListTile(
@@ -128,6 +130,10 @@ class NewGrammarStepScreen extends GetView<NewGrammarStepController> {
                 overflow: TextOverflow.ellipsis,
                 fontFamily: AppFonts.japaneseFont,
               ),
+            ),
+            trailing: LikeIcon(
+              isSaved: controller.isSaveds[index],
+              onTap: () => controller.toggleSaved(index),
             ),
             subtitle: Padding(
               padding: const EdgeInsets.only(bottom: 16),

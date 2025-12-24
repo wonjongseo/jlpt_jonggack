@@ -84,9 +84,22 @@ extension MyWordTypeExtension on MyWordType {
       case MyWordType.all:
         return isKo ? "모두 보기" : 'See All';
       case MyWordType.known:
-        return isKo ? "암기 단어" : 'Known Word';
+        return isKo ? "암기 단어" : 'Known';
       case MyWordType.unKnown:
-        return isKo ? "미암기 단어" : 'Unknown Word';
+        return isKo ? "미암기 단어" : 'Unknown';
+    }
+  }
+}
+
+enum WordOrGrammar { word, grammar }
+
+extension WordOrGrammarEx on WordOrGrammar {
+  String get label {
+    switch (this) {
+      case WordOrGrammar.word:
+        return isKo ? '일본어/한자' : 'Japanese/Kanji';
+      case WordOrGrammar.grammar:
+        return isKo ? '문법' : 'Grammar';
     }
   }
 }

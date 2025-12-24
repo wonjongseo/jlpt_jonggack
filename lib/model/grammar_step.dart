@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
 
 part 'grammar_step.g.dart';
 
@@ -59,5 +60,10 @@ class GrammarStep extends HiveObject {
       scores: scores ?? this.scores,
       isFinished: isFinished ?? this.isFinished,
     );
+  }
+
+  factory GrammarStep.fromMyWords(List<MyWord> myWords) {
+    final grammars = myWords.map((mw) => Grammar.fromMyWord(mw)).toList();
+    return GrammarStep(level: 'my_word', step: 0, grammars: grammars);
   }
 }

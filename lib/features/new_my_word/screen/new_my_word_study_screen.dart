@@ -5,13 +5,13 @@ import 'package:jlpt_jonggack/common/common.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
-import 'package:jlpt_jonggack/features/my_voca/services/my_voca_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_gramar_card.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 
@@ -62,7 +62,10 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                     curIndex: pageIndex + 1,
                     totalIndex: controller.allMyWords.length,
                   ),
-          actions: [if (hasKangi) howToRightBtn(context, japanese)],
+          actions: [
+            if (hasKangi && controller.isSelectedWord)
+              howToRightBtn(context, japanese),
+          ],
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -79,7 +82,8 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
         ),
       ),
       body: SafeArea(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
           child: PageView.builder(
             onPageChanged: (value) {
               pageIndex = value;
@@ -111,10 +115,15 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                 );
               }
               final word = controller.allMyWords[index];
-              return WordCard(
-                word: Word.myWordToWord(word),
-                myWordIcon: _myWordIcon(word),
-              );
+              return word.isGrammar
+                  ? GrammarCard(
+                    grammar: Grammar.fromMyWord(word),
+                    myWordIcon: _myWordIcon(word),
+                  )
+                  : WordCard(
+                    word: Word.myWordToWord(word),
+                    myWordIcon: _myWordIcon(word),
+                  );
             },
           ),
         ),
@@ -122,7 +131,7 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
     );
   }
 
-  Padding _myWordIcon(MyWord word) {
+  Widget _myWordIcon(MyWord word) {
     return Padding(
       padding: EdgeInsets.only(left: 8),
       child: GetBuilder<NewMyWordController>(
@@ -132,27 +141,37 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
               Column(
                 children: [
                   Checkbox.adaptive(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
                     value: word.isKnown,
                     onChanged: (v) {
                       controller.updateWord(word);
                     },
                   ),
-                  if (word.isKnown)
-                    Text(
-                      AppString.known.tr,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: SettingController.to.mainBordColor,
-                      ),
-                    )
-                  else
-                    Text(AppString.unKnown.tr),
+                  Text(
+                    word.isKnown ? AppString.known.tr : AppString.unKnown.tr,
+                    style: TextStyle(
+                      fontWeight: word.isKnown ? FontWeight.bold : null,
+                      color:
+                          word.isKnown
+                              ? SettingController.to.mainBordColor
+                              : null,
+                      fontSize: 12,
+                      height: 1.0,
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(width: 12),
               Column(
                 children: [
                   IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
+                    iconSize: 20,
+                    splashRadius: 18,
                     onPressed: () {
                       controller.deleteWordInDetailPage(word);
                     },
@@ -163,6 +182,8 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                     style: TextStyle(
                       color: Colors.redAccent,
                       fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      height: 1.0,
                     ),
                   ),
                 ],
@@ -171,6 +192,62 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+enum MyWordPopupMenuButtonType { edit, delete }
+
+class MyWordPopupMenuButton extends StatelessWidget {
+  final MyWord myWord;
+  final Function(MyWordPopupMenuButtonType v) onSelected;
+  const MyWordPopupMenuButton({
+    super.key,
+    required this.myWord,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<MyWordPopupMenuButtonType>(
+      onSelected: onSelected,
+      itemBuilder:
+          (context) => [
+            PopupMenuItem(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              value: MyWordPopupMenuButtonType.edit,
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  disabledForegroundColor: SettingController.to.mainBordColor,
+                ),
+                onPressed: null,
+                label:
+                    myWord.isKnown
+                        ? Text(
+                          AppString.known.tr,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                        : Text(AppString.unKnown.tr),
+                icon: Icon(
+                  myWord.isKnown
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank,
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              value: MyWordPopupMenuButtonType.delete,
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  disabledForegroundColor: Colors.red,
+                ),
+                onPressed: null,
+                label: Text(AppString.delete.tr),
+                icon: Icon(Icons.delete),
+              ),
+            ),
+          ],
     );
   }
 }

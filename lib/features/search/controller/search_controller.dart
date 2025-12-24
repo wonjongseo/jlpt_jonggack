@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
@@ -12,19 +11,6 @@ import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 class JSearchController extends GetxController {
   static JSearchController get to => Get.find<JSearchController>();
   late TextEditingController teCnt = TextEditingController();
-
-  // @override
-  // void onInit() {
-  //   teCnt = TextEditingController(text: Get.arguments ?? '');
-  //   sendQuery();
-  //   super.onInit();
-  // }
-
-  // @override
-  // void onClose() {
-  //   teCnt.dispose();
-  //   super.onClose();
-  // }
 
   final isLoading = false.obs;
 

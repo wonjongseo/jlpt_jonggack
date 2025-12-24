@@ -1,16 +1,18 @@
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
-import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
 
 class NewGrammarStepController extends GetxController {
   final String chapter;
   final GrammarStep grammarStep;
 
   final isHideMeanIdxs = <bool>[].obs;
-  final isSavedGrammars = <bool>[].obs;
+  // final isSavedGrammars = <bool>[].obs;
+  late final RxList<bool> isSaveds;
 
   final _isHideMean = false.obs;
   bool get isHideMean => _isHideMean.value;
@@ -28,10 +30,11 @@ class NewGrammarStepController extends GetxController {
     isHideMeanIdxs[index] = !isHideMeanIdxs[index];
   }
 
-  NewGrammarStepController(this.grammarStep, this.chapter);
+  NewGrammarStepController(this.grammarStep, this.chapter)
+    : isSaveds = List.filled(grammarStep.grammars.length, false).obs;
 
-  void goToDetailScreen(List<Grammar> grammars, int index) {
-    Get.to(() => GrammarCardDetails(grammars: grammars, index: index));
+  void goToDetailScreen(GrammarStep grammerStep, int index) {
+    Get.to(() => GrammarCardDetails(grammerStep: grammerStep, index: index));
   }
 
   void goToTestScreen() async {
@@ -52,8 +55,28 @@ class NewGrammarStepController extends GetxController {
   }
 
   void _init() {
+    for (var i = 0; i < grammarStep.grammars.length; i++) {
+      final grammer = grammarStep.grammars[i];
+      isSaveds[i] = MyBookController.to.isSavedInJgBook(
+        MyWord.grammerToWord(grammer),
+      );
+    }
+    print('isSaveds : ${isSaveds}');
+
     isHideMeanIdxs.assignAll(
       List.generate(grammarStep.grammars.length, (_) => false),
     );
+  }
+
+  void toggleSaved(int index) {
+    final grammar = grammarStep.grammars[index];
+    final savedGrammar = MyWord.grammerToWord(grammar);
+    if (isSaveds[index]) {
+      isSaveds[index] = false;
+      MyBookController.to.deleteMyWord(savedGrammar);
+    } else {
+      isSaveds[index] = true;
+      MyBookController.to.addMyWord(savedGrammar);
+    }
   }
 }

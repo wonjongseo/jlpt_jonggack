@@ -11,6 +11,7 @@ import 'package:jlpt_jonggack/features/jlpt_and_kangi/jlpt/controller/jlpt_step_
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
 import 'package:jlpt_jonggack/features/kangi_study/widgets/kangi_card.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_gramar_card.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/word.dart';

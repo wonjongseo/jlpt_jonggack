@@ -13,11 +13,17 @@ class SettingRepository {
   }
 
   // bool 저장 (비동기)
-  static Future<void> setBool(String key, bool value) async {
+  static Future<void> setBool(
+    String key,
+    bool value, {
+    bool isLog = false,
+  }) async {
+    if (isLog) {
+      LogManager.info('키: $key, 값: $value 저장');
+    }
     // box가 null이면 Hive.openBox을 강제로 열어두도록 해도 되지만,
     // 이미 main()에서 열었다면 Hive.box()로 가져오기만 하면 됩니다.
     final box = _box ?? Hive.box(AppConstant.settingModelBox);
-    LogManager.info('키: $key, 값: $value 저장');
     await box.put(key, value);
   }
 

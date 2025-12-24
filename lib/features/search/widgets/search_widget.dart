@@ -34,9 +34,7 @@ class NewSearchWidget extends GetView<JSearchController> {
                       keyboardType: TextInputType.text,
                       readOnly: controller.isLoading.value,
                       controller: controller.teCnt,
-                      onEditingComplete: () {
-                        search();
-                      },
+                      onEditingComplete: () => search(),
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontFamily: AppFonts.japaneseFont,

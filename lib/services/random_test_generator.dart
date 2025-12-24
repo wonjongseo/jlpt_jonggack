@@ -11,6 +11,7 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/grammar_test/grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
@@ -162,7 +163,7 @@ class RandomTestGenerator {
     return tempKangis;
   }
 
-  static Future<List<Grammar>> _getAllGrammarByLevel(
+  static Future<List<Grammar>> getAllGrammarByLevel(
     int level,
     bool isPremium,
   ) async {
@@ -243,16 +244,26 @@ class RandomTestGenerator {
         );
         break;
       case CategoryEnum.grammars:
-        tempGrammars = await _getAllGrammarByLevel(level, isPremium);
+        tempGrammars = await getAllGrammarByLevel(level, isPremium);
 
         List<Grammar> grammars = await _createGrammarQuiz(
           level,
           AppConstant.MINIMUM_STEP_COUNT,
           tempGrammars,
         );
+
+        final grammarStep = GrammarStep(
+          level: 'random',
+          step: 0,
+          grammars: grammars,
+        );
         Get.toNamed(
-          GrammarTestScreen.name,
-          arguments: {'grammar': grammars, IS_RANDOM: true},
+          NewGrammarTestScreen.name,
+          arguments: {
+            'grammarStep': grammarStep,
+            'isMyWord': false,
+            'isRandom': true,
+          },
         );
     }
   }

@@ -20,10 +20,10 @@ class GrammarStepAdapter extends TypeAdapter<GrammarStep> {
       level: fields[0] as String,
       step: fields[1] as int,
       grammars: (fields[2] as List).cast<Grammar>(),
-    )
-      ..unKnownGrammars = (fields[3] as List).cast<Grammar>()
-      ..scores = fields[4] as int
-      ..isFinished = fields[5] as bool?;
+      unKnownGrammars: (fields[3] as List?)?.cast<Grammar>(),
+      scores: fields[4] as int?,
+      isFinished: fields[5] as bool?,
+    );
   }
 
   @override

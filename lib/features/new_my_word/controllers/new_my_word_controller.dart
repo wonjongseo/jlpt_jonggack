@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
@@ -8,10 +10,14 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_study_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/book.dart';
+import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
@@ -31,17 +37,137 @@ class NewMyWordController extends GetxController {
     return myBookController.selectedBook!;
   }
 
+  final _isSelectedWord = true.obs;
+  bool get isSelectedWord => _isSelectedWord.value;
+
   ScrollController scrollController = ScrollController();
 
-  // 선택된 타입
-  final _selectedType = MyWordType.all.obs;
-  MyWordType get selectedType => _selectedType.value;
+  @override
+  void onInit() {
+    super.onInit();
+    _getLocalDBData();
+    loadMyWords();
+  }
+
+  void autoUpdateWordInQuiz(Word word, bool value) {
+    int index = -1;
+    // MyWord updateMyWord = MyWord.wordToMyWord(word);
+    for (var i = 0; i < allMyWords.length; i++) {
+      if (allMyWords[i].word == word.word &&
+          allMyWords[i].yomikata == word.yomikata) {
+        index = i;
+        break;
+      }
+    }
+    if (index == -1) {
+      return;
+    }
+
+    allMyWords[index].isKnown = value;
+    MyBookController.to.updateMyWord(allMyWords[index]);
+    update();
+  }
+
+  void updateWord(MyWord word) {
+    word.isKnown = !word.isKnown;
+
+    MyBookController.to.updateMyWord(word);
+    update();
+  }
+
+  void goToQuiz({int backCnt = 0}) async {
+    final result = await Get.dialog(
+      name: 'InputQuizCntDialog',
+      InputQuizCntDialog(maxCnt: allMyWords.length, isWord: isSelectedWord),
+    );
+    if (result == null) return;
+
+    String quizCnt = result['quizCnt'];
+
+    int iQuizCnt = int.tryParse(quizCnt) ?? 0;
+    if (iQuizCnt < 1) {
+      SnackBarHelper.showErrorSnackBar(AppString.plzEnterMoreOne.tr);
+      return;
+    } else if (iQuizCnt > allMyWords.length) {
+      SnackBarHelper.showErrorSnackBar(
+        isEn
+            ? 'Please enter a number less than ${allMyWords.length}'
+            : '${allMyWords.length}보다 작은 수를 입력해주세요',
+      );
+      return;
+    }
+
+    List<MyWord> tempWords = List.from(allMyWords);
+
+    tempWords = tempWords.sublist(0, iQuizCnt);
+
+    if (_isSelectedWord.value) {
+      await Get.toNamed(
+        JlptTestScreen.name,
+        arguments: {MY_VOCA_TEST: tempWords, 'backCnt': backCnt},
+      );
+    } else {
+      // 문법 일 경우
+      if (iQuizCnt < 4) {
+        SnackBarHelper.showErrorSnackBar(AppString.plzEnterMoreFour.tr);
+        return;
+      }
+
+      final grammarStep = GrammarStep.fromMyWords(tempWords);
+
+      await Get.toNamed(
+        NewGrammarTestScreen.name,
+        arguments: {
+          'grammarStep': grammarStep,
+          'isRecord': false,
+          'isMyWord': true,
+        },
+      );
+      loadMyWords();
+    }
+  }
+
+  void goToAddMyWord() {
+    Get.toNamed(NewAddMyWordScreen.name);
+  }
 
   @override
   void dispose() {
     scrollController.dispose();
     super.dispose();
   }
+
+  void _getLocalDBData() {
+    _isSelectedWord.value =
+        SettingRepository.getBool(AppConstant.isSelectedWord) ?? true;
+  }
+
+  void toggleIsSelectedWord() {
+    _isSelectedWord.value = !_isSelectedWord.value;
+
+    // (선택) 탭 바꾸면 맨 위로
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(0);
+    }
+
+    _applyCurrentFilters(); // ✅ 이게 핵심
+    SettingRepository.setBool(
+      AppConstant.isSelectedWord,
+      _isSelectedWord.value,
+    );
+  }
+
+  bool _matchWordOrGrammar(MyWord w) {
+    if (_isSelectedWord.value) {
+      return w.isGrammar != true; // 단어
+    } else {
+      return w.isGrammar == true; // 문법
+    }
+  }
+
+  // 선택된 타입
+  final _selectedType = MyWordType.all.obs;
+  MyWordType get selectedType => _selectedType.value;
 
   // ✅ 타입 변경 시 표시 데이터 재적용
   void changeType(MyWordType? type) {
@@ -108,8 +234,6 @@ class NewMyWordController extends GetxController {
           (w.createdAt?.millisecondsSinceEpoch ?? -2) == t,
     );
   }
-
-  void excelSaveMyWords() {}
 
   void onScrollLeft(int dateIndex, int wordIndex) {
     final item = _getVisibleItem(dateIndex, wordIndex);
@@ -199,84 +323,31 @@ class NewMyWordController extends GetxController {
   // Range 상태
   final Rxn<DateTime> rangeStart = Rxn<DateTime>();
   final Rxn<DateTime> rangeEnd = Rxn<DateTime>();
-
-  bool get isRanged => rangeStart.value != null || rangeEnd.value != null;
-
-  // 캘린더 상태
   final selectedDay = Rxn<DateTime>();
   final focusedDay = DateTime.now().obs;
 
-  static int _getHashCode(DateTime key) =>
-      key.day * 1_000_000 + key.month * 10_000 + key.year;
-  static DateTime _dayKey(DateTime dt) =>
-      DateTime.utc(dt.year, dt.month, dt.day);
+  bool get isRanged => rangeStart.value != null && rangeEnd.value != null;
 
-  // ✅ 타입 매칭 함수(공통 사용)
-  bool _matchType(MyWord w) {
-    switch (selectedType) {
-      case MyWordType.known:
-        return w.isKnown == true;
-      case MyWordType.unKnown:
-        return w.isKnown != true;
-      case MyWordType.all:
-        return true;
-    }
-  }
+  String get dateString {
+    final fmt = DateFormat.yMMMd(Get.locale.toString());
 
-  // ✅ eventLoader도 타입 반영
-  List<MyWord> getEventsForDay(DateTime day) {
-    final key = _dayKey(day);
-    final bucket = _allMap[key] ?? const <MyWord>[];
-    return bucket.where(_matchType).toList();
-  }
-
-  // ✅ 현재 조건(전체/단일일/범위) + 타입을 적용해 myWordsMap 갱신
-  void _applyCurrentFilters() {
-    final filtered = LinkedHashMap<DateTime, List<MyWord>>(
-      equals: isSameDay,
-      hashCode: _getHashCode,
-    );
-
-    DateTime? s, e;
-    if (rangeStart.value != null && rangeEnd.value != null) {
-      s = _dayKey(rangeStart.value!);
-      e = _dayKey(rangeEnd.value!);
-    } else if (selectedDay.value != null) {
-      s = _dayKey(selectedDay.value!);
-      e = s;
+    if (isRanged) {
+      return '${fmt.format(rangeStart.value!)} ~ ${fmt.format(rangeEnd.value!)}';
     }
 
-    for (final entry in _allMap.entries) {
-      final day = entry.key;
-      if (s != null && e != null) {
-        if (day.isBefore(s) || day.isAfter(e)) continue;
-      }
-      final bucket = entry.value.where(_matchType).toList();
-      if (bucket.isNotEmpty) {
-        filtered[day] = bucket;
-      }
+    if (rangeStart.value != null && rangeEnd.value == null) {
+      return fmt.format(rangeStart.value!);
     }
 
-    myWordsMap.value
-      ..clear()
-      ..addAll(filtered);
-    myWordsMap.refresh();
-  }
-
-  void onDaySelected(DateTime selected, DateTime focused) {
-    if (!isSameDay(selectedDay.value, selected)) {
-      selectedDay.value = selected;
-      focusedDay.value = focused;
-      // 단일일 선택 시 range 해제
-      rangeStart.value = null;
-      rangeEnd.value = null;
-      _applyCurrentFilters(); // ✅ 타입 + 단일일 반영
+    if (selectedDay.value != null) {
+      return fmt.format(selectedDay.value!);
     }
+
+    return AppString.allDay.tr;
   }
 
   final bookRepo = Get.find<HiveRepository<Book>>();
   Future<void> loadMyWords() async {
-    print("loadMyWords");
     try {
       _isLoading(true);
 
@@ -304,6 +375,44 @@ class NewMyWordController extends GetxController {
     } finally {
       _isLoading(false);
     }
+  }
+
+  void onDaySelected(DateTime selected, DateTime focused) {
+    if (!isSameDay(selectedDay.value, selected)) {
+      selectedDay.value = selected;
+      focusedDay.value = focused;
+      // 단일일 선택 시 range 해제
+      rangeStart.value = null;
+      rangeEnd.value = null;
+      _applyCurrentFilters(); // ✅ 타입 + 단일일 반영
+    }
+  }
+  // 캘린더 상태
+
+  static int _getHashCode(DateTime key) =>
+      key.day * 1_000_000 + key.month * 10_000 + key.year;
+  static DateTime _dayKey(DateTime dt) =>
+      DateTime.utc(dt.year, dt.month, dt.day);
+
+  // ✅ 타입 매칭 함수(공통 사용)
+  bool _matchType(MyWord w) {
+    switch (selectedType) {
+      case MyWordType.known:
+        return w.isKnown == true;
+      case MyWordType.unKnown:
+        return w.isKnown != true;
+      case MyWordType.all:
+        return true;
+    }
+  }
+
+  // ✅ eventLoader도 타입 반영
+  List<MyWord> getEventsForDay(DateTime day) {
+    final key = _dayKey(day);
+    final bucket = _allMap[key] ?? const <MyWord>[];
+    return bucket
+        .where((w) => _matchType(w) && _matchWordOrGrammar(w))
+        .toList();
   }
 
   void _rebuildAllMap(List<MyWord> list) {
@@ -359,147 +468,108 @@ class NewMyWordController extends GetxController {
     _applyCurrentFilters(); // ✅ 타입만 반영해 전체 보기
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadMyWords();
-  }
+  // ✅ 현재 조건(전체/단일일/범위) + 타입을 적용해 myWordsMap 갱신
+  void _applyCurrentFilters() {
+    final filtered = LinkedHashMap<DateTime, List<MyWord>>(
+      equals: isSameDay,
+      hashCode: _getHashCode,
+    );
 
-  void autoUpdateWordInQuiz(Word word, bool value) {
-    int index = -1;
-    // MyWord updateMyWord = MyWord.wordToMyWord(word);
-    for (var i = 0; i < allMyWords.length; i++) {
-      if (allMyWords[i].word == word.word &&
-          allMyWords[i].yomikata == word.yomikata) {
-        index = i;
-        break;
+    DateTime? s, e;
+    if (rangeStart.value != null && rangeEnd.value != null) {
+      s = _dayKey(rangeStart.value!);
+      e = _dayKey(rangeEnd.value!);
+    } else if (selectedDay.value != null) {
+      s = _dayKey(selectedDay.value!);
+      e = s;
+    }
+
+    for (final entry in _allMap.entries) {
+      final day = entry.key;
+      if (s != null && e != null) {
+        if (day.isBefore(s) || day.isAfter(e)) continue;
+      }
+      final bucket =
+          entry.value
+              .where((w) => _matchType(w) && _matchWordOrGrammar(w))
+              .toList();
+      if (bucket.isNotEmpty) {
+        filtered[day] = bucket;
       }
     }
-    if (index == -1) {
-      return;
-    }
-    print('index : ${index}');
 
-    allMyWords[index].isKnown = value;
-    MyBookController.to.updateMyWord(allMyWords[index]);
-    update();
-  }
-
-  void updateWord(MyWord word) {
-    word.isKnown = !word.isKnown;
-
-    MyBookController.to.updateMyWord(word);
-    update();
-  }
-
-  void goToQuiz({int backCnt = 0}) async {
-    final result = await Get.dialog(
-      name: 'InputQuizCntDialog',
-      InputQuizCntDialog(maxCnt: allMyWords.length),
-    );
-    if (result == null) return;
-
-    String quizCnt = result['quizCnt'];
-    bool isRandom = result['isRandom'];
-
-    int iQuizCnt = int.tryParse(quizCnt) ?? 0;
-    if (iQuizCnt < 1) {
-      SnackBarHelper.showErrorSnackBar(AppString.plzEnterMoreOne.tr);
-      return;
-    } else if (iQuizCnt > allMyWords.length) {
-      SnackBarHelper.showErrorSnackBar(
-        isEn
-            ? 'Please enter a number less than ${allMyWords.length}'
-            : '${allMyWords.length}보다 작은 수를 입력해주세요',
-      );
-      return;
-    }
-
-    List<MyWord> tempWords = List.from(allMyWords);
-
-    if (isRandom) {
-      tempWords.shuffle();
-    }
-    tempWords = tempWords.sublist(0, iQuizCnt);
-
-    await Get.toNamed(
-      JlptTestScreen.name,
-      arguments: {MY_VOCA_TEST: tempWords, 'backCnt': backCnt},
-    );
-  }
-
-  void goToAddMyWord() {
-    Get.toNamed(NewAddMyWordScreen.name);
+    myWordsMap.value
+      ..clear()
+      ..addAll(filtered);
+    myWordsMap.refresh();
   }
 }
 
-class InputQuizCntDialog extends StatefulWidget {
-  const InputQuizCntDialog({super.key, required this.maxCnt});
+class InputQuizCntDialog extends StatelessWidget {
+  const InputQuizCntDialog({
+    super.key,
+    required this.maxCnt,
+    required this.isWord,
+  });
+  final bool isWord;
   final int maxCnt;
 
   @override
-  State<InputQuizCntDialog> createState() => _InputQuizCntDialogState();
-}
-
-class _InputQuizCntDialogState extends State<InputQuizCntDialog> {
-  late TextEditingController teCrl;
-  bool isRandom = true;
-
-  @override
-  void initState() {
-    teCrl = TextEditingController(
-      text: widget.maxCnt > 15 ? '15' : widget.maxCnt.toString(),
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    teCrl.dispose();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    bool isShowFourMore = !isWord && maxCnt < 4;
+
+    TextEditingController teCrl = TextEditingController(
+      text: maxCnt > 15 ? '15' : maxCnt.toString(),
+    );
     return AlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             AppString.plzEnterNumberOfQuiz.tr,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: FSController.to.baseFS,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          SizedBox(height: 12),
 
+          if (isShowFourMore) ...[
+            SizedBox(height: 6),
+            Text(
+              AppString.plzFourMoreGrammar1.tr,
+              style: TextStyle(
+                fontSize: FSController.to.baseFS - 1,
+                color: Colors.red,
+              ),
+            ),
+          ],
+          SizedBox(height: 12),
           Card(
             child: CustomTextFormField(
-              autofocus: true,
+              autofocus: !isShowFourMore,
+              readOnly: isShowFourMore,
+              color: isShowFourMore ? Colors.grey : null,
               hintText: '15',
               controller: teCrl,
               sufficIcon: Text(
-                isEn ? 'Up to ${widget.maxCnt} words' : '최대 ${widget.maxCnt}개',
-                style: TextStyle(fontSize: 12),
+                isEn ? 'Up to $maxCnt words' : '최대 $maxCnt개',
+                style: TextStyle(fontSize: FSController.to.baseFS - 2),
               ),
               keyboardType: TextInputType.number,
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(AppString.shuffleOrder.tr),
-              SizedBox(width: 4),
-              Checkbox.adaptive(
-                value: isRandom,
-                onChanged: (v) => setState(() => isRandom = !isRandom),
-              ),
-            ],
-          ),
-          SizedBox(height: 12),
+
+          SizedBox(height: 24),
           BottomBtn(
             label: AppString.confirm.tr,
+            backgroundColor: isShowFourMore ? Colors.grey : null,
             onTap: () {
-              Get.back(result: {'quizCnt': teCrl.text, 'isRandom': isRandom});
+              if (isShowFourMore) {
+                Get.back();
+                return;
+              }
+
+              Get.back(result: {'quizCnt': teCrl.text});
             },
           ),
         ],

@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
-import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 
 import 'package:jlpt_jonggack/model/kangi.dart';
 
@@ -15,7 +13,7 @@ import '../common/app_constant.dart';
 class KangiRepositroy {
   static Future<Kangi?> searchKangi(String query) async {
     final kangiBox = Hive.box<Kangi>(Kangi.boxKey);
-    Kangi? kangi = await kangiBox.get(query);
+    Kangi? kangi = kangiBox.get(query);
 
     return kangi;
   }

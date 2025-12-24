@@ -28,6 +28,7 @@ class AppConstant {
   static const String progressKey = 'basicOrJlptOrMyKey';
 
   static const String isUpdated = 'isUpdatedKey';
+  static const String isSelectedWord = 'isSelectedWordKey';
 }
 
 class HVKey {

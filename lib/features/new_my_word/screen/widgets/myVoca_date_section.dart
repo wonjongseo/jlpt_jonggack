@@ -26,7 +26,6 @@ class MyVocaDateSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final header = DateFormat(isEn ? 'yyymd' : "yyyy년 M월 d일").format(date);
     final header = DateFormat.yMMMEd(Get.locale.toString()).format(date);
     return ExpansionTile(
       initiallyExpanded: true,
@@ -80,15 +79,17 @@ class MyVocaDateSection extends StatelessWidget {
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        AutoSizeText(
-                          w.word,
-                          style: TextStyle(
-                            fontSize: FSController.to.baseFS + 6,
-                            fontFamily: AppFonts.japaneseFont,
-                            fontWeight: FontWeight.w500,
-                            color: textColor,
+                        Flexible(
+                          child: AutoSizeText(
+                            w.word,
+                            style: TextStyle(
+                              fontSize: FSController.to.baseFS + 6,
+                              fontFamily: AppFonts.japaneseFont,
+                              fontWeight: FontWeight.w500,
+                              color: textColor,
+                            ),
+                            maxLines: 1,
                           ),
-                          maxLines: 1,
                         ),
                         SizedBox(width: 12),
                         Icon(
