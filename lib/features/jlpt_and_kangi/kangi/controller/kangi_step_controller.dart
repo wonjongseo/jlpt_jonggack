@@ -7,6 +7,7 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
@@ -131,8 +132,8 @@ class KangiStepController extends GetxController {
     } else {
       MyBookController.to.addMyWord(newMyWord);
 
-      if (showSnackBar) {
-        SnackBarHelper.showSuccessSnackBar(
+      if (showSnackBar && SettingController.to.saveWordNoti) {
+        SnackBarHelper.showSelectableSuccessSnackBar(
           '${newMyWord.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
         );
       }

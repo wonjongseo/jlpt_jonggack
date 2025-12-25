@@ -28,6 +28,7 @@ class MyVocaDateSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final header = DateFormat.yMMMEd(Get.locale.toString()).format(date);
     return ExpansionTile(
+      iconColor: SettingController.to.mainColor,
       initiallyExpanded: true,
       childrenPadding: EdgeInsets.all(8),
       shape: Border.all(color: Colors.transparent),

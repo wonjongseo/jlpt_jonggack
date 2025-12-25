@@ -1,8 +1,11 @@
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
@@ -35,6 +38,7 @@ class NewGrammarStepController extends GetxController {
 
   void goToDetailScreen(GrammarStep grammerStep, int index) {
     Get.to(() => GrammarCardDetails(grammerStep: grammerStep, index: index));
+    // Get.toNamed(NewGrammarCardDetail.name, arguments: index);
   }
 
   void goToTestScreen() async {
@@ -61,7 +65,6 @@ class NewGrammarStepController extends GetxController {
         MyWord.grammerToWord(grammer),
       );
     }
-    print('isSaveds : ${isSaveds}');
 
     isHideMeanIdxs.assignAll(
       List.generate(grammarStep.grammars.length, (_) => false),
@@ -77,6 +80,12 @@ class NewGrammarStepController extends GetxController {
     } else {
       isSaveds[index] = true;
       MyBookController.to.addMyWord(savedGrammar);
+
+      if (SettingController.to.saveWordNoti) {
+        SnackBarHelper.showSelectableSuccessSnackBar(
+          '${savedGrammar.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
+        );
+      }
     }
   }
 }

@@ -62,9 +62,12 @@ class EditWordController extends GetxController {
 
       MyBookController.to.addMyWord(myword);
       NewMyWordController.to.loadMyWords();
-      SnackBarHelper.showSuccessSnackBar(
-        '${myword.getWord()}${AppString.savedWord.tr}',
-      );
+
+      if (SettingController.to.saveWordNoti) {
+        SnackBarHelper.showSelectableSuccessSnackBar(
+          '${myword.getWord()}${AppString.savedWord.tr}',
+        );
+      }
 
       japaneseController.clear();
       yomikataController.clear();

@@ -107,25 +107,26 @@ class NewGrammarTestScreen extends GetView<NewGrammarTestController> {
        */
       actions: [
         Obx(
-          () => Container(
-            padding: EdgeInsets.all(8),
-            margin: EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(
-              color: SettingController.to.mainColor,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(0, 4),
-                  blurRadius: 10,
-                  color: Colors.black.withValues(alpha: .2),
-                ),
-              ],
-            ),
-            child: InkWell(
-              onTap:
-                  controller.isSubmitted
-                      ? controller.againTest
-                      : controller.submit,
+          () => InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap:
+                controller.isSubmitted
+                    ? controller.againTest
+                    : controller.submit,
+            child: Container(
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(right: 8),
+              decoration: BoxDecoration(
+                color: SettingController.to.mainColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 4),
+                    blurRadius: 10,
+                    color: Colors.black.withValues(alpha: .2),
+                  ),
+                ],
+              ),
               child: Text(
                 controller.isSubmitted
                     ? AppString.again.tr

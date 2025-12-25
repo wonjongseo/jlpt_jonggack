@@ -87,6 +87,9 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
           child: PageView.builder(
             onPageChanged: (value) {
               pageIndex = value;
+              if (value < controller.allMyWords.length) {
+                controller.selectedIndex = value;
+              }
               setState(() {});
             },
             itemCount: itemCount + 1,
@@ -173,7 +176,10 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
                     iconSize: 20,
                     splashRadius: 18,
                     onPressed: () {
-                      controller.deleteWordInDetailPage(word);
+                      controller.deleteWordInDetailPage(
+                        word,
+                        currentIndex: pageIndex,
+                      );
                     },
                     icon: Icon(Icons.delete),
                   ),

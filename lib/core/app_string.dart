@@ -127,6 +127,7 @@ class AppString extends Translations {
       AppString.plzFourMoreGrammar1: AppString.plzFourMoreGrammar1Kr,
       AppString.allDay: AppString.allDayKr,
       AppString.filter: AppString.filterKr,
+      AppString.disableNotiAt: AppString.disableNotiAtKr,
     },
     'en_US': {
       AppString.language: AppString.languageEn,
@@ -252,6 +253,7 @@ class AppString extends Translations {
       AppString.plzFourMoreGrammar1: AppString.plzFourMoreGrammar1En,
       AppString.allDay: AppString.allDayEn,
       AppString.filter: AppString.filterEn,
+      AppString.disableNotiAt: AppString.disableNotiAtEn,
     },
   };
 
@@ -845,6 +847,11 @@ We’ll review it as soon as possible and work on improvements.
   static String filter = "filterTr";
   static String filterKr = '필터';
   static String filterEn = "Filter";
+
+  static String disableNotiAt = "disableNotiAtTr";
+  static String disableNotiAtKr = '설정 페이지에서 알림을 OFF로 변경할 수 있습니다.';
+  static String disableNotiAtEn =
+      "You can disable alerts from the Settings page.";
 
   //
 }

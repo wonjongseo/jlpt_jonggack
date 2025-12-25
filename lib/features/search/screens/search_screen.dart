@@ -92,6 +92,7 @@ class SearchScreen extends GetView<JSearchController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ExpansionTile(
+                            iconColor: SettingController.to.mainColor,
                             initiallyExpanded: true,
                             shape: Border.all(color: Colors.transparent),
                             title: SearchHeader(
@@ -124,6 +125,7 @@ class SearchScreen extends GetView<JSearchController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ExpansionTile(
+                            iconColor: SettingController.to.mainColor,
                             initiallyExpanded: true,
                             shape: Border.all(color: Colors.transparent),
                             title: SearchHeader(label: CategoryEnum.kangis.id),
@@ -154,6 +156,7 @@ class SearchScreen extends GetView<JSearchController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ExpansionTile(
+                            iconColor: SettingController.to.mainColor,
                             initiallyExpanded: true,
                             shape: Border.all(color: Colors.transparent),
                             title: SearchHeader(

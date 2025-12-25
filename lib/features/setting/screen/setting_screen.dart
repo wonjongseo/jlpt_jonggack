@@ -21,6 +21,7 @@ class SettingScreen extends GetView<SettingController> {
   }) {
     return Card(
       child: ExpansionTile(
+        iconColor: SettingController.to.mainColor,
         initiallyExpanded: true,
         shape: Border(),
         title: Text(
@@ -41,6 +42,7 @@ class SettingScreen extends GetView<SettingController> {
     required List<Widget> children,
   }) {
     return ExpansionTile(
+      iconColor: SettingController.to.mainColor,
       shape: Border(),
       title: Text(
         title,
@@ -159,6 +161,18 @@ class SettingScreen extends GetView<SettingController> {
                         );
                       }),
                     ),
+                    _innerExpansionTile(
+                      title: '알람',
+                      children: [
+                        _listTile(
+                          title: '나만의 단어장에 추가 시 알람 표시',
+                          trailing: Switch.adaptive(
+                            value: controller.saveWordNoti,
+                            onChanged: (v) => controller.toggleSaveWordNoti(v),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
 
@@ -230,6 +244,7 @@ class SettingScreen extends GetView<SettingController> {
                     ),
 
                     ExpansionTile(
+                      iconColor: SettingController.to.mainColor,
                       shape: Border.all(color: Colors.transparent),
                       title: Text(
                         AppString.fontSize.tr,
@@ -273,7 +288,6 @@ class SettingScreen extends GetView<SettingController> {
 
                 _expansionTile(
                   title: AppString.another.tr,
-
                   children: [
                     _listTile(
                       title: AppString.fnOrErorreport.tr,

@@ -29,6 +29,7 @@ class AppConstant {
 
   static const String isUpdated = 'isUpdatedKey';
   static const String isSelectedWord = 'isSelectedWordKey';
+  static const String saveWordNoti = 'saveWordNotiKey';
 }
 
 class HVKey {

@@ -1,19 +1,15 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
+import 'package:jlpt_jonggack/common/widget/like_icon.dart';
 import 'package:jlpt_jonggack/config/size.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/grammar_step/widgets/grammar_description_card.dart';
-import 'package:jlpt_jonggack/features/grammar_test/components/grammar_example_card.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_step_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_gramar_card.dart';
-import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
-import 'package:jlpt_jonggack/model/grammar.dart';
+
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
@@ -30,6 +26,8 @@ class GrammarCardDetails extends StatefulWidget {
 }
 
 class _GrammarCardDetailsState extends State<GrammarCardDetails> {
+  final controller = Get.find<NewGrammarStepController>();
+
   late PageController pageController;
   int _currentPageIndex = 0;
 
@@ -48,7 +46,6 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
 
   UserController userController = Get.find<UserController>();
 
-  TtsController ttsController = Get.find<TtsController>();
   bool isShowMoreExample = false;
 
   PreferredSize _appBar(int len) {
@@ -78,7 +75,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
             itemCount: len >= 4 ? len + 1 : len,
             controller: pageController,
             onPageChanged: (value) {
-              ttsController.stop();
+              TtsController.to.stop();
               isShowMoreExample = false;
               setState(() {});
               _currentPageIndex = value;
@@ -113,7 +110,17 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
                   ),
                 );
               }
-              return GrammarCard(grammar: widget.grammerStep.grammars[index]);
+              return Obx(
+                () => GrammarCard(
+                  grammar: widget.grammerStep.grammars[index],
+                  myWordIcon: LikeIcon(
+                    isSaved: controller.isSaveds[index],
+                    onTap: () {
+                      controller.toggleSaved(index);
+                    },
+                  ),
+                ),
+              );
             },
           ),
         ),

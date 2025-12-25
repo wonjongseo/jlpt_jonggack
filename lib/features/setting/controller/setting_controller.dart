@@ -212,6 +212,7 @@ class SettingController extends GetxController {
   void onInit() async {
     await getSystemLanguage();
     await getIsDarkMode();
+    getSaveWordNoti();
     getIsSubjective();
     getTtsValue();
     getQuizValue();
@@ -391,6 +392,19 @@ class SettingController extends GetxController {
         await repo.put(entry.key, entry.value);
       }
     }
+  }
+
+  final Rx<bool> _saveWordNoti = true.obs;
+  bool get saveWordNoti => _saveWordNoti.value;
+
+  void getSaveWordNoti() {
+    _saveWordNoti.value =
+        SettingRepository.getBool(AppConstant.saveWordNoti) ?? true;
+  }
+
+  void toggleSaveWordNoti(bool v) {
+    _saveWordNoti.value = v;
+    SettingRepository.setBool(AppConstant.saveWordNoti, _saveWordNoti.value);
   }
 
   final Rx<bool> _isDarkMode = false.obs;

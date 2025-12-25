@@ -15,14 +15,19 @@ class LikeIcon extends StatelessWidget {
   final double? iconSize;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: FaIcon(
-          isSaved ? FontAwesomeIcons.solidBookmark : FontAwesomeIcons.bookmark,
-          color: isSaved ? SettingController.to.mainBordColor : null,
-          size: iconSize ?? 22,
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: FaIcon(
+            isSaved
+                ? FontAwesomeIcons.solidBookmark
+                : FontAwesomeIcons.bookmark,
+            color: isSaved ? SettingController.to.mainBordColor : null,
+            size: iconSize ?? 22,
+          ),
         ),
       ),
     );

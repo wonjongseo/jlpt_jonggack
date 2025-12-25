@@ -30,11 +30,11 @@ class _GrammarCardState extends State<GrammarCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: double.infinity,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: Responsive.width10),
       child: Card(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

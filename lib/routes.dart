@@ -10,6 +10,7 @@ import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_step_c
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_test_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_step_screen.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
+import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_grammar_card_detail.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
@@ -47,6 +48,13 @@ class AppRoutes {
 
         return NewGrammarStepController(grammars, chapter);
       }),
+    ),
+    GetPage(
+      name: NewGrammarCardDetail.name,
+      page: () {
+        final index = Get.arguments as int;
+        return NewGrammarCardDetail(index: index);
+      },
     ),
     GetPage(
       name: NewGrammarTestScreen.name,

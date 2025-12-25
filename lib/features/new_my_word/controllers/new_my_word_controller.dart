@@ -260,17 +260,45 @@ class NewMyWordController extends GetxController {
     deleteWord(_allList[idx]);
   }
 
+  // void deleteWordInDetailPage(
+  //   MyWord myWord, {
+  //   bool isYokumatiageruWord = true,
+  // }) async {
+  //   await deleteWord(myWord);
+
+  //   if (allMyWords.isNotEmpty) {
+  //     Get.off(() => NewMyWordStudyScreen(), preventDuplicates: false);
+  //   } else {
+  //     Get.back();
+  //   }
+  // }
   void deleteWordInDetailPage(
     MyWord myWord, {
-    bool isYokumatiageruWord = true,
+    required int currentIndex,
   }) async {
-    await deleteWord(myWord);
+    await deleteWord(myWord); // 내부에서 loadMyWords()까지 됨
 
-    if (_allList.isNotEmpty) {
-      Get.off(() => NewMyWordStudyScreen(), preventDuplicates: false);
-    } else {
+    final len = allMyWords.length;
+    if (len == 0) {
       Get.back();
+      return;
     }
+
+    // ✅ 삭제 후 이동할 인덱스
+    // "3에서 삭제하면 4로" (다음으로) 원하면 +1,
+    // 일반적으로는 같은 index에 '다음 카드'가 당겨지므로 그대로 두는 게 자연스러움.
+    int nextIndex = currentIndex; // 기본: 같은 자리(다음 카드가 올라옴)
+
+    // 만약 너가 말한대로 "다음 번호로" 강제하고 싶으면:
+    // int nextIndex = min(currentIndex, len - 1); // 같은 자리(추천)
+    // int nextIndex = min(currentIndex + 1, len - 1); // 다음으로(요청대로)
+
+    // ✅ 마지막 페이지(퀴즈 페이지)로 가는 것 방지
+    nextIndex = nextIndex.clamp(0, len - 1);
+
+    selectedIndex = nextIndex;
+
+    Get.off(() => const NewMyWordStudyScreen(), preventDuplicates: false);
   }
 
   Future<void> deleteWord(MyWord myWord) async {
