@@ -1,15 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/widget/custom_appbar.dart';
 import 'package:jlpt_jonggack/common/widget/kanji_stroke_viewer.dart';
 import 'package:jlpt_jonggack/common/widget/like_icon.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
-import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -20,7 +19,6 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/widgets/word_card.dart';
 
 import 'package:jlpt_jonggack/model/kangi.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 
 // ignore: must_be_immutable
 class KangiCard extends StatefulWidget {
@@ -60,10 +58,10 @@ class _KangiCardState extends State<KangiCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: cardMargin,
       child: Card(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),
+          padding: cardPadding,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

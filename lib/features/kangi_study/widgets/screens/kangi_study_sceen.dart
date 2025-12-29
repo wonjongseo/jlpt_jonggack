@@ -92,30 +92,34 @@ class _KangiStudySceenState extends State<KangiStudySceen> {
       itemCount: wordsLen >= 4 ? wordsLen + 1 : wordsLen,
       itemBuilder: (context, index) {
         if (index == wordsLen) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-            child: InkWell(
-              onTap: () => controller.goToTest(isOffAndToName: true),
-              child: Card(
-                child: Center(
-                  child: Text(
-                    AppString.goToQuiz.tr,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.cyan.shade600,
-                      fontSize: Responsive.height10 * 2.4,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
+          return _lastCard(controller);
         }
         return KangiCard(
           controller: controller,
           kangi: controller.getKangiStep().kangis[index],
         );
       },
+    );
+  }
+
+  Padding _lastCard(KangiStepController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+      child: InkWell(
+        onTap: () => controller.goToTest(isOffAndToName: true),
+        child: Card(
+          child: Center(
+            child: Text(
+              AppString.goToQuiz.tr,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.cyan.shade600,
+                fontSize: Responsive.height10 * 2.4,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

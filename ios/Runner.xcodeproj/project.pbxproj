@@ -502,7 +502,7 @@
 				DEVELOPMENT_TEAM = 6B7JBM5DS9;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 3.0.6;
-				FLUTTER_BUILD_NUMBER = 1;
+				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "JLPT Jg";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
@@ -694,7 +694,7 @@
 				DEVELOPMENT_TEAM = 6B7JBM5DS9;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 3.0.6;
-				FLUTTER_BUILD_NUMBER = 1;
+				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "JLPT Jg";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
@@ -722,7 +722,7 @@
 				DEVELOPMENT_TEAM = 6B7JBM5DS9;
 				ENABLE_BITCODE = NO;
 				FLUTTER_BUILD_NAME = 3.0.6;
-				FLUTTER_BUILD_NUMBER = 1;
+				FLUTTER_BUILD_NUMBER = 2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "JLPT Jg";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";

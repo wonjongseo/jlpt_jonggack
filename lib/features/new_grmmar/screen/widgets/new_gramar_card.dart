@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
@@ -31,7 +32,7 @@ class _GrammarCardState extends State<GrammarCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Responsive.width10),
+      padding: cardMargin,
       child: Card(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),

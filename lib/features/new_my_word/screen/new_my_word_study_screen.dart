@@ -82,53 +82,50 @@ class _NewMyWordStudyScreenState extends State<NewMyWordStudyScreen> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-          child: PageView.builder(
-            onPageChanged: (value) {
-              pageIndex = value;
-              if (value < controller.allMyWords.length) {
-                controller.selectedIndex = value;
-              }
-              setState(() {});
-            },
-            itemCount: itemCount + 1,
-            controller: pageController,
-            itemBuilder: (context, index) {
-              if (itemCount == index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-                  child: InkWell(
-                    onTap: () {
-                      controller.goToQuiz(backCnt: 1);
-                    },
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          AppString.goToQuiz.tr,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.cyan.shade600,
-                            fontSize: 24,
-                          ),
+        child: PageView.builder(
+          onPageChanged: (value) {
+            pageIndex = value;
+            if (value < controller.allMyWords.length) {
+              controller.selectedIndex = value;
+            }
+            setState(() {});
+          },
+          itemCount: itemCount + 1,
+          controller: pageController,
+          itemBuilder: (context, index) {
+            if (itemCount == index) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                child: InkWell(
+                  onTap: () {
+                    controller.goToQuiz(backCnt: 1);
+                  },
+                  child: Card(
+                    child: Center(
+                      child: Text(
+                        AppString.goToQuiz.tr,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.cyan.shade600,
+                          fontSize: 24,
                         ),
                       ),
                     ),
                   ),
+                ),
+              );
+            }
+            final word = controller.allMyWords[index];
+            return word.isGrammar
+                ? GrammarCard(
+                  grammar: Grammar.fromMyWord(word),
+                  myWordIcon: _myWordIcon(word),
+                )
+                : WordCard(
+                  word: Word.myWordToWord(word),
+                  myWordIcon: _myWordIcon(word),
                 );
-              }
-              final word = controller.allMyWords[index];
-              return word.isGrammar
-                  ? GrammarCard(
-                    grammar: Grammar.fromMyWord(word),
-                    myWordIcon: _myWordIcon(word),
-                  )
-                  : WordCard(
-                    word: Word.myWordToWord(word),
-                    myWordIcon: _myWordIcon(word),
-                  );
-            },
-          ),
+          },
         ),
       ),
     );

@@ -94,7 +94,6 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                 }
 
                 final keys = map.keys.toList()..sort((a, b) => b.compareTo(a));
-
                 return ListView.separated(
                   controller: controller.scrollController,
                   padding: const EdgeInsets.only(bottom: 12),

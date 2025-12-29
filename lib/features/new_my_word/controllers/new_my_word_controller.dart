@@ -59,6 +59,7 @@ class NewMyWordController extends GetxController {
         break;
       }
     }
+    // 案の定、鮮やか、改める、祈る、印鑑
     if (index == -1) {
       return;
     }
@@ -98,6 +99,8 @@ class NewMyWordController extends GetxController {
     }
 
     List<MyWord> tempWords = List.from(allMyWords);
+
+    tempWords.shuffle();
 
     tempWords = tempWords.sublist(0, iQuizCnt);
 

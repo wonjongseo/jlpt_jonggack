@@ -69,60 +69,57 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
     return Scaffold(
       appBar: _appBar(len),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
-          child: PageView.builder(
-            itemCount: len >= 4 ? len + 1 : len,
-            controller: pageController,
-            onPageChanged: (value) {
-              TtsController.to.stop();
-              isShowMoreExample = false;
-              setState(() {});
-              _currentPageIndex = value;
-              setState(() {});
-            },
-            itemBuilder: (context, index) {
-              if (index == len) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 32,
-                    horizontal: 16,
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      Get.offAndToNamed(
-                        NewGrammarTestScreen.name,
-                        arguments: {'grammerStep': widget.grammerStep},
-                      );
-                    },
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          AppString.goToQuiz.tr,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.cyan.shade600,
-                            fontSize: 20.4,
-                          ),
+        child: PageView.builder(
+          itemCount: len >= 4 ? len + 1 : len,
+          controller: pageController,
+          onPageChanged: (value) {
+            TtsController.to.stop();
+            isShowMoreExample = false;
+            setState(() {});
+            _currentPageIndex = value;
+            setState(() {});
+          },
+          itemBuilder: (context, index) {
+            if (index == len) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 32,
+                  horizontal: 16,
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Get.offAndToNamed(
+                      NewGrammarTestScreen.name,
+                      arguments: {'grammerStep': widget.grammerStep},
+                    );
+                  },
+                  child: Card(
+                    child: Center(
+                      child: Text(
+                        AppString.goToQuiz.tr,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.cyan.shade600,
+                          fontSize: 20.4,
                         ),
                       ),
                     ),
                   ),
-                );
-              }
-              return Obx(
-                () => GrammarCard(
-                  grammar: widget.grammerStep.grammars[index],
-                  myWordIcon: LikeIcon(
-                    isSaved: controller.isSaveds[index],
-                    onTap: () {
-                      controller.toggleSaved(index);
-                    },
-                  ),
                 ),
               );
-            },
-          ),
+            }
+            return Obx(
+              () => GrammarCard(
+                grammar: widget.grammerStep.grammars[index],
+                myWordIcon: LikeIcon(
+                  isSaved: controller.isSaveds[index],
+                  onTap: () {
+                    controller.toggleSaved(index);
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ),
       bottomNavigationBar: SafeArea(

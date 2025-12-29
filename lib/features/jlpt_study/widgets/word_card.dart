@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/kangi_text.dart';
 import 'package:jlpt_jonggack/common/widget/like_icon.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
@@ -40,10 +40,10 @@ class WordCard extends StatelessWidget {
     KangiStepRepositroy kangiStepRepositroy = KangiStepRepositroy();
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Responsive.width10),
+      padding: cardMargin,
       child: Card(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 11, horizontal: 14),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

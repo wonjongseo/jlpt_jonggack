@@ -30,7 +30,7 @@ class MyVocaDateSection extends StatelessWidget {
     return ExpansionTile(
       iconColor: SettingController.to.mainColor,
       initiallyExpanded: true,
-      childrenPadding: EdgeInsets.all(8),
+      childrenPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       shape: Border.all(color: Colors.transparent),
       title: Text.rich(
         TextSpan(

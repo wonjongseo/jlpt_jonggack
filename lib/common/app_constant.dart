@@ -1,6 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 
 class AppConstant {
   // 챕터 당 단어 수
@@ -39,3 +41,8 @@ class HVKey {
 class AppConstantMsg {
   static const String initDataAlertMsg = '점수들도 함께 사라집니다.\n그래도 진행하시겠습니까?';
 }
+
+EdgeInsets cardMargin = const EdgeInsets.symmetric(
+  horizontal: 12,
+).copyWith(top: 4);
+EdgeInsets cardPadding = EdgeInsets.symmetric(horizontal: 10);
