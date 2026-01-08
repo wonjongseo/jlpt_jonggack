@@ -45,16 +45,16 @@ extension ExternalDictTypeExtension on ExternalDictType {
   }
 }
 
-enum KindOfStudy { basic, jlpt, my }
+enum BookType { basic, jlpt, my }
 
-extension KindOfStudyExtension on KindOfStudy {
+extension KindOfStudyExtension on BookType {
   String get value {
     switch (this) {
-      case KindOfStudy.basic:
+      case BookType.basic:
         return isKo ? '왕초보' : 'Basic';
-      case KindOfStudy.jlpt:
+      case BookType.jlpt:
         return 'JLPT';
-      case KindOfStudy.my:
+      case BookType.my:
         return isKo ? '나만의' : "My";
     }
   }

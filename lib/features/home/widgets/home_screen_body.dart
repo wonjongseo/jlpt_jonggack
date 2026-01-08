@@ -1,10 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
-import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
@@ -30,11 +27,11 @@ class _JLPTCardsState extends State<JLPTCards> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getProgress(KindOfStudy.jlpt.name) ?? 0;
+    _currentIndex = LocalReposotiry.getProgress(BookType.jlpt.name) ?? 0;
   }
 
   void putBasicOrJlptOrMyDetail(int index) {
-    LocalReposotiry.setProgress(KindOfStudy.jlpt.name, index);
+    LocalReposotiry.setProgress(BookType.jlpt.name, index);
   }
 
   @override
@@ -111,13 +108,13 @@ class _MyCardsState extends State<MyCards> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getProgress(KindOfStudy.my.name) ?? 0;
+    _currentIndex = LocalReposotiry.getProgress(BookType.my.name) ?? 0;
 
     bodys = [];
   }
 
   void putBasicOrJlptOrMyDetail(int index) {
-    LocalReposotiry.setProgress(KindOfStudy.my.name, index);
+    LocalReposotiry.setProgress(BookType.my.name, index);
   }
 
   @override
@@ -162,7 +159,7 @@ class _MyCardsState extends State<MyCards> {
           final book = controller.books[index];
           return LevelCategoryCard(
             onTap: () {
-              controller.tapBook(book);
+              controller.tapBook(index);
             },
             title: book.title,
 
@@ -211,11 +208,11 @@ class _BasicCardState extends State<BasicCard> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = LocalReposotiry.getProgress(KindOfStudy.basic.name) ?? 0;
+    _currentIndex = LocalReposotiry.getProgress(BookType.basic.name) ?? 0;
   }
 
   void putBasicOrJlptOrMyDetail(int inedx) {
-    LocalReposotiry.setProgress(KindOfStudy.basic.name, inedx);
+    LocalReposotiry.setProgress(BookType.basic.name, inedx);
   }
 
   @override
@@ -227,7 +224,7 @@ class _BasicCardState extends State<BasicCard> {
   List<Widget> bodys = [
     LevelCategoryCard(
       onTap: () {
-        Get.to(() => const HiraganaScreen(category: 'hiragana'));
+        Get.to(() => const BasicScreen(category: 'hiragana'));
       },
       title: AppString.hiraganaVocabulary.tr,
 
@@ -235,7 +232,7 @@ class _BasicCardState extends State<BasicCard> {
     ),
     LevelCategoryCard(
       onTap: () {
-        Get.to(() => const HiraganaScreen(category: 'katakana'));
+        Get.to(() => const BasicScreen(category: 'katakana'));
       },
       title: AppString.katakanaVocabulary.tr,
 

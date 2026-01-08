@@ -7,7 +7,6 @@ import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/grammar_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/japanese_book_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/screens/kangi_book_step_body.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_controller.dart';
@@ -18,6 +17,8 @@ import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
 class JlptHomeScreen extends StatefulWidget {
+  static String name = '/jlpt_book';
+
   const JlptHomeScreen({super.key, required this.levelIndex});
   final int levelIndex;
   @override

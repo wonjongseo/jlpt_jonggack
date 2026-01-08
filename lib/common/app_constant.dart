@@ -27,7 +27,7 @@ class AppConstant {
 
   static const String basicOrJlptOrMyKey = 'basicOrJlptOrMy';
   static const String progressBox = 'progressBox';
-  static const String progressKey = 'basicOrJlptOrMyKey';
+  static const String bookTypeIdxKey = 'basicOrJlptOrMyKey';
 
   static const String isUpdated = 'isUpdatedKey';
   static const String isSelectedWord = 'isSelectedWordKey';

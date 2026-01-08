@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "870699280502",
+    "project_id": "jlpt-jonggack",
+    "storage_bucket": "jlpt-jonggack.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:870699280502:android:4eaf0d462effdb1eea1757",
+        "android_client_info": {
+          "package_name": "com.wonjongseo.jlpt_jonggack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2vlWiGD1Rx0M32MFHcusgKGnalhNhypE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

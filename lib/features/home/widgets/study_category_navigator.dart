@@ -18,7 +18,7 @@ class StudyCategoryNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(KindOfStudy.values.length, (index) {
+      children: List.generate(BookType.values.length, (index) {
         return GestureDetector(
           onTap: () => onTap(index),
           child: Container(
@@ -38,7 +38,7 @@ class StudyCategoryNavigator extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '${KindOfStudy.values[index].value} ${AppString.vocabulary.tr}',
+                '${BookType.values[index].value} ${AppString.vocabulary.tr}',
                 style: TextStyle(
                   fontWeight:
                       index == currentPageIndex ? FontWeight.bold : null,

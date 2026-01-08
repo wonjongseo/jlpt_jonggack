@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/app_constant.dart';
+import 'package:jlpt_jonggack/core/analytics/analytics_service.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/core/bindings/initial_bindings.dart';
 
@@ -8,6 +10,7 @@ import 'package:jlpt_jonggack/features/home/screens/home_screen.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
+import 'package:jlpt_jonggack/firebase_options.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
@@ -79,6 +82,9 @@ buildConfiguration = "Release"
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   MobileAds.instance.initialize();
 
   InterstitialManager.instance.configure(
@@ -125,7 +131,9 @@ class _AppState extends State<App> {
       future: loadData(langCode),
       builder: (context, snapshat) {
         if (snapshat.hasData == true) {
+          String? lastRoute;
           return GetMaterialApp(
+            navigatorObservers: [AnalyticsService.I.observer],
             builder: (context, child) {
               final mediaQuery = MediaQuery.of(context);
               return MediaQuery(
@@ -143,6 +151,15 @@ class _AppState extends State<App> {
             themeMode: controller.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             locale: effectiveLocale,
             translations: AppString(),
+            // routingCallback: (routing) {
+            //   final current = routing?.current ?? '';
+            //   if (current.isEmpty) return;
+
+            //   if (current == lastRoute) return;
+            //   lastRoute = current;
+
+            //   unawaited(AnalyticsService.I.logScreenView(screenName: current));
+            // },
           );
         } else {
           return loadingMaterialApp(context);

@@ -28,7 +28,6 @@ class MyWordScreenBottomSheet extends GetView<NewMyWordController> {
             ),
           ),
           ListTile(
-            // title: Text('날자 선택'),
             onTap: () {
               showCustomBottomSheet(
                 context: context,
@@ -103,7 +102,7 @@ class MyWordScreenBottomSheet extends GetView<NewMyWordController> {
             ),
           ),
 
-          SizedBox(height: 300),
+          SizedBox(height: 100),
         ],
       ),
     );

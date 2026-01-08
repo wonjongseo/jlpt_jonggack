@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/controller/tts_controller.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
@@ -14,14 +13,15 @@ import 'package:jlpt_jonggack/features/basic/hiragana/models/hiragana.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
 
-class HiraganaScreen extends StatefulWidget {
-  const HiraganaScreen({super.key, required this.category});
+class BasicScreen extends StatefulWidget {
+  static String name = '/basic_book';
+  const BasicScreen({super.key, required this.category});
   final String category;
   @override
-  State<HiraganaScreen> createState() => _HiraganaScreenState();
+  State<BasicScreen> createState() => _BasicScreenState();
 }
 
-class _HiraganaScreenState extends State<HiraganaScreen> {
+class _BasicScreenState extends State<BasicScreen> {
   int selectedIndex = 0;
   late Hiragana selectedHiragana;
   late List<Hiragana> hiraAndkatakana;
