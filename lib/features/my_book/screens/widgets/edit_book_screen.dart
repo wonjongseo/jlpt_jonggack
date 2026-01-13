@@ -8,7 +8,7 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 
 class EditBookScreen extends StatefulWidget {
-  static String name = '/edit-book';
+  static String name = '/editBookScreen';
 
   const EditBookScreen({super.key});
 

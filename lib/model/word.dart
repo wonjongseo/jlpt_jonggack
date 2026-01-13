@@ -50,7 +50,6 @@ class Word extends HiveObject {
               map['examples'].length,
               (index) => Example.fromMap(map['examples'][index]),
             );
-    // examples = map[''] List.generate(map['examples'].legth, (index) => null)
   }
 
   static Word myWordToWord(MyWord newWord) {

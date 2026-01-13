@@ -18,7 +18,7 @@ TextStyle accentTextStyle = TextStyle(
 );
 
 class NewAddMyWordScreen extends GetView<EditWordController> {
-  static String name = '/new-add-my-word';
+  static String name = '/addMyWordScreen';
   const NewAddMyWordScreen({super.key});
 
   @override

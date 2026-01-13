@@ -12,6 +12,7 @@ import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.d
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class SearchScreen extends GetView<JSearchController> {
+  static String name = '/searchScreen';
   const SearchScreen({super.key});
 
   @override

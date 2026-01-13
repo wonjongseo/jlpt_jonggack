@@ -17,7 +17,7 @@ class NewSearchWidget extends GetView<JSearchController> {
       void search() {
         controller.sendQuery();
         if (controller.teCnt.text.isNotEmpty && isHomeScreen) {
-          Get.to(() => SearchScreen());
+          Get.toNamed(SearchScreen.name);
         }
       }
 

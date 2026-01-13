@@ -61,7 +61,7 @@ class _JLPTCardsState extends State<JLPTCards> {
           items: List.generate(5, (index) {
             return LevelCategoryCard(
               title: 'N${index + 1}',
-              onTap: () => Get.to(() => JlptHomeScreen(levelIndex: index)),
+              onTap: () => Get.to(() => JlptScreen(levelIndex: index)),
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

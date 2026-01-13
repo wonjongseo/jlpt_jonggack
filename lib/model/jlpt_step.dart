@@ -26,6 +26,18 @@ class JlptStep extends HiveObject {
   @HiveField(6)
   List<Question>? wrongQestion = [];
 
+  List<int> get correctWords {
+    if (isFinished != true) return [];
+
+    final result = <int>[];
+    for (var i = 0; i < words.length; i++) {
+      if (!unKnownWord.contains(words[i])) {
+        result.add(i);
+      }
+    }
+    return result;
+  }
+
   JlptStep({
     required this.headTitle,
     required this.step,

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/jlpt_home/screens/new_jlpt_screen/screens/new_jlpt_screen.dart';
 
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
@@ -12,6 +13,7 @@ import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen
 import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_grammar_card_detail.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
+import 'package:jlpt_jonggack/features/search/screens/search_screen.dart';
 import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 
 import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
@@ -24,13 +26,6 @@ class AppRoutes {
   static List<GetPage<dynamic>> getPages = [
     GetPage(name: HomeScreen.name, page: () => const HomeScreen()),
     GetPage(
-      name: JlptHomeScreen.name,
-      page: () {
-        final levelIndex = Get.arguments;
-        return JlptHomeScreen(levelIndex: levelIndex);
-      },
-    ),
-    GetPage(
       name: BasicScreen.name,
       page: () {
         final category = Get.arguments;
@@ -38,26 +33,28 @@ class AppRoutes {
       },
     ),
     GetPage(
-      name: KANGI_SCORE_PATH,
-      page: () => const KangiScoreScreen(),
-      // middlewares: [AnalyticsMiddleware()],
+      name: JlptScreen.name,
+      page: () {
+        final levelIndex = Get.arguments;
+        return JlptScreen(levelIndex: levelIndex);
+      },
+    ),
+    GetPage(
+      name: NewJlptScreen.name,
+      page: () => NewJlptScreen(),
+      binding: BindingsBuilder.put(() {
+        final levelIndex = Get.arguments;
+        return NewJlptController(levelIndex);
+      }),
     ),
 
-    GetPage(
-      name: EditBookScreen.name,
-      page: () => EditBookScreen(),
-      // middlewares: [AnalyticsMiddleware()],
-    ),
-    GetPage(
-      name: NewMyWordScreen.name,
-      page: () => NewMyWordScreen(),
-      // middlewares: [AnalyticsMiddleware()],
-    ),
-    GetPage(
-      name: NewAddMyWordScreen.name,
-      page: () => NewAddMyWordScreen(),
-      // middlewares: [AnalyticsMiddleware()],
-    ),
+    GetPage(name: NewMyWordScreen.name, page: () => NewMyWordScreen()),
+    GetPage(name: KANGI_SCORE_PATH, page: () => const KangiScoreScreen()),
+
+    GetPage(name: EditBookScreen.name, page: () => EditBookScreen()),
+
+    GetPage(name: NewAddMyWordScreen.name, page: () => NewAddMyWordScreen()),
+    GetPage(name: SearchScreen.name, page: () => SearchScreen()),
 
     GetPage(
       name: NewGrammarStepScreen.name,
@@ -68,7 +65,6 @@ class AppRoutes {
 
         return NewGrammarStepController(grammars, chapter);
       }),
-      // middlewares: [AnalyticsMiddleware()],
     ),
     GetPage(
       name: NewGrammarCardDetail.name,
@@ -76,7 +72,6 @@ class AppRoutes {
         final index = Get.arguments as int;
         return NewGrammarCardDetail(index: index);
       },
-      // middlewares: [AnalyticsMiddleware()],
     ),
     GetPage(
       name: NewGrammarTestScreen.name,
@@ -95,27 +90,10 @@ class AppRoutes {
           isMyWord ?? false,
         );
       }),
-      // middlewares: [AnalyticsMiddleware()],
     ),
-    GetPage(
-      name: JlptTestScreen.name,
-      page: () => const JlptTestScreen(),
-      // middlewares: [AnalyticsMiddleware()],
-    ),
-    GetPage(
-      name: KangiTestScreen.name,
-      page: () => const KangiTestScreen(),
-      // middlewares: [AnalyticsMiddleware()],
-    ),
-    GetPage(
-      name: SettingScreen.name,
-      page: () => const SettingScreen(),
-      // middlewares: [AnalyticsMiddleware()],
-    ),
-    GetPage(
-      name: ScoreScreen.name,
-      page: () => const ScoreScreen(),
-      // middlewares: [AnalyticsMiddleware()],
-    ),
+    GetPage(name: JlptTestScreen.name, page: () => const JlptTestScreen()),
+    GetPage(name: KangiTestScreen.name, page: () => const KangiTestScreen()),
+    GetPage(name: SettingScreen.name, page: () => const SettingScreen()),
+    GetPage(name: ScoreScreen.name, page: () => const ScoreScreen()),
   ];
 }

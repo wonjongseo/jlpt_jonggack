@@ -2,7 +2,6 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 
 class AppConstant {
   // 챕터 당 단어 수
@@ -12,6 +11,7 @@ class AppConstant {
   static const String settingLanguageKey = 'settingLanguage';
   static const String isDarkModeKey = 'isDarkModeKey';
 
+  static const String createAtKey = 'createAt';
   // Tts
   static const String speechRateKey = 'speechRateKey';
   static const String volumnKey = 'volumnKey';

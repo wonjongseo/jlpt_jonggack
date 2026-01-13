@@ -14,7 +14,7 @@ import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dar
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
 
 class BasicScreen extends StatefulWidget {
-  static String name = '/basic_book';
+  static String name = '/basicScreen';
   const BasicScreen({super.key, required this.category});
   final String category;
   @override

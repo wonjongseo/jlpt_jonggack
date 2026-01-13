@@ -12,7 +12,7 @@ import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dar
 import 'package:jlpt_jonggack/model/my_word.dart';
 
 class NewMyWordScreen extends GetView<NewMyWordController> {
-  static String name = '/my-word';
+  static String name = '/myWordScreen';
   const NewMyWordScreen({super.key});
 
   @override

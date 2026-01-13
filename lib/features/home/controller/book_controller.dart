@@ -3,6 +3,7 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/analytics/analytics_service.dart';
 import 'package:jlpt_jonggack/features/basic/hiragana/screens/hiragana_screen.dart';
 import 'package:jlpt_jonggack/features/jlpt_home/screens/jlpt_home_screen.dart';
+import 'package:jlpt_jonggack/features/jlpt_home/screens/new_jlpt_screen/screens/new_jlpt_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 
@@ -48,7 +49,8 @@ class BookController extends GetxController {
         Get.toNamed(BasicScreen.name, arguments: label);
         break;
       case BookType.jlpt:
-        Get.toNamed(JlptHomeScreen.name, arguments: index);
+        Get.toNamed(JlptScreen.name, arguments: index);
+        // Get.toNamed(NewJlptScreen.name, arguments: index);
         break;
       case BookType.my:
         MyBookController.to.tapBook(index);

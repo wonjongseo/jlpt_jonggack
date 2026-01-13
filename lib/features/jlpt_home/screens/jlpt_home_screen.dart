@@ -16,16 +16,16 @@ import 'package:jlpt_jonggack/features/search/widgets/search_widget.dart';
 import 'package:jlpt_jonggack/repository/local_repository.dart';
 import 'package:jlpt_jonggack/services/random_test_generator.dart';
 
-class JlptHomeScreen extends StatefulWidget {
-  static String name = '/jlpt_book';
+class JlptScreen extends StatefulWidget {
+  static String name = '/jlptScreen';
 
-  const JlptHomeScreen({super.key, required this.levelIndex});
+  const JlptScreen({super.key, required this.levelIndex});
   final int levelIndex;
   @override
-  State<JlptHomeScreen> createState() => _JlptHomeScreenState();
+  State<JlptScreen> createState() => _JlptScreenState();
 }
 
-class _JlptHomeScreenState extends State<JlptHomeScreen> {
+class _JlptScreenState extends State<JlptScreen> {
   late PageController pageController;
   TtsController ttsController = Get.find<TtsController>();
   String name = '';

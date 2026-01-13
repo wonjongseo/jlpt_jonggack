@@ -208,7 +208,7 @@ class _AppState extends State<App> {
         UserController.to.user = await UserRepository.init(user);
 
         await SettingRepository.setString(
-          'createAt',
+          AppConstant.createAtKey,
           DateTime.now().toIso8601String(),
         );
       } else {
