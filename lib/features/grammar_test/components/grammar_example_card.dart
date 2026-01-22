@@ -3,7 +3,6 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/common.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';

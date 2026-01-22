@@ -39,6 +39,7 @@ class Book extends HiveObject {
   @HiveField(7, defaultValue: null)
   BookCategory? selectedCategory;
 
+  static int jgBookNum = 1;
   Book({
     String? id,
     String? createdAt,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/my_voca/components/custom_button.dart';
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -123,7 +124,6 @@ class CommonDialog {
       AlertDialog.adaptive(
         title: title,
         content: connent,
-
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -172,6 +172,102 @@ class JonggackAvator extends StatelessWidget {
   }
 }
 
+class AppealUpdateJgPlus extends StatelessWidget {
+  const AppealUpdateJgPlus({super.key, required this.label});
+
+  final String label;
+  @override
+  Widget build(BuildContext context) {
+    final plusFeatureStyle = TextStyle(
+      fontSize: 12,
+      color: SettingController.to.realBlackOrWhite.withValues(alpha: .9),
+    );
+
+    return AlertDialog.adaptive(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 1),
+          Text(
+            AppString.pleaseUseJgPluse.tr,
+            style: TextStyle(
+              fontSize: 15,
+              color: SettingController.to.mainBordColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+
+            decoration: BoxDecoration(
+              color: SettingController.to.blackOrWhite,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '+ ${AppString.unlimitedJlptWords.tr}',
+                  style: plusFeatureStyle,
+                ),
+                SizedBox(height: 4),
+                Text('+ ${AppString.removeAds.tr}', style: plusFeatureStyle),
+                SizedBox(height: 4),
+                Text(
+                  '+ ${AppString.unlimitedBooks.tr}',
+                  style: plusFeatureStyle,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  '+ ${AppString.unlimitedCategoris.tr}',
+                  style: plusFeatureStyle,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          GestureDetector(
+            onTap: () async {
+              if (GetPlatform.isIOS) {
+                launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
+              } else if (GetPlatform.isAndroid) {
+                launchUrl(
+                  Uri.parse(
+                    'https://play.google.com/store/apps/details?id=com.wonjongseo.jlpt_jonggack_plus',
+                  ),
+                );
+              } else {
+                launchUrl(Uri.parse('https://apps.apple.com/app/id6450434849'));
+              }
+            },
+
+            child: Container(
+              width: double.infinity,
+              height: 40,
+              decoration: BoxDecoration(
+                color: SettingController.to.mainColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                isEn ? 'Download JLPT Jg Plus→' : 'JLPT종각 Plus 다운로드→',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class AppealUpgrade extends StatelessWidget {
   const AppealUpgrade({super.key});
 
@@ -197,6 +293,7 @@ class AppealUpgrade extends StatelessWidget {
                   style: const TextStyle(color: Colors.black, fontSize: 14),
                 ),
               )
+              //JLPT N1을 더 학습하기 위해서는\nJLPT 종각앱 Plus를 이용해주세요
               : RichText(
                 text: TextSpan(
                   text: 'JLPT N1을 더 학습하기 위해서는',

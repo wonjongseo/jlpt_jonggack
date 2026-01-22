@@ -340,7 +340,7 @@ class SettingController extends GetxController {
     final books = repo.getAll();
 
     // 1) bookNum 1, 2 찾기 (없으면 조용히 리턴)
-    final jgBook = books.firstWhere((b) => b.bookNum == 1);
+    final jgBook = books.firstWhere((b) => b.bookNum == Book.jgBookNum);
     final myBook = books.firstWhere((b) => b.bookNum == 2);
 
     // 2) 타깃 문구

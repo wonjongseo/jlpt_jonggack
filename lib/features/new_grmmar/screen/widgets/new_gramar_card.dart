@@ -22,9 +22,11 @@ class GrammarCard extends StatefulWidget {
 class _GrammarCardState extends State<GrammarCard> {
   bool isShowMoreExample = false;
   int maxLine = 1;
+  int exampleCnt = 0;
   @override
   void initState() {
     super.initState();
+    exampleCnt = widget.grammar.examples.length;
 
     maxLine = (widget.grammar.grammar.length / 18).ceil();
   }
@@ -90,7 +92,11 @@ class _GrammarCardState extends State<GrammarCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ...List.generate(
-                      isShowMoreExample ? widget.grammar.examples.length : 2,
+                      isShowMoreExample
+                          ? exampleCnt
+                          : exampleCnt > 2
+                          ? 2
+                          : exampleCnt,
                       (index2) {
                         return GrammarExampleCard(
                           index: index2,
@@ -98,7 +104,7 @@ class _GrammarCardState extends State<GrammarCard> {
                         );
                       },
                     ),
-                    if (!isShowMoreExample)
+                    if (!isShowMoreExample && exampleCnt > 2)
                       TextButton(
                         onPressed: () {
                           isShowMoreExample = true;

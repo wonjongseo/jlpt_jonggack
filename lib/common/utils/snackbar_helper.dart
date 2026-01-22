@@ -9,6 +9,7 @@ class SnackBarHelper {
     String message, {
     String title = "Error",
     bool isLog = false,
+    int second = 3,
   }) {
     if (isLog) {
       LogManager.info(message);
@@ -21,7 +22,7 @@ class SnackBarHelper {
       backgroundColor: Colors.red,
       borderRadius: 20,
       margin: EdgeInsets.symmetric(horizontal: 20),
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: second),
       snackPosition: SnackPosition.TOP,
       icon: Icon(Icons.error, color: Colors.white),
     );

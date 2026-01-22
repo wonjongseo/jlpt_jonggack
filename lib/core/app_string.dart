@@ -136,6 +136,21 @@ class AppString extends Translations {
       AppString.plzEnterCategoryNameLess15Char:
           AppString.plzEnterCategoryNameLess15CharKr,
       AppString.add: AppString.addKr,
+      AppString.plzEnterCategoryName: AppString.plzEnterCategoryNameKr,
+
+      AppString.pleaseUseJgPluse: AppString.pleaseUseJgPluseKr,
+      AppString.upgradePlusForN1: AppString.upgradePlusForN1Kr,
+      AppString.upgradePlusForMoreBook: AppString.upgradePlusForMoreBookKr,
+      AppString.upgradePlusForMoreCategory:
+          AppString.upgradePlusForMoreCategoryKr,
+
+      AppString.unlimitedJlptWords: AppString.unlimitedJlptWordsKr,
+      AppString.removeAds: AppString.removeAdsKr,
+      AppString.unlimitedBooks: AppString.unlimitedBooksKr,
+      AppString.unlimitedCategoris: AppString.unlimitedCategorisKr,
+      AppString.alarm: AppString.alarmKr,
+      AppString.showAnAlertWhenAddingToMyBook:
+          AppString.showAnAlertWhenAddingToMyBookKr,
     },
     'en_US': {
       AppString.language: AppString.languageEn,
@@ -270,6 +285,22 @@ class AppString extends Translations {
       AppString.plzEnterCategoryNameLess15Char:
           AppString.plzEnterCategoryNameLess15CharEn,
       AppString.add: AppString.addEn,
+      AppString.plzEnterCategoryName: AppString.plzEnterCategoryNameEn,
+
+      AppString.pleaseUseJgPluse: AppString.pleaseUseJgPluseEn,
+      AppString.upgradePlusForN1: AppString.upgradePlusForN1En,
+      AppString.upgradePlusForMoreBook: AppString.upgradePlusForMoreBookEn,
+      AppString.upgradePlusForMoreCategory:
+          AppString.upgradePlusForMoreCategoryEn,
+
+      AppString.unlimitedJlptWords: AppString.unlimitedJlptWordsEn,
+      AppString.removeAds: AppString.removeAdsEn,
+      AppString.unlimitedBooks: AppString.unlimitedBooksEn,
+      AppString.unlimitedCategoris: AppString.unlimitedCategorisEn,
+
+      AppString.alarm: AppString.alarmEn,
+      AppString.showAnAlertWhenAddingToMyBook:
+          AppString.showAnAlertWhenAddingToMyBookEn,
     },
   };
 
@@ -900,4 +931,50 @@ We’ll review it as soon as possible and work on improvements.
   static String add = "addTr";
   static String addKr = '추가';
   static String addEn = "Add";
+
+  static String plzEnterCategoryName = "plzEnterCategoryNameTr";
+  static String plzEnterCategoryNameKr = '카테고리 이름을 입력해주세요.';
+  static String plzEnterCategoryNameEn = "Please Enter a Category Name";
+
+  static String pleaseUseJgPluse = "pleaseUseJgPluseTr";
+  static String pleaseUseJgPluseKr = 'JLPT 종각 Plus를 이용해 주세요.';
+  static String pleaseUseJgPluseEn = "Please use JLPT Jg Plus.";
+
+  static String upgradePlusForN1 = "upgradePlusForN1Tr";
+  static String upgradePlusForN1Kr = '더 깊은 N1 학습을 원하면';
+  static String upgradePlusForN1En = "For deeper JLPT N1 study";
+
+  static String upgradePlusForMoreBook = "upgradePlusForMoreBookTr";
+  static String upgradePlusForMoreBookKr = '더 많은 단어장을 추가하려면';
+  static String upgradePlusForMoreBookEn = "To add more Books";
+
+  static String upgradePlusForMoreCategory = "upgradePlusForMoreCategoryTr";
+  static String upgradePlusForMoreCategoryKr = '더 많은 카테고리를 추가하려면';
+  static String upgradePlusForMoreCategoryEn = "To add more Categories";
+
+  static String unlimitedJlptWords = "unlimitedJlptWordsTr";
+  static String unlimitedJlptWordsKr = 'JLPT 단어 제한 없음';
+  static String unlimitedJlptWordsEn = "Unlimited JLPT words";
+
+  static String removeAds = "removeAdsTr";
+  static String removeAdsKr = '광고 제거';
+  static String removeAdsEn = "Remove ads";
+
+  static String unlimitedBooks = "unlimitedBooksTr";
+  static String unlimitedBooksKr = '단어장 생성 무제한';
+  static String unlimitedBooksEn = "Unlimited Wordbooks";
+
+  static String unlimitedCategoris = "unlimitedCategorisTr";
+  static String unlimitedCategorisKr = '카테고리 생성 무제한';
+  static String unlimitedCategorisEn = "Unlimited Categories";
+
+  static String alarm = "alarmTr";
+  static String alarmKr = '알람';
+  static String alarmEn = "Alarm";
+
+  static String showAnAlertWhenAddingToMyBook =
+      "showAnAlertWhenAddingToMyBookTr";
+  static String showAnAlertWhenAddingToMyBookKr = 'JG 단어장에 추가 시 알람 표시';
+  static String showAnAlertWhenAddingToMyBookEn =
+      "Show an alert when adding to Jg Book";
 }

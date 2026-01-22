@@ -13,7 +13,7 @@ class DeleteCategoryDialog extends StatelessWidget {
       title:
           isEn
               ? Text("Delete $categoryName?")
-              : Text('$categoryName를 삭제하시겠습니까?'),
+              : Text('$categoryName을(를) 삭제하시겠습니까?'),
       content:
           isEn
               ? Text(

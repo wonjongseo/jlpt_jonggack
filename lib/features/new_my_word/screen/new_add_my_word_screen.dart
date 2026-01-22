@@ -30,7 +30,6 @@ class NewAddMyWordScreen extends GetView<EditWordController> {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(controller.jgWord == null ? 80 : 35),
             child: AppBar(
-              // title: Text('단어 저장'),
               bottom:
                   controller.jgWord == null
                       ? TabBar(

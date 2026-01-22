@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
+import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/book_category_selector.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/add_cateogry_dialog.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
@@ -10,6 +14,7 @@ import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_contr
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/myVoca_date_section.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/my_word_screen_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
@@ -35,10 +40,27 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
     );
   }
 
+  void _onAdd(List<BookCategory> cats) {
+    Get.closeCurrentSnackbar();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (cats.length >= AppConstant.jgMaxCategoryCnt) {
+        Get.dialog(
+          AppealUpdateJgPlus(label: AppString.upgradePlusForMoreCategory.tr),
+        );
+        return;
+      }
+      final value = await Get.dialog(AddCatagoryDialog());
+      if (value == null) return;
+
+      MyBookController.to.addCategory(value);
+    });
+  }
+
   SafeArea _body() {
     return SafeArea(
       child: Obx(() {
         final map = controller.myWordsMap.value;
+        print('map : ${map}');
 
         final isLoading = controller.isLoading;
         final isEmpty = !isLoading && map.isEmpty;
@@ -98,8 +120,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                             isMyBookScreen: true,
                           );
                         },
-                        onAdd:
-                            (value) => MyBookController.to.addCategory(value),
+                        onAdd: () => _onAdd(cats),
                         onDelete:
                             (value) =>
                                 MyBookController.to.deleteCategory(value),
@@ -107,7 +128,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
                     }),
                   ),
                   const SizedBox(height: 8),
-                  if (controller.book.bookNum == 1) ...[
+                  if (controller.book.bookNum == Book.jgBookNum) ...[
                     _wordOrGrammarSelector(),
                     const SizedBox(height: 12),
                   ],
@@ -130,6 +151,7 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
               SliverList(
                 delegate: SliverChildBuilderDelegate((context, i) {
                   final day = keys[i];
+
                   final words = map[day] ?? const <MyWord>[];
 
                   return Column(

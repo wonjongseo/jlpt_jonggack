@@ -4,6 +4,7 @@ import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/calendar_step/kangi_calendar_step_body.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/kangi/controller/kangi_step_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
@@ -66,7 +67,9 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
               },
               onTap: () {
                 if (!isAllAccessable) {
-                  CommonDialog.appealDownLoadThePaidVersion();
+                  Get.dialog(
+                    AppealUpdateJgPlus(label: AppString.upgradePlusForN1.tr),
+                  );
                   return;
                 }
 

@@ -23,7 +23,7 @@ class BookCategorySelector extends StatelessWidget {
   final List<BookCategory> cats;
   final BookCategory? selectedCat;
   final Function(String?) onChanged;
-  final Function(String) onAdd;
+  final Function() onAdd;
   final Function(String) onDelete;
   final Map<BookCategory, int>? wordCntPerCategory;
   @override
@@ -91,6 +91,7 @@ class BookCategorySelector extends StatelessWidget {
             );
           }),
           DropdownMenuItem(
+            onTap: onAdd,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,14 +110,14 @@ class BookCategorySelector extends StatelessWidget {
                 ),
               ],
             ),
-            onTap: () {
-              Get.closeCurrentSnackbar();
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                final value = await Get.dialog(AddCatagoryDialog());
-                if (value == null) return;
-                onAdd(value);
-              });
-            },
+            // onTap: () {
+            //   Get.closeCurrentSnackbar();
+            //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+            //     final value = await Get.dialog(AddCatagoryDialog());
+            //     if (value == null) return;
+            //     onAdd(value);
+            //   });
+            // },
           ),
         ],
       ),

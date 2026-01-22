@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
+import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/book_category_selector.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/add_cateogry_dialog.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
-import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/manual_add_word_widget.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/book_catgory.dart';
@@ -67,12 +69,14 @@ class _EditBookScreenState extends State<EditBookScreen> {
       SnackBarHelper.showErrorSnackBar(AppString.plzEnterMess20Char.tr);
       return;
     }
+
     Get.back(
       result: {
         'title': title,
         'description': description,
         'isEditMode': isEditMode,
         'isDelete': false,
+        'bookCategories': bookCategories,
       },
     );
   }
@@ -121,17 +125,13 @@ class _EditBookScreenState extends State<EditBookScreen> {
                   label: AppString.category.tr,
                   cats: bookCategories,
                   selectedCat: selectedCat,
-                  onAdd: (value) {
-                    setState(() {
-                      final cat = BookCategory(value);
-                      bookCategories.add(cat);
-                    });
-                  },
+                  onAdd: _onAdd,
                   onChanged: (value) {
                     setState(() {
                       final cat = bookCategories.firstWhereOrNull(
                         (cat) => cat.id == value,
                       );
+
                       selectedCat = cat;
                     });
                   },
@@ -161,6 +161,44 @@ class _EditBookScreenState extends State<EditBookScreen> {
         ),
       ),
     );
+  }
+
+  _onAdd() {
+    Get.closeCurrentSnackbar();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (bookCategories.length >= AppConstant.jgMaxCategoryCnt) {
+        Get.dialog(
+          AppealUpdateJgPlus(label: AppString.upgradePlusForMoreCategory.tr),
+        );
+        return;
+      }
+      final value = await Get.dialog(AddCatagoryDialog()) as String?;
+      if (value == null || value.isEmpty) {
+        SnackBarHelper.showErrorSnackBar(
+          AppString.plzEnterCategoryName.tr,
+          second: 2,
+        );
+        return;
+      }
+
+      final exist = bookCategories.firstWhereOrNull((cat) => cat.name == value);
+      if (exist != null) {
+        SnackBarHelper.showErrorSnackBar(
+          '$value${AppString.isAlreadyExists.tr}',
+          second: 2,
+        );
+        return;
+      }
+      setState(() {
+        final cat = BookCategory(value);
+        bookCategories.add(cat);
+        selectedCat = cat;
+      });
+      SnackBarHelper.showSuccessSnackBar(
+        '${AppString.category.tr}${AppString.doneCreate.tr}',
+        duration: Duration(seconds: 2),
+      );
+    });
   }
 
   SafeArea _bottomNavigationBar() {

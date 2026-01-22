@@ -162,10 +162,10 @@ class SettingScreen extends GetView<SettingController> {
                       }),
                     ),
                     _innerExpansionTile(
-                      title: '알람',
+                      title: AppString.alarm.tr,
                       children: [
                         _listTile(
-                          title: '나만의 단어장에 추가 시 알람 표시',
+                          title: AppString.showAnAlertWhenAddingToMyBook.tr,
                           trailing: Switch.adaptive(
                             value: controller.saveWordNoti,
                             onChanged: (v) => controller.toggleSaveWordNoti(v),

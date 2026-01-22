@@ -1,8 +1,12 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
+import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/book_category_selector.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/add_cateogry_dialog.dart';
 
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
@@ -10,6 +14,7 @@ import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 
 TextStyle accentTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
@@ -23,6 +28,9 @@ class ManualAddWordWidget extends GetView<EditWordController> {
   final textFormInterval = 18.0;
   @override
   Widget build(BuildContext context) {
+    final isGrammar = controller.jgWord?.isGrammar ?? false;
+    final isCantDelete = isGrammar && controller.examples.length == 1;
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: SingleChildScrollView(
@@ -41,41 +49,58 @@ class ManualAddWordWidget extends GetView<EditWordController> {
 
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Obx(
-                    () => Column(
-                      children: List.generate(controller.examples.length, (
-                        index,
-                      ) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 8),
-                                child: Text(
-                                  "${index + 1}. ${controller.examples![index].word}",
-                                  style: const TextStyle(
-                                    fontFamily: AppFonts.japaneseFont,
-                                    fontWeight: FontWeight.bold,
+                  child: Obx(() {
+                    final examples = controller.examples;
+                    return Column(
+                      children: List.generate(examples.length, (index) {
+                        final example = controller.examples[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${index + 1}. ${example.word}",
+                                        style: const TextStyle(
+                                          fontFamily: AppFonts.japaneseFont,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 6),
+                                      Text(
+                                        example.mean,
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
-                            ),
-                            TextButton(
-                              onPressed: () => controller.deleteExample(index),
-                              child: Text(
-                                AppString.delete.tr,
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 14,
+
+                              if (!isCantDelete)
+                                TextButton(
+                                  onPressed:
+                                      () => controller.deleteExample(index),
+                                  child: Text(
+                                    AppString.delete.tr,
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       }),
-                    ),
-                  ),
+                    );
+                  }),
                 ),
 
                 SizedBox(height: 30),
@@ -125,6 +150,22 @@ class ManualAddWordWidget extends GetView<EditWordController> {
     );
   }
 
+  void _onAdd(List<BookCategory> cats) {
+    Get.closeCurrentSnackbar();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (cats.length >= AppConstant.jgMaxCategoryCnt) {
+        Get.dialog(
+          AppealUpdateJgPlus(label: AppString.upgradePlusForMoreCategory.tr),
+        );
+        return;
+      }
+      final value = await Get.dialog(AddCatagoryDialog());
+      if (value == null) return;
+
+      MyBookController.to.addCategory(value);
+    });
+  }
+
   Widget _textForms() {
     return Column(
       children: [
@@ -140,12 +181,13 @@ class ManualAddWordWidget extends GetView<EditWordController> {
             onChanged: (value) {
               MyBookController.to.onChangeCategory(value);
             },
-            onAdd: (value) => MyBookController.to.addCategory(value),
+            onAdd: () => _onAdd(cats),
             onDelete: (value) => MyBookController.to.deleteCategory(value),
           );
         }),
         SizedBox(height: textFormInterval),
         CustomTextFormField(
+          needContentPadding: true,
           textInputAction: TextInputAction.next,
           controller: controller.japaneseController,
           focusNode: controller.japaneseFocusNode,
@@ -155,6 +197,7 @@ class ManualAddWordWidget extends GetView<EditWordController> {
         SizedBox(height: textFormInterval),
         if (!(controller.jgWord?.isGrammar ?? false)) ...[
           CustomTextFormField(
+            needContentPadding: true,
             textInputAction: TextInputAction.next,
             controller: controller.yomikataController,
             focusNode: controller.yomikataFocusNode,
@@ -165,6 +208,7 @@ class ManualAddWordWidget extends GetView<EditWordController> {
         ],
 
         CustomTextFormField(
+          needContentPadding: true,
           textInputAction: TextInputAction.done,
           controller: controller.meanController,
           focusNode: controller.meanFocusNode,
@@ -174,12 +218,14 @@ class ManualAddWordWidget extends GetView<EditWordController> {
         SizedBox(height: textFormInterval),
         if (controller.jgWord?.isGrammar ?? false) ...[
           CustomTextFormField(
+            needContentPadding: true,
             textInputAction: TextInputAction.done,
             controller: controller.descriptionCtl,
             label: TextInputEnum.description.name,
           ),
           SizedBox(height: textFormInterval),
           CustomTextFormField(
+            needContentPadding: true,
             textInputAction: TextInputAction.done,
             controller: controller.connectionWaysCtl,
             label: TextInputEnum.connectionWays.name,
@@ -198,6 +244,7 @@ class ManualAddWordWidget extends GetView<EditWordController> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           CustomTextFormField(
+            needContentPadding: true,
             textInputAction: TextInputAction.next,
             controller: controller.exampleWordController,
             focusNode: controller.exampleWordFocusNode,
@@ -205,6 +252,7 @@ class ManualAddWordWidget extends GetView<EditWordController> {
           ),
           SizedBox(height: textFormInterval),
           CustomTextFormField(
+            needContentPadding: true,
             textInputAction: TextInputAction.done,
             controller: controller.exampleMeanController,
             focusNode: controller.exampleMeanFocusNode,

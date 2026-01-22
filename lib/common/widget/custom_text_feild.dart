@@ -11,13 +11,13 @@ class CustomTextFormField extends StatelessWidget {
     this.sufficIcon,
     this.hintText,
     this.keyboardType,
-
     this.hintStyle,
-
     this.color,
     this.autofocus,
     this.focusNode,
     this.textInputAction,
+    this.onEditingComplete,
+    this.needContentPadding,
   });
   final FocusNode? focusNode;
   final TextEditingController? controller;
@@ -31,7 +31,8 @@ class CustomTextFormField extends StatelessWidget {
   final TextStyle? hintStyle;
   final TextInputAction? textInputAction;
   final Widget? sufficIcon;
-
+  final bool? needContentPadding;
+  final Function()? onEditingComplete;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -41,6 +42,7 @@ class CustomTextFormField extends StatelessWidget {
       autofocus: autofocus ?? false,
       readOnly: readOnly ?? false,
       maxLines: maxLines,
+      onEditingComplete: onEditingComplete,
 
       decoration: InputDecoration(
         hintText: hintText,
@@ -50,7 +52,10 @@ class CustomTextFormField extends StatelessWidget {
         floatingLabelStyle: TextStyle(
           color: color ?? SettingController.to.mainBordColor,
         ),
-
+        contentPadding:
+            needContentPadding == null
+                ? null
+                : EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         suffixIconConstraints: const BoxConstraints(minHeight: 0, minWidth: 0),
         labelStyle: TextStyle(color: Colors.grey, fontSize: 13),
         enabledBorder: _border(),

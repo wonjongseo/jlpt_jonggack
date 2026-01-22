@@ -72,7 +72,7 @@ class NewGrammarController extends GetxController {
   void onCardTap(int index) {
     bool accessable = isAllAccessable(index);
     if (!accessable) {
-      CommonDialog.appealDownLoadThePaidVersion();
+      Get.dialog(AppealUpdateJgPlus(label: AppString.upgradePlusForN1.tr));
       return;
     }
     _curIndex.value = index;

@@ -145,8 +145,14 @@ class NewMyWordController extends GetxController {
   }
 
   void _getLocalDBData() {
-    _isSelectedWord.value =
-        SettingRepository.getBool(AppConstant.isSelectedWord) ?? true;
+    final isJGBook =
+        MyBookController.to.selectedBookRx.value!.bookNum == Book.jgBookNum;
+    if (isJGBook) {
+      _isSelectedWord.value =
+          SettingRepository.getBool(AppConstant.isSelectedWord) ?? true;
+    } else {
+      _isSelectedWord.value = true;
+    }
   }
 
   void scrollToTop() {

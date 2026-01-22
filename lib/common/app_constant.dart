@@ -2,7 +2,6 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 
 class AppConstant {
   // 챕터 당 단어 수
@@ -32,6 +31,9 @@ class AppConstant {
   static const String isUpdated = 'isUpdatedKey';
   static const String isSelectedWord = 'isSelectedWordKey';
   static const String saveWordNoti = 'saveWordNotiKey';
+
+  static const jgMaxBookCnt = 5;
+  static const jgMaxCategoryCnt = 5;
 }
 
 class HVKey {

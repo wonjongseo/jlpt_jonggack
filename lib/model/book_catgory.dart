@@ -23,7 +23,6 @@ class BookCategory {
   );
 
   //TODO CHECK
-  // static const unspecified = BookCategory._('지정 안함', 'unspecified');
   static BookCategory unspecified = BookCategory._(
     isEn ? AppString.unspecifiedEn : AppString.unspecifiedKr,
     'unspecified',

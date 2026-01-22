@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
+import 'package:jlpt_jonggack/common/app_constant.dart';
+import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
 import 'package:jlpt_jonggack/common/widget/dialog/delete_category_dialog.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
@@ -29,14 +32,21 @@ class MyBookController extends GetxController {
   Rxn<Book> get selectedBookRx => _selectedBook;
 
   void addCategory(String name) {
+    if (name.trim().isEmpty) {
+      SnackBarHelper.showErrorSnackBar(AppString.plzEnterCategoryName.tr);
+      return;
+    }
     final book = _selectedBook.value!;
 
     final cats = book.categories ?? [];
+
     final isExist = cats.firstWhereOrNull((cat) => cat.name == name);
+
     if (isExist != null) {
       SnackBarHelper.showErrorSnackBar('$name${AppString.isAlreadyExists.tr}');
       return;
     }
+    // InterstitialManager.instance.forceShow();
     final newCats = List<BookCategory>.from(book.categories ?? []);
     final newCat = BookCategory(name);
     newCats.add(newCat);
@@ -53,6 +63,8 @@ class MyBookController extends GetxController {
       duration: Duration(seconds: 2),
     );
     loadBooks();
+
+    NewMyWordController.to.onBookCategoryChange();
   }
 
   void deleteCategory(String id) async {
@@ -103,16 +115,22 @@ class MyBookController extends GetxController {
       final beforeIdxCategory = newCats[deleteCategoryIdx - 1];
       newCats.removeAt(deleteCategoryIdx);
 
-      _selectedBook.value = _selectedBook.value!.copyWith(
+      final updatedBook = _selectedBook.value!.copyWith(
         categories: newCats,
         selectedCategory: beforeIdxCategory,
       );
+      _selectedBook.value = updatedBook;
+
+      final idx = books.indexWhere((b) => b.id == updatedBook.id);
+      if (idx != -1) books[idx] = updatedBook;
 
       bookRepo.put(_selectedBook.value!.id, _selectedBook.value!);
+
       SnackBarHelper.showSuccessSnackBar(
         '${AppString.category.tr}${AppString.doneDelete.tr}',
         duration: Duration(seconds: 2),
       );
+      NewMyWordController.to.onBookCategoryChange();
     }
   }
 
@@ -211,17 +229,20 @@ class MyBookController extends GetxController {
     loadBooks();
   }
 
-  void _editBook(Map<String, dynamic> result) {
+  void _createOrEditBook(Map<String, dynamic> result) {
     bool isEditMode = result['isEditMode'];
     Book newBook;
 
     String title = result['title'];
     String description = result['description'];
+    List<BookCategory> bookCategories = result['bookCategories'];
 
     if (isEditMode) {
       _selectedBook.value = _selectedBook.value!.copyWith(
         title: title,
         description: description,
+        categories: bookCategories,
+        selectedCategory: bookCategories.firstOrNull,
       );
       newBook = _selectedBook.value!;
     } else {
@@ -229,7 +250,11 @@ class MyBookController extends GetxController {
         title: title,
         description: description,
         bookNum: books.length + 1,
+        categories: bookCategories,
+        selectedCategory: bookCategories.firstOrNull,
       );
+
+      InterstitialManager.instance.forceShow();
     }
 
     _updateBook(newBook);
@@ -245,6 +270,13 @@ class MyBookController extends GetxController {
     try {
       if (book == null) {
         _selectedBook.value = null;
+        if (MyBookController.to.books.length >= AppConstant.jgMaxBookCnt) {
+          Get.dialog(
+            AppealUpdateJgPlus(label: AppString.upgradePlusForMoreBook.tr),
+          );
+
+          return;
+        }
       }
 
       final result = await Get.toNamed(EditBookScreen.name, arguments: book);
@@ -254,7 +286,7 @@ class MyBookController extends GetxController {
       if (result['isDelete']) {
         _deleteBook(book!);
       } else {
-        _editBook(result);
+        _createOrEditBook(result);
       }
     } catch (e) {
       SnackBarHelper.showErrorSnackBar(e.toString(), isLog: true);

@@ -42,6 +42,7 @@ class _GrammarCardDetailsState extends State<GrammarCardDetails> {
   void dispose() {
     super.dispose();
     pageController.dispose();
+    TtsController.to.stop();
   }
 
   UserController userController = Get.find<UserController>();

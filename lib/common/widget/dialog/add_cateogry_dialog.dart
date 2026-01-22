@@ -11,30 +11,35 @@ class AddCatagoryDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final teCtl = TextEditingController();
+
+    void onTap() {
+      final value = teCtl.text;
+      if (value.length >= 15) {
+        Get.back();
+        SnackBarHelper.showErrorSnackBar(
+          AppString.plzEnterCategoryNameLess15Char.tr,
+        );
+        return;
+      }
+      Get.back(result: teCtl.text);
+    }
+
     return AlertDialog.adaptive(
       content: Material(
         color: Colors.transparent,
         child: Column(
           children: [
             CustomTextFormField(
+              maxLines: 1,
               autofocus: true,
               label: AppString.categoryName.tr,
               controller: teCtl,
+              onEditingComplete: onTap,
             ),
             SizedBox(height: 24),
             CustomButton(
               borderRadius: 12,
-              onTap: () {
-                final value = teCtl.text;
-                if (value.length >= 15) {
-                  Get.back();
-                  SnackBarHelper.showErrorSnackBar(
-                    AppString.plzEnterCategoryNameLess15Char.tr,
-                  );
-                  return;
-                }
-                Get.back(result: teCtl.text);
-              },
+              onTap: onTap,
               label: AppString.save.tr,
             ),
           ],

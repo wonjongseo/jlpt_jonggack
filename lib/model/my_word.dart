@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:jlpt_jonggack/model/book_catgory.dart';
 
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/hive_type.dart';
@@ -60,11 +60,6 @@ class MyWord {
                  examples.map((e) => e.copyWith()), // deep copy 권장
                ),
        createdAt = DateTime.now();
-
-  @override
-  String toString() {
-    return "MyWord{word: $word, mean: $mean, yomikata: $yomikata, isKnown: $isKnown, createdAt: $createdAt, isManuelSave: $isManuelSave, examples: $examples}";
-  }
 
   MyWord.fromMap(Map<String, dynamic> map) {
     word = map['word'] ?? '';
@@ -135,5 +130,10 @@ class MyWord {
         createdAt.hashCode ^
         isManuelSave.hashCode ^
         examples.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'MyWord(word: $word, mean: $mean, yomikata: $yomikata, isKnown: $isKnown, createdAt: $createdAt, isManuelSave: $isManuelSave, examples: $examples, isGrammar: $isGrammar, connectionWays: $connectionWays, description: $description, category: $category)';
   }
 }

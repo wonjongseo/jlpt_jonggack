@@ -82,7 +82,7 @@ class NewGrammarStepController extends GetxController {
         NewAddMyWordScreen.name,
         arguments: savedGrammar,
       );
-      if (isSaved) {
+      if (isSaved == true) {
         isSaveds[index] = true;
       }
 

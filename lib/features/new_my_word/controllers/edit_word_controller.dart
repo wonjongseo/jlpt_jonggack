@@ -125,6 +125,10 @@ class EditWordController extends GetxController {
   }
 
   void addWord() {
+    if (Get.isSnackbarOpen) {
+      Get.closeAllSnackbars();
+      return;
+    }
     final isError = _validate();
     if (isError != null) {
       SnackBarHelper.showErrorSnackBar(isError);
