@@ -8,6 +8,7 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/features/home/widgets/home_screen_body.dart';
 import 'package:jlpt_jonggack/model/Question.dart';
 import 'package:jlpt_jonggack/model/book.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
@@ -67,6 +68,10 @@ class LocalReposotiry {
 
     if (!Hive.isAdapterRegistered(QuestionTypeId)) {
       Hive.registerAdapter(QuestionAdapter());
+    }
+
+    if (!Hive.isAdapterRegistered(bookCateogryId)) {
+      Hive.registerAdapter(BookCategoryAdapter());
     }
 
     if (!Hive.isBoxOpen(AppConstant.progressBox)) {
@@ -244,5 +249,24 @@ class LocalReposotiry {
       return true;
     }
     return false;
+  }
+
+  static Future<void> ensureUnspecifiedCategory() async {
+    final bookRepo = Get.find<HiveRepository<Book>>();
+
+    final books = bookRepo.getAll();
+    for (var book in books) {
+      final bookCategories = book.categories ?? [];
+      final hasUnspecified = bookCategories.any(
+        (c) => c.id == BookCategory.unspecified.id,
+      );
+
+      if (!hasUnspecified) {
+        final bookCat = BookCategory.unspecified;
+        book.categories = [bookCat, ...bookCategories];
+        book.selectedCategory = bookCat;
+        await bookRepo.put(book.id, book);
+      }
+    }
   }
 }

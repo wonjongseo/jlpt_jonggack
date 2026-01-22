@@ -13,6 +13,9 @@ class SnackBarHelper {
     if (isLog) {
       LogManager.info(message);
     }
+    if (Get.isSnackbarOpen) {
+      return;
+    }
     Get.rawSnackbar(
       message: message,
       backgroundColor: Colors.red,
@@ -28,17 +31,18 @@ class SnackBarHelper {
     String message, {
     String title = "Success",
     bool isLog = false,
+    Duration duration = const Duration(seconds: 3),
   }) {
-    if (Get.isSnackbarOpen) return;
     if (isLog) {
       LogManager.info(message);
     }
+    if (Get.isSnackbarOpen) return;
     Get.rawSnackbar(
       message: message,
       backgroundColor: Colors.green,
       borderRadius: 20,
       margin: EdgeInsets.symmetric(horizontal: 20),
-      duration: Duration(seconds: 3),
+      duration: duration,
       snackPosition: SnackPosition.TOP,
       icon: Icon(Icons.check_circle, color: Colors.white),
     );

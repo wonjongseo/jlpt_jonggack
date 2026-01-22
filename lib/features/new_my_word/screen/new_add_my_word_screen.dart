@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
-import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_voca/components/import_excel_file_widget.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
@@ -30,28 +28,31 @@ class NewAddMyWordScreen extends GetView<EditWordController> {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(80),
+            preferredSize: Size.fromHeight(controller.jgWord == null ? 80 : 35),
             child: AppBar(
-              bottom: TabBar(
-                onTap: (value) => controller.toggleTab(value),
-                isScrollable: false, // 많으면 true로 스와이프형
-                labelColor: SettingController.to.mainColor,
-                // unselectedLabelColor: Colors.black,
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: FSController.to.baseFS + 3,
-                ),
-                unselectedLabelStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: FSController.to.baseFS,
-                ),
-                dividerColor: Colors.transparent,
-                indicatorColor: SettingController.to.mainColor, // 기본 밑줄 색
-                tabs: [
-                  Tab(text: AppString.direclyEnter.tr),
-                  Tab(text: AppString.importExcel.tr),
-                ],
-              ),
+              // title: Text('단어 저장'),
+              bottom:
+                  controller.jgWord == null
+                      ? TabBar(
+                        onTap: (value) => controller.toggleTab(value),
+                        isScrollable: false, // 많으면 true로 스와이프형
+                        labelColor: SettingController.to.mainColor,
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: FSController.to.baseFS + 3,
+                        ),
+                        unselectedLabelStyle: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: FSController.to.baseFS,
+                        ),
+                        dividerColor: Colors.transparent,
+                        indicatorColor: SettingController.to.mainColor,
+                        tabs: [
+                          Tab(text: AppString.direclyEnter.tr),
+                          Tab(text: AppString.importExcel.tr),
+                        ],
+                      )
+                      : null,
             ),
           ),
           bottomNavigationBar: SafeArea(
@@ -71,12 +72,17 @@ class NewAddMyWordScreen extends GetView<EditWordController> {
               ],
             ),
           ),
-          body: TabBarView(
-            children: [
-              ManualAddWordWidget(),
-              isEn ? ImportExcelFileWidgetEn() : ImportExcelFileWidget(),
-            ],
-          ),
+          body:
+              controller.jgWord == null
+                  ? TabBarView(
+                    children: [
+                      ManualAddWordWidget(),
+                      isEn
+                          ? ImportExcelFileWidgetEn()
+                          : ImportExcelFileWidget(),
+                    ],
+                  )
+                  : ManualAddWordWidget(),
         ),
       ),
     );

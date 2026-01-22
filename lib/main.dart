@@ -207,6 +207,8 @@ class _AppState extends State<App> {
 
       if (bookRepo.getAll().isEmpty) {
         await LocalReposotiry.migrationToBook(UserController.to.user!);
+      } else {
+        LocalReposotiry.ensureUnspecifiedCategory();
       }
 
       Get.put(JSearchController());

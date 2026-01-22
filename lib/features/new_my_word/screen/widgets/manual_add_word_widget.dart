@@ -1,11 +1,14 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jlpt_jonggack/common/widget/book_category_selector.dart';
+import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
 
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
-import 'package:jlpt_jonggack/features/my_voca/components/custom_text_form.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
+import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
 
 TextStyle accentTextStyle = TextStyle(
@@ -15,113 +18,68 @@ TextStyle accentTextStyle = TextStyle(
 );
 
 class ManualAddWordWidget extends GetView<EditWordController> {
-  static String name = '/new-add-my-word';
   const ManualAddWordWidget({super.key});
 
+  final textFormInterval = 18.0;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: SingleChildScrollView(
         controller: controller.scrollController,
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         child: Card(
-          child: Form(
-            key: controller.wordFormKey,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 15,
-              ).copyWith(bottom: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Obx(
-                      () => DropdownButton2(
-                        underline: SizedBox(),
-                        value: controller.externalDictType.value,
-                        onMenuStateChange: (isOpen) {
-                          controller.isDropdownButtonOpen = isOpen;
-                        },
-                        onChanged:
-                            (value) => controller.toggleExternalDictType(value),
-                        items: List.generate(ExternalDictType.values.length, (
-                          index,
-                        ) {
-                          final type = ExternalDictType.values[index];
-                          return DropdownMenuItem(
-                            value: type,
-                            child: InkWell(
-                              onTap: () {
-                                controller.onTapExternalType(type);
-                              },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _naverOrGoogle(),
+
+                _textForms(),
+                SizedBox(height: textFormInterval),
+
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Obx(
+                    () => Column(
+                      children: List.generate(controller.examples.length, (
+                        index,
+                      ) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
                               child: Padding(
-                                padding: EdgeInsets.all(8),
+                                padding: EdgeInsets.only(left: 8),
                                 child: Text(
-                                  type.label,
-                                  style: TextStyle(
-                                    color: type.color,
-                                    fontSize: 14,
+                                  "${index + 1}. ${controller.examples![index].word}",
+                                  style: const TextStyle(
+                                    fontFamily: AppFonts.japaneseFont,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                             ),
-                          );
-                        }),
-                      ),
+                            TextButton(
+                              onPressed: () => controller.deleteExample(index),
+                              child: Text(
+                                AppString.delete.tr,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                     ),
                   ),
+                ),
 
-                  _wordTextForms(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      _exampleTextForms(),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Obx(
-                          () => Column(
-                            children: List.generate(controller.examples.length, (
-                              index,
-                            ) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 8),
-                                    child: Text(
-                                      "${index + 1}. ${controller.examples![index].word}",
-                                      style: const TextStyle(
-                                        fontFamily: AppFonts.japaneseFont,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      controller.deleteExample(index);
-                                    },
-                                    child: Text(
-                                      "삭제",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                SizedBox(height: 30),
+              ],
             ),
           ),
         ),
@@ -129,45 +87,106 @@ class ManualAddWordWidget extends GetView<EditWordController> {
     );
   }
 
-  Widget _wordTextForms() {
+  Padding _naverOrGoogle() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Obx(
+        () => DropdownButton2(
+          underline: SizedBox(),
+          value: controller.externalDictType.value,
+          onMenuStateChange: (isOpen) {
+            controller.isDropdownButtonOpen = isOpen;
+          },
+          onChanged: (value) => controller.toggleExternalDictType(value),
+          items: List.generate(ExternalDictType.values.length, (index) {
+            final type = ExternalDictType.values[index];
+            return DropdownMenuItem(
+              value: type,
+              child: InkWell(
+                onTap: () {
+                  controller.onTapExternalType(type);
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    type.label,
+                    style: TextStyle(
+                      color: type.color,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _textForms() {
     return Column(
       children: [
-        CustomTextForm(
-          textInputEnum: TextInputEnum.japanese,
-          textController: controller.japaneseController,
+        Obx(() {
+          final book = MyBookController.to.selectedBookRx.value;
+          final cats = book?.categories ?? [];
+          final selectedCat = book?.selectedCategory;
+
+          return BookCategorySelector(
+            label: AppString.category.tr,
+            cats: cats,
+            selectedCat: selectedCat,
+            onChanged: (value) {
+              MyBookController.to.onChangeCategory(value);
+            },
+            onAdd: (value) => MyBookController.to.addCategory(value),
+            onDelete: (value) => MyBookController.to.deleteCategory(value),
+          );
+        }),
+        SizedBox(height: textFormInterval),
+        CustomTextFormField(
+          textInputAction: TextInputAction.next,
+          controller: controller.japaneseController,
           focusNode: controller.japaneseFocusNode,
-          isFocus: TextInputEnum.japanese == controller.currentFocus,
-          validator: (value) {
-            return controller.customValidator(
-              value: value,
-              textInputEnum: TextInputEnum.japanese,
-            );
-          },
+          autofocus: controller.jgWord == null,
+          label: TextInputEnum.japanese.name,
         ),
-        CustomTextForm(
-          textInputEnum: TextInputEnum.yomikata,
-          textController: controller.yomikataController,
-          focusNode: controller.yomikataFocusNode,
-          isFocus: TextInputEnum.yomikata == controller.currentFocus,
-          validator: (value) {
-            return controller.customValidator(
-              value: value,
-              textInputEnum: TextInputEnum.yomikata,
-            );
-          },
-        ),
-        CustomTextForm(
-          textInputEnum: TextInputEnum.mean,
-          textController: controller.meanController,
+        SizedBox(height: textFormInterval),
+        if (!(controller.jgWord?.isGrammar ?? false)) ...[
+          CustomTextFormField(
+            textInputAction: TextInputAction.next,
+            controller: controller.yomikataController,
+            focusNode: controller.yomikataFocusNode,
+
+            label: TextInputEnum.yomikata.name,
+          ),
+          SizedBox(height: textFormInterval),
+        ],
+
+        CustomTextFormField(
+          textInputAction: TextInputAction.done,
+          controller: controller.meanController,
           focusNode: controller.meanFocusNode,
-          isFocus: TextInputEnum.mean == controller.currentFocus,
-          validator: (value) {
-            return controller.customValidator(
-              value: value,
-              textInputEnum: TextInputEnum.mean,
-            );
-          },
+
+          label: TextInputEnum.mean.name,
         ),
+        SizedBox(height: textFormInterval),
+        if (controller.jgWord?.isGrammar ?? false) ...[
+          CustomTextFormField(
+            textInputAction: TextInputAction.done,
+            controller: controller.descriptionCtl,
+            label: TextInputEnum.description.name,
+          ),
+          SizedBox(height: textFormInterval),
+          CustomTextFormField(
+            textInputAction: TextInputAction.done,
+            controller: controller.connectionWaysCtl,
+            label: TextInputEnum.connectionWays.name,
+          ),
+          SizedBox(height: textFormInterval),
+        ],
+        _exampleTextForms(),
       ],
     );
   }
@@ -175,34 +194,21 @@ class ManualAddWordWidget extends GetView<EditWordController> {
   Widget _exampleTextForms() {
     return Form(
       key: controller.exampleFormKey,
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          CustomTextForm(
-            textInputEnum: TextInputEnum.exampleSentence,
-            textController: controller.exampleWordController,
+          CustomTextFormField(
+            textInputAction: TextInputAction.next,
+            controller: controller.exampleWordController,
             focusNode: controller.exampleWordFocusNode,
-            isFocus: TextInputEnum.exampleSentence == controller.currentFocus,
-            validator: (value) {
-              return controller.customValidator(
-                value: value,
-                textInputEnum: TextInputEnum.exampleSentence,
-              );
-            },
+            label: TextInputEnum.exampleSentence.name,
           ),
-          CustomTextForm(
-            textInputEnum: TextInputEnum.exampleMean,
-            textController: controller.exampleMeanController,
+          SizedBox(height: textFormInterval),
+          CustomTextFormField(
+            textInputAction: TextInputAction.done,
+            controller: controller.exampleMeanController,
             focusNode: controller.exampleMeanFocusNode,
-            isFocus: TextInputEnum.exampleMean == controller.currentFocus,
-            validator: (value) {
-              return controller.customValidator(
-                value: value,
-                textInputEnum: TextInputEnum.exampleMean,
-              );
-            },
-            onFieldSubmitted: (v) => controller.appendExample(),
+            label: TextInputEnum.exampleMean.name,
           ),
         ],
       ),

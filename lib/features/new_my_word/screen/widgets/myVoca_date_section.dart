@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
@@ -27,109 +28,118 @@ class MyVocaDateSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final header = DateFormat.yMMMEd(Get.locale.toString()).format(date);
-    return ExpansionTile(
-      iconColor: SettingController.to.mainColor,
-      initiallyExpanded: true,
-      childrenPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      shape: Border.all(color: Colors.transparent),
-      title: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: header,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            TextSpan(
-              text:
-                  ' (${words.length}${isKo
-                      ? '개'
-                      : words.length > 1
-                      ? 's'
-                      : ''})',
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ExpansionTile(
+        minTileHeight: 20,
+        iconColor: SettingController.to.mainColor,
+        initiallyExpanded: true,
+        childrenPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        shape: Border.all(color: Colors.transparent),
+        title: Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: header,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text:
+                    ' (${words.length}${isKo
+                        ? '개'
+                        : words.length > 1
+                        ? 's'
+                        : ''})',
+              ),
+            ],
+          ),
         ),
-      ),
 
-      children: List.generate(words.length, (index) {
-        final w = words[index];
-        return Padding(
-          padding: EdgeInsets.only(bottom: 8),
-          child: GetBuilder<NewMyWordController>(
-            builder: (controller) {
-              final sController = SettingController.to;
+        children: List.generate(words.length, (index) {
+          final w = words[index];
+          return Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: GetBuilder<NewMyWordController>(
+              builder: (controller) {
+                final sController = SettingController.to;
 
-              Color textColor =
-                  w.isKnown ? Colors.white : sController.realBlackOrWhite;
+                Color textColor =
+                    w.isKnown ? Colors.white : sController.realBlackOrWhite;
 
-              Color containerCoclor =
-                  w.isKnown ? sController.mainColor : sController.blackOrWhite;
+                Color containerCoclor =
+                    w.isKnown
+                        ? sController.mainColor
+                        : sController.blackOrWhite;
 
-              return Slidable(
-                startActionPane: _startActionPane(w, index),
-                endActionPane: _endActionPane(index),
-                child: Container(
-                  padding: EdgeInsets.only(top: 8),
-                  decoration: BoxDecoration(
-                    color: containerCoclor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    isThreeLine: true,
-                    onTap: () => onTap(index),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: AutoSizeText(
-                            w.word,
-                            style: TextStyle(
-                              fontSize: FSController.to.baseFS + 6,
-                              fontFamily: AppFonts.japaneseFont,
-                              fontWeight: FontWeight.w500,
-                              color: textColor,
-                            ),
-                            maxLines: 1,
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Icon(
-                          Icons.arrow_forward_ios_sharp,
-                          size: 16,
-                          color: textColor,
-                        ),
-                      ],
+                return Slidable(
+                  startActionPane: _startActionPane(w, index),
+                  endActionPane: _endActionPane(index),
+                  child: Container(
+                    padding: EdgeInsets.only(top: 8),
+                    decoration: BoxDecoration(
+                      color: containerCoclor,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Column(
+                    child: ListTile(
+                      isThreeLine: true,
+                      onTap: () => onTap(index),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  w.mean,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontSize: FSController.to.baseFS,
-                                  ),
-                                ),
+                          Flexible(
+                            child: AutoSizeText(
+                              w.word,
+                              style: TextStyle(
+                                fontSize: FSController.to.baseFS + 6,
+                                fontFamily: AppFonts.japaneseFont,
+                                fontWeight: FontWeight.w500,
+                                color: textColor,
                               ),
-                            ],
+                              maxLines: 1,
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Icon(
+                            Icons.arrow_forward_ios_sharp,
+                            size: 16,
+                            color: textColor,
                           ),
                         ],
                       ),
+
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    w.mean,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: textColor,
+                                      fontSize: FSController.to.baseFS,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        );
-      }),
+                );
+              },
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -144,7 +154,7 @@ class MyVocaDateSection extends StatelessWidget {
           backgroundColor: const Color(0xFFFE4A49),
           foregroundColor: Colors.white,
           icon: Icons.delete,
-          label: '단어 삭제',
+          label: AppString.delete.tr,
         ),
       ],
     );

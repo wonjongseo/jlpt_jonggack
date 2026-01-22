@@ -128,6 +128,14 @@ class AppString extends Translations {
       AppString.allDay: AppString.allDayKr,
       AppString.filter: AppString.filterKr,
       AppString.disableNotiAt: AppString.disableNotiAtKr,
+      AppString.category: AppString.categoryKr,
+      AppString.unspecified: AppString.unspecifiedKr,
+      AppString.categoryName: AppString.categoryNameKr,
+      AppString.isAlreadyExists: AppString.isAlreadyExistsKr,
+      AppString.errorOccurred: AppString.errorOccurredKr,
+      AppString.plzEnterCategoryNameLess15Char:
+          AppString.plzEnterCategoryNameLess15CharKr,
+      AppString.add: AppString.addKr,
     },
     'en_US': {
       AppString.language: AppString.languageEn,
@@ -254,6 +262,14 @@ class AppString extends Translations {
       AppString.allDay: AppString.allDayEn,
       AppString.filter: AppString.filterEn,
       AppString.disableNotiAt: AppString.disableNotiAtEn,
+      AppString.category: AppString.categoryEn,
+      AppString.unspecified: AppString.unspecifiedEn,
+      AppString.categoryName: AppString.categoryNameEn,
+      AppString.isAlreadyExists: AppString.isAlreadyExistsEn,
+      AppString.errorOccurred: AppString.errorOccurredEn,
+      AppString.plzEnterCategoryNameLess15Char:
+          AppString.plzEnterCategoryNameLess15CharEn,
+      AppString.add: AppString.addEn,
     },
   };
 
@@ -853,5 +869,35 @@ We’ll review it as soon as possible and work on improvements.
   static String disableNotiAtEn =
       "You can disable alerts from the Settings page.";
 
-  //
+  static String category = "categoryTr";
+  static String categoryKr = '카테고리';
+  static String categoryEn = "Category";
+
+  static String unspecified = "unspecifiedTr";
+  static String unspecifiedKr = '지정 안함';
+  static String unspecifiedEn = "Unspecified";
+
+  static String categoryName = "categoryNameTr";
+  static String categoryNameKr = '카테고리 이름';
+  static String categoryNameEn = "Category Name";
+
+  static String isAlreadyExists = "isAlreadyExistsTr";
+  static String isAlreadyExistsKr = '은(는) 이미 등록되어 있습니다.';
+  static String isAlreadyExistsEn = " already exists. ";
+
+  static String errorOccurred = "errorOccurredTr";
+  static String errorOccurredKr =
+      '처리 중 문제가 발생했습니다. 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.';
+  static String errorOccurredEn =
+      " Something went wrong. Please try again later or contact the administrator.";
+
+  static String plzEnterCategoryNameLess15Char =
+      "plzEnterCategoryNameLess15CharTr";
+  static String plzEnterCategoryNameLess15CharKr = '카테고리 이름은 15자 미만으로 입력해주세요';
+  static String plzEnterCategoryNameLess15CharEn =
+      "Please enter a category name within 15 characters.";
+
+  static String add = "addTr";
+  static String addKr = '추가';
+  static String addEn = "Add";
 }

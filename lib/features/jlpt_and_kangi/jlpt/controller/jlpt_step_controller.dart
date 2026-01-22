@@ -1,12 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
-import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
-import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_study/screens/jlpt_study_sceen.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
-import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/model/jlpt_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -18,6 +17,7 @@ import '../../../../model/Question.dart';
 import '../../../../user/controller/user_controller.dart';
 
 class JlptStepController extends GetxController {
+  static JlptStepController get to => Get.find<JlptStepController>();
   int currChapNumber = 0;
 
   void toggleAllSave() {
@@ -132,7 +132,7 @@ class JlptStepController extends GetxController {
     return isWordSaved;
   }
 
-  void toggleSaveWord(Word word, {bool showSnackBar = true}) {
+  void toggleSaveWord(Word word, {bool showSnackBar = true}) async {
     // if (kDebugMode) {
     //   for (var i = 0; i < 1000; i++) {
     //     final randomeDay = Random().nextInt(90);
@@ -149,13 +149,7 @@ class JlptStepController extends GetxController {
     if (book1Words.contains(newMyWord)) {
       MyBookController.to.deleteMyWord(newMyWord);
     } else {
-      MyBookController.to.addMyWord(newMyWord);
-
-      if (showSnackBar && SettingController.to.saveWordNoti) {
-        SnackBarHelper.showSelectableSuccessSnackBar(
-          '${word.word}${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
-        );
-      }
+      await Get.toNamed(NewAddMyWordScreen.name, arguments: newMyWord);
     }
 
     update();

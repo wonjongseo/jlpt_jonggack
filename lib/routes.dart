@@ -11,6 +11,7 @@ import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_test_c
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_step_screen.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/widgets/new_grammar_card_detail.dart';
+import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/new_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
@@ -19,6 +20,7 @@ import 'package:jlpt_jonggack/features/score/screens/kangi_score_screen.dart';
 import 'package:jlpt_jonggack/features/score/screens/score_screen.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
+import 'package:jlpt_jonggack/model/my_word.dart';
 
 import 'features/home/screens/home_screen.dart';
 
@@ -34,7 +36,14 @@ class AppRoutes {
 
     GetPage(name: EditBookScreen.name, page: () => EditBookScreen()),
     GetPage(name: NewMyWordScreen.name, page: () => NewMyWordScreen()),
-    GetPage(name: NewAddMyWordScreen.name, page: () => NewAddMyWordScreen()),
+    GetPage(
+      name: NewAddMyWordScreen.name,
+      page: () => NewAddMyWordScreen(),
+      binding: BindingsBuilder.put(() {
+        MyWord? myword = Get.arguments;
+        return EditWordController(myword);
+      }),
+    ),
     // GetPage(
     //   name: GrammarCalendarStepScreen.name,
     //   page: () => GrammarCalendarStepScreen(),

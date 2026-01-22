@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
@@ -13,10 +12,8 @@ import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_contro
 import 'package:jlpt_jonggack/features/new_grmmar/controllers/new_grammar_step_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
-import 'package:jlpt_jonggack/model/grammar.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 
-// OK
 class NewGrammarStepScreen extends GetView<NewGrammarStepController> {
   static String name = '/new-grammar-step';
   const NewGrammarStepScreen({super.key});

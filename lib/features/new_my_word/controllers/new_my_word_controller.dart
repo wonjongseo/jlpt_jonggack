@@ -17,6 +17,7 @@ import 'package:jlpt_jonggack/features/setting/controller/font_size_controller.d
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/book.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/model/word.dart';
@@ -34,7 +35,7 @@ class NewMyWordController extends GetxController {
   NewMyWordController(this.myBookController);
 
   Book get book {
-    return myBookController.selectedBook!;
+    return myBookController.selectedBookRx.value!;
   }
 
   final _isSelectedWord = true.obs;
@@ -42,16 +43,20 @@ class NewMyWordController extends GetxController {
 
   ScrollController scrollController = ScrollController();
 
+  final _isScrollUp = false.obs;
+  bool get isScrollUp => _isScrollUp.value;
   @override
   void onInit() {
     super.onInit();
     _getLocalDBData();
     loadMyWords();
+    scrollController.addListener(() {
+      _isScrollUp.value = scrollController.offset > 120;
+    });
   }
 
   void autoUpdateWordInQuiz(Word word, bool value) {
     int index = -1;
-    // MyWord updateMyWord = MyWord.wordToMyWord(word);
     for (var i = 0; i < allMyWords.length; i++) {
       if (allMyWords[i].word == word.word &&
           allMyWords[i].yomikata == word.yomikata) {
@@ -59,7 +64,6 @@ class NewMyWordController extends GetxController {
         break;
       }
     }
-    // 案の定、鮮やか、改める、祈る、印鑑
     if (index == -1) {
       return;
     }
@@ -143,6 +147,14 @@ class NewMyWordController extends GetxController {
   void _getLocalDBData() {
     _isSelectedWord.value =
         SettingRepository.getBool(AppConstant.isSelectedWord) ?? true;
+  }
+
+  void scrollToTop() {
+    scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+    );
   }
 
   void toggleIsSelectedWord() {
@@ -382,7 +394,7 @@ class NewMyWordController extends GetxController {
     try {
       _isLoading(true);
 
-      List<MyWord> myWord = myBookController.selectedBook!.mywords;
+      List<MyWord> myWord = myBookController.selectedBookRx.value!.mywords;
 
       // 최신순 정렬
       myWord.sort((a, b) {
@@ -499,6 +511,10 @@ class NewMyWordController extends GetxController {
     _applyCurrentFilters(); // ✅ 타입만 반영해 전체 보기
   }
 
+  void onBookCategoryChange() {
+    _applyCurrentFilters();
+  }
+
   // ✅ 현재 조건(전체/단일일/범위) + 타입을 적용해 myWordsMap 갱신
   void _applyCurrentFilters() {
     final filtered = LinkedHashMap<DateTime, List<MyWord>>(
@@ -522,7 +538,12 @@ class NewMyWordController extends GetxController {
       }
       final bucket =
           entry.value
-              .where((w) => _matchType(w) && _matchWordOrGrammar(w))
+              .where(
+                (w) =>
+                    _matchType(w) &&
+                    _matchWordOrGrammar(w) &&
+                    _matchCategory(w),
+              )
               .toList();
       if (bucket.isNotEmpty) {
         filtered[day] = bucket;
@@ -533,6 +554,17 @@ class NewMyWordController extends GetxController {
       ..clear()
       ..addAll(filtered);
     myWordsMap.refresh();
+  }
+
+  bool _matchCategory(MyWord word) {
+    final selected = myBookController.selectedBookRx.value?.selectedCategory;
+
+    if (selected == null) return true;
+    if (selected == BookCategory.unspecified && (word.category == null)) {
+      return true;
+    }
+
+    return word.category?.id == selected.id;
   }
 }
 
@@ -575,19 +607,20 @@ class InputQuizCntDialog extends StatelessWidget {
             ),
           ],
           SizedBox(height: 12),
-          Card(
-            child: CustomTextFormField(
-              autofocus: !isShowFourMore,
-              readOnly: isShowFourMore,
-              color: isShowFourMore ? Colors.grey : null,
-              hintText: '15',
-              controller: teCrl,
-              sufficIcon: Text(
-                isEn ? 'Up to $maxCnt words' : '최대 $maxCnt개',
-                style: TextStyle(fontSize: FSController.to.baseFS - 2),
-              ),
-              keyboardType: TextInputType.number,
+          CustomTextFormField(
+            autofocus: !isShowFourMore,
+            readOnly: isShowFourMore,
+            color:
+                isShowFourMore
+                    ? Colors.grey
+                    : SettingController.to.blackOrWhite,
+            hintText: '15',
+            controller: teCrl,
+            sufficIcon: Text(
+              isEn ? 'Up to $maxCnt words' : '최대 $maxCnt개',
+              style: TextStyle(fontSize: FSController.to.baseFS - 2),
             ),
+            keyboardType: TextInputType.number,
           ),
 
           SizedBox(height: 24),

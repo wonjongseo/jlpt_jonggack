@@ -27,13 +27,14 @@ class MyWordAdapter extends TypeAdapter<MyWord> {
       description: fields[9] as String?,
     )
       ..isKnown = fields[2] as bool
-      ..createdAt = fields[4] as DateTime?;
+      ..createdAt = fields[4] as DateTime?
+      ..category = fields[10] as BookCategory?;
   }
 
   @override
   void write(BinaryWriter writer, MyWord obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.word)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class MyWordAdapter extends TypeAdapter<MyWord> {
       ..writeByte(8)
       ..write(obj.connectionWays)
       ..writeByte(9)
-      ..write(obj.description);
+      ..write(obj.description)
+      ..writeByte(10)
+      ..write(obj.category);
   }
 
   @override

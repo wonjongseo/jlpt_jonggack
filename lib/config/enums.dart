@@ -3,7 +3,15 @@ import 'package:get/utils.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
-enum TextInputEnum { japanese, yomikata, mean, exampleSentence, exampleMean }
+enum TextInputEnum {
+  japanese,
+  yomikata,
+  mean,
+  description,
+  connectionWays,
+  exampleSentence,
+  exampleMean,
+}
 
 extension TextInputEnumExtension on TextInputEnum {
   String get name {
@@ -13,7 +21,11 @@ extension TextInputEnumExtension on TextInputEnum {
       case TextInputEnum.yomikata:
         return isKo ? '읽는 법' : 'Proun';
       case TextInputEnum.mean:
-        return isKo ? '한국어' : 'Mean';
+        return isKo ? '의미' : 'Mean';
+      case TextInputEnum.description:
+        return isKo ? '설명' : 'Description';
+      case TextInputEnum.connectionWays:
+        return isKo ? '접속 방법' : 'Connection Ways';
       case TextInputEnum.exampleSentence:
         return isKo ? '예제 (예문)' : 'Example (sentence)';
       case TextInputEnum.exampleMean:

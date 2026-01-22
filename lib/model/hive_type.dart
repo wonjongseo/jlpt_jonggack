@@ -16,3 +16,4 @@ const int NewVocaExampleId = 21;
 const int NewKangiId = 22;
 const int NewJapaneseId = 23;
 const int NewJapaneseListId = 24;
+const int bookCateogryId = 25;

@@ -1,98 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
-    this.hintText,
-    this.widget,
-    this.color,
+    this.label,
     this.maxLines,
     this.readOnly,
     this.controller,
-    this.width,
     this.sufficIcon,
+    this.hintText,
     this.keyboardType,
-    this.onTap,
+
     this.hintStyle,
-    this.onFieldSubmitted,
-    this.maxLength,
+
+    this.color,
     this.autofocus,
     this.focusNode,
+    this.textInputAction,
   });
-
-  final bool? autofocus;
   final FocusNode? focusNode;
+  final TextEditingController? controller;
+  final bool? autofocus;
+  final bool? readOnly;
+  final String? label;
   final String? hintText;
   final Color? color;
-  final Widget? widget;
   final int? maxLines;
-  final bool? readOnly;
-  final TextEditingController? controller;
-  final Widget? sufficIcon;
-  final Function()? onTap;
-  final Function(String?)? onFieldSubmitted;
   final TextInputType? keyboardType;
-  final int? maxLength;
   final TextStyle? hintStyle;
-  final double? width;
+  final TextInputAction? textInputAction;
+  final Widget? sufficIcon;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: color,
-        border: Border.all(color: Colors.grey, width: 1.0),
-        borderRadius: BorderRadius.circular(12),
+    return TextFormField(
+      style: const TextStyle(fontSize: 13),
+      focusNode: focusNode,
+      controller: controller,
+      autofocus: autofocus ?? false,
+      readOnly: readOnly ?? false,
+      maxLines: maxLines,
+
+      decoration: InputDecoration(
+        hintText: hintText,
+        fillColor: SettingController.to.blackOrWhite,
+        filled: true,
+        label: Text(label ?? ''),
+        floatingLabelStyle: TextStyle(
+          color: color ?? SettingController.to.mainBordColor,
+        ),
+
+        suffixIconConstraints: const BoxConstraints(minHeight: 0, minWidth: 0),
+        labelStyle: TextStyle(color: Colors.grey, fontSize: 13),
+        enabledBorder: _border(),
+        focusedBorder: _border(),
+        suffixIcon:
+            sufficIcon != null
+                ? Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: sufficIcon,
+                )
+                : null,
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              autofocus: autofocus ?? false,
-              maxLength: maxLength,
-              keyboardType: keyboardType,
-              onFieldSubmitted: onFieldSubmitted,
-              onTap: onTap,
-              focusNode: focusNode,
-              readOnly: readOnly ?? false,
-              style: const TextStyle(fontSize: 12),
-              maxLines: maxLines ?? 1,
-              controller: controller,
-              decoration: InputDecoration(
-                counterText: "",
-                prefixIconConstraints: const BoxConstraints(
-                  minHeight: 0,
-                  minWidth: 0,
-                ),
-                suffixIconConstraints: const BoxConstraints(
-                  minHeight: 0,
-                  minWidth: 0,
-                ),
-                suffixIcon:
-                    sufficIcon != null
-                        ? Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: sufficIcon,
-                        )
-                        : null,
-                contentPadding:
-                    maxLines != null
-                        ? EdgeInsets.all(15)
-                        : EdgeInsets.symmetric(horizontal: 15),
-                hintStyle: hintStyle,
-                hintText: hintText,
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-          ),
-          if (widget != null) widget!,
-        ],
-      ),
+    );
+  }
+
+  OutlineInputBorder _border() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Colors.grey),
     );
   }
 }

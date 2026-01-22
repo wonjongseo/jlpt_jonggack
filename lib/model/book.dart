@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:get/utils.dart';
+
 import 'package:hive/hive.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 
 import 'package:jlpt_jonggack/model/hive_type.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
@@ -32,6 +33,12 @@ class Book extends HiveObject {
   @HiveField(5)
   List<MyWord> mywords;
 
+  @HiveField(6, defaultValue: null)
+  List<BookCategory>? categories;
+
+  @HiveField(7, defaultValue: null)
+  BookCategory? selectedCategory;
+
   Book({
     String? id,
     String? createdAt,
@@ -39,6 +46,8 @@ class Book extends HiveObject {
     required this.description,
     required this.bookNum,
     List<MyWord>? mywords,
+    this.categories,
+    this.selectedCategory,
   }) : id = id ?? '${DateTime.now().microsecondsSinceEpoch}',
        createdAt = createdAt ?? DateTime.now().toIso8601String(),
        mywords = mywords ?? [];
@@ -80,6 +89,8 @@ class Book extends HiveObject {
         other.description == description &&
         other.bookNum == bookNum &&
         other.createdAt == createdAt &&
+        other.selectedCategory == selectedCategory &&
+        listEquals(other.categories, categories) &&
         listEquals(other.mywords, mywords);
   }
 
@@ -90,6 +101,8 @@ class Book extends HiveObject {
         description.hashCode ^
         bookNum.hashCode ^
         createdAt.hashCode ^
+        categories.hashCode ^
+        selectedCategory.hashCode ^
         mywords.hashCode;
   }
 
@@ -99,15 +112,21 @@ class Book extends HiveObject {
   }
 
   static List<Book> createDefaultBooks() {
+    final myBook1Cat = BookCategory.unspecified;
     Book myWordBook1 = Book(
       title: isEn ? AppString.jgVocaEn : AppString.jgVocaKr,
       description: isEn ? AppString.jgVocaDescEn : AppString.jgVocaDescKr,
       bookNum: 1,
+      categories: [myBook1Cat],
+      selectedCategory: myBook1Cat,
     );
+    final myBook2Cat = BookCategory.unspecified;
     Book myWordBook2 = Book(
       title: isEn ? AppString.myVocaEn : AppString.myVocaKr,
       description: isEn ? AppString.myVocaDescEn : AppString.myVocaDescKr,
       bookNum: 2,
+      categories: [myBook2Cat],
+      selectedCategory: myBook2Cat,
     );
 
     List<Book> books = [myWordBook1, myWordBook2];
@@ -121,6 +140,8 @@ class Book extends HiveObject {
     int? bookNum,
     String? createdAt,
     List<MyWord>? mywords,
+    List<BookCategory>? categories,
+    BookCategory? selectedCategory,
   }) {
     return Book(
       id: id ?? this.id,
@@ -129,6 +150,8 @@ class Book extends HiveObject {
       bookNum: bookNum ?? this.bookNum,
       createdAt: createdAt ?? this.createdAt,
       mywords: mywords ?? this.mywords,
+      categories: categories ?? this.categories,
+      selectedCategory: selectedCategory ?? this.selectedCategory,
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
+import 'package:jlpt_jonggack/config/size.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/search/controller/search_controller.dart';
@@ -19,14 +19,17 @@ class SearchScreen extends GetView<JSearchController> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              controller.clearQuery();
-              controller.teCnt.clear();
-              Get.back();
-            },
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(appBarHeight),
+          child: AppBar(
+            leading: BackButton(
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                controller.clearQuery();
+                controller.teCnt.clear();
+                Get.back();
+              },
+            ),
           ),
         ),
         body: Obx(() {
@@ -53,9 +56,8 @@ class SearchScreen extends GetView<JSearchController> {
               children: [
                 NewSearchWidget(isHomeScreen: false),
                 if (!controller.isLoading.value) ...[
-                  SizedBox(height: 10),
+                  SizedBox(height: 4),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         '${controller.query} ',
@@ -79,6 +81,7 @@ class SearchScreen extends GetView<JSearchController> {
               ],
             ),
           ),
+          SizedBox(height: 10),
           if (controller.isLoading.value)
             Center(child: CircularProgressIndicator.adaptive())
           else
@@ -88,100 +91,77 @@ class SearchScreen extends GetView<JSearchController> {
                 child: Column(
                   children: [
                     if (controller.words.isNotEmpty) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ExpansionTile(
-                            iconColor: SettingController.to.mainColor,
-                            initiallyExpanded: true,
-                            shape: Border.all(color: Colors.transparent),
-                            title: SearchHeader(
-                              label: CategoryEnum.japaneses.id,
-                            ),
-                            children: List.generate(controller.words!.length, (
-                              index,
-                            ) {
-                              String title = controller.words[index].word;
-                              String subTitle = controller.words[index].mean;
-                              return SearchListTile(
-                                title: title,
-                                subTitle: subTitle,
-                                onTap: () {
-                                  Get.to(
-                                    () => SearchedWordDetailScreen(
-                                      searchedWords: controller.words,
-                                      index: index,
-                                    ),
-                                  );
-                                },
+                      _expansionTile(
+                        label: CategoryEnum.japaneses.id,
+                        cnt: '${controller.words.length}',
+                        children: List.generate(controller.words!.length, (
+                          index,
+                        ) {
+                          String title = controller.words[index].word;
+                          String subTitle = controller.words[index].mean;
+                          return SearchListTile(
+                            title: title,
+                            subTitle: subTitle,
+                            onTap: () {
+                              Get.to(
+                                () => SearchedWordDetailScreen(
+                                  searchedWords: controller.words,
+                                  index: index,
+                                ),
                               );
-                            }),
-                          ),
-                        ],
+                            },
+                          );
+                        }),
                       ),
                     ],
                     if (controller.kangis.isNotEmpty) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ExpansionTile(
-                            iconColor: SettingController.to.mainColor,
-                            initiallyExpanded: true,
-                            shape: Border.all(color: Colors.transparent),
-                            title: SearchHeader(label: CategoryEnum.kangis.id),
-                            children: List.generate(controller.kangis.length, (
-                              index,
-                            ) {
-                              String title = controller.kangis[index].japan;
-                              String subTitle = controller.kangis[index].korea;
-                              return SearchListTile(
-                                title: title,
-                                subTitle: subTitle,
-                                onTap: () {
-                                  Get.to(
-                                    () => SearchedKangiDetailScreen(
-                                      searchedKangis: controller.kangis,
-                                      index: index,
-                                    ),
-                                  );
-                                },
+                      SizedBox(height: 10),
+                      _expansionTile(
+                        label: CategoryEnum.kangis.id,
+                        cnt: '${controller.kangis.length}',
+                        children: List.generate(controller.kangis.length, (
+                          index,
+                        ) {
+                          String title = controller.kangis[index].japan;
+                          String subTitle = controller.kangis[index].korea;
+                          return SearchListTile(
+                            title: title,
+                            subTitle: subTitle,
+                            onTap: () {
+                              Get.to(
+                                () => SearchedKangiDetailScreen(
+                                  searchedKangis: controller.kangis,
+                                  index: index,
+                                ),
                               );
-                            }),
-                          ),
-                        ],
+                            },
+                          );
+                        }),
                       ),
                     ],
                     if (controller.grammar.isNotEmpty) ...[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ExpansionTile(
-                            iconColor: SettingController.to.mainColor,
-                            initiallyExpanded: true,
-                            shape: Border.all(color: Colors.transparent),
-                            title: SearchHeader(
-                              label: CategoryEnum.grammars.id,
-                            ),
-                            children: List.generate(controller.grammar.length, (
-                              index,
-                            ) {
-                              String title = controller.grammar[index].grammar;
-                              String subTitle = controller.grammar[index].means;
-                              return SearchListTile(
-                                title: title,
-                                subTitle: subTitle,
-                                onTap: () {
-                                  Get.to(
-                                    () => SearchedGrammarDetailScreen(
-                                      searchedGrammar: controller.grammar,
-                                      index: index,
-                                    ),
-                                  );
-                                },
+                      SizedBox(height: 10),
+                      _expansionTile(
+                        label: CategoryEnum.grammars.id,
+                        cnt: '${controller.grammar.length}',
+                        children: List.generate(controller.grammar.length, (
+                          index,
+                        ) {
+                          String title = controller.grammar[index].grammar;
+                          String subTitle = controller.grammar[index].means;
+                          return SearchListTile(
+                            title: title,
+                            subTitle: subTitle,
+                            onTap: () {
+                              Get.to(
+                                () => SearchedGrammarDetailScreen(
+                                  searchedGrammar: controller.grammar,
+                                  index: index,
+                                ),
                               );
-                            }),
-                          ),
-                        ],
+                            },
+                          );
+                        }),
                       ),
                     ],
                   ],
@@ -192,20 +172,32 @@ class SearchScreen extends GetView<JSearchController> {
       ),
     );
   }
-}
 
-class SearchHeader extends StatelessWidget {
-  const SearchHeader({super.key, required this.label});
-  final String label;
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: SettingController.to.mainBordColor,
+  Widget _expansionTile({
+    required String label,
+    String? cnt,
+    required List<Widget> children,
+  }) {
+    return ExpansionTile(
+      dense: true,
+      minTileHeight: 20,
+      iconColor: SettingController.to.mainColor,
+      initiallyExpanded: true,
+      shape: Border.all(color: Colors.transparent),
+      title: Row(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: SettingController.to.mainBordColor,
+            ),
+          ),
+          if (cnt != null) ...[SizedBox(width: 4), Text('($cnt)')],
+        ],
       ),
+      children: children,
     );
   }
 }
@@ -224,6 +216,8 @@ class SearchListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 0,
+      color: SettingController.to.blackOrWhite,
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         onTap: onTap,
@@ -231,7 +225,7 @@ class SearchListTile extends StatelessWidget {
         title: Text(
           title,
           style: TextStyle(
-            fontSize: FSController.to.baseFS + 6,
+            fontSize: FSController.to.baseFS + 5,
             fontFamily: AppFonts.japaneseFont,
             fontWeight: FontWeight.bold,
           ),

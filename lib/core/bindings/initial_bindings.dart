@@ -11,7 +11,6 @@ class InitialBindings extends Bindings {
     Get.put(FSController(), permanent: true);
     Get.lazyPut(() => TtsController(), fenix: true);
     Get.lazyPut(() => MyBookController(), fenix: true);
-    Get.lazyPut(() => EditWordController(), fenix: true);
 
     Get.lazyPut(() {
       return NewMyWordController(Get.find());

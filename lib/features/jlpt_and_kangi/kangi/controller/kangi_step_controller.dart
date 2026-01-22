@@ -7,6 +7,7 @@ import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/kangi_test/kangi_test_screen.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/kangi.dart';
 import 'package:jlpt_jonggack/model/kangi_step.dart';
@@ -26,49 +27,12 @@ class KangiStepController extends GetxController {
             .map((item) => MyWord.kangiToMyWord(item))
             .toList();
     if (!isAllSave()) {
-      // for (var word in getJlptStep().words) {
-      //   MyBookController.to.addMyWord(MyWord.wordToMyWord(word));
-      // }
       MyBookController.to.bulkHandleMyWords(myWords);
     } else {
-      // for (var word in getJlptStep().words) {
-      //   MyBookController.to.deleteMyWord(MyWord.wordToMyWord(word));
-      // }
       MyBookController.to.bulkHandleMyWords(myWords, isAdd: false);
     }
 
-    // for (int i = 0; i < getJlptStep().words.length; i++) {
-    //   Word word = getJlptStep().words[i];
-    //   toggleSaveWord(word, showSnackBar: false);
-    // }
     update();
-    // if (isAllSave()) {
-    //   for (int i = 0; i < getKangiStep().kangis.length; i++) {
-    //     Kangi kangi = getKangiStep().kangis[i];
-    //     MyWord newMyWord = MyWord.kangiToMyWord(kangi);
-
-    //     if (isSavedInLocal(kangi)) {
-    //       MyWordRepository.deleteMyWord(newMyWord);
-    //       userController.updateMyWordSavedCount(false);
-    //     }
-    //   }
-    //   // isAllSave = false;
-    // } else {
-    //   for (int i = 0; i < getKangiStep().kangis.length; i++) {
-    //     Kangi kangi = getKangiStep().kangis[i];
-
-    //     MyWord newMyWord = MyWord.kangiToMyWord(kangi);
-
-    //     if (!isSavedInLocal(kangi)) {
-    //       MyWordRepository.saveMyWord(newMyWord);
-    //       userController.updateMyWordSavedCount(true);
-    //       isWordSaved = true;
-    //     }
-    //   }
-
-    //   // isAllSave = true;
-    // }
-    // update();
   }
 
   bool isAllSave() {
@@ -123,20 +87,21 @@ class KangiStepController extends GetxController {
     return MyBookController.to.books[0].mywords;
   }
 
-  void toggleSaveWord(MyWord newMyWord, {bool showSnackBar = true}) {
+  void toggleSaveWord(MyWord newMyWord, {bool showSnackBar = true}) async {
     // MyWord newMyWord = MyWord.wordToMyWord(word);
     List<MyWord> book1Words = MyBookController.to.books[0].mywords;
 
     if (book1Words.contains(newMyWord)) {
       MyBookController.to.deleteMyWord(newMyWord);
     } else {
-      MyBookController.to.addMyWord(newMyWord);
+      await Get.toNamed(NewAddMyWordScreen.name, arguments: newMyWord);
+      // MyBookController.to.addMyWord(newMyWord);
 
-      if (showSnackBar && SettingController.to.saveWordNoti) {
-        SnackBarHelper.showSelectableSuccessSnackBar(
-          '${newMyWord.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
-        );
-      }
+      // if (showSnackBar && SettingController.to.saveWordNoti) {
+      //   SnackBarHelper.showSelectableSuccessSnackBar(
+      //     '${newMyWord.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
+      //   );
+      // }
     }
 
     update();

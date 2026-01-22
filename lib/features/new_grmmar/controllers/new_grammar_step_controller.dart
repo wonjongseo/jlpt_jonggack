@@ -1,15 +1,15 @@
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
-import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
-import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/grammar_step/widgets/gammar_card_details.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_test_screen.dart';
-import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/features/new_my_word/screen/new_add_my_word_screen.dart';
 import 'package:jlpt_jonggack/model/grammar_step.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
 class NewGrammarStepController extends GetxController {
+  static NewGrammarStepController get to =>
+      Get.find<NewGrammarStepController>();
   final String chapter;
   final GrammarStep grammarStep;
 
@@ -71,21 +71,28 @@ class NewGrammarStepController extends GetxController {
     );
   }
 
-  void toggleSaved(int index) {
+  void toggleSaved(int index) async {
     final grammar = grammarStep.grammars[index];
     final savedGrammar = MyWord.grammerToWord(grammar);
     if (isSaveds[index]) {
       isSaveds[index] = false;
       MyBookController.to.deleteMyWord(savedGrammar);
     } else {
-      isSaveds[index] = true;
-      MyBookController.to.addMyWord(savedGrammar);
-
-      if (SettingController.to.saveWordNoti) {
-        SnackBarHelper.showSelectableSuccessSnackBar(
-          '${savedGrammar.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
-        );
+      final isSaved = await Get.toNamed(
+        NewAddMyWordScreen.name,
+        arguments: savedGrammar,
+      );
+      if (isSaved) {
+        isSaveds[index] = true;
       }
+
+      // MyBookController.to.addMyWord(savedGrammar);
+
+      // if (SettingController.to.saveWordNoti) {
+      //   SnackBarHelper.showSelectableSuccessSnackBar(
+      //     '${savedGrammar.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
+      //   );
+      // }
     }
   }
 }

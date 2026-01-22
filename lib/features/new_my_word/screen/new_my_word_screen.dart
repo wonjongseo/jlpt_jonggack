@@ -1,7 +1,7 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
+import 'package:jlpt_jonggack/common/widget/book_category_selector.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
@@ -10,6 +10,7 @@ import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_contr
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/myVoca_date_section.dart';
 import 'package:jlpt_jonggack/features/new_my_word/screen/widgets/my_word_screen_bottom_sheet.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
 class NewMyWordScreen extends GetView<NewMyWordController> {
@@ -19,108 +20,175 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Obx(() {
-          return Text(controller.book.title);
-        }),
-        actions: [
-          if (controller.book.bookNum != 1)
-            IconButton(
-              onPressed: () {
-                MyBookController.to.goToEditBook(book: controller.book);
-              },
-              icon: Icon(Icons.mode_edit_outline_outlined),
+      body: _body(),
+      bottomNavigationBar: _bottomNavigationBar(),
+      floatingActionButton: Obx(() {
+        if (!controller.isScrollUp) return const SizedBox.shrink();
+        return FloatingActionButton(
+          shape: CircleBorder(),
+          backgroundColor: SettingController.to.realBlackOrWhite,
+          foregroundColor: SettingController.to.blackOrWhite,
+          onPressed: controller.scrollToTop,
+          child: const Icon(Icons.arrow_upward_rounded),
+        );
+      }),
+    );
+  }
+
+  SafeArea _body() {
+    return SafeArea(
+      child: Obx(() {
+        final map = controller.myWordsMap.value;
+
+        final isLoading = controller.isLoading;
+        final isEmpty = !isLoading && map.isEmpty;
+
+        final keys = map.keys.toList()..sort((a, b) => b.compareTo(a));
+
+        return CustomScrollView(
+          controller: controller.scrollController,
+          slivers: [
+            SliverAppBar(
+              title: Obx(() => Text(controller.book.title)),
+              actions: [
+                if (controller.book.bookNum != 1)
+                  IconButton(
+                    onPressed: () {
+                      MyBookController.to.goToEditBook(book: controller.book);
+                    },
+                    icon: const Icon(Icons.mode_edit_outline_outlined),
+                  ),
+                IconButton(
+                  onPressed: () => Get.bottomSheet(MyWordScreenBottomSheet()),
+                  icon: const Icon(Icons.menu),
+                ),
+              ],
             ),
 
-          IconButton(
-            onPressed: () => Get.bottomSheet(MyWordScreenBottomSheet()),
-            icon: Icon(Icons.menu),
-          ),
-        ],
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SliverToBoxAdapter(
+              child: Column(
                 children: [
-                  if (controller.book.bookNum != 1) ...[
-                    Expanded(
-                      child: BottomBtn(
-                        label: AppString.addWord.tr,
-                        onTap: () {
-                          controller.goToAddMyWord();
-                        },
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 8,
                     ),
-                    SizedBox(width: 6),
+                    child: Obx(() {
+                      final book = MyBookController.to.selectedBookRx.value;
+                      final cats = book?.categories ?? [];
+                      final selectedCat = book?.selectedCategory;
+                      final Map<BookCategory, int> wordCntPerCategory = {
+                        for (final c in cats) c: 0,
+                      };
+
+                      for (MyWord word in book?.mywords ?? []) {
+                        final cat = word.category ?? BookCategory.unspecified;
+                        wordCntPerCategory[cat] =
+                            (wordCntPerCategory[cat] ?? 0) + 1;
+                      }
+
+                      return BookCategorySelector(
+                        label: AppString.category.tr,
+                        cats: cats,
+                        selectedCat: selectedCat,
+                        wordCntPerCategory: wordCntPerCategory,
+                        onChanged: (value) {
+                          MyBookController.to.onChangeCategory(
+                            value,
+                            isMyBookScreen: true,
+                          );
+                        },
+                        onAdd:
+                            (value) => MyBookController.to.addCategory(value),
+                        onDelete:
+                            (value) =>
+                                MyBookController.to.deleteCategory(value),
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 8),
+                  if (controller.book.bookNum == 1) ...[
+                    _wordOrGrammarSelector(),
+                    const SizedBox(height: 12),
                   ],
-                  if (controller.allMyWords.isNotEmpty)
-                    Expanded(
-                      child: BottomBtn(
-                        label: AppString.quiz.tr,
-                        onTap: () {
-                          controller.goToQuiz();
-                        },
-                      ),
-                    ),
                 ],
               ),
             ),
-            const GlobalBannerAdmob(),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            if (controller.book.bookNum == 1) ...[
-              _wordOrGrammarSelector(),
-              SizedBox(height: 6),
-            ],
+            SliverToBoxAdapter(child: SizedBox(height: 10)),
 
-            Expanded(
-              child: Obx(() {
-                if (controller.isLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
+            if (isLoading)
+              const SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(child: CircularProgressIndicator.adaptive()),
+              )
+            else if (isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(child: Text(AppString.noSavedWord.tr)),
+              )
+            else
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, i) {
+                  final day = keys[i];
+                  final words = map[day] ?? const <MyWord>[];
+
+                  return Column(
+                    children: [
+                      MyVocaDateSection(
+                        date: day,
+                        words: words,
+                        onTap: (index) => controller.goToStudyScreen(i, index),
+                        onScrollLeft:
+                            (index) => controller.onScrollLeft(i, index),
+                        onScrollRight:
+                            (index) => controller.onScrollRight(i, index),
+                      ),
+                    ],
                   );
-                }
-                final map = controller.myWordsMap.value;
-                if (map.isEmpty) {
-                  return Center(child: Text(AppString.noSavedWord.tr));
-                }
+                }, childCount: keys.length),
+              ),
 
-                final keys = map.keys.toList()..sort((a, b) => b.compareTo(a));
-                return ListView.separated(
-                  controller: controller.scrollController,
-                  padding: const EdgeInsets.only(bottom: 12),
-                  itemCount: keys.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1),
-                  itemBuilder: (context, i) {
-                    final day = keys[i];
-                    final words = map[day] ?? const <MyWord>[];
-                    return MyVocaDateSection(
-                      date: day,
-                      words: words,
-                      onTap: (index) {
-                        controller.goToStudyScreen(i, index);
-                      },
-                      onScrollLeft: (index) {
-                        controller.onScrollLeft(i, index);
-                      },
-                      onScrollRight: (index) {
-                        controller.onScrollRight(i, index);
-                      },
-                    );
-                  },
-                );
-              }),
-            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
           ],
-        ),
+        );
+      }),
+    );
+  }
+
+  SafeArea _bottomNavigationBar() {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (controller.book.bookNum != 1) ...[
+                  Expanded(
+                    child: BottomBtn(
+                      label: AppString.addWord.tr,
+                      onTap: () {
+                        controller.goToAddMyWord();
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 6),
+                ],
+                if (controller.allMyWords.isNotEmpty)
+                  Expanded(
+                    child: BottomBtn(
+                      label: AppString.quiz.tr,
+                      onTap: () {
+                        controller.goToQuiz();
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const GlobalBannerAdmob(),
+        ],
       ),
     );
   }

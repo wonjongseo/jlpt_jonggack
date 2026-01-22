@@ -10,7 +10,7 @@ import 'package:jlpt_jonggack/repository/kangis_step_repository.dart';
 
 class JSearchController extends GetxController {
   static JSearchController get to => Get.find<JSearchController>();
-  late TextEditingController teCnt = TextEditingController();
+  late TextEditingController teCnt = TextEditingController(text: 'から');
 
   final isLoading = false.obs;
 

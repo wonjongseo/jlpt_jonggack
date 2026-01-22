@@ -103,7 +103,7 @@ class MyWordScreenBottomSheet extends GetView<NewMyWordController> {
             ),
           ),
 
-          SizedBox(height: 300),
+          Spacer(),
         ],
       ),
     );

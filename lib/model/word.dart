@@ -55,7 +55,7 @@ class Word extends HiveObject {
 
   static Word myWordToWord(MyWord newWord) {
     return Word(
-      word: newWord.getWord(),
+      word: newWord.word,
       mean: newWord.mean,
       yomikata: newWord.yomikata ?? '',
       headTitle: '',

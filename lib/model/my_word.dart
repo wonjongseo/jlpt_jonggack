@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/grammar.dart';
@@ -32,14 +33,15 @@ class MyWord {
 
   @HiveField(7, defaultValue: false)
   late bool isGrammar;
-  @HiveField(8, defaultValue: null)
-  late String? connectionWays;
-  @HiveField(9, defaultValue: null)
-  late String? description;
 
-  String getWord() {
-    return word;
-  }
+  @HiveField(8, defaultValue: null)
+  String? connectionWays;
+
+  @HiveField(9, defaultValue: null)
+  String? description;
+
+  @HiveField(10, defaultValue: null)
+  BookCategory? category;
 
   MyWord({
     required this.word,
@@ -50,6 +52,7 @@ class MyWord {
     this.isGrammar = false,
     this.connectionWays,
     this.description,
+    this.category,
   }) : examples =
            examples == null
                ? <Example>[]

@@ -6,14 +6,77 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/new_my_word_controller.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/model/example.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/services/excel_service.dart';
-import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EditWordController extends GetxController {
+  MyWord? jgWord;
+  EditWordController(this.jgWord);
+
   final externalDictType = ExternalDictType.naver.obs;
+
+  final _isLoading = false.obs;
+  bool get isLoading => _isLoading.value;
+
+  final exampleFormKey = GlobalKey<FormState>();
+
+  late TextEditingController japaneseController;
+  late TextEditingController yomikataController;
+  late TextEditingController meanController;
+  late TextEditingController exampleController;
+
+  late FocusNode japaneseFocusNode;
+  late FocusNode yomikataFocusNode;
+  late FocusNode meanFocusNode;
+  // late FocusNode exampleFocusNode;
+
+  final _examples = <Example>[].obs;
+  List<Example> get examples => _examples.value;
+  late TextEditingController exampleWordController;
+  late TextEditingController exampleMeanController;
+
+  late FocusNode exampleWordFocusNode;
+  late FocusNode exampleMeanFocusNode;
+
+  bool isDropdownButtonOpen = false;
+  @override
+  void onInit() {
+    japaneseController = TextEditingController();
+    yomikataController = TextEditingController();
+    meanController = TextEditingController();
+    exampleController = TextEditingController();
+
+    japaneseFocusNode = FocusNode();
+    yomikataFocusNode = FocusNode();
+    meanFocusNode = FocusNode();
+
+    japaneseFocusNode.addListener(() => _onFocusChange(TextInputEnum.japanese));
+    yomikataFocusNode.addListener(() => _onFocusChange(TextInputEnum.yomikata));
+    meanFocusNode.addListener(() => _onFocusChange(TextInputEnum.mean));
+
+    exampleWordController = TextEditingController();
+    exampleMeanController = TextEditingController();
+
+    exampleWordFocusNode = FocusNode();
+    exampleMeanFocusNode = FocusNode();
+
+    exampleWordFocusNode.addListener(
+      () => _onFocusChange(TextInputEnum.exampleSentence),
+    );
+    exampleMeanFocusNode.addListener(
+      () => _onFocusChange(TextInputEnum.exampleMean),
+    );
+    if (jgWord != null) {
+      _setInputForms();
+    }
+    super.onInit();
+  }
+
+  TextEditingController? connectionWaysCtl;
+  TextEditingController? descriptionCtl;
 
   void toggleExternalDictType(ExternalDictType? type) {
     if (type == null) return;
@@ -39,45 +102,78 @@ class EditWordController extends GetxController {
     }
   }
 
-  final _isLoading = false.obs;
-  bool get isLoading => _isLoading.value;
+  void _setInputForms() {
+    MyBookController.to.setJgBook();
+    japaneseController.text = (jgWord?.word ?? '');
+    yomikataController.text = (jgWord!.yomikata ?? '');
+    meanController.text = (jgWord?.mean ?? '');
+    exampleController.text = '';
+
+    final examples = (jgWord?.examples) ?? [];
+
+    for (var example in examples) {
+      example.word = example.word.replaceAll('<span class=\"bold\">', '');
+      example.word = example.word.replaceAll('</span>', '');
+    }
+
+    _examples.assignAll(examples);
+
+    if (jgWord!.isGrammar) {
+      connectionWaysCtl = TextEditingController(text: jgWord!.connectionWays);
+      descriptionCtl = TextEditingController(text: jgWord!.description);
+    }
+  }
 
   void addWord() {
-    if (wordFormKey.currentState!.validate()) {
-      String japanese = japaneseController.text;
-      String yomikata = yomikataController.text;
-      String mean = meanController.text;
+    final isError = _validate();
+    if (isError != null) {
+      SnackBarHelper.showErrorSnackBar(isError);
+      return;
+    }
 
-      if (!appendExample()) {
-        return;
-      }
+    final book = MyBookController.to.selectedBookRx.value;
+    final selectedCat = book?.selectedCategory ?? BookCategory.unspecified;
 
-      final myword = MyWord(
-        word: japanese,
-        mean: mean,
-        yomikata: yomikata,
-        examples: _examples,
-        isManuelSave: true,
+    String japanese = japaneseController.text;
+    String yomikata = yomikataController.text;
+    String mean = meanController.text;
+
+    if (!appendExample()) {
+      return;
+    }
+
+    final myword = MyWord(
+      word: japanese,
+      mean: mean,
+      yomikata: yomikata,
+      examples: _examples,
+      isManuelSave: true,
+      isGrammar: jgWord == null ? false : jgWord!.isGrammar,
+      category: selectedCat,
+    );
+
+    MyBookController.to.addMyWord(myword);
+    NewMyWordController.to.loadMyWords();
+
+    japaneseController.clear();
+    yomikataController.clear();
+    meanController.clear();
+
+    japaneseFocusNode.requestFocus();
+
+    _examples.clear();
+    exampleWordController.clear();
+    exampleMeanController.clear();
+
+    if (jgWord != null) {
+      // JlptStepController.to.update();
+      Get.back(result: true);
+    }
+
+    if (SettingController.to.saveWordNoti) {
+      SnackBarHelper.showSelectableSuccessSnackBar(
+        '${myword.word} ${AppString.savedWord.tr}\n${AppString.checkItAtJGBook.tr}',
       );
-
-      MyBookController.to.addMyWord(myword);
-      NewMyWordController.to.loadMyWords();
-
-      if (SettingController.to.saveWordNoti) {
-        SnackBarHelper.showSelectableSuccessSnackBar(
-          '${myword.getWord()}${AppString.savedWord.tr}',
-        );
-      }
-
-      japaneseController.clear();
-      yomikataController.clear();
-      meanController.clear();
-
-      japaneseFocusNode.requestFocus();
-
-      _examples.clear();
-      exampleWordController.clear();
-      exampleMeanController.clear();
     }
   }
 
@@ -111,34 +207,10 @@ class EditWordController extends GetxController {
     }
   }
 
-  final wordFormKey = GlobalKey<FormState>();
-  final exampleFormKey = GlobalKey<FormState>();
-
-  late TextEditingController japaneseController;
-  late TextEditingController yomikataController;
-  late TextEditingController meanController;
-  late TextEditingController exampleController;
-
-  late FocusNode japaneseFocusNode;
-  late FocusNode yomikataFocusNode;
-  late FocusNode meanFocusNode;
-  // late FocusNode exampleFocusNode;
-
-  final _examples = <Example>[].obs;
-  List<Example> get examples => _examples.value;
-  late TextEditingController exampleWordController;
-  late TextEditingController exampleMeanController;
-
-  late FocusNode exampleWordFocusNode;
-  late FocusNode exampleMeanFocusNode;
-
-  bool isDropdownButtonOpen = false;
-
   Future<void> onTapExternalType(ExternalDictType? type) async {
     toggleExternalDictType(type);
 
     String? sUrl;
-    String query = '';
 
     final mean = meanController.text.trim();
     final jp = japaneseController.text.trim();
@@ -213,37 +285,6 @@ class EditWordController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    japaneseController = TextEditingController();
-    yomikataController = TextEditingController();
-    meanController = TextEditingController();
-    exampleController = TextEditingController();
-
-    japaneseFocusNode = FocusNode();
-    yomikataFocusNode = FocusNode();
-    meanFocusNode = FocusNode();
-    // exampleFocusNode = FocusNode();
-
-    japaneseFocusNode.addListener(() => _onFocusChange(TextInputEnum.japanese));
-    yomikataFocusNode.addListener(() => _onFocusChange(TextInputEnum.yomikata));
-    meanFocusNode.addListener(() => _onFocusChange(TextInputEnum.mean));
-
-    exampleWordController = TextEditingController();
-    exampleMeanController = TextEditingController();
-
-    exampleWordFocusNode = FocusNode();
-    exampleMeanFocusNode = FocusNode();
-
-    exampleWordFocusNode.addListener(
-      () => _onFocusChange(TextInputEnum.exampleSentence),
-    );
-    exampleMeanFocusNode.addListener(
-      () => _onFocusChange(TextInputEnum.exampleMean),
-    );
-    super.onInit();
-  }
-
   TextInputEnum currentFocus = TextInputEnum.japanese;
   void _onFocusChange(TextInputEnum currentFocus) {
     this.currentFocus = currentFocus;
@@ -302,44 +343,36 @@ class EditWordController extends GetxController {
     return false;
   }
 
-  String? customValidator({
-    String? value,
-    required TextInputEnum textInputEnum,
-  }) {
-    switch (textInputEnum) {
-      case TextInputEnum.japanese:
-        if (value == null || value.isEmpty) {
-          japaneseFocusNode.requestFocus();
-          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
-        }
-        return null;
-      // return '일본어';
-      case TextInputEnum.yomikata:
-        if (value == null || value.isEmpty) {
-          yomikataFocusNode.requestFocus();
-          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
-        }
-        return null;
-
-      case TextInputEnum.mean:
-        if (value == null || value.isEmpty) {
-          meanFocusNode.requestFocus();
-          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
-        }
-        return null;
-
-      case TextInputEnum.exampleMean:
-        if (value == null || value.isEmpty) {
-          exampleMeanFocusNode.requestFocus();
-          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
-        }
-        return null;
-      case TextInputEnum.exampleSentence:
-        if (value == null || value.isEmpty) {
-          exampleWordFocusNode.requestFocus();
-          return '${textInputEnum.name} ${isEn ? 'is Required.' : '를 입력해주세요.'}';
-        }
-        return null;
+  String? _validate() {
+    final japanese = japaneseController.text.trim();
+    if (japanese.isEmpty) {
+      japaneseFocusNode.requestFocus();
+      return '${TextInputEnum.japanese.name}${isEn ? ' is Required.' : '를 입력해주세요.'}';
     }
+    if (jgWord == null) {
+      final yomikata = yomikataController.text.trim();
+      if (yomikata.isEmpty) {
+        yomikataFocusNode.requestFocus();
+        return '${TextInputEnum.yomikata.name}${isEn ? ' is Required.' : '을 입력해주세요.'}';
+      }
+    }
+    final mean = meanController.text.trim();
+    if (mean.isEmpty) {
+      meanFocusNode.requestFocus();
+      return '${TextInputEnum.mean.name}${isEn ? ' is Required.' : '를 입력해주세요.'}';
+    }
+
+    final exampleMean = exampleWordController.text.trim();
+    final exampleSentence = exampleMeanController.text.trim();
+
+    if (exampleMean.isEmpty && exampleSentence.isNotEmpty) {
+      exampleWordFocusNode.requestFocus();
+      return '${TextInputEnum.exampleMean.name}${isEn ? ' is Required.' : '를 입력해주세요.'}';
+    }
+    if (exampleSentence.isEmpty && exampleMean.isNotEmpty) {
+      exampleMeanFocusNode.requestFocus();
+      return '${TextInputEnum.exampleSentence.name}${isEn ? ' is Required.' : '를 입력해주세요.'}';
+    }
+    return null;
   }
 }
