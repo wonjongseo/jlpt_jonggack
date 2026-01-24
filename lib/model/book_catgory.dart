@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
-
 import 'package:jlpt_jonggack/model/hive_type.dart';
 
 part 'book_catgory.g.dart';
@@ -40,4 +40,8 @@ class BookCategory {
 
   @override
   int get hashCode => name.hashCode ^ id.hashCode;
+
+  BookCategory copyWith({String? name, String? id}) {
+    return BookCategory(name ?? this.name, id: id ?? this.id);
+  }
 }

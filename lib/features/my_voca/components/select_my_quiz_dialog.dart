@@ -7,6 +7,7 @@ import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 
+// ignore: must_be_immutable
 class SelectMyQuizDialog extends StatelessWidget {
   SelectMyQuizDialog({
     super.key,
@@ -33,6 +34,7 @@ class SelectMyQuizDialog extends StatelessWidget {
       builder: (context, setState) {
         return AlertDialog(
           title: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(

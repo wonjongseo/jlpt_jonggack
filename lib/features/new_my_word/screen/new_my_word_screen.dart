@@ -60,7 +60,6 @@ class NewMyWordScreen extends GetView<NewMyWordController> {
     return SafeArea(
       child: Obx(() {
         final map = controller.myWordsMap.value;
-        print('map : ${map}');
 
         final isLoading = controller.isLoading;
         final isEmpty = !isLoading && map.isEmpty;

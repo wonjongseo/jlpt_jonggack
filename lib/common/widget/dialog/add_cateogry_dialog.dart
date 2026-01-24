@@ -28,6 +28,7 @@ class AddCatagoryDialog extends StatelessWidget {
       content: Material(
         color: Colors.transparent,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             CustomTextFormField(
               maxLines: 1,

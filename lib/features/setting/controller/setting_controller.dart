@@ -12,6 +12,7 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart' as FB;
 import 'package:jlpt_jonggack/features/setting/services/setting_repository.dart';
 import 'package:jlpt_jonggack/model/book.dart';
+import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/repository/grammar_step_repository.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
 import 'package:jlpt_jonggack/repository/jlpt_step_repository.dart';
@@ -248,7 +249,6 @@ class SettingController extends GetxController {
 
     if (result == true) {
       Get.dialog(
-        // barrierDismissible: false,
         AlertDialog.adaptive(
           title: Obx(
             () =>
@@ -339,11 +339,9 @@ class SettingController extends GetxController {
     final repo = Get.find<HiveRepository<Book>>();
     final books = repo.getAll();
 
-    // 1) bookNum 1, 2 찾기 (없으면 조용히 리턴)
     final jgBook = books.firstWhere((b) => b.bookNum == Book.jgBookNum);
-    final myBook = books.firstWhere((b) => b.bookNum == 2);
+    final myBook = books.firstWhereOrNull((b) => b.bookNum == 2);
 
-    // 2) 타깃 문구
     final jgTitle = isEn ? AppString.jgVocaEn : AppString.jgVocaKr;
     final jgDesc = isEn ? AppString.jgVocaDescEn : AppString.jgVocaDescKr;
 
@@ -352,7 +350,6 @@ class SettingController extends GetxController {
     final myDescDefaultKo = AppString.myVocaDescKr;
     final myDescDefaultEn = AppString.myVocaDescEn;
 
-    // 3) 변경 계산 (불필요한 put 피하기)
     final toSave = <String, Book>{};
 
     final updated = jgBook.copyWith(title: jgTitle, description: jgDesc);
@@ -364,7 +361,6 @@ class SettingController extends GetxController {
       Book updated = myBook;
 
       if (isEn) {
-        // "사용자가 손대지 않은 기본값"으로 보일 때만 언어 스위치
         if (myBook.title == myTitleDefaultKo) {
           updated = updated.copyWith(title: myTitleDefaultEn);
         }
@@ -385,12 +381,23 @@ class SettingController extends GetxController {
       }
     }
 
-    // 4) 저장 (배치 지원 시)
     if (toSave.isNotEmpty) {
-      // repo.putAll(toSave); // 지원하면 이걸 사용
       for (final entry in toSave.entries) {
         await repo.put(entry.key, entry.value);
       }
+    }
+
+    for (var book in books) {
+      final updatedCats = List<BookCategory>.from(book.categories ?? []);
+      final unspecified = updatedCats.first;
+
+      updatedCats[0] = unspecified.copyWith(
+        name: isEn ? AppString.unspecifiedEn : AppString.unspecifiedKr,
+      );
+
+      book = book.copyWith(categories: updatedCats);
+
+      await repo.put(book.id, book);
     }
   }
 
