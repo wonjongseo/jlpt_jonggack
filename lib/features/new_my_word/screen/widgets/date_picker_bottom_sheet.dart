@@ -13,6 +13,10 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    print('isLandscape : ${isLandscape}');
+
     return Obx(() {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -20,7 +24,8 @@ class DatePickerBottomSheet extends GetView<NewMyWordController> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             child: AspectRatio(
-              aspectRatio: .65,
+              aspectRatio: isLandscape ? 1.1 : .65,
+              // aspectRatio: 1,
               child: TableCalendar<MyWord>(
                 headerStyle: HeaderStyle(
                   titleCentered: true,
