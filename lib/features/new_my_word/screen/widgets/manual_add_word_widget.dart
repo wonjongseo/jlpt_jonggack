@@ -7,6 +7,7 @@ import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/widget/book_category_selector.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
 import 'package:jlpt_jonggack/common/widget/dialog/add_cateogry_dialog.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/appeal_update_jg_plus.dart';
 
 import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
@@ -15,6 +16,7 @@ import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/controller/my_book_controller.dart';
 import 'package:jlpt_jonggack/features/new_my_word/controllers/edit_word_controller.dart';
 import 'package:jlpt_jonggack/model/book_catgory.dart';
+import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 TextStyle accentTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
@@ -153,11 +155,13 @@ class ManualAddWordWidget extends GetView<EditWordController> {
   void _onAdd(List<BookCategory> cats) {
     Get.closeCurrentSnackbar();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (cats.length >= AppConstant.jgMaxCategoryCnt) {
-        Get.dialog(
-          AppealUpdateJgPlus(label: AppString.upgradePlusForMoreCategory.tr),
-        );
-        return;
+      if (!UserController.to.user!.premieum) {
+        if (cats.length >= AppConstant.jgMaxCategoryCnt) {
+          Get.dialog(
+            AppealUpdateJgPlus(label: AppString.upgradePlusForMoreCategory.tr),
+          );
+          return;
+        }
       }
       final value = await Get.dialog(AddCatagoryDialog());
       if (value == null) return;

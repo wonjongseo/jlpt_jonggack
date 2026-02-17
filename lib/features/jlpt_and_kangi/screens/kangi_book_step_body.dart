@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/appeal_update_jg_plus.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/config/colors.dart';
@@ -55,8 +56,7 @@ class _KangiBookStepBodyState extends State<KangiBookStepBody> {
           items: List.generate(kangiController.headTitleCount, (index) {
             bool isAllAccessable =
                 !(widget.level == '1' && index > 2) ||
-                controller.user!.isPremieum ||
-                controller.user!.isTrik;
+                controller.user!.premieum;
 
             return InkWell(
               onLongPress: () {

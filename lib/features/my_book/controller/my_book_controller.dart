@@ -4,6 +4,7 @@ import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/common/app_constant.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/appeal_update_jg_plus.dart';
 import 'package:jlpt_jonggack/common/widget/dialog/delete_category_dialog.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/my_book/screens/widgets/edit_book_screen.dart';
@@ -13,6 +14,7 @@ import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/book_catgory.dart';
 import 'package:jlpt_jonggack/model/my_word.dart';
 import 'package:jlpt_jonggack/repository/hive_repository.dart';
+import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class MyBookController extends GetxController {
   static MyBookController get to => Get.find<MyBookController>();
@@ -46,7 +48,7 @@ class MyBookController extends GetxController {
       SnackBarHelper.showErrorSnackBar('$name${AppString.isAlreadyExists.tr}');
       return;
     }
-    // InterstitialManager.instance.forceShow();
+
     final newCats = List<BookCategory>.from(book.categories ?? []);
     final newCat = BookCategory(name);
     newCats.add(newCat);
@@ -270,12 +272,14 @@ class MyBookController extends GetxController {
     try {
       if (book == null) {
         _selectedBook.value = null;
-        if (MyBookController.to.books.length >= AppConstant.jgMaxBookCnt) {
-          Get.dialog(
-            AppealUpdateJgPlus(label: AppString.upgradePlusForMoreBook.tr),
-          );
+        if (!UserController.to.user!.isPremieum) {
+          if (MyBookController.to.books.length >= AppConstant.jgMaxBookCnt) {
+            Get.dialog(
+              AppealUpdateJgPlus(label: AppString.upgradePlusForMoreBook.tr),
+            );
 
-          return;
+            return;
+          }
         }
       }
 

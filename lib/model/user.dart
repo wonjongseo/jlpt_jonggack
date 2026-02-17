@@ -48,6 +48,8 @@ class User extends HiveObject {
   @HiveField(101, defaultValue: false)
   bool isTrik = false;
 
+  bool get premieum => isPremieum || isTrik;
+
   // @HiveField(7, defaultValue: [])
   // List<String> bookIds = [];
 

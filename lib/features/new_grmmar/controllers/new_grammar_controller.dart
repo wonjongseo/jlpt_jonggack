@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/commonDialog.dart';
 import 'package:jlpt_jonggack/common/utils/snackbar_helper.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/appeal_update_jg_plus.dart';
 import 'package:jlpt_jonggack/config/enums.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/new_grmmar/screen/new_grammar_step_screen.dart';
@@ -57,9 +58,7 @@ class NewGrammarController extends GetxController {
   }
 
   bool isAllAccessable(int index) {
-    return !(level == '1' && index > 2) ||
-        UserController.to.user!.isPremieum ||
-        UserController.to.user!.isTrik;
+    return !(level == '1' && index > 2) || UserController.to.user!.premieum;
   }
 
   void onCardLongPress(int index) {

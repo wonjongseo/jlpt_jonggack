@@ -62,8 +62,9 @@ class InterstitialManager {
   }
 
   Future<void> forceShow() async {
-    print('forceShow');
     if (_ad == null) return;
+    UserController userController = Get.find<UserController>();
+    if (userController.user!.isPremieum) return;
     await _ad!.show();
     _ad = null;
   }

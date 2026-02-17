@@ -8,10 +8,12 @@ import 'package:jlpt_jonggack/common/widget/book_category_selector.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
 import 'package:jlpt_jonggack/common/widget/custom_text_feild.dart';
 import 'package:jlpt_jonggack/common/widget/dialog/add_cateogry_dialog.dart';
+import 'package:jlpt_jonggack/common/widget/dialog/appeal_update_jg_plus.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
 import 'package:jlpt_jonggack/model/book.dart';
 import 'package:jlpt_jonggack/model/book_catgory.dart';
+import 'package:jlpt_jonggack/user/controller/user_controller.dart';
 
 class EditBookScreen extends StatefulWidget {
   static String name = '/edit-book';
@@ -98,6 +100,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(
             isEditMode ? AppString.changeBook.tr : AppString.createBook.tr,
@@ -147,6 +150,7 @@ class _EditBookScreenState extends State<EditBookScreen> {
                 CustomTextFormField(
                   label: AppString.bookName.tr,
                   controller: titleTController,
+                  maxLines: 1,
                 ),
                 SizedBox(height: 20),
                 CustomTextFormField(
@@ -166,12 +170,15 @@ class _EditBookScreenState extends State<EditBookScreen> {
   _onAdd() {
     Get.closeCurrentSnackbar();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (bookCategories.length >= AppConstant.jgMaxCategoryCnt) {
-        Get.dialog(
-          AppealUpdateJgPlus(label: AppString.upgradePlusForMoreCategory.tr),
-        );
-        return;
+      if (!UserController.to.user!.isPremieum) {
+        if (bookCategories.length >= AppConstant.jgMaxCategoryCnt) {
+          Get.dialog(
+            AppealUpdateJgPlus(label: AppString.upgradePlusForMoreCategory.tr),
+          );
+          return;
+        }
       }
+
       final value = await Get.dialog(AddCatagoryDialog()) as String?;
       if (value == null || value.isEmpty) {
         SnackBarHelper.showErrorSnackBar(
