@@ -27,9 +27,7 @@ class KangiQuestionOption extends StatelessWidget {
     List<String> multMean = text.split(',');
     Size size = MediaQuery.of(context).size;
 
-    if (multMean.length > 3) {
-      multMean = multMean.sublist(0, 3);
-    }
+    final oneLineText = multMean.map((value) => value.trim()).join(', ');
     return GetBuilder<KangiTestController>(
       init: KangiTestController(),
       builder: (qnController) {
@@ -39,37 +37,21 @@ class KangiQuestionOption extends StatelessWidget {
           Size size,
         ) {
           return Container(
-            margin: const EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             height: size.height * 0.1,
             decoration: BoxDecoration(
               border: Border.all(color: color),
               borderRadius: BorderRadius.circular(15),
             ),
             alignment: Alignment.center,
-            child:
-                multMean.length == 1
-                    ? Text(
-                      text,
-                      style: TextStyle(color: color, fontSize: 13),
-                      maxLines: 1,
-                    )
-                    : Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          multMean.length,
-                          (index) => Container(
-                            padding: EdgeInsets.symmetric(horizontal: 2),
-                            child: AutoSizeText(
-                              '${index + 1}. ${multMean[index].trim()}',
-                              style: TextStyle(color: color, fontSize: 13),
-                              maxLines: 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+            child: Center(
+              child: AutoSizeText(
+                oneLineText,
+                style: TextStyle(color: color, fontSize: 13),
+                maxLines: 1,
+                minFontSize: 9,
+              ),
+            ),
           );
         }
 

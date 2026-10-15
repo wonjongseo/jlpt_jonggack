@@ -5,12 +5,11 @@ import 'package:jlpt_jonggack/common/admob/banner_ad/global_banner_admob.dart';
 import 'package:jlpt_jonggack/common/widget/dimentions.dart';
 import 'package:jlpt_jonggack/common/widget/random_quiz_not_score_text.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/kangi_test/controller/kangi_test_controller.dart';
 import 'package:jlpt_jonggack/features/kangi_test/components/kangi_test_card.dart';
 import 'package:jlpt_jonggack/features/jlpt_and_kangi/widgets/progress_bar.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
-
-import '../../config/colors.dart';
 
 const KANGI_TEST = 'kangi';
 const CONTINUTE_KANGI_TEST = 'continue_kangi_test';
@@ -29,6 +28,7 @@ class KangiTestScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: _appBar(kangiTestController),
       body: _body(context),
+      floatingActionButton: nextToUndocAndHundocBtn(),
       bottomNavigationBar: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -57,7 +57,7 @@ class KangiTestScreen extends StatelessWidget {
                     children: [
                       Text.rich(
                         TextSpan(
-                          text: "問題 ",
+                          text: '${AppString.kangiQuestion.tr} ',
                           style: theme.headlineSmall!.copyWith(
                             fontFamily: AppFonts.japaneseFont,
                           ),
@@ -128,6 +128,32 @@ class KangiTestScreen extends StatelessWidget {
           },
         ),
       ],
+    );
+  }
+
+  GetBuilder<KangiTestController> nextToUndocAndHundocBtn() {
+    return GetBuilder<KangiTestController>(
+      builder: (controller) {
+        final canReveal =
+            ((controller.currentStage == 1 && controller.isAnswered1) ||
+                (controller.currentStage == 2 && controller.isAnswered2));
+        if (!canReveal) return const SizedBox.shrink();
+        return FloatingActionButton.extended(
+          onPressed: controller.revealNextStage,
+          backgroundColor: SettingController.to.mainColor,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          label: Text(
+            (controller.currentStage == 1
+                    ? AppString.kangiSolveUndoc
+                    : AppString.kangiSolveHundoc)
+                .tr,
+          ),
+        );
+      },
     );
   }
 }

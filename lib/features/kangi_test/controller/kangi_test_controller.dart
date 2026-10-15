@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/admob/interstitial_manager.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
+import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/jlpt_test/screens/jlpt_test_screen.dart';
 import 'package:jlpt_jonggack/features/setting/screen/setting_screen.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
@@ -82,6 +83,9 @@ class KangiTestController extends GetxController
   bool isAnswered1 = false;
   bool isAnswered2 = false;
   bool isAnswered3 = false;
+  int currentStage = 1;
+  bool isTransitioning = false;
+  bool currentQuestionIsCorrect = true;
 
   // 정답 인덱스 -> 인덱스 말고 문자열이 같은지 비교할 거임
   String correctAns = '';
@@ -97,7 +101,7 @@ class KangiTestController extends GetxController
 
   // 맞춘 정답
   int numOfCorrectAns = 0;
-  String text = 'skip';
+  String text = AppString.skip.tr;
   Color color = SettingController.to.realBlackOrWhite;
   bool isDisTouchable = false;
 
@@ -222,7 +226,9 @@ class KangiTestController extends GetxController
   }
 
   void checkAns(Question question, String selectedIndex, String type) {
-    // 운독, 훈독, 읽는 법을 다 채크 했니 ?
+    if (isTransitioning) return;
+    final expectedStage = type == 'hangul' ? 1 : type == 'undoc' ? 2 : 3;
+    if (expectedStage != currentStage) return;
 
     if (type == 'hangul') {
       correctAns = question.question.mean;
@@ -239,41 +245,39 @@ class KangiTestController extends GetxController
       isAnswered3 = true;
     }
 
-    // 운독, 훈독, 읽는 법 중 하나라도 채크가 안됬으면  리턴.
-    if (!(isAnswered1 && isAnswered2 && isAnswered3)) {
-      return;
-    } else {
-      isDisTouchable = true;
-      animationController.stop();
-      update();
-
-      // 정답 이면
-      if (correctAns == selectedAns &&
-          correctAns2 == selectedAns2 &&
-          correctAns3 == selectedAns3) {
-        text = 'skip';
-        numOfCorrectAns++;
-        color = Colors.blue;
-        text = 'next';
-        Future.delayed(
-          Duration(milliseconds: SettingController.to.correctDuration.value),
-          () {
-            nextQuestion();
-          },
-        );
+    final isCorrect = type == 'hangul'
+        ? selectedAns == correctAns
+        : type == 'undoc' ? selectedAns2 == correctAns2 : selectedAns3 == correctAns3;
+    currentQuestionIsCorrect &= isCorrect;
+    final answeredStage = currentStage;
+    isTransitioning = true;
+    update();
+    final duration = isCorrect
+        ? SettingController.to.correctDuration.value
+        : SettingController.to.incorrectDuration.value;
+    Future.delayed(Duration(milliseconds: duration), () {
+      if (currentStage != answeredStage) return;
+      isTransitioning = false;
+      if (currentStage == 3) {
+        if (currentQuestionIsCorrect) {
+          numOfCorrectAns++;
+        } else {
+          saveWrongQuestion();
+        }
+        nextQuestion();
       } else {
-        saveWrongQuestion();
-        isWrong = true;
-        color = Colors.pink;
-        text = 'next';
-        Future.delayed(
-          Duration(milliseconds: SettingController.to.incorrectDuration.value),
-          () {
-            nextQuestion();
-          },
-        );
+        update();
       }
-    }
+    });
+  }
+
+  void revealNextStage() {
+    if (currentStage >= 3) return;
+    if (currentStage == 1 && !isAnswered1) return;
+    if (currentStage == 2 && !isAnswered2) return;
+    currentStage++;
+    isTransitioning = false;
+    update();
   }
 
   void saveWrongQuestion() {
@@ -288,11 +292,13 @@ class KangiTestController extends GetxController
     isAnswered1 = true;
     isAnswered2 = true;
     isAnswered3 = true;
+    currentStage = 3;
+    currentQuestionIsCorrect = false;
     animationController.stop();
     saveWrongQuestion();
     isWrong = true;
     color = Colors.pink;
-    text = 'next';
+    text = AppString.next.tr;
     nextQuestion();
   }
 
@@ -306,11 +312,14 @@ class KangiTestController extends GetxController
         saveWrongQuestion();
       }
       isWrong = false;
-      text = 'skip';
+      text = AppString.skip.tr;
       color = SettingController.to.realBlackOrWhite;
       isAnswered1 = false;
       isAnswered2 = false;
       isAnswered3 = false;
+      currentStage = 1;
+      isTransitioning = false;
+      currentQuestionIsCorrect = true;
 
       pageController.nextPage(
         duration: const Duration(milliseconds: 250),

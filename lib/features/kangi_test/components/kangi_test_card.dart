@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jlpt_jonggack/common/widget/bottom_btn.dart';
-import 'package:jlpt_jonggack/config/colors.dart';
 import 'package:jlpt_jonggack/config/theme.dart';
 import 'package:jlpt_jonggack/core/app_string.dart';
 import 'package:jlpt_jonggack/features/setting/controller/setting_controller.dart';
@@ -51,7 +50,7 @@ class KangiQuestionCard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 8, bottom: 4),
                         child: Text(
-                          '한자',
+                          AppString.kangiKanji.tr,
                           style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                       ),
@@ -102,7 +101,7 @@ class KangiQuestionCard extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   BottomBtn(
-                    label: '다음',
+                    label: AppString.next.tr,
                     onTap: () {
                       controller.onNextButton(question);
                     },
@@ -113,11 +112,12 @@ class KangiQuestionCard extends StatelessWidget {
           ] else
             Row(
               children: [
-                Expanded(child: _selectKangi()),
-                SizedBox(width: 10),
-                Expanded(child: _selectUndoc()),
-                SizedBox(width: 10),
-                Expanded(child: _selectHundoc()),
+                if (controller.currentStage == 1)
+                  Expanded(child: _selectKangi()),
+                if (controller.currentStage == 2)
+                  Expanded(child: _selectUndoc()),
+                if (controller.currentStage == 3)
+                  Expanded(child: _selectHundoc()),
               ],
             ),
         ],
@@ -127,190 +127,163 @@ class KangiQuestionCard extends StatelessWidget {
 
   Widget _selectHundoc() {
     return Column(
-      children: [
-        Text(AppString.hundoc.tr),
-        Column(
-          children: List.generate(question.options.length, (index) {
-            return GetBuilder<KangiTestController>(
-              builder: (controller1) {
-                Color getTheRightColor2() {
-                  if (controller1.isAnswered3) {
-                    if (question
+      children: List.generate(question.options.length, (index) {
+        return GetBuilder<KangiTestController>(
+          builder: (controller1) {
+            Color getTheRightColor2() {
+              if (controller1.isAnswered3) {
+                if (question.options[controller1.randumIndexs2[index]].yomikata
+                        .split('@')[1] ==
+                    controller1.correctAns3) {
+                  return Colors.green;
+                } else if (question
                             .options[controller1.randumIndexs2[index]]
                             .yomikata
                             .split('@')[1] ==
+                        controller1.selectedAns3 &&
+                    question.options[controller1.randumIndexs2[index]].yomikata
+                            .split('@')[1] !=
                         controller1.correctAns3) {
-                      return Colors.green;
-                    } else if (question
-                                .options[controller1.randumIndexs2[index]]
-                                .yomikata
-                                .split('@')[1] ==
-                            controller1.selectedAns3 &&
-                        question
-                                .options[controller1.randumIndexs2[index]]
-                                .yomikata
-                                .split('@')[1] !=
-                            controller1.correctAns3) {
-                      return const Color(0xFFE92E30);
-                    }
-                  }
-                  return SettingController.to.nonSelectedColor;
+                  return const Color(0xFFE92E30);
                 }
+              }
+              return SettingController.to.nonSelectedColor;
+            }
 
-                return KangiQuestionOption(
-                  text:
-                      question
-                                  .options[controller1.randumIndexs2[index]]
-                                  .yomikata
-                                  .split('@')[1] ==
-                              '-'
-                          ? isEn
-                              ? 'None'
-                              : '없음'
-                          : question
-                              .options[controller1.randumIndexs2[index]]
-                              .yomikata
-                              .split('@')[1],
-                  color: getTheRightColor2(),
-                  isAnswered: controller1.isAnswered3,
-                  question: question,
-                  index: index,
-                  press:
-                      controller1.isAnswered3
-                          ? () {}
-                          : () => controller1.checkAns(
-                            question,
-                            question
-                                .options[controller1.randumIndexs2[index]]
-                                .yomikata
-                                .split('@')[1],
-                            'hundoc',
-                          ),
-                );
-              },
+            return KangiQuestionOption(
+              text:
+                  question.options[controller1.randumIndexs2[index]].yomikata
+                              .split('@')[1] ==
+                          '-'
+                      ? isEn
+                          ? 'None'
+                          : '없음'
+                      : question
+                          .options[controller1.randumIndexs2[index]]
+                          .yomikata
+                          .split('@')[1],
+              color: getTheRightColor2(),
+              isAnswered: controller1.isAnswered3,
+              question: question,
+              index: index,
+              press:
+                  controller1.isAnswered3
+                      ? () {}
+                      : () => controller1.checkAns(
+                        question,
+                        question
+                            .options[controller1.randumIndexs2[index]]
+                            .yomikata
+                            .split('@')[1],
+                        'hundoc',
+                      ),
             );
-          }),
-        ),
-      ],
+          },
+        );
+      }),
     );
   }
 
   Widget _selectUndoc() {
     return Column(
-      children: [
-        Text(AppString.undoc.tr),
-        Column(
-          children: List.generate(question.options.length, (index) {
-            return GetBuilder<KangiTestController>(
-              builder: (controller1) {
-                Color getTheRightColor2() {
-                  if (controller1.isAnswered2) {
-                    if (question
+      children: List.generate(question.options.length, (index) {
+        return GetBuilder<KangiTestController>(
+          builder: (controller1) {
+            Color getTheRightColor2() {
+              if (controller1.isAnswered2) {
+                if (question.options[controller1.randumIndexs[index]].yomikata
+                        .split('@')[0] ==
+                    controller1.correctAns2) {
+                  // return const Color(0xFF6AC259);
+                  return Colors.green;
+                } else if (question
                             .options[controller1.randumIndexs[index]]
                             .yomikata
                             .split('@')[0] ==
+                        controller1.selectedAns2 &&
+                    question.options[controller1.randumIndexs[index]].yomikata
+                            .split('@')[0] !=
                         controller1.correctAns2) {
-                      // return const Color(0xFF6AC259);
-                      return Colors.green;
-                    } else if (question
-                                .options[controller1.randumIndexs[index]]
-                                .yomikata
-                                .split('@')[0] ==
-                            controller1.selectedAns2 &&
-                        question
-                                .options[controller1.randumIndexs[index]]
-                                .yomikata
-                                .split('@')[0] !=
-                            controller1.correctAns2) {
-                      return const Color(0xFFE92E30);
-                    }
-                  }
-                  return SettingController.to.nonSelectedColor;
+                  return const Color(0xFFE92E30);
                 }
+              }
+              return SettingController.to.nonSelectedColor;
+            }
 
-                return KangiQuestionOption(
-                  text:
-                      question.options[controller1.randumIndexs[index]].yomikata
-                                  .split('@')[0] ==
-                              '-'
-                          ? AppString.none.tr
-                          : question
-                              .options[controller1.randumIndexs[index]]
-                              .yomikata
-                              .split('@')[0],
-                  color: getTheRightColor2(),
-                  isAnswered: controller1.isAnswered2,
-                  question: question,
-                  index: index,
-                  press:
-                      controller1.isAnswered2
-                          ? () {}
-                          : () => controller1.checkAns(
-                            question,
-                            question
-                                .options[controller1.randumIndexs[index]]
-                                .yomikata
-                                .split('@')[0],
-                            'undoc',
-                          ),
-                );
-              },
+            return KangiQuestionOption(
+              text:
+                  question.options[controller1.randumIndexs[index]].yomikata
+                              .split('@')[0] ==
+                          '-'
+                      ? AppString.none.tr
+                      : question
+                          .options[controller1.randumIndexs[index]]
+                          .yomikata
+                          .split('@')[0],
+              color: getTheRightColor2(),
+              isAnswered: controller1.isAnswered2,
+              question: question,
+              index: index,
+              press:
+                  controller1.isAnswered2
+                      ? () {}
+                      : () => controller1.checkAns(
+                        question,
+                        question
+                            .options[controller1.randumIndexs[index]]
+                            .yomikata
+                            .split('@')[0],
+                        'undoc',
+                      ),
             );
-          }),
-        ),
-      ],
+          },
+        );
+      }),
     );
   }
 
   Widget _selectKangi() {
     return Column(
-      children: [
-        Text(isKo ? '한자' : 'Mean'),
-        Column(
-          children: List.generate(question.options.length, (index) {
-            final splitedMean = question.options[index].mean.split('/');
-            final text =
-                splitedMean.length == 1
-                    ? splitedMean.first
-                    : splitedMean.last.trim();
+      children: List.generate(question.options.length, (index) {
+        final splitedMean = question.options[index].mean.split('/');
+        final text =
+            splitedMean.length == 1
+                ? splitedMean.first
+                : splitedMean.last.trim();
 
-            return GetBuilder<KangiTestController>(
-              builder: (controller1) {
-                Color getTheRightColor() {
-                  if (controller1.isAnswered1) {
-                    if (question.options[index].mean ==
-                        controller1.correctAns) {
-                      return Colors.green;
-                    } else if (question.options[index].mean ==
-                            controller1.selectedAns &&
-                        question.options[index].mean !=
-                            controller1.correctAns) {
-                      return const Color(0xFFE92E30);
-                    }
-                  }
-                  return SettingController.to.nonSelectedColor;
+        return GetBuilder<KangiTestController>(
+          builder: (controller1) {
+            Color getTheRightColor() {
+              if (controller1.isAnswered1) {
+                if (question.options[index].mean == controller1.correctAns) {
+                  return Colors.green;
+                } else if (question.options[index].mean ==
+                        controller1.selectedAns &&
+                    question.options[index].mean != controller1.correctAns) {
+                  return const Color(0xFFE92E30);
                 }
+              }
+              return SettingController.to.nonSelectedColor;
+            }
 
-                return KangiQuestionOption(
-                  text: text,
-                  color: getTheRightColor(),
-                  isAnswered: controller1.isAnswered1,
-                  question: question,
-                  index: index,
-                  press:
-                      controller1.isAnswered1
-                          ? null
-                          : () => controller1.checkAns(
-                            question,
-                            question.options[index].mean,
-                            'hangul',
-                          ),
-                );
-              },
+            return KangiQuestionOption(
+              text: text,
+              color: getTheRightColor(),
+              isAnswered: controller1.isAnswered1,
+              question: question,
+              index: index,
+              press:
+                  controller1.isAnswered1
+                      ? null
+                      : () => controller1.checkAns(
+                        question,
+                        question.options[index].mean,
+                        'hangul',
+                      ),
             );
-          }),
-        ),
-      ],
+          },
+        );
+      }),
     );
   }
 }
